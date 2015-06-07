@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbe:messageSchema xmlns:sbe="http://www.fixprotocol.org/ns/simple/1.0"
+                   package="com.unisoft.algotrader.event.data.sbe"
+                   id="1"
+                   version="0"
+                   semanticVersion="5.2"
+                   description="Code generation unit test support"
+                   byteOrder="littleEndian">
+    <types>
+        <composite name="messageHeader" description="Message identifiers and length of message root">
+            <type name="blockLength" primitiveType="uint16"/>
+            <type name="templateId" primitiveType="uint16"/>
+            <type name="schemaId" primitiveType="uint16"/>
+            <type name="version" primitiveType="uint16"/>
+        </composite>
+        <composite name="groupSizeEncoding" description="Repeating group dimensions">
+            <type name="blockLength" primitiveType="uint16"/>
+            <type name="numInGroup" primitiveType="uint8"/>
+        </composite>
+        <composite name="varDataEncoding">
+            <type name="length" primitiveType="uint8"/>
+            <type name="varData" primitiveType="uint8" length="0" characterEncoding="UTF-8"/>
+        </composite>
+    </types>
+    <types>
+        <type name="ModelYear" primitiveType="uint16"/>
+        <type name="VehicleCode" primitiveType="char" length="6"/>
+        <type name="someNumbers" primitiveType="int32" length="5"/>
+        <type name="Ron" primitiveType="uint8" minValue="90" maxValue="110"/>
+        <composite name="Engine">
+            <type name="capacity" primitiveType="uint16"/>
+            <type name="numCylinders" primitiveType="uint8"/>
+            <type name="maxRpm" primitiveType="uint16" presence="constant">9000</type>
+            <type name="manufacturerCode" primitiveType="char" length="3"/>
+            <type name="fuel" primitiveType="char" presence="constant">Petrol</type>
+        </composite>
+        <enum name="BooleanType" encodingType="uint8">
+            <validValue name="FALSE">0</validValue>
+            <validValue name="TRUE">1</validValue>
+        </enum>
+        <enum name="Model" encodingType="char">
+            <validValue name="A">A</validValue>
+            <validValue name="B">B</validValue>
+            <validValue name="C">C</validValue>
+        </enum>
+        <set name="OptionalExtras" encodingType="uint8">
+            <choice name="sunRoof">0</choice>
+            <choice name="sportsPack">1</choice>
+            <choice name="cruiseControl">2</choice>
+        </set>
+    </types>
+    <sbe:message name="Quote" id="1" description="Quote">
+        <field name="symbolId" id="1" type="uint32"/>
+        <field name="datetime" id="2" type="uint64"/>
+        <field name="bid" id="3" type="double"/>
+        <field name="ask" id="4" type="double"/>
+        <field name="bidVol" id="5" type="uint32"/>
+        <field name="askVol" id="6" type="uint32"/>
+    </sbe:message>
+
+    <sbe:message name="Trade" id="2" description="Trade">
+        <field name="symbolId" id="1" type="uint32"/>
+        <field name="datetime" id="2" type="uint64"/>
+        <field name="price" id="3" type="double"/>
+        <field name="tradeVol" id="4" type="uint32"/>
+    </sbe:message>
+
+    <sbe:message name="Bar" id="3" description="Bar">
+        <field name="symbolId" id="1" type="uint32"/>
+        <field name="datetime" id="2" type="uint64"/>
+        <field name="barSize" id="3" type="double"/>
+        <field name="high" id="4" type="double"/>
+        <field name="low" id="5" type="double"/>
+        <field name="open" id="5" type="double"/>
+        <field name="close" id="5" type="double"/>
+        <field name="volume" id="5" type="uint64"/>
+        <field name="openInt" id="6" type="uint64"/>
+    </sbe:message>
+</sbe:messageSchema>

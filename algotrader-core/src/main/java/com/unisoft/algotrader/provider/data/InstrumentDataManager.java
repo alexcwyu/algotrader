@@ -1,0 +1,87 @@
+package com.unisoft.algotrader.provider.data;
+
+import com.google.common.collect.Maps;
+import com.unisoft.algotrader.event.Event;
+import com.unisoft.algotrader.event.EventBusManager;
+import com.unisoft.algotrader.event.data.*;
+import com.unisoft.algotrader.threading.AbstractEventProcessor;
+import com.unisoft.algotrader.threading.YieldMultiBufferWaitStrategy;
+
+import java.util.Map;
+
+/**
+ * Created by alex on 5/21/15.
+ */
+public class InstrumentDataManager extends AbstractEventProcessor implements MarketDataHandler {
+
+    @Override
+    public void onMarketDataContainer(MarketDataContainer data) {
+        System.out.println("InstrumentDataManager, onMarketDataContainer=" + data);
+        if (data.bitset.get(MarketDataContainer.BAR_BIT))
+            onBar(data.bar);
+        if (data.bitset.get(MarketDataContainer.QUOTE_BIT))
+            onQuote(data.quote);
+        if (data.bitset.get(MarketDataContainer.TRADE_BIT))
+            onTrade(data.trade);
+    }
+
+    public InstrumentData getInstrumentData(String instId){
+        InstrumentData data = map.get(instId);
+        if (data == null){
+            data = new InstrumentData(instId);
+            map.put(instId, data);
+        }
+        return data;
+    }
+
+    @Override
+    public void onBar(Bar bar) {
+        InstrumentData data = getInstrumentData(bar.instId);
+        data.bar = bar;
+    }
+
+    @Override
+    public void onQuote(Quote quote) {
+        InstrumentData data = getInstrumentData(quote.instId);
+        data.quote = quote;
+    }
+
+    @Override
+    public void onTrade(Trade trade) {
+        InstrumentData data = getInstrumentData(trade.instId);
+        data.trade = trade;
+    }
+
+    public static class InstrumentData {
+        public final String instId;
+        public Bar bar;
+        public Quote quote;
+        public Trade trade;
+
+        public InstrumentData(String instId){
+            this.instId = instId;
+        }
+    }
+
+    public Map<String, InstrumentData> map = Maps.newHashMap();
+
+    public static final InstrumentDataManager INSTANCE;
+
+    static {
+        INSTANCE = new InstrumentDataManager();
+    }
+
+
+    private InstrumentDataManager(){
+        super(new YieldMultiBufferWaitStrategy(),  null, EventBusManager.INSTANCE.marketDataRB);
+    }
+
+    @Override
+    public void onEvent(Event event) {
+        event.on(this);
+    }
+
+    public void clear(){
+        this.map.clear();
+    }
+}

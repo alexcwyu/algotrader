@@ -1,0 +1,164 @@
+package com.unisoft.algotrader.provider.execution.simulation;
+
+import com.unisoft.algotrader.core.OrdType;
+import com.unisoft.algotrader.core.Side;
+import com.unisoft.algotrader.event.SampleEventFactory;
+import com.unisoft.algotrader.event.data.Bar;
+import com.unisoft.algotrader.event.data.Quote;
+import com.unisoft.algotrader.event.data.Trade;
+import com.unisoft.algotrader.event.execution.Order;
+import com.unisoft.algotrader.provider.execution.SimulationExecutor;
+import com.unisoft.algotrader.provider.execution.SimulatorConfig;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyDouble;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+/**
+ * Created by alex on 6/6/15.
+ */
+public class TrailingStopOrderHandlerTest {
+
+    private SimulationExecutor executor;
+
+    private TrailingStopOrderHandler handler;
+    private SimulatorConfig config;
+
+    private Order noFillOrderBuy;
+    private Order noFillOrderSell;
+    private Order order;
+
+    private Quote quote;
+    private Trade trade;
+    private Bar bar;
+
+    @BeforeClass
+    public static void init(){
+    }
+
+    @Before
+    public void setup(){
+        executor = mock(SimulationExecutor.class);
+
+        config = new SimulatorConfig();
+        handler = new TrailingStopOrderHandler(config, executor);
+
+        noFillOrderBuy = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.TrailingStop, 800, 0, 20);
+        noFillOrderSell = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.TrailingStop, 1000, 0, 20);
+
+        quote = SampleEventFactory.createQuote(SampleEventFactory.testInstrument.instId, 95, 98, 550, 600);
+        trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 99, 500);
+        bar = SampleEventFactory.createBar(SampleEventFactory.testInstrument.instId, 92, 80, 87, 88);
+    }
+
+    @Test
+    public void test_no_fill(){
+        handler.process(noFillOrderBuy, quote);
+        handler.process(noFillOrderSell, quote);
+
+        verify(executor, times(0)).execute(any(), anyDouble(), anyDouble());
+
+        handler.process(noFillOrderBuy, trade);
+        handler.process(noFillOrderSell, trade);
+
+        verify(executor, times(0)).execute(any(), anyDouble(), anyDouble());
+
+        handler.process(noFillOrderBuy, bar);
+        handler.process(noFillOrderSell, bar);
+
+        verify(executor, times(0)).execute(any(), anyDouble(), anyDouble());
+
+        handler.process(noFillOrderBuy, 90, 200);
+        handler.process(noFillOrderSell, 100, 200);
+
+        verify(executor, times(0)).execute(any(), anyDouble(), anyDouble());
+    }
+
+
+    @Test
+    public void test_fill_on_quote(){
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.TrailingStop, 50, 0, 10);
+        handler.process(order, quote);
+        assertEquals(quote.ask+10, order.trailingStopExecPrice, 0.0);
+        verify(executor, times(0)).execute(any(), anyDouble(), anyDouble());
+
+        quote = SampleEventFactory.createQuote(SampleEventFactory.testInstrument.instId,105, 108, 550, 600);
+        handler.process(order, quote);
+        verify(executor, times(1)).execute(order, quote.ask, quote.askSize);
+
+        reset(executor);
+
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.TrailingStop, 100, 0, 10);
+        quote = SampleEventFactory.createQuote(SampleEventFactory.testInstrument.instId, 105, 108, 550, 600);
+        handler.process(order, quote);
+        assertEquals(quote.bid - 10, order.trailingStopExecPrice, 0.0);
+        verify(executor, times(0)).execute(any(), anyDouble(), anyDouble());
+
+        quote = SampleEventFactory.createQuote(SampleEventFactory.testInstrument.instId, 85, 88, 550, 600);
+        handler.process(order, quote);
+        verify(executor, times(1)).execute(order, quote.bid, quote.bidSize);
+    }
+
+
+    @Test
+    public void test_fill_on_bar(){
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.TrailingStop, 50, 0, 10);
+        handler.process(order, bar);
+        verify(executor, times(1)).execute(order, order.trailingStopExecPrice, order.ordQty);
+
+        reset(executor);
+
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.TrailingStop, 100, 0, 10);
+        handler.process(order, bar);
+        verify(executor, times(1)).execute(order, order.trailingStopExecPrice, order.ordQty);
+    }
+
+
+    @Test
+    public void test_fill_on_trade(){
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.TrailingStop, 50, 0, 10);
+        handler.process(order, trade);
+        assertEquals(109, order.trailingStopExecPrice, 0.0);
+        verify(executor, times(0)).execute(any(), anyDouble(), anyDouble());
+        trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 109, 80);
+        handler.process(order, trade);
+        verify(executor, times(1)).execute(order, trade.price, order.ordQty);
+
+        reset(executor);
+
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.TrailingStop, 100, 0, 10);
+        trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 88, 80);
+        handler.process(order, trade);
+        assertEquals(78, order.trailingStopExecPrice, 0.0);
+        verify(executor, times(0)).execute(any(), anyDouble(), anyDouble());
+        trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 68, 80);
+        handler.process(order, trade);
+        verify(executor, times(1)).execute(order, trade.price, order.ordQty);
+
+    }
+
+
+    @Test
+    public void test_fill_on_price_qty(){
+
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.TrailingStop, 50, 0, 10);
+        handler.process(order, 90, 100);
+        verify(executor, times(0)).execute(any(), anyDouble(), anyDouble());
+        handler.process(order, 100, 100);
+        verify(executor, times(1)).execute(order, 100, 100);
+
+        reset(executor);
+
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.TrailingStop, 100, 0, 10);
+        handler.process(order, 90, 100);
+        verify(executor, times(0)).execute(any(), anyDouble(), anyDouble());
+        handler.process(order, 80, 100);
+        verify(executor, times(1)).execute(order, 80, 100);
+    }
+}

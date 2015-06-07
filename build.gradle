@@ -1,0 +1,228 @@
+allprojects {
+    apply plugin: 'idea'
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+
+    idea {
+	module {
+            excludeDirs += file('build')
+            excludeDirs += file('.gradle')
+	}
+    }
+
+}
+
+ext{
+//    jettyVersion         = "9.3.0.M1"
+//    jodaVersion          = "2.7"
+//    gsonVersion          = "2.3.1"
+//    slf4jVersion         = "1.7.10"
+//    disruptorVersion     = "3.3.2"
+//    reactorVersion       = "1.1.5.RELEASE"
+//    chronicleVersion     = "3.4.1"
+//    rxjavaVersion        = "1.0.6"
+//    quasarVersion        = "0.6.2"
+//    akkaVersion          = "2.3.9"
+//    guiceVersion         = "4.0-beta5"
+//    logbackVersion       = "1.1.2"
+//    springVersion        = "4.1.4.RELEASE"
+//    scalaVersion         = "2.11.5"
+//    //scalaVersion         = "2.11.2"
+//    junitVersion         = "4.12"
+//    commonsIoVersion     = "2.4"
+//    commonsLang3Version  = "3.3.2"
+//    commonsLangVersion   = "2.6"
+//    trove4jVersion       = "3.0.3"
+//    msgpackVersion       = "0.6.11"
+//    msgpackScalaVersion  = "0.6.8"
+//    jacksonVersion       = "2.5.1"
+//    protobufVersion      = "2.6.1"
+//    kryoVersion          = "2.24.0"
+//    mockitoVersion       = "1.10.19"
+//    jmockitVersion       = "1.14"
+//    functionaljavaVersion   = "4.3"
+//    javolutionVersion    = "6.1.0-SNAPSHOT"
+//    resteasyVersion      = "3.0.10.Final"
+//    weldVersion          = "2.2.9.Final"
+//    arquillianVersion    = "1.1.7.Final"
+//    undertowVersion      = "1.2.0.Beta5"
+//    guavaVersion         = "18.0"
+//    restassuredVersion   = "2.4.0"
+//    hamcrestVersion      = "1.3"
+//    cucumberVersion      = "1.2.2"
+//    testNGVersion        = "6.8.21"
+//    jeromqVersion        = "0.3.4"
+//    jzmqVersion          = "3.1.0"
+//    nettyVersion         = "4.0.25.Final"
+//    xstreamVersion       = "1.4.7"
+//    snappyVersion        = "1.1.1.6"
+//    saddleVersion        = "1.3.3"
+//    cqEngineVersion      = "1.3.2"
+//    log4jVersion         = "2.1"
+//    elasticSearchVersion = "1.4.2"
+//    jnaVersion           = "4.1.0"
+//    aerospikeVersion     = "3.0.34"
+//    jedisVersion         = "2.6.2"
+//    cassandraVersion     = "2.1.2"
+//    cassandraDriverVersion = "2.1.4"
+//    stormVersion         = "0.9.3"
+//    summingbirdVersion   = "0.5.1"
+//    finagleVersion       = "6.24.1-MONOCACHE"
+//    sparkVersion         = "1.2.1"
+//    sharkVersion         = "0.9.1"
+//    sparkCassVersion	 = "1.0.0-rc3"
+//    stratioDeepVersion   = "0.7.0"
+//    retrofitVersion	 = "1.9.0"
+//    supercsvVersion	 = "2.2.1"
+//    hadoopVersion        = "2.6.0"
+//    jooqVersion          = "3.5.2"
+//    hazelcastVersion     = "3.2.4"
+//    ehcacheVersion       = "2.8.3"
+//    avroVersion          = "1.7.7"
+//    calliopeVersion      = "0.9.0-U1-C2-EA"
+//    scalaTestVersion     = "2.2.4"
+//    cassandraunitVersion = "2.0.2.2"
+//
+//    quickfixjVersion     = "1.5.3"
+//    talibVersion         = "0.4.0"
+//
+//    kamonVersion = "0.3.5"
+
+    typesafeConfigVersion       = "latest.release"
+    jettyVersion         = "latest.release"
+    jodaVersion          = "latest.release"
+    gsonVersion          = "latest.release"
+    slf4jVersion         = "latest.release"
+    disruptorVersion     = "latest.release"
+    reactorVersion       = "latest.release"
+    chronicleVersion     = "latest.release"
+    rxjavaVersion        = "latest.release"
+    rxnettyVersion        = "latest.release"
+    quasarVersion        = "latest.release"
+    akkaVersion          = "latest.release"
+    guiceVersion         = "latest.release"
+    logbackVersion       = "latest.release"
+    springVersion        = "latest.release"
+    springBootVersion    = "latest.release"
+    scalaVersion         = "latest.release"
+    junitVersion         = "latest.release"
+    commonsIoVersion     = "latest.release"
+    commonsLang3Version  = "latest.release"
+    commonsLangVersion   = "latest.release"
+    trove4jVersion       = "latest.release"
+    msgpackVersion       = "latest.release"
+    msgpackScalaVersion  = "latest.release"
+    jacksonVersion       = "latest.release"
+    protobufVersion      = "latest.release"
+    protostuffVersion      = "latest.release"
+    kryoVersion          = "latest.release"
+    mockitoVersion       = "latest.release"
+    jmockitVersion       = "latest.release"
+    functionaljavaVersion   = "latest.release"
+    javolutionVersion    = "latest.release"
+    resteasyVersion      = "latest.release"
+    weldVersion          = "latest.release"
+    arquillianVersion    = "latest.release"
+    undertowVersion      = "latest.release"
+    guavaVersion         = "latest.release"
+    gparsVersion         = "latest.release"
+    restassuredVersion   = "latest.release"
+    hamcrestVersion      = "latest.release"
+    cucumberVersion      = "latest.release"
+    testNGVersion        = "latest.release"
+    jeromqVersion        = "latest.release"
+    jzmqVersion          = "latest.release"
+    nettyVersion         = "latest.release"
+    xstreamVersion       = "latest.release"
+    snappyVersion        = "latest.release"
+    saddleVersion        = "latest.release"
+    cqEngineVersion      = "latest.release"
+    log4jVersion         = "latest.release"
+    elasticSearchVersion = "latest.release"
+    jnaVersion           = "latest.release"
+    aerospikeVersion     = "latest.release"
+    jedisVersion         = "latest.release"
+    cassandraVersion     = "latest.release"
+    cassandraDriverVersion = "latest.release"
+    stormVersion         = "latest.release"
+    summingbirdVersion   = "latest.release"
+    finagleVersion       = "latest.release"
+    sparkVersion         = "latest.release"
+    sharkVersion         = "latest.release"
+    sparkCassVersion	 = "latest.release"
+    stratioDeepVersion   = "latest.release"
+    retrofitVersion	 = "latest.release"
+    supercsvVersion	 = "latest.release"
+    hadoopVersion        = "latest.release"
+    jooqVersion          = "latest.release"
+    hazelcastVersion     = "latest.release"
+    ehcacheVersion       = "latest.release"
+    avroVersion          = "latest.release"
+    calliopeVersion      = "latest.release"
+    scalaTestVersion     = "latest.release"
+    cassandraunitVersion = "latest.release"
+    quickfixjVersion     = "latest.release"
+    talibVersion         = "latest.release"
+    kamonVersion = "latest.release"
+    aeronVersion = "0.1-SNAPSHOT"
+    sbeVersion = "1.0.4-RC2-SNAPSHOT"
+    agronaVersion = "latest.release"
+    univocityVersion = "latest.release"
+
+}
+
+subprojects {
+
+    repositories {
+       mavenLocal()
+       mavenCentral()
+       maven {
+            url "https://maven.java.net/content/repositories/public"
+       }
+    }
+
+    dependencies {
+        testCompile "junit:junit:${junitVersion}"
+        testCompile "org.testng:testng:${testNGVersion}"
+        testCompile "org.mockito:mockito-all:${mockitoVersion}"
+        testCompile "org.jmockit:jmockit:${jmockitVersion}"
+        testCompile "org.hamcrest:hamcrest-all:${hamcrestVersion}"
+        testCompile "info.cukes:cucumber-java:${cucumberVersion}"
+    }
+
+//    configurations {
+//        compile.exclude group: "org.slf4j", module: "slf4j-jdk14"
+//        runtime.exclude group: "org.slf4j", module: "slf4j-jdk14"
+//    }
+
+    version = '1.0'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    jar {
+        manifest.attributes provider: 'gradle'
+    }
+
+
+    task checkSlf4j {
+        description 'Ensure only one SFL4j binding is present in the runtime configuration'
+
+        doLast {
+            def bindings = []
+            configurations.runtime.each {
+                zipTree(it).matching { include 'org/slf4j/impl/StaticLoggerBinder.class' }.each { c ->
+                    bindings << [it.getName(), c]
+                }
+            }
+            if (bindings.size () > 1) {
+                throw new GradleException("Multiple SLF4J bindings found: ${bindings*.getAt(0)}")
+            }
+        }
+    }
+
+    check.dependsOn checkSlf4j
+}
+
+
+
