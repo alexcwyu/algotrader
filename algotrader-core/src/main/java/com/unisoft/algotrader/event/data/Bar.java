@@ -8,7 +8,7 @@ import com.lmax.disruptor.EventFactory;
  */
 public class Bar extends MarketData<Bar> {
 
-    public long size = -1;
+    public int size = -1;
 
     public double high = 0.0;
 
@@ -41,7 +41,30 @@ public class Bar extends MarketData<Bar> {
     public Bar(
             String instId,
             long dateTime,
-            long size,
+            int size,
+            double high,
+            double low,
+            double open,
+            double close) {
+        this(instId, dateTime, size, high, low, open, close, 0, 0);
+    }
+
+    public Bar(
+            String instId,
+            long dateTime,
+            int size,
+            double high,
+            double low,
+            double open,
+            double close,
+            long volume) {
+        this(instId, dateTime, size, high, low, open, close, volume, 0);
+    }
+
+    public Bar(
+            String instId,
+            long dateTime,
+            int size,
                double high,
                double low,
                double open,
@@ -62,7 +85,7 @@ public class Bar extends MarketData<Bar> {
     public String toString() {
         return "Bar{" +
                 "instId=" + instId +
-                "dateTime=" + dateTime +
+                ", dateTime=" + dateTime +
                 ", size=" + size +
                 ", high=" + high +
                 ", low=" + low +
@@ -93,13 +116,6 @@ public class Bar extends MarketData<Bar> {
     public int hashCode() {
         return Objects.hashCode(instId, dateTime, size, high, low, open, close, volume, openInt);
     }
-
-    public static final EventFactory<Bar> FACTORY = new EventFactory(){
-        @Override
-        public Bar newInstance() {
-            return new Bar();
-        }
-    };
 
     @Override
     public void on(MarketDataHandler handler){

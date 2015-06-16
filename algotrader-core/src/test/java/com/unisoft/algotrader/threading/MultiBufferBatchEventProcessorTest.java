@@ -25,9 +25,9 @@ public class MultiBufferBatchEventProcessorTest {
     private final ExecutorService executor = Executors.newFixedThreadPool(NUM_PUBLISHERS + NUM_PROCESSERS, DaemonThreadFactory.INSTANCE);
     private final CyclicBarrier cyclicBarrier = new CyclicBarrier(NUM_PUBLISHERS + 1);
 
-    private final RingBuffer<Bar> barRB = RingBuffer.createSingleProducer(Bar.FACTORY, BUFFER_SIZE, new NoWaitStrategy());
-    private final RingBuffer<Quote> quoteRB = RingBuffer.createSingleProducer(Quote.FACTORY, BUFFER_SIZE, new NoWaitStrategy());
-    private final RingBuffer<Trade> tradeRB = RingBuffer.createSingleProducer(Trade.FACTORY, BUFFER_SIZE, new NoWaitStrategy());
+    private final RingBuffer<Bar> barRB = RingBuffer.createSingleProducer(Bar::new, BUFFER_SIZE, new NoWaitStrategy());
+    private final RingBuffer<Quote> quoteRB = RingBuffer.createSingleProducer(Quote::new, BUFFER_SIZE, new NoWaitStrategy());
+    private final RingBuffer<Trade> tradeRB = RingBuffer.createSingleProducer(Trade::new, BUFFER_SIZE, new NoWaitStrategy());
 
     private final SequenceBarrier barBarrier = barRB.newBarrier();
     private final SequenceBarrier quoteBarrier = quoteRB.newBarrier();

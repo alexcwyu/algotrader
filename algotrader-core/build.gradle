@@ -1,6 +1,10 @@
 
 
 dependencies {
+
+    compile project(':algotrader-provider:common')
+    compile project(':algotrader-common')
+
     //threading
     compile "com.lmax:disruptor:${disruptorVersion}"
     compile "net.openhft:chronicle:${chronicleVersion}"
@@ -32,8 +36,6 @@ dependencies {
 
     //csv
     compile "com.univocity:univocity-parsers:${univocityVersion}"
-
-
     //testing
     //testCompile "junit:junit:${junitVersion}"
 }

@@ -82,11 +82,13 @@ public class Transaction {
 
 
     public double transactionCost(){
-        double cost = 0.0;
-        for (Commission commission : commissions){
-            cost += commission.apply(this);
-        }
-        return cost;
+//        double cost = 0.0;
+//        for (Commission commission : commissions){
+//            cost += commission.apply(this);
+//        }
+//        return cost;
+
+        throw new UnsupportedOperationException("");
     }
 
     public double cashFlow(){

@@ -12,7 +12,7 @@ public abstract class Commission {
         this.commission = commission;
     }
 
-    public abstract double apply(Transaction transaction);
+    //public abstract double apply(Transaction transaction);
     public abstract double apply(Order order);
 
     public static class AbsoluteCommission extends Commission {
@@ -20,10 +20,10 @@ public abstract class Commission {
         public AbsoluteCommission(double commission){
             super(commission);
         }
-
-        public double apply(Transaction transaction){
-            return commission;
-        }
+//
+//        public double apply(Transaction transaction){
+//            return commission;
+//        }
         public double apply(Order order){
             return commission;
         }
@@ -35,9 +35,9 @@ public abstract class Commission {
             super(commission);
         }
 
-        public double apply(Transaction transaction){
-            return commission * transaction.value();
-        }
+//        public double apply(Transaction transaction){
+//            return commission * transaction.value();
+//        }
         public double apply(Order order){
             return commission * order.value();
         }
@@ -49,9 +49,9 @@ public abstract class Commission {
             super(commission);
         }
 
-        public double apply(Transaction transaction){
-            return commission * transaction.qty;
-        }
+//        public double apply(Transaction transaction){
+//            return commission * transaction.qty;
+//        }
         public double apply(Order order){
             return commission * order.filledQty;
         }

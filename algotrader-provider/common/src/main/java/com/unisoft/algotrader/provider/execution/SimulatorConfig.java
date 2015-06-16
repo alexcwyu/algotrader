@@ -31,7 +31,7 @@ public class SimulatorConfig {
     public boolean fillOnTrade = true;
     public boolean fillOnBar = true;
     public FillOnQuoteMode fillOnQuoteMode = FillOnQuoteMode.LastQuote;
-    public FillOnBarMode fillOnBarMode = FillOnBarMode  .LastBarClose;
+    public FillOnBarMode fillOnBarMode = FillOnBarMode.LastBarClose;
     public FillOnTradeMode fillOnTradeMode = FillOnTradeMode.LastTrade;
 
 }

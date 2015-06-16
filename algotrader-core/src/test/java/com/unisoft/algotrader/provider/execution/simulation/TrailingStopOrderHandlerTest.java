@@ -169,7 +169,7 @@ public class TrailingStopOrderHandlerTest {
         handler.process(order, trade);
         //trade.price + order.stoppx = 99 + 10 = 109
         assertEquals(109, order.trailingStopExecPrice, 0.0);
-        //price move up, trailing stop remaining unchanged
+        //price move up, trailing close remaining unchanged
         trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 88, 80);
         handler.process(order, trade);
         assertEquals(98, order.trailingStopExecPrice, 0.0);
@@ -183,7 +183,7 @@ public class TrailingStopOrderHandlerTest {
         handler.process(order, trade);
         //trade.price + order.stoppx = 99 - 10 = 89
         assertEquals(89, order.trailingStopExecPrice, 0.0);
-        //price move up, trailing stop remaining unchanged
+        //price move up, trailing close remaining unchanged
         trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 108, 80);
         handler.process(order, trade);
         assertEquals(98, order.trailingStopExecPrice, 0.0);
@@ -198,7 +198,7 @@ public class TrailingStopOrderHandlerTest {
         handler.process(order, trade);
         //trade.price + order.stoppx = 99 + 10 = 109
         assertEquals(109, order.trailingStopExecPrice, 0.0);
-        //price move up, trailing stop remaining unchanged
+        //price move up, trailing close remaining unchanged
         trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 108, 80);
         handler.process(order, trade);
         assertEquals(109, order.trailingStopExecPrice, 0.0);
@@ -212,7 +212,7 @@ public class TrailingStopOrderHandlerTest {
         handler.process(order, trade);
         //trade.price + order.stoppx = 99 - 10 = 89
         assertEquals(89, order.trailingStopExecPrice, 0.0);
-        //price move up, trailing stop remaining unchanged
+        //price move up, trailing close remaining unchanged
         trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 88, 80);
         handler.process(order, trade);
         assertEquals(89, order.trailingStopExecPrice, 0.0);

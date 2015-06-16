@@ -3,7 +3,6 @@ package com.unisoft.algotrader.provider.execution;
 import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.event.Event;
 import com.unisoft.algotrader.event.data.*;
-import com.unisoft.algotrader.provider.data.InstrumentDataManager;
 import com.unisoft.algotrader.strategy.Strategy;
 import com.unisoft.algotrader.threading.MultiEventProcessor;
 import com.unisoft.algotrader.threading.disruptor.waitstrategy.NoWaitStrategy;

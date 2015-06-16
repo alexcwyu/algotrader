@@ -22,7 +22,7 @@ public class BatchEventProcessorTest {
     private final ExecutorService executor = Executors.newFixedThreadPool(NUM_PUBLISHERS + 2, DaemonThreadFactory.INSTANCE);
     private final CyclicBarrier cyclicBarrier = new CyclicBarrier(NUM_PUBLISHERS + 1);
 
-    private final RingBuffer<Bar> barRB = RingBuffer.createSingleProducer(Bar.FACTORY, BUFFER_SIZE, new YieldingWaitStrategy());
+    private final RingBuffer<Bar> barRB = RingBuffer.createSingleProducer(Bar::new, BUFFER_SIZE, new YieldingWaitStrategy());
     private final SequenceBarrier barBarrier = barRB.newBarrier();
 
     private final DataPublisher<Bar> barDataPublisher = new DataPublisher(cyclicBarrier,

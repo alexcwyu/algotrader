@@ -59,13 +59,6 @@ public class Trade extends MarketData<Trade> {
         handler.onTrade(this);
     }
 
-    public static final EventFactory<Trade> FACTORY = new EventFactory(){
-        @Override
-        public Trade newInstance() {
-            return new Trade();
-        }
-    };
-
     @Override
     public void reset(){
         super.reset();

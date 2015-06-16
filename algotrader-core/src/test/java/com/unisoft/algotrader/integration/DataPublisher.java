@@ -76,7 +76,7 @@ public class DataPublisher {
     }
     public void publishBar(String instId,
                            long dateTime,
-                           long size,
+                           int size,
                            double high,
                            double low,
                            double open,

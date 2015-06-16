@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.unisoft.algotrader.provider.execution.SimulatorConfig.*;
+
 /**
  * Created by alex on 5/18/15.
  */
@@ -174,7 +175,7 @@ public class SimulationExecutor extends MultiEventProcessor implements Execution
             }
 
         }
-        // stop/limit orders
+        // close/limit orders
         else{
             if (!executed && instrumentData.quote != null && config.fillOnQuote){
                 executed = process(order, instrumentData.quote);

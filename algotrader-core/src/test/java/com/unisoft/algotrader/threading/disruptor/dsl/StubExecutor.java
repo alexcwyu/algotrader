@@ -60,7 +60,7 @@ public class StubExecutor implements Executor
                 }
             }
 
-            Assert.assertFalse("Failed to stop thread: " + thread, thread.isAlive());
+            Assert.assertFalse("Failed to close thread: " + thread, thread.isAlive());
         }
 
         threads.clear();

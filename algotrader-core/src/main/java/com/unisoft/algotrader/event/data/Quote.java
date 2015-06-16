@@ -77,13 +77,6 @@ public class Quote extends MarketData<Quote> {
         handler.onQuote(this);
     }
 
-    public static final EventFactory<Quote> FACTORY = new EventFactory(){
-        @Override
-        public Quote newInstance() {
-            return new Quote();
-        }
-    };
-
     @Override
     public void reset(){
         super.reset();

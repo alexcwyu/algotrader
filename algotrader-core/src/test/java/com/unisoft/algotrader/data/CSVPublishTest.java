@@ -5,6 +5,7 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 import com.unisoft.algotrader.core.Portfolio;
 import com.unisoft.algotrader.core.PortfolioManager;
 import com.unisoft.algotrader.event.data.MarketDataContainer;
+import com.unisoft.algotrader.provider.SubscriptionKey;
 import com.unisoft.algotrader.provider.data.historical.DummyDataProvider;
 import com.unisoft.algotrader.strategy.Strategy;
 import com.unisoft.algotrader.threading.disruptor.waitstrategy.NoWaitStrategy;
@@ -75,7 +76,7 @@ public class CSVPublishTest {
         Thread.sleep(5000);
 
         LOG.info("start");
-        provider.subscribe("HSI", 20110101, 20141231);
+        provider.subscribe(SubscriptionKey.createDailySubscriptionKey("HSI"), 20110101, 20141231);
 
         latch.await();
 
