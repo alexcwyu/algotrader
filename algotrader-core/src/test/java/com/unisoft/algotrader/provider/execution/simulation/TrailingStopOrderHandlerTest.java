@@ -17,8 +17,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyDouble;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 /**
  * Created by alex on 6/6/15.
@@ -160,5 +158,64 @@ public class TrailingStopOrderHandlerTest {
         verify(executor, times(0)).execute(any(), anyDouble(), anyDouble());
         handler.process(order, 80, 100);
         verify(executor, times(1)).execute(order, 80, 100);
+    }
+
+    @Test
+    public void test_change_trailing_stop(){
+        //test 1 BUY ORDER
+        //buy order trailingstop should be changed when price go down
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.TrailingStop, 50, 0, 10);
+        trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 99, 500);
+        handler.process(order, trade);
+        //trade.price + order.stoppx = 99 + 10 = 109
+        assertEquals(109, order.trailingStopExecPrice, 0.0);
+        //price move up, trailing stop remaining unchanged
+        trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 88, 80);
+        handler.process(order, trade);
+        assertEquals(98, order.trailingStopExecPrice, 0.0);
+
+
+
+        //test 2 SELL ORDER
+        //order trailingstop should be changed when price go up
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.TrailingStop, 50, 0, 10);
+        trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 99, 500);
+        handler.process(order, trade);
+        //trade.price + order.stoppx = 99 - 10 = 89
+        assertEquals(89, order.trailingStopExecPrice, 0.0);
+        //price move up, trailing stop remaining unchanged
+        trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 108, 80);
+        handler.process(order, trade);
+        assertEquals(98, order.trailingStopExecPrice, 0.0);
+    }
+
+    @Test
+    public void test_no_change_trailing_stop(){
+        //test 1 BUY ORDER
+        //buy order trailingstop should not be changed when price go up
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.TrailingStop, 50, 0, 10);
+        trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 99, 500);
+        handler.process(order, trade);
+        //trade.price + order.stoppx = 99 + 10 = 109
+        assertEquals(109, order.trailingStopExecPrice, 0.0);
+        //price move up, trailing stop remaining unchanged
+        trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 108, 80);
+        handler.process(order, trade);
+        assertEquals(109, order.trailingStopExecPrice, 0.0);
+
+
+
+        //test 2 SELL ORDER
+        //order trailingstop should be not changed when price go down
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.TrailingStop, 50, 0, 10);
+        trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 99, 500);
+        handler.process(order, trade);
+        //trade.price + order.stoppx = 99 - 10 = 89
+        assertEquals(89, order.trailingStopExecPrice, 0.0);
+        //price move up, trailing stop remaining unchanged
+        trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 88, 80);
+        handler.process(order, trade);
+        assertEquals(89, order.trailingStopExecPrice, 0.0);
+
     }
 }

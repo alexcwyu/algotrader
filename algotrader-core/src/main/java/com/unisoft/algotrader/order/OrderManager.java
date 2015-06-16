@@ -10,8 +10,10 @@ import com.unisoft.algotrader.event.execution.*;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.strategy.Strategy;
 import com.unisoft.algotrader.strategy.StrategyManager;
-import com.unisoft.algotrader.threading.AbstractEventProcessor;
-import com.unisoft.algotrader.threading.YieldMultiBufferWaitStrategy;
+import com.unisoft.algotrader.threading.MultiEventProcessor;
+import com.unisoft.algotrader.threading.disruptor.waitstrategy.NoWaitStrategy;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
@@ -19,8 +21,9 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Created by alex on 5/18/15.
  */
-public class OrderManager extends AbstractEventProcessor implements OrderHandler , ExecutionHandler {
+public class OrderManager extends MultiEventProcessor implements OrderHandler , ExecutionHandler {
 
+    private static final Logger LOG = LogManager.getLogger(OrderManager.class);
     public static final OrderManager INSTANCE;
 
     static {
@@ -33,7 +36,7 @@ public class OrderManager extends AbstractEventProcessor implements OrderHandler
     private Map<String, Map<Long, Order>> orderMap = Maps.newConcurrentMap();
 
     public OrderManager(){
-        super(new YieldMultiBufferWaitStrategy(),  null, EventBusManager.INSTANCE.executionReportRB, EventBusManager.INSTANCE.orderRB, EventBusManager.INSTANCE.orderStatusRB);
+        super(new NoWaitStrategy(),  null, EventBusManager.INSTANCE.executionReportRB, EventBusManager.INSTANCE.orderRB, EventBusManager.INSTANCE.orderStatusRB);
     }
 
     public long nextOrdId(){
@@ -61,10 +64,9 @@ public class OrderManager extends AbstractEventProcessor implements OrderHandler
 
     @Override
     public void onOrder(Order order) {
-        System.out.println("OrderManager, onOrder=" + order);
+        LOG.info("onOrder {}" , order);
 
         addOrder(order);
-
         ProviderManager.INSTANCE.getExecutionProvider(order.execProviderId).onOrder(order);
     }
 
@@ -74,8 +76,7 @@ public class OrderManager extends AbstractEventProcessor implements OrderHandler
 
     @Override
     public void onExecutionReport(ExecutionReport executionReport) {
-
-        System.out.println("OrderManager, onExecutionReport=" + executionReport);
+        LOG.info("onExecutionReport {}", executionReport);
 
         Order order = getOrder(executionReport.instId, executionReport.orderId);
         if (order != null){

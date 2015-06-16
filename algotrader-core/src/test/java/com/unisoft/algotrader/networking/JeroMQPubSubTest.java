@@ -3,10 +3,12 @@ package com.unisoft.algotrader.networking;
 import com.unisoft.algotrader.networking.jeromq.JeroMQConfig;
 import com.unisoft.algotrader.networking.jeromq.JeroMQPublisher;
 import com.unisoft.algotrader.networking.jeromq.JeroMQSubscriber;
+import org.junit.Ignore;
 
 /**
  * Created by alex on 5/16/15.
  */
+@Ignore
 public class JeroMQPubSubTest extends AbstractPubSubTest{
 
     public Subscriber createSubScriber(){

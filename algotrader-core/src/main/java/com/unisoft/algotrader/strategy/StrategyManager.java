@@ -2,7 +2,6 @@ package com.unisoft.algotrader.strategy;
 
 import com.google.common.collect.Maps;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -28,6 +27,8 @@ public class StrategyManager {
     }
 
     public Strategy get(String strategyId){
+        if (strategyId == null)
+            return null;
         return map.get(strategyId);
     }
 }

@@ -3,10 +3,12 @@ package com.unisoft.algotrader.networking;
 import com.unisoft.algotrader.networking.aeron.AeronConfig;
 import com.unisoft.algotrader.networking.aeron.AeronPublisher;
 import com.unisoft.algotrader.networking.aeron.AeronSubscriber;
+import org.junit.Ignore;
 
 /**
  * Created by alex on 5/16/15.
  */
+@Ignore
 public class AeronPubSubTest extends AbstractPubSubTest{
 
     public Subscriber createSubScriber(){

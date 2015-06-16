@@ -1,6 +1,5 @@
 package com.unisoft.algotrader.provider.execution.simulation;
 
-import com.unisoft.algotrader.core.OrdStatus;
 import com.unisoft.algotrader.core.OrdType;
 import com.unisoft.algotrader.core.Side;
 import com.unisoft.algotrader.event.SampleEventFactory;
@@ -14,10 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 /**
  * Created by alex on 6/6/15.

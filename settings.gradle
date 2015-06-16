@@ -1,4 +1,13 @@
 
 include 'algotrader-core'
-
+include 'algotrader-backtest'
+include 'sample'
+include 'algotrader-provider:common'
+include 'algotrader-provider:yahoo'
+include 'algotrader-provider:cassandra'
+include 'algotrader-provider:csv'
+include 'algotrader-provider:ib'
+include 'algotrader-provider:influxdb'
+include 'algotrader-provider:kdb'
+include 'algotrader-provider:google'
 

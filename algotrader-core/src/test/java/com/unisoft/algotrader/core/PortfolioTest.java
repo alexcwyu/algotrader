@@ -5,6 +5,8 @@ import com.unisoft.algotrader.event.data.Quote;
 import com.unisoft.algotrader.event.data.Trade;
 import com.unisoft.algotrader.event.execution.ExecutionReport;
 import com.unisoft.algotrader.event.execution.Order;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,6 +19,8 @@ import static org.mockito.Mockito.when;
  * Created by alex on 5/29/15.
  */
 public class PortfolioTest {
+
+    private static final Logger LOG = LogManager.getLogger(PortfolioTest.class);
 
     public static long ordId = 0;
     public static long execId = 100;
@@ -333,13 +337,8 @@ public class PortfolioTest {
     }
 
     private void logDebug(Account account, Portfolio portfolio, String stage){
-        System.out.println("======"+stage+"======");
-        System.out.println("account.value="+account.value());
-        System.out.println("portfolio.positionValue="+portfolio.positionValue());
-        System.out.println("portfolio.value="+portfolio.value());
-        System.out.println("portfolio.cashFlow="+portfolio.cashFlow());
-        System.out.println("portfolio.netCashFlow="+portfolio.netCashFlow());
-        System.out.println("portfolio.totalEquity="+portfolio.totalEquity());
+        LOG.info("stage = {}, account.value={}, portfolio.positionValue={}, portfolio.value={}, portfolio.cashFlow={}, portfolio.netCashFlow={}, portfolio.totalEquity={}",
+                stage, account.value(), portfolio.positionValue(), portfolio.value(), portfolio.cashFlow(), portfolio.netCashFlow(), portfolio.totalEquity());
     }
 
 

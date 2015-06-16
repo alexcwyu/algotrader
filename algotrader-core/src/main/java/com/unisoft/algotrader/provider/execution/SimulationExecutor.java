@@ -3,7 +3,6 @@ package com.unisoft.algotrader.provider.execution;
 import com.google.common.collect.Maps;
 import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.clock.Clock;
-import com.unisoft.algotrader.clock.SimulationClock;
 import com.unisoft.algotrader.core.OrdStatus;
 import com.unisoft.algotrader.core.OrdType;
 import com.unisoft.algotrader.event.Event;
@@ -13,22 +12,26 @@ import com.unisoft.algotrader.order.OrderManager;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.InstrumentDataManager;
 import com.unisoft.algotrader.provider.execution.simulation.*;
-import com.unisoft.algotrader.threading.AbstractEventProcessor;
-import com.unisoft.algotrader.threading.YieldMultiBufferWaitStrategy;
+import com.unisoft.algotrader.threading.MultiEventProcessor;
+import com.unisoft.algotrader.threading.disruptor.waitstrategy.NoWaitStrategy;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
-import static com.unisoft.algotrader.provider.execution.SimulatorConfig.FillOnBarMode;
-import static com.unisoft.algotrader.provider.execution.SimulatorConfig.FillOnQuoteMode;
-import static com.unisoft.algotrader.provider.execution.SimulatorConfig.FillOnTradeMode;
+
+import static com.unisoft.algotrader.provider.execution.SimulatorConfig.*;
 /**
  * Created by alex on 5/18/15.
  */
-public class SimulationExecutor extends AbstractEventProcessor implements ExecutionProvider, MarketDataHandler {
+public class SimulationExecutor extends MultiEventProcessor implements ExecutionProvider, MarketDataHandler {
+
+    private static final Logger LOG = LogManager.getLogger(SimulationExecutor.class);
 
     public static final String PROVIDER_ID = "Simulated";
 
     private final OrderManager orderManager;
+    private final InstrumentDataManager instrumentDataManager;
 
     //commission Provider
     //slippage provider
@@ -44,11 +47,12 @@ public class SimulationExecutor extends AbstractEventProcessor implements Execut
     private Map<String, Quote> quoteMap = Maps.newHashMap();
 
     public SimulatorConfig config = new SimulatorConfig();
-    private Clock clock = new SimulationClock();
+    private Clock clock = Clock.CLOCK;
 
-    public SimulationExecutor(OrderManager orderManager, RingBuffer... rbs) {
-        super(new YieldMultiBufferWaitStrategy(),  null, rbs);
+    public SimulationExecutor(OrderManager orderManager, InstrumentDataManager instrumentDataManager, RingBuffer... rbs) {
+        super(new NoWaitStrategy(),  null, rbs);
         this.orderManager = orderManager;
+        this.instrumentDataManager = instrumentDataManager;
         ProviderManager.INSTANCE.registerExecutionProvider(this);
 
         this.execId = new AtomicLong();
@@ -95,10 +99,14 @@ public class SimulationExecutor extends AbstractEventProcessor implements Execut
 
     @Override
     public void onOrder(Order order) {
+        LOG.info("onOrder = {}", order);
+
+        addOrder(order);
+
         sendExecutionReport(order, 0, 0, order.ordStatus);
 
-        if (!processNewOrder(order)){
-            addOrder(order);
+        if (processNewOrder(order)){
+            removeOrder(order);
         }
     }
 
@@ -147,7 +155,7 @@ public class SimulationExecutor extends AbstractEventProcessor implements Execut
 
     private boolean processNewOrder(Order order){
 
-        InstrumentDataManager.InstrumentData instrumentData = InstrumentDataManager.INSTANCE.getInstrumentData(order.instId);
+        InstrumentDataManager.InstrumentData instrumentData = instrumentDataManager.getInstrumentData(order.instId);
 
         boolean executed = false;
         // market order
@@ -247,7 +255,9 @@ public class SimulationExecutor extends AbstractEventProcessor implements Execut
 
     @Override
     public void onBar(Bar bar) {
+        LOG.info("onBar");
         //TODO Bar filter
+        instrumentDataManager.onBar(bar);
 
         clock.setDateTime(bar.dateTime);
 
@@ -271,6 +281,8 @@ public class SimulationExecutor extends AbstractEventProcessor implements Execut
 
     @Override
     public void onQuote(Quote quote) {
+        instrumentDataManager.onQuote(quote);
+
         clock.setDateTime(quote.dateTime);
 
         boolean diffAsk = true;
@@ -307,6 +319,8 @@ public class SimulationExecutor extends AbstractEventProcessor implements Execut
 
     @Override
     public void onTrade(Trade trade) {
+        instrumentDataManager.onTrade(trade);
+
         clock.setDateTime(trade.dateTime);
         if (config.fillOnTrade && orderMap.containsKey(trade.instId)){
             for (Order order :orderMap.get(trade.instId).values()) {

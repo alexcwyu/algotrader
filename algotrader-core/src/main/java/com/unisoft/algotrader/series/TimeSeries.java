@@ -1,7 +1,5 @@
 package com.unisoft.algotrader.series;
 
-import gnu.trove.list.TDoubleList;
-import gnu.trove.list.array.TDoubleArrayList;
 import gnu.trove.map.TLongIntMap;
 import gnu.trove.map.hash.TLongIntHashMap;
 
@@ -86,7 +84,7 @@ public class TimeSeries<T> {
 
     public long [] index(){
         long [] idx =index.keys();
-        Arrays.sort(index.keys());
+        Arrays.sort(idx);
         return idx;
     }
 }

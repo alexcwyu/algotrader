@@ -2,11 +2,11 @@ package com.unisoft.algotrader.event.execution;
 
 import com.google.common.base.Objects;
 import com.lmax.disruptor.EventFactory;
-import com.unisoft.algotrader.event.Event;
 import com.unisoft.algotrader.core.OrdStatus;
 import com.unisoft.algotrader.core.OrdType;
 import com.unisoft.algotrader.core.Side;
 import com.unisoft.algotrader.core.TimeInForce;
+import com.unisoft.algotrader.event.Event;
 
 /**
  * Created by alex on 5/17/15.

@@ -1,8 +1,8 @@
 package com.unisoft.algotrader.series;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.testng.Assert;
 
 import java.util.Calendar;
 

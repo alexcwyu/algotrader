@@ -13,7 +13,7 @@ import com.unisoft.algotrader.order.OrderManager;
 import com.unisoft.algotrader.provider.data.InstrumentDataManager;
 import com.unisoft.algotrader.strategy.Strategy;
 import com.unisoft.algotrader.strategy.StrategyManager;
-import com.unisoft.algotrader.threading.NoWaitStrategy;
+import com.unisoft.algotrader.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -42,7 +42,7 @@ public class SimulationExecutorIntegrationTest {
         private final OrderManager orderManager;
 
         public MockStrategy(OrderManager orderManager){
-            super(mockStrategyId, mock(Portfolio.class));
+            super(mockStrategyId);
             this.orderManager = orderManager;
         }
 
@@ -80,7 +80,7 @@ public class SimulationExecutorIntegrationTest {
 
         rb =RingBuffer.createSingleProducer(MarketDataContainer.FACTORY, 1024, new NoWaitStrategy());
 
-        simulationExecutor = new SimulationExecutor(orderManager, rb);
+        simulationExecutor = new SimulationExecutor(orderManager, InstrumentDataManager.INSTANCE, rb);
         simulationExecutor.config.fillOnQuote = true;
         simulationExecutor.config.fillOnQuoteMode = FillOnQuoteMode.LastQuote;
         simulationExecutor.config.fillOnTrade = true;

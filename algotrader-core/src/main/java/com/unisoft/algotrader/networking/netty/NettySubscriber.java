@@ -3,18 +3,12 @@ package com.unisoft.algotrader.networking.netty;
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.networking.DataHandler;
 import com.unisoft.algotrader.networking.Subscriber;
-
-
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.bytes.ByteArrayDecoder;
-import io.netty.handler.codec.bytes.ByteArrayEncoder;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;

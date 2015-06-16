@@ -1,7 +1,6 @@
 package com.unisoft.algotrader.core;
 
 import com.google.common.collect.Maps;
-import com.unisoft.algotrader.series.DoubleTimeSeries;
 
 import java.util.Map;
 

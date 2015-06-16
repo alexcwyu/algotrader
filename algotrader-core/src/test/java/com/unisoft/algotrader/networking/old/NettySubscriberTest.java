@@ -1,8 +1,6 @@
 package com.unisoft.algotrader.networking.old;
 
 import com.unisoft.algotrader.networking.aeron.AeronUtils;
-import com.unisoft.algotrader.networking.jeromq.JeroMQConfig;
-import com.unisoft.algotrader.networking.jeromq.JeroMQSubscriber;
 import com.unisoft.algotrader.networking.netty.NettySubscriber;
 import uk.co.real_logic.aeron.common.RateReporter;
 

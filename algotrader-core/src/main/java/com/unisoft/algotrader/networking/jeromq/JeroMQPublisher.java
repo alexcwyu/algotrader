@@ -1,9 +1,7 @@
 package com.unisoft.algotrader.networking.jeromq;
 
 import com.unisoft.algotrader.networking.Publisher;
-
 import org.zeromq.ZMQ;
-import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
 
 import java.nio.ByteBuffer;

@@ -1,8 +1,8 @@
 package com.unisoft.algotrader.series;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.testng.Assert;
 
 import java.util.Calendar;
 
@@ -42,29 +42,32 @@ public class DoubleTimeSeriesTest {
 
     @Test
     public void should_equals_bytime_and_byidx(){
-        Assert.assertEquals(doubleTimeSeries.getByDate(c1.getTimeInMillis()), doubleTimeSeries.getByIdx(0));
-        Assert.assertEquals(doubleTimeSeries.getByDate(c2.getTimeInMillis()), doubleTimeSeries.getByIdx(1));
-        Assert.assertEquals(doubleTimeSeries.getByDate(c3.getTimeInMillis()), doubleTimeSeries.getByIdx(2));
+        Assert.assertEquals(doubleTimeSeries.getByDate(c1.getTimeInMillis()), doubleTimeSeries.getByIdx(0), 0.0);
+        Assert.assertEquals(doubleTimeSeries.getByDate(c2.getTimeInMillis()), doubleTimeSeries.getByIdx(1), 0.0);
+        Assert.assertEquals(doubleTimeSeries.getByDate(c3.getTimeInMillis()), doubleTimeSeries.getByIdx(2), 0.0);
     }
 
     @Test
     public void should_return_correct_ago_value(){
-        Assert.assertEquals(doubleTimeSeries.ago(2), doubleTimeSeries.getByIdx(0));
-        Assert.assertEquals(doubleTimeSeries.ago(1), doubleTimeSeries.getByIdx(1));
-        Assert.assertEquals(doubleTimeSeries.ago(0), doubleTimeSeries.getByIdx(2));
+        Assert.assertEquals(doubleTimeSeries.ago(2), doubleTimeSeries.getByIdx(0), 0.0);
+        Assert.assertEquals(doubleTimeSeries.ago(1), doubleTimeSeries.getByIdx(1), 0.0);
+        Assert.assertEquals(doubleTimeSeries.ago(0), doubleTimeSeries.getByIdx(2), 0.0);
     }
 
     @Test
     public void should_return_correct_bydate_value(){
-        Assert.assertEquals(doubleTimeSeries.getByDate(c1.getTimeInMillis()), doubleTimeSeries.getByDate(c1.getTime()));
-        Assert.assertEquals(doubleTimeSeries.getByDate(c2.getTimeInMillis()), doubleTimeSeries.getByDate(c2.getTime()));
-        Assert.assertEquals(doubleTimeSeries.getByDate(c3.getTimeInMillis()), doubleTimeSeries.getByDate(c3.getTime()));
+        Assert.assertEquals(doubleTimeSeries.getByDate(c1.getTimeInMillis()), doubleTimeSeries.getByDate(c1.getTime()), 0.0);
+        Assert.assertEquals(doubleTimeSeries.getByDate(c2.getTimeInMillis()), doubleTimeSeries.getByDate(c2.getTime()), 0.0);
+        Assert.assertEquals(doubleTimeSeries.getByDate(c3.getTimeInMillis()), doubleTimeSeries.getByDate(c3.getTime()), 0.0);
     }
 
     @Test
     public void should_return_correct_key(){
         long[] index = doubleTimeSeries.index();
         Assert.assertEquals(3, index.length);
+        System.out.println(index[0]);
+        System.out.println(index[1]);
+        System.out.println(index[2]);
         Assert.assertEquals(c1.getTimeInMillis(), index[0]);
         Assert.assertEquals(c2.getTimeInMillis(), index[1]);
         Assert.assertEquals(c3.getTimeInMillis(), index[2]);

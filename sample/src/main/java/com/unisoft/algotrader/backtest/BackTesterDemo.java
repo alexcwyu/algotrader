@@ -1,0 +1,49 @@
+package com.unisoft.algotrader.backtest;
+
+import com.unisoft.algotrader.core.Currency;
+import com.unisoft.algotrader.core.Instrument;
+import com.unisoft.algotrader.core.Performance;
+import com.unisoft.algotrader.event.EventBusManager;
+import com.unisoft.algotrader.provider.data.historical.DummyDataProvider;
+import com.unisoft.algotrader.series.TimeSeriesHelper;
+import com.unisoft.algotrader.strategy.Strategy;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.concurrent.CountDownLatch;
+
+/**
+ * Created by alex on 6/16/15.
+ */
+public class BackTesterDemo {
+
+
+    private static final Logger LOG = LogManager.getLogger(BackTesterDemo.class);
+
+    public static Instrument testInstrument = new Instrument("TestInst", "TestExch", Currency.HKD.ccyId);
+
+
+    public static void main(String [] args) throws Exception{
+        DummyDataProvider provider = new DummyDataProvider(EventBusManager.INSTANCE.rawMarketDataRB);
+
+        CountDownLatch latch = new CountDownLatch(1);
+        Strategy strategy = new CountDownStrategy("Sid", latch, 20, EventBusManager.INSTANCE.marketDataRB);
+
+        BackTester backTester = new BackTester(strategy, provider, Currency.HKD, 100000, testInstrument, 20110101, 20110111);
+
+        backTester.run();
+
+        latch.await();
+        logPerformance(backTester.getPerformance());
+
+        LOG.info("done");
+    }
+
+    private static void logPerformance(Performance performance){
+
+        LOG.info("Performance:\nEquity\n{}\nPnl\n{}\nDrawdown\n{}"
+                , TimeSeriesHelper.print(performance.getEquitySeries())
+                , TimeSeriesHelper.print(performance.getPnlSeries())
+                , TimeSeriesHelper.print(performance.getDrawdownSeries()));
+    }
+}

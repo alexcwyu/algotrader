@@ -1,7 +1,10 @@
 package com.unisoft.algotrader.serialization.kryo;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.*;
+import com.esotericsoftware.kryo.io.ByteBufferInput;
+import com.esotericsoftware.kryo.io.ByteBufferOutput;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.google.common.collect.Maps;
 import com.unisoft.algotrader.serialization.Serializer;
 

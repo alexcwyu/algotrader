@@ -1,9 +1,6 @@
 package com.unisoft.algotrader.networking.jeromq;
 
 import org.zeromq.ZMQ;
-import org.zeromq.ZMQ;
-import org.zeromq.ZMQ.Context;
-import org.zeromq.ZMQ.Socket;
 
 /**
  * Created by alex on 4/19/15.

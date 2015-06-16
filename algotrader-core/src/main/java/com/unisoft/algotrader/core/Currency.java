@@ -16,7 +16,7 @@ public class Currency {
     public static Currency CAD = new CurrencyBuilder().setCcyId("CAD").setName("Canadian Dollar").createCurrency();
 
     public static Currency GBP = new CurrencyBuilder().setCcyId("GBP").setName("British Pound").createCurrency();
-    public static Currency EUR = new CurrencyBuilder().setCcyId("USD").setName("Euro").createCurrency();
+    public static Currency EUR = new CurrencyBuilder().setCcyId("EUR").setName("Euro").createCurrency();
     public static Currency JPY = new CurrencyBuilder().setCcyId("JPY").setName("Japanese Yen").createCurrency();
     public static Currency CHF = new CurrencyBuilder().setCcyId("CHF").setName("Swiss Franc").createCurrency();
     public static Currency SGD = new CurrencyBuilder().setCcyId("SGD").setName("Singapore Dollar").createCurrency();

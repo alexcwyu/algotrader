@@ -1,8 +1,8 @@
 /* Generated SBE (Simple Binary Encoding) message codec */
 package com.unisoft.algotrader.event.data.sbe;
 
-import uk.co.real_logic.sbe.codec.java.*;
 import uk.co.real_logic.agrona.concurrent.UnsafeBuffer;
+import uk.co.real_logic.sbe.codec.java.CodecUtil;
 
 public class Trade
 {

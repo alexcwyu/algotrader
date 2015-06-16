@@ -4,28 +4,24 @@ import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.event.EventBusManager;
 import com.unisoft.algotrader.event.data.Bar;
 import com.unisoft.algotrader.event.data.MarketDataContainer;
-import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
 
-import java.io.FileReader;
-import java.io.Reader;
 import java.text.SimpleDateFormat;
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by alex on 5/19/15.
  */
 public class DummyDataProvider implements HistoricalDataProvider{
 
-    private final int count;
     private final RingBuffer<MarketDataContainer> marketDataRB;
 
-    private final static  int DAILY_SIZE = 60*60*24;
-    public DummyDataProvider(int count){
-        this(count, EventBusManager.INSTANCE.rawMarketDataRB);
+    private final static long DAY_TO_MS = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS);
+    private final static int DAILY_SIZE = 60*60*24;
+    public DummyDataProvider(){
+        this(EventBusManager.INSTANCE.rawMarketDataRB);
     }
-    public DummyDataProvider(int count, RingBuffer<MarketDataContainer> marketDataRB){
-        this.count = count;
+    public DummyDataProvider(RingBuffer<MarketDataContainer> marketDataRB){
         this.marketDataRB = marketDataRB;
     }
 
@@ -39,33 +35,34 @@ public class DummyDataProvider implements HistoricalDataProvider{
         settings.setHeaderExtractionEnabled(true);
 
         try {
+            long dateTime = FORMAT2.parse(Integer.toString(fromDate)).getTime();
+            long toDateTime = FORMAT2.parse(Integer.toString(toDate)).getTime();
 
-            long fromDateTime = FORMAT2.parse(Integer.toString(fromDate)).getTime();
-
-            for (int i = 0 ; i <count; i++) {
-
-                long time = fromDateTime + i;
+            int count = 0;
+            while (dateTime < toDateTime) {
                 long sequence = marketDataRB.next();
 
                 MarketDataContainer event = marketDataRB.get(sequence);
                 event.reset();
-                event.dateTime = fromDateTime;
+                event.dateTime = dateTime;
                 event.instId = instId;
                 event.bitset.set(MarketDataContainer.BAR_BIT);
 
                 Bar bar = event.bar;
                 bar.instId = instId;
-                bar.dateTime = time;
+                bar.dateTime = dateTime;
                 bar.size = DAILY_SIZE;
-                bar.high = 1000 + i;
-                bar.low = 800 +i;
-                bar.open = 900 +i;
-                bar.close = 950 + i;
+                bar.high = 1000 + count;
+                bar.low = 800 +count;
+                bar.open = 900 +count;
+                bar.close = 950 + count;
                 bar.volume = 0;
                 bar.openInt = 0;
 
                 marketDataRB.publish(sequence);
 
+                dateTime += DAY_TO_MS;
+                count++;
             }
         }
         catch(Exception e){
@@ -84,7 +81,7 @@ public class DummyDataProvider implements HistoricalDataProvider{
     }
 
     public static void main(String [] args){
-        DummyDataProvider provider = new DummyDataProvider(1000);
+        DummyDataProvider provider = new DummyDataProvider();
         provider.subscribe("HSI", 20110101, 20141231);
     }
 }

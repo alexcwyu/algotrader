@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.core;
 
-import com.beust.jcommander.internal.Maps;
+import com.google.common.collect.Maps;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,0 +1,4 @@
+dependencies {
+    compile project(':algotrader-core')
+    compile project(':algotrader-backtest')
+}

@@ -5,6 +5,8 @@ import com.univocity.parsers.common.ParsingContext;
 import com.univocity.parsers.common.processor.ObjectRowProcessor;
 import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.FileReader;
 import java.io.Reader;
@@ -16,6 +18,7 @@ import java.util.List;
  * Created by alex on 5/16/15.
  */
 public class CSVTest {
+    private static final Logger LOG = LogManager.getLogger(CSVTest.class);
     public static SimpleDateFormat FORMAT= new SimpleDateFormat("yyyyMMdd");
     public static void main(String ... args) throws Exception{
         CsvParserSettings settings = new CsvParserSettings();
@@ -57,7 +60,7 @@ public class CSVTest {
             Double.parseDouble(row[4]),
             Integer.parseInt(row[5]),
                     0);
-            System.out.println(bar);
+            LOG.info(bar);
         }
 
         // The resources are closed automatically when the end of the input is reached,
@@ -73,7 +76,7 @@ public class CSVTest {
             @Override
             public void rowProcessed(Object[] row, ParsingContext context) {
                 //here is the row. Let's just print it.
-                System.out.println(Arrays.toString(row));
+                LOG.info(Arrays.toString(row));
             }
         };
         settings.setRowProcessor(rowProcessor);

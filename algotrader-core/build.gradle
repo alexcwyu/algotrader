@@ -1,11 +1,4 @@
-apply plugin: 'java'
 
-sourceCompatibility = 1.8
-version = '1.0'
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
     //threading
@@ -42,5 +35,5 @@ dependencies {
 
 
     //testing
-    testCompile "junit:junit:${junitVersion}"
+    //testCompile "junit:junit:${junitVersion}"
 }

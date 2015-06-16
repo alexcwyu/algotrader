@@ -8,7 +8,7 @@ import com.unisoft.algotrader.serialization.MessageHeader;
 import com.unisoft.algotrader.serialization.Serializer;
 import com.unisoft.algotrader.serialization.kryo.KryoSerializer;
 import com.unisoft.algotrader.serialization.msgpack.MsgpackSerializer;
-import org.testng.annotations.Test;
+import org.junit.Test;
 import uk.co.real_logic.aeron.common.RateReporter;
 
 import java.nio.ByteBuffer;

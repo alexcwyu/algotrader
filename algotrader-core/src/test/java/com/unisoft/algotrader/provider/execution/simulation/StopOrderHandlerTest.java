@@ -16,8 +16,6 @@ import org.junit.Test;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyDouble;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 /**
  * Created by alex on 6/6/15.

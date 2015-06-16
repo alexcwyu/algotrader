@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.core;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 /**
  * Created by alex on 6/1/15.
