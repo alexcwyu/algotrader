@@ -5,6 +5,7 @@ import com.unisoft.algotrader.core.*;
 import com.unisoft.algotrader.event.EventBusManager;
 import com.unisoft.algotrader.order.OrderManager;
 import com.unisoft.algotrader.provider.ProviderManager;
+import com.unisoft.algotrader.provider.SubscriptionKey;
 import com.unisoft.algotrader.provider.data.BarFactory;
 import com.unisoft.algotrader.provider.data.InstrumentDataManager;
 import com.unisoft.algotrader.provider.data.historical.DummyDataProvider;
@@ -97,7 +98,7 @@ public class BackTester {
     public void run(){
         executor.submit(barFactory);
         executor.submit(simulator);
-        dataProvider.subscribe(instrument.instId, fromDate, toDate);
+        dataProvider.subscribe(SubscriptionKey.createDailySubscriptionKey(instrument.instId), fromDate, toDate);
     }
 
     public Performance getPerformance(){
