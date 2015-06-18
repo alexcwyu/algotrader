@@ -4,5 +4,3 @@ trade:([]
  sym:`symbol$();
  price:`real$();
  size:`int$())
-
-cd
