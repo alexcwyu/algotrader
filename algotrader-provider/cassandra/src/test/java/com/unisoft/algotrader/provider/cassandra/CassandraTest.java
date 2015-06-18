@@ -1,5 +1,9 @@
 package com.unisoft.algotrader.provider.cassandra;
-import com.datastax.driver.core.*;
+
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
+import com.datastax.driver.core.Session;
 /**
  * Created by alex on 6/18/15.
  */

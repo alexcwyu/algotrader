@@ -1,8 +1,7 @@
 package com.unisoft.algotrader.threading.disruptor.dsl;
 
 import com.lmax.disruptor.*;
-import com.lmax.disruptor.dsl.*;
-import com.lmax.disruptor.util.Util;
+import com.lmax.disruptor.dsl.ProducerType;
 import com.unisoft.algotrader.threading.MultiEventProcessor;
 import com.unisoft.algotrader.threading.disruptor.waitstrategy.NoWaitStrategy;
 

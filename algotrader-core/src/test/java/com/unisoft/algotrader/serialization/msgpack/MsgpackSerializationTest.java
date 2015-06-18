@@ -22,6 +22,7 @@ public class MsgpackSerializationTest {
     public static void setup(){
         serializer = new MsgpackSerializer();
 
+        serializer.register(InstId.class);
         serializer.register(Quote.class);
         serializer.register(Trade.class);
         serializer.register(Bar.class);

@@ -1,7 +1,6 @@
 package com.unisoft.algotrader.provider;
 
 import com.google.common.base.Objects;
-import com.unisoft.algotrader.core.Instrument;
 import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.data.Bar;
 import com.unisoft.algotrader.event.data.Quote;

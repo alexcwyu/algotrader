@@ -6,7 +6,6 @@ import com.unisoft.algotrader.threading.disruptor.waitstrategy.MultiBufferWaitSt
 import com.unisoft.algotrader.threading.disruptor.waitstrategy.NoWaitStrategy;
 
 import java.util.Queue;
-import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.util.Arrays.fill;

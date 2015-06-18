@@ -1,7 +1,6 @@
 package com.unisoft.algotrader.event.data;
 
 import com.google.common.base.Objects;
-import com.lmax.disruptor.EventFactory;
 import com.unisoft.algotrader.core.id.InstId;
 
 /**

@@ -57,7 +57,7 @@ public class StopLimitOrderHandlerTest {
 
         quote = SampleEventFactory.createQuote(SampleEventFactory.testInstrument.instId, 95, 98, 550, 600);
         trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 99, 500);
-        bar = SampleEventFactory.createBar(SampleEventFactory.testInstrument.instId, 92, 60, 87, 88);
+        bar = SampleEventFactory.createBar(SampleEventFactory.testInstrument.instId, 87, 92, 60, 88);
     }
 
     @Test

@@ -26,7 +26,7 @@ public class BackTesterDemo {
 
 
     public static void main(String [] args) throws Exception{
-        DummyDataProvider provider = new DummyDataProvider(EventBusManager.INSTANCE.rawMarketDataRB);
+        DummyDataProvider provider = new DummyDataProvider();
 
         CountDownLatch latch = new CountDownLatch(1);
         Strategy strategy = new CountDownStrategy("Sid", latch, 20, EventBusManager.INSTANCE.marketDataRB);

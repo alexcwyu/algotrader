@@ -3,6 +3,7 @@ package com.unisoft.algotrader.provider.cassandra;
 import com.datastax.driver.core.*;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.unisoft.algotrader.core.id.InstId;
+import com.unisoft.algotrader.event.EventBus;
 import com.unisoft.algotrader.event.data.Bar;
 import com.unisoft.algotrader.event.data.Quote;
 import com.unisoft.algotrader.event.data.Trade;
@@ -15,9 +16,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
-import static com.datastax.driver.core.querybuilder.QueryBuilder.gte;
-import static com.datastax.driver.core.querybuilder.QueryBuilder.lt;
+import static com.datastax.driver.core.querybuilder.QueryBuilder.*;
 
 /**
  * Created by alex on 6/18/15.
@@ -29,6 +28,14 @@ public class CassandraDataStore implements DataStore, HistoricalDataProvider {
     private static final String BAR_INSERT_STATEMENT = "INSERT INTO bar (instid, barsize, datetime, open, high, low, close, volume, openint) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String QUOTE_INSERT_STATEMENT = "INSERT INTO quote (instid, datetime, bid, ask, bidsize, asksize) VALUES (?, ?, ?, ?, ?, ?);";
     private static final String TRADE_INSERT_STATEMENT = "INSERT INTO bar (instid, datetime, price, size) VALUES (?, ?, ?, ?);";
+
+    private static final String COL_DATETIME = "datetime";
+    private static final String COL_INSTID = "instid";
+    private static final String COL_BARSIZE = "barsize";
+
+    private static final String TABLE_BAR = "bar";
+    private static final String TABLE_TRADE = "trade";
+    private static final String TABLE_QUOTE = "quote";
 
     private AtomicBoolean connected = new AtomicBoolean(false);
 
@@ -42,7 +49,6 @@ public class CassandraDataStore implements DataStore, HistoricalDataProvider {
     }
 
     /// PROVIDER
-
     @Override
     public String providerId() {
         return "Cassandra";
@@ -68,7 +74,6 @@ public class CassandraDataStore implements DataStore, HistoricalDataProvider {
     }
 
     /// DATASTORE
-
     @Override
     public void onBar(Bar bar) {
         PreparedStatement statement = session.prepare(BAR_INSERT_STATEMENT);
@@ -91,63 +96,51 @@ public class CassandraDataStore implements DataStore, HistoricalDataProvider {
     }
 
     /// PROVIDER
-
-
     @Override
-    public void subscribe(SubscriptionKey subscriptionKey, Date fromDate, Date toDate) {
+    public void subscribe(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate) {
         switch (subscriptionKey.type) {
             case Bar:
-                queryBar(subscriptionKey, fromDate, toDate);
+                queryBar(eventBus, subscriptionKey, fromDate, toDate);
                 break;
 
             case Trade:
-                queryTrade(subscriptionKey, fromDate, toDate);
+                queryTrade(eventBus, subscriptionKey, fromDate, toDate);
                 break;
 
             case Quote:
-                queryQuote(subscriptionKey, fromDate, toDate);
+                queryQuote(eventBus, subscriptionKey, fromDate, toDate);
                 break;
         }
     }
 
-
-    private void queryBar(SubscriptionKey subscriptionKey, Date fromDate, Date toDate){
-        Statement select = QueryBuilder.select().all().from(config.keyspace, "bar")
-                .where(eq("instid", subscriptionKey.instId.toString()))
-                .and(eq("barsize", subscriptionKey.barSize))
-                .and(gte("datetime", fromDate)).and(lt("datetime", toDate));
+    private void queryBar(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate){
+        Statement select = QueryBuilder.select().all().from(config.keyspace, TABLE_BAR)
+                .where(eq(COL_INSTID, subscriptionKey.instId.toString()))
+                .and(eq(COL_BARSIZE, subscriptionKey.barSize))
+                .and(gte(COL_DATETIME, fromDate)).and(lt(COL_DATETIME, toDate));
         ResultSet results = session.execute(select);
         for (Row row : results) {
-            Bar bar = new Bar(InstId.parse(row.getString(0)), row.getDate(2).getTime(), row.getInt(1), row.getDouble(4), row.getDouble(5), row.getDouble(3), row.getDouble(6), row.getLong(7), row.getLong(8));
-            System.out.println(bar);
+            eventBus.publishBar(InstId.parse(row.getString(0)), row.getInt(1), row.getDate(2).getTime(), row.getDouble(3), row.getDouble(4), row.getDouble(5), row.getDouble(6), row.getLong(7), row.getLong(8));
         }
     }
 
-    private void queryQuote(SubscriptionKey subscriptionKey, Date fromDate, Date toDate){
-        Statement select = QueryBuilder.select().all().from(config.keyspace, "quote")
-                .where(eq("instid", subscriptionKey.instId))
-                .and(gte("datetime", fromDate)).and(lt("datetime", toDate));
+    private void queryQuote(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate){
+        Statement select = QueryBuilder.select().all().from(config.keyspace, TABLE_QUOTE)
+                .where(eq(COL_INSTID, subscriptionKey.instId))
+                .and(gte(COL_DATETIME, fromDate)).and(lt(COL_DATETIME, toDate));
         ResultSet results = session.execute(select);
         for (Row row : results) {
-            Quote quote = new Quote(InstId.parse(row.getString(0)), row.getDate(1).getTime(), row.getDouble(2), row.getDouble(3), row.getInt(4), row.getInt(5));
-            LOG.info(quote);
+            eventBus.publishQuote(InstId.parse(row.getString(0)), row.getDate(1).getTime(), row.getDouble(2), row.getDouble(3), row.getInt(4), row.getInt(5));
         }
     }
 
-    private void queryTrade(SubscriptionKey subscriptionKey, Date fromDate, Date toDate){
-        Statement select = QueryBuilder.select().all().from(config.keyspace, "trade")
-                .where(eq("instid", subscriptionKey.instId))
-                .and(gte("datetime", fromDate)).and(lt("datetime", toDate));
+    private void queryTrade(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate){
+        Statement select = QueryBuilder.select().all().from(config.keyspace, TABLE_TRADE)
+                .where(eq(COL_INSTID, subscriptionKey.instId))
+                .and(gte(COL_DATETIME, fromDate)).and(lt(COL_DATETIME, toDate));
         ResultSet results = session.execute(select);
         for (Row row : results) {
-            Trade trade = new Trade(InstId.parse(row.getString(0)), row.getDate(1).getTime(), row.getDouble(2), row.getInt(3));
-            LOG.info(trade);
+            eventBus.publishTrade(InstId.parse(row.getString(0)), row.getDate(1).getTime(), row.getDouble(2), row.getInt(3));
         }
-    }
-
-    public static void main(String [] args) throws Exception{
-        CassandraDataStore provider = new CassandraDataStore(new CassandraConfig());
-        provider.connect();
-        provider.subscribe(SubscriptionKey.createBarSubscriptionKey(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(), 60), YYYYMMDD_FORMAT.parse("20101010"), YYYYMMDD_FORMAT.parse("20161010"));
     }
 }

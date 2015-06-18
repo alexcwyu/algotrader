@@ -3,6 +3,7 @@ package com.unisoft.algotrader.backtest;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import com.unisoft.algotrader.core.*;
 import com.unisoft.algotrader.event.EventBusManager;
+import com.unisoft.algotrader.event.data.RingBufferMarketDataEventBus;
 import com.unisoft.algotrader.order.OrderManager;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.SubscriptionKey;
@@ -95,7 +96,7 @@ public class BackTester {
     public void run(){
         executor.submit(barFactory);
         executor.submit(simulator);
-        dataProvider.subscribe(SubscriptionKey.createDailySubscriptionKey(instrument.instId), fromDate, toDate);
+        dataProvider.subscribe(new RingBufferMarketDataEventBus(EventBusManager.INSTANCE.rawMarketDataRB), SubscriptionKey.createDailySubscriptionKey(instrument.instId), fromDate, toDate);
     }
 
     public Performance getPerformance(){

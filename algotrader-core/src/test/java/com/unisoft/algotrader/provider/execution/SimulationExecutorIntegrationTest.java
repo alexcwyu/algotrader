@@ -24,7 +24,6 @@ import java.util.List;
 import static com.unisoft.algotrader.provider.execution.SimulatorConfig.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
 /**
@@ -115,7 +114,7 @@ public class SimulationExecutorIntegrationTest {
         if (setTrade)
             InstrumentDataManager.INSTANCE.onTrade(createTrade(89.5, 500));
         if (setBar)
-            InstrumentDataManager.INSTANCE.onBar(createBar(95, 80, 82, 92));
+            InstrumentDataManager.INSTANCE.onBar(createBar(82, 95, 80, 92));
     }
 
     @Test
@@ -278,7 +277,7 @@ public class SimulationExecutorIntegrationTest {
         assertTrue(strategy.executionReports.size() == 1);
         assertNotFilled(strategy.executionReports.get(0));
 
-        simulationExecutor.onBar(createBar(987, 87, 500, 600));
+        simulationExecutor.onBar(createBar(500, 987, 87, 600));
 
         assertTrue(strategy.executionReports.size() == 2);
         ExecutionReport report = strategy.executionReports.get(1);
@@ -338,10 +337,10 @@ public class SimulationExecutorIntegrationTest {
     }
 
     private Bar createBar(
+            double open,
             double high,
             double low,
-            double open,
             double close){
-        return new Bar(testInstrument.instId, System.currentTimeMillis(), 60, high, low, open, close, 0, 0);
+        return new Bar(testInstrument.instId, 60, System.currentTimeMillis(), open, high, low, close, 0, 0);
     }
 }

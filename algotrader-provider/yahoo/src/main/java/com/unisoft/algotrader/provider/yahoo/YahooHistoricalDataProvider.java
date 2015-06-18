@@ -1,9 +1,11 @@
 package com.unisoft.algotrader.provider.yahoo;
 
-import com.unisoft.algotrader.core.id.InstId;
-import com.unisoft.algotrader.event.data.Bar;
+import com.google.common.collect.Lists;
+import com.unisoft.algotrader.event.EventBus;
 import com.unisoft.algotrader.provider.SubscriptionKey;
 import com.unisoft.algotrader.provider.csv.historical.HistoricalDataProvider;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -12,15 +14,22 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by alex on 6/16/15.
+ *
+ * http://www.jarloo.com/google-finance-and-yql/
+ * https://www.bigmiketrading.com/brokers-data-feeds/31382-yahoo-finance-historical-daily-data-retrieved-programmatically.html#post403430
+ * https://www.quantconnect.com/blog/downloading-yahoo-finance-data-with-c/
  */
+
 public class YahooHistoricalDataProvider implements HistoricalDataProvider {
 
-    //http://www.jarloo.com/google-finance-and-yql/
-    //https://www.bigmiketrading.com/brokers-data-feeds/31382-yahoo-finance-historical-daily-data-retrieved-programmatically.html#post403430
-//https://www.quantconnect.com/blog/downloading-yahoo-finance-data-with-c/
+
+
+    private static final Logger LOG = LogManager.getLogger(YahooHistoricalDataProvider.class);
+
     private static final String URL = "http://ichart.yahoo.com/table.csv?s=%1$s&a=%2$d&b=%3$d&c=%4$d&d=%5$d&e=%6$d&f=%7$d";
 
     private static final String YAHOO_CSV_HEADER = "Date,Open,High,Low,Close,Volume,Adj Close";
@@ -29,28 +38,26 @@ public class YahooHistoricalDataProvider implements HistoricalDataProvider {
 
 
     @Override
-    public void subscribe(SubscriptionKey subscriptionKey, Date fromDate, Date toDate) {
+    public void subscribe(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate) {
         String url = getURL(subscriptionKey, fromDate, toDate);
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new URL(url).openConnection().getInputStream()))) {
             String line;
-
             String header = bufferedReader.readLine();
-
             assert YAHOO_CSV_HEADER.equals(header);
 
-            while ((line = bufferedReader.readLine()) != null) {
-                String [] tokens = line.split(",");
-                Bar bar = new Bar();
-                bar.instId = subscriptionKey.instId;
-                bar.size = SubscriptionKey.DAILY_SIZE;
-                bar.dateTime = DATE_FORMAT.parse(tokens[0]).getTime();
-                bar.open = Double.parseDouble(tokens[1]);
-                bar.high = Double.parseDouble(tokens[2]);
-                bar.low = Double.parseDouble(tokens[3]);
-                bar.close = Double.parseDouble(tokens[4]);
-                bar.volume = Long.parseLong(tokens[5]);
+            List<String> csvData = Lists.newArrayList();
 
-                System.out.println(bar);
+            while ((line = bufferedReader.readLine()) != null) {
+                csvData.add(line);
+            }
+
+            //reverse the data, as the yahoo'csv store latest on the top
+            for (int i = csvData.size() -1; i>=0; i--){
+                line = csvData.get(i);
+                String [] tokens = line.split(",");
+
+                eventBus.publishBar(subscriptionKey.instId, SubscriptionKey.DAILY_SIZE, DATE_FORMAT.parse(tokens[0]).getTime(),
+                        Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]), Double.parseDouble(tokens[3]), Double.parseDouble(tokens[4]), Long.parseLong(tokens[5]), 0);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -108,13 +115,6 @@ public class YahooHistoricalDataProvider implements HistoricalDataProvider {
         String s = prefix + query2.replaceAll(" ", "%20") + suffix;
 
         System.out.println(s);
-    }
-
-
-    public static void main(String [] args) throws Exception{
-        YahooHistoricalDataProvider provider = new YahooHistoricalDataProvider();
-
-        provider.subscribe(SubscriptionKey.createDailySubscriptionKey(InstId.Builder.as().symbol("GOOG").exchId("NASDAQ").build()), 20150601, 20150616);
     }
 
 }

@@ -61,10 +61,10 @@ public class SampleEventFactory {
 
     public static Bar createBar(
             InstId instId,
+            double open,
             double high,
             double low,
-            double open,
             double close){
-        return new Bar(instId, System.currentTimeMillis(), 60, high, low, open, close, 0, 0);
+        return new Bar(instId, 60, System.currentTimeMillis(), open, high, low, close, 0, 0);
     }
 }

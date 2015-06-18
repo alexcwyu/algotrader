@@ -1,10 +1,6 @@
 package com.unisoft.algotrader.provider.csv.historical;
 
-import com.lmax.disruptor.RingBuffer;
-import com.unisoft.algotrader.core.id.InstId;
-import com.unisoft.algotrader.event.EventBusManager;
-import com.unisoft.algotrader.event.data.Bar;
-import com.unisoft.algotrader.event.data.MarketDataContainer;
+import com.unisoft.algotrader.event.EventBus;
 import com.unisoft.algotrader.provider.SubscriptionKey;
 import com.univocity.parsers.csv.CsvParserSettings;
 
@@ -17,24 +13,14 @@ import java.util.concurrent.TimeUnit;
  */
 public class DummyDataProvider implements HistoricalDataProvider {
 
-    private final RingBuffer<MarketDataContainer> marketDataRB;
-
     private final static long DAY_TO_MS = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS);
     private final static int DAILY_SIZE = 60 * 60 * 24;
-
-    public DummyDataProvider() {
-        this(EventBusManager.INSTANCE.rawMarketDataRB);
-    }
-
-    public DummyDataProvider(RingBuffer<MarketDataContainer> marketDataRB) {
-        this.marketDataRB = marketDataRB;
-    }
 
     public static SimpleDateFormat FORMAT2 = new SimpleDateFormat("yyyyMMdd");
 
 
     @Override
-    public void subscribe(SubscriptionKey subscriptionKey, Date fromDate, Date toDate) {
+    public void subscribe(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate) {
         CsvParserSettings settings = new CsvParserSettings();
 
         settings.getFormat().setLineSeparator("\n");
@@ -46,26 +32,13 @@ public class DummyDataProvider implements HistoricalDataProvider {
 
         int count = 0;
         while (dateTime < toDateTime) {
-            long sequence = marketDataRB.next();
 
-            MarketDataContainer event = marketDataRB.get(sequence);
-            event.reset();
-            event.dateTime = dateTime;
-            event.instId = subscriptionKey.instId;
-            event.bitset.set(MarketDataContainer.BAR_BIT);
-
-            Bar bar = event.bar;
-            bar.instId = subscriptionKey.instId;
-            bar.dateTime = dateTime;
-            bar.size = subscriptionKey.barSize;
-            bar.high = 1000 + count;
-            bar.low = 800 + count;
-            bar.open = 900 + count;
-            bar.close = 950 + count;
-            bar.volume = 0;
-            bar.openInt = 0;
-
-            marketDataRB.publish(sequence);
+            eventBus.publishBar(subscriptionKey.instId, subscriptionKey.barSize,dateTime,
+                    900 + count,
+                    1000 + count,
+                    800 + count,
+                    950 + count,
+                    0,0);
 
             dateTime += DAY_TO_MS;
             count++;
@@ -74,7 +47,7 @@ public class DummyDataProvider implements HistoricalDataProvider {
 
     @Override
     public String providerId() {
-        return "CSV";
+        return "Dummy";
     }
 
     @Override
@@ -82,8 +55,4 @@ public class DummyDataProvider implements HistoricalDataProvider {
         return true;
     }
 
-    public static void main(String [] args){
-        DummyDataProvider provider = new DummyDataProvider();
-        provider.subscribe(SubscriptionKey.createDailySubscriptionKey(InstId.Builder.as().symbol("HSI").exchId("HKEX").build()), 20110101, 20141231);
-    }
 }

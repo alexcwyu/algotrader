@@ -1,9 +1,11 @@
 package com.unisoft.algotrader.provider.google;
 
-import com.unisoft.algotrader.core.id.InstId;
-import com.unisoft.algotrader.event.data.Bar;
+import com.google.common.collect.Lists;
+import com.unisoft.algotrader.event.EventBus;
 import com.unisoft.algotrader.provider.SubscriptionKey;
 import com.unisoft.algotrader.provider.csv.historical.HistoricalDataProvider;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -13,21 +15,30 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by alex on 6/16/15.
+ *
+ * inspired by http://stackoverflow.com/questions/9093000/read-csv-file-from-internet
+ * https://www.bigmiketrading.com/brokers-data-feeds/31385-google-finance-historical-daily-data-retrieved-programmatically.html
+ * http://trading.cheno.net/downloading-google-intraday-historical-data-with-python/
+ * http://www.codeproject.com/Articles/221952/Simple-Csharp-DLL-to-download-data-from-Google-Fin
+ * http://www.networkerror.org/component/content/article/1-technical-wootness/44-googles-undocumented-finance-api.html
+ * http://www.marketcalls.in/database/google-realtime-intraday-backfill-data.html
  */
 public class GoogleHistoricalDataProvider implements HistoricalDataProvider {
+
+    private static final Logger LOG = LogManager.getLogger(GoogleHistoricalDataProvider.class);
 
     private static final String GOOGLE_CSV_HEADER = "\uFEFFDate,Open,High,Low,Close,Volume";
     private static final String URL = "http://www.google.com/finance/historical?q=%1$s&histperiod=daily&startdate=%2$s&enddate=%3$s&output=csv";
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMM d yyyy");
-
     private static final SimpleDateFormat DATE_FORMAT_2 = new SimpleDateFormat("d-MMM-yy");
 
 
     @Override
-    public void subscribe(SubscriptionKey subscriptionKey, Date fromDate, Date toDate) {
+    public void subscribe(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate) {
         String url = getURL(subscriptionKey, fromDate, toDate);
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new URL(url).openConnection().getInputStream()))) {
             String line;
@@ -35,20 +46,20 @@ public class GoogleHistoricalDataProvider implements HistoricalDataProvider {
             String header = bufferedReader.readLine();
 
             assert GOOGLE_CSV_HEADER.equals(header);
+            List<String> csvData = Lists.newArrayList();
 
             while ((line = bufferedReader.readLine()) != null) {
-                String [] tokens = line.split(",");
-                Bar bar = new Bar();
-                bar.instId = subscriptionKey.instId;
-                bar.size = SubscriptionKey.DAILY_SIZE;
-                bar.dateTime = DATE_FORMAT_2.parse(tokens[0]).getTime();
-                bar.open = Double.parseDouble(tokens[1]);
-                bar.high = Double.parseDouble(tokens[2]);
-                bar.low = Double.parseDouble(tokens[3]);
-                bar.close = Double.parseDouble(tokens[4]);
-                bar.volume = Long.parseLong(tokens[5]);
+                csvData.add(line);
+            }
 
-                System.out.println(bar);
+            //reverse the data, as the google'csv store latest on the top
+            for (int i = csvData.size() -1; i>=0; i--){
+                line = csvData.get(i);
+                String [] tokens = line.split(",");
+
+                eventBus.publishBar(subscriptionKey.instId, SubscriptionKey.DAILY_SIZE, DATE_FORMAT_2.parse(tokens[0]).getTime(),
+                        Double.parseDouble(tokens[1]),Double.parseDouble(tokens[2]),Double.parseDouble(tokens[3]),Double.parseDouble(tokens[4]),Long.parseLong(tokens[5]), 0);
+
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -77,12 +88,6 @@ public class GoogleHistoricalDataProvider implements HistoricalDataProvider {
         }
     }
 
-    //inspired by http://stackoverflow.com/questions/9093000/read-csv-file-from-internet
-    //https://www.bigmiketrading.com/brokers-data-feeds/31385-google-finance-historical-daily-data-retrieved-programmatically.html
-    //http://trading.cheno.net/downloading-google-intraday-historical-data-with-python/
-    //http://www.codeproject.com/Articles/221952/Simple-Csharp-DLL-to-download-data-from-Google-Fin
-    //http://www.networkerror.org/component/content/article/1-technical-wootness/44-googles-undocumented-finance-api.html
-    //http://www.marketcalls.in/database/google-realtime-intraday-backfill-data.html
     public static void sample_query1() {
         try {
             URL url = new URL("http://www.google.com/finance/historical?q=GOOG&histperiod=daily&startdate=Apr+1+2014&enddate=Apr+15+2014&output=csv");
@@ -117,11 +122,4 @@ public class GoogleHistoricalDataProvider implements HistoricalDataProvider {
         }
     }
 
-    public static void main(String [] args) throws Exception{
-        GoogleHistoricalDataProvider provider = new GoogleHistoricalDataProvider();
-
-        provider.subscribe(SubscriptionKey.createDailySubscriptionKey(InstId.Builder.as().symbol("GOOG").exchId("NASDAQ").build()), 20150601, 20150616);
-
-
-    }
 }

@@ -22,8 +22,10 @@ public class CSVDataStoreTest {
         StringWriter sw = new StringWriter();
         CSVDataStore csvImport = new CSVDataStore(sw);
 
-        Bar bar1 = new Bar(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(), 19999, 60, 9999, 100, 500, 600);
-        Bar bar2 = new Bar(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(), 20000, 60, 20000, 120, 600, 700);
+        Bar bar1 = new Bar(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(),  60, 19999,
+                500, 9999, 100, 600);
+        Bar bar2 = new Bar(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(),  60, 20000,
+                600, 20000, 120, 700);
 
         csvImport.onBar(bar1);
         csvImport.onBar(bar2);

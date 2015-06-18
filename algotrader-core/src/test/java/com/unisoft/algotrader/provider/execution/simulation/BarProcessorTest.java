@@ -30,7 +30,7 @@ public class BarProcessorTest {
     @Before
     public void setup(){
         order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.Limit, 800, 88);
-        bar = SampleEventFactory.createBar(SampleEventFactory.testInstrument.instId, 95, 60, 87, 88);
+        bar = SampleEventFactory.createBar(SampleEventFactory.testInstrument.instId, 87, 95, 60, 88);
     }
 
     @Test

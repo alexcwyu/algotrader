@@ -1,13 +1,8 @@
 package com.unisoft.algotrader.threading.disruptor.dsl;
 
-import com.lmax.disruptor.BlockingWaitStrategy;
-import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.EventTranslator;
 import com.lmax.disruptor.RingBuffer;
-import com.lmax.disruptor.dsl.Disruptor;
-import com.lmax.disruptor.dsl.EventHandlerGroup;
 import com.lmax.disruptor.dsl.ProducerType;
-import com.unisoft.algotrader.event.data.Bar;
 import com.unisoft.algotrader.threading.MultiEventProcessor;
 import org.junit.After;
 import org.junit.Before;
@@ -17,13 +12,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by alex on 6/11/15.

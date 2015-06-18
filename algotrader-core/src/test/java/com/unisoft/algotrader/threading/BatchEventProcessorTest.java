@@ -5,7 +5,7 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.SequenceBarrier;
 import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.util.DaemonThreadFactory;
-import com.unisoft.algotrader.event.data.*;
+import com.unisoft.algotrader.event.data.Bar;
 import com.unisoft.algotrader.threading.disruptor.waitstrategy.DataPublisher;
 
 import java.util.concurrent.*;

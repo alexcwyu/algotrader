@@ -6,6 +6,7 @@ import com.unisoft.algotrader.core.Portfolio;
 import com.unisoft.algotrader.core.PortfolioManager;
 import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.data.MarketDataContainer;
+import com.unisoft.algotrader.event.data.RingBufferMarketDataEventBus;
 import com.unisoft.algotrader.provider.SubscriptionKey;
 import com.unisoft.algotrader.provider.csv.historical.DummyDataProvider;
 import com.unisoft.algotrader.strategy.Strategy;
@@ -52,7 +53,7 @@ public class CSVPublishTest {
         RingBuffer<MarketDataContainer> marketDataRB
                 = RingBuffer.createSingleProducer(MarketDataContainer.FACTORY, 1024, new NoWaitStrategy());
 
-        DummyDataProvider provider = new DummyDataProvider(marketDataRB);
+        DummyDataProvider provider = new DummyDataProvider();
 
         Portfolio portfolio = new Portfolio("PID1");
         PortfolioManager.INSTANCE.add(portfolio);
@@ -77,7 +78,7 @@ public class CSVPublishTest {
         Thread.sleep(5000);
 
         LOG.info("start");
-        provider.subscribe(SubscriptionKey.createDailySubscriptionKey(InstId.Builder.as().symbol("HSI").exchId("HKEX").build()), 20110101, 20141231);
+        provider.subscribe(new RingBufferMarketDataEventBus(marketDataRB), SubscriptionKey.createDailySubscriptionKey(InstId.Builder.as().symbol("HSI").exchId("HKEX").build()), 20110101, 20141231);
 
         latch.await();
 

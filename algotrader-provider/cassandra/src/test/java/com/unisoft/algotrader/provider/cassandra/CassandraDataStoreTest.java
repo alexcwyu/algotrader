@@ -29,8 +29,10 @@ public class CassandraDataStoreTest {
 
     @Test
     public void testInsertBar(){
-        Bar bar1 = new Bar(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(), Calendar.getInstance().getTime().getTime(), 60, 9999, 100, 500, 600);
-        Bar bar2 = new Bar(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(), Calendar.getInstance().getTime().getTime()+1, 60, 20000, 120, 600, 700);
+        Bar bar1 = new Bar(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(),  60,Calendar.getInstance().getTime().getTime(),
+                500, 9999, 100, 600);
+        Bar bar2 = new Bar(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(),  60, Calendar.getInstance().getTime().getTime()+1,
+                600, 20000, 120, 700);
         cassandraDataStore.onBar(bar1);
         cassandraDataStore.onBar(bar2);
     }

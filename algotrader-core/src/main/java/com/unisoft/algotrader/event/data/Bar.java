@@ -1,7 +1,6 @@
 package com.unisoft.algotrader.event.data;
 
 import com.google.common.base.Objects;
-import com.lmax.disruptor.EventFactory;
 import com.unisoft.algotrader.core.id.InstId;
 
 /**
@@ -11,11 +10,11 @@ public class Bar extends MarketData<Bar> {
 
     public int size = -1;
 
+    public double open = 0.0;
+
     public double high = 0.0;
 
     public double low = 0.0;
-
-    public double open = 0.0;
 
     public double close = 0.0;
 
@@ -30,9 +29,9 @@ public class Bar extends MarketData<Bar> {
     public Bar(Bar bar) {
         super(bar.instId, bar.dateTime);
         this.size = bar.size;
+        this.open = bar.open;
         this.high = bar.high;
         this.low = bar.low;
-        this.open = bar.open;
         this.close = bar.close;
         this.volume = bar.volume;
         this.openInt = bar.openInt;
@@ -41,42 +40,42 @@ public class Bar extends MarketData<Bar> {
 
     public Bar(
             InstId instId,
-            long dateTime,
             int size,
+            long dateTime,
+            double open,
             double high,
             double low,
-            double open,
             double close) {
-        this(instId, dateTime, size, high, low, open, close, 0, 0);
+        this(instId, size, dateTime, open, high, low, close, 0, 0);
     }
 
     public Bar(
             InstId instId,
-            long dateTime,
             int size,
+            long dateTime,
+            double open,
             double high,
             double low,
-            double open,
             double close,
             long volume) {
-        this(instId, dateTime, size, high, low, open, close, volume, 0);
+        this(instId, size, dateTime, open, high, low, close, volume, 0);
     }
 
     public Bar(
             InstId instId,
-            long dateTime,
             int size,
-               double high,
-               double low,
-               double open,
-               double close,
-               long volume,
-               long openInt) {
+            long dateTime,
+            double open,
+            double high,
+            double low,
+            double close,
+            long volume,
+            long openInt) {
         super(instId, dateTime);
         this.size = size;
+        this.open = open;
         this.high = high;
         this.low = low;
-        this.open = open;
         this.close = close;
         this.volume = volume;
         this.openInt = openInt;

@@ -3,16 +3,19 @@ package com.unisoft.algotrader.provider.csv;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.unisoft.algotrader.event.EventBus;
 import com.unisoft.algotrader.event.data.Bar;
 import com.unisoft.algotrader.event.data.Quote;
 import com.unisoft.algotrader.event.data.Trade;
 import com.unisoft.algotrader.provider.SubscriptionKey;
+import com.unisoft.algotrader.provider.csv.historical.HistoricalDataProvider;
+import com.univocity.parsers.csv.CsvParser;
+import com.univocity.parsers.csv.CsvParserSettings;
 import com.univocity.parsers.csv.CsvWriter;
 import com.univocity.parsers.csv.CsvWriterSettings;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
+import java.io.*;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.unisoft.algotrader.provider.SubscriptionKey.createSubscriptionKey;
@@ -21,7 +24,7 @@ import static com.unisoft.algotrader.provider.csv.CSVConfig.*;
 /**
  * Created by alex on 6/16/15.
  */
-public class CSVDataStore implements DataStore {
+public class CSVDataStore implements DataStore, HistoricalDataProvider{
 
     private AtomicBoolean connected = new AtomicBoolean(false);
     private final String path;
@@ -45,7 +48,7 @@ public class CSVDataStore implements DataStore {
         this.path = null;
     }
 
-
+    /// PROVIDER
     @Override
     public String providerId() {
         return "CSV";
@@ -65,12 +68,11 @@ public class CSVDataStore implements DataStore {
         caches.asMap().values().stream().forEach(csvWriter -> csvWriter.close());
     }
 
-
+    /// DATASTORE
     @Override
     public void onBar(Bar bar) {
         SubscriptionKey key = createSubscriptionKey(bar);
         CsvWriter writer = getOrCreateCsvWriter(key);
-        //String dateStr = formatDate(bar.dateTime);
         writer.writeRow(bar.dateTime, bar.open, bar.high, bar.low, bar.close, bar.volume, bar.openInt);
     }
 
@@ -78,7 +80,6 @@ public class CSVDataStore implements DataStore {
     public void onQuote(Quote quote) {
         SubscriptionKey key = createSubscriptionKey(quote);
         CsvWriter writer = getOrCreateCsvWriter(key);
-        //String dateStr = formatDate(quote.dateTime);
         writer.writeRow(quote.dateTime, quote.bid, quote.ask, quote.bidSize, quote.askSize);
     }
 
@@ -86,7 +87,6 @@ public class CSVDataStore implements DataStore {
     public void onTrade(Trade trade) {
         SubscriptionKey key = createSubscriptionKey(trade);
         CsvWriter writer = getOrCreateCsvWriter(key);
-        //String dateStr = formatDate(trade.dateTime);
         writer.writeRow(trade.dateTime, trade.price, trade.size);
     }
 
@@ -115,7 +115,6 @@ public class CSVDataStore implements DataStore {
         }
     }
 
-
     protected String [] getHeader(SubscriptionKey key){
         switch (key.type){
             case Bar:
@@ -127,5 +126,112 @@ public class CSVDataStore implements DataStore {
             default:
                 throw new UnsupportedOperationException();
         }
+    }
+
+    @Override
+    public void subscribe(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate) {
+        CsvParserSettings settings = new CsvParserSettings();
+
+        settings.getFormat().setLineSeparator("\n");
+        settings.getFormat().setDelimiter(',');
+        settings.setHeaderExtractionEnabled(true);
+
+        try {
+            long fromDateTime = fromDate.getTime();
+            long toDateTime = toDate.getTime();
+            CsvParser parser = new CsvParser(settings);
+            Reader reader = new FileReader(path+CSVConfig.getFileName(subscriptionKey));
+
+            switch (subscriptionKey.type) {
+                case Bar:
+                    publishBar(eventBus, subscriptionKey, parser, reader, fromDateTime, toDateTime);
+                    break;
+
+                case Trade:
+                    publishTrade(eventBus, subscriptionKey, parser, reader, fromDateTime, toDateTime);
+                    break;
+
+                case Quote:
+                    publishQuote(eventBus, subscriptionKey, parser, reader, fromDateTime, toDateTime);
+                    break;
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    protected void publishBar(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, CsvParser parser, Reader reader, long fromDateTime, long toDateTime) {
+        try {
+            parser.beginParsing(reader);
+            String[] row;
+            while ((row = parser.parseNext()) != null) {
+                long time = FORMAT.parse(row[0]).getTime();
+                if (lt(time, fromDateTime)) continue;
+                if (gt(time, toDateTime)) break;
+                eventBus.publishBar(subscriptionKey.instId, subscriptionKey.barSize, time,
+                        Double.parseDouble(row[1]), Double.parseDouble(row[2]), Double.parseDouble(row[3]), Double.parseDouble(row[4]), Long.parseLong(row[5]), 0);
+            }
+            parser.stopParsing();
+
+//            List<String[]> allRows = parser.parseAll(reader);
+//            for (String[] row : allRows){
+//                long time = FORMAT.parse(row[0]).getTime();
+//                if (time <fromDateTime)
+//                    continue;
+//                if (time >toDateTime)
+//                    break;
+//                eventBus.publishBar(subscriptionKey.instId, subscriptionKey.barSize, time,
+//                        Double.parseDouble(row[1]), Double.parseDouble(row[2]), Double.parseDouble(row[3]), Double.parseDouble(row[4]), Long.parseLong(row[5]), 0);
+//
+//            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void publishQuote(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, CsvParser parser, Reader reader, long fromDateTime, long toDateTime) {
+        try {
+            parser.beginParsing(reader);
+            String[] row;
+            while ((row = parser.parseNext()) != null) {
+                long time = FORMAT.parse(row[0]).getTime();
+                if (lt(time, fromDateTime)) continue;
+                if (gt(time, toDateTime)) break;
+                eventBus.publishQuote(subscriptionKey.instId, time,
+                        Double.parseDouble(row[1]), Double.parseDouble(row[2]), Integer.parseInt(row[3]), Integer.parseInt(row[4]));
+            }
+            parser.stopParsing();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void publishTrade(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, CsvParser parser, Reader reader, long fromDateTime, long toDateTime) {
+        try {
+            parser.beginParsing(reader);
+            String[] row;
+            while ((row = parser.parseNext()) != null) {
+                long time = FORMAT.parse(row[0]).getTime();
+                if (lt(time, fromDateTime)) continue;
+                if (gt(time, toDateTime)) break;
+                eventBus.publishTrade(subscriptionKey.instId, time,
+                        Double.parseDouble(row[1]), Integer.parseInt(row[2]));
+            }
+            parser.stopParsing();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    boolean lt(long time, long fromDateTime){
+        return (time < fromDateTime);
+    }
+
+    boolean gt(long time, long toDateTime){
+        return (time > toDateTime);
     }
 }

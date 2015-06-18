@@ -52,7 +52,7 @@ public class TrailingStopOrderHandlerTest {
 
         quote = SampleEventFactory.createQuote(SampleEventFactory.testInstrument.instId, 95, 98, 550, 600);
         trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 99, 500);
-        bar = SampleEventFactory.createBar(SampleEventFactory.testInstrument.instId, 92, 80, 87, 88);
+        bar = SampleEventFactory.createBar(SampleEventFactory.testInstrument.instId, 87, 92, 80, 88);
     }
 
     @Test

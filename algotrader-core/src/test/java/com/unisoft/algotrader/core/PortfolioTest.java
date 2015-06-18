@@ -136,7 +136,7 @@ public class PortfolioTest {
         portfolio.onQuote(new Quote(InstId.Builder.as().symbol("0959.HK").exchId("HKEX").build(), System.currentTimeMillis(), 87, 89, 1, 1));
         assertEquals(58870, portfolio.positionValue(), 0.0);
 
-        portfolio.onBar(new Bar(InstId.Builder.as().symbol("0005.HK").exchId("HKEX").build(), System.currentTimeMillis(), 60, 2100, 1900, 2000, 2050, 1, 1));
+        portfolio.onBar(new Bar(InstId.Builder.as().symbol("0005.HK").exchId("HKEX").build(), 60, System.currentTimeMillis(), 2000, 2100, 1900, 2050, 1, 1));
 
         //(-21000 * 2) + 2050 * 50 + 87 * 10
         assertEquals(61370, portfolio.positionValue(), 0.0);
@@ -177,7 +177,7 @@ public class PortfolioTest {
         portfolio.onQuote(new Quote(InstId.Builder.as().symbol("0959.HK").exchId("HKEX").build(), System.currentTimeMillis(), 87, 89, 1, 1));
         assertEquals(58870, portfolio.positionValue(), 0.0);
 
-        portfolio.onBar(new Bar(InstId.Builder.as().symbol("0005.HK").exchId("HKEX").build(), System.currentTimeMillis(), 60, 2100, 1900, 2000, 2050, 1, 1));
+        portfolio.onBar(new Bar(InstId.Builder.as().symbol("0005.HK").exchId("HKEX").build(), 60, System.currentTimeMillis(), 2000, 2100, 1900, 2050, 1, 1));
 
         //(-21000 * 2) + 2050 * 50 + 87 * 10
         assertEquals(61370, portfolio.positionValue(), 0.0);

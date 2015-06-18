@@ -53,8 +53,8 @@ public class CSVTest {
         int size = 60*60*24;
         while ((row = parser.parseNext()) != null) {
             Bar bar = new Bar(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(),
-            FORMAT.parse(row[0]).getTime(),
                     size,
+            FORMAT.parse(row[0]).getTime(),
             Double.parseDouble(row[1]),
             Double.parseDouble(row[2]),
             Double.parseDouble(row[3]),
