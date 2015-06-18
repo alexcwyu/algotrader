@@ -1,5 +1,4 @@
 dependencies {
-    compile project(':algotrader-core')
-    compile project(':algotrader-backtest')
     compile project(':algotrader-provider:algotrader-provider-common')
+    compile "com.datastax.cassandra:cassandra-driver-core:${cassandraDriverVersion}"
 }

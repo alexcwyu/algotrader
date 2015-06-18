@@ -1,4 +1,0 @@
-dependencies {
-    compile project(':algotrader-provider:common')
-    compile 'com.datastax.cassandra:cassandra-driver-core:2.1.6'
-}

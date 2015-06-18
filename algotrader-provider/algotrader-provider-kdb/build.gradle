@@ -1,5 +1,4 @@
 dependencies {
-    compile project(':algotrader-core')
-    compile project(':algotrader-backtest')
     compile project(':algotrader-provider:algotrader-provider-common')
+    compile files('libs/qJava-2.1.2.jar')
 }

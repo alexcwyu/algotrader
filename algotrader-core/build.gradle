@@ -2,7 +2,7 @@
 
 dependencies {
 
-    compile project(':algotrader-provider:common')
+    compile project(':algotrader-provider:algotrader-provider-common')
     compile project(':algotrader-common')
     compile project(':algotrader-config')
 

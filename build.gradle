@@ -168,6 +168,7 @@ ext{
     sbeVersion = "1.0.4-RC2-SNAPSHOT"
     agronaVersion = "latest.release"
     univocityVersion = "latest.release"
+    influxdbVersion = "latest.release"
 
 }
 

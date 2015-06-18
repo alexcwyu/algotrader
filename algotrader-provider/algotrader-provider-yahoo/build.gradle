@@ -1,5 +1,4 @@
 dependencies {
-    compile project(':algotrader-core')
-    compile project(':algotrader-backtest')
     compile project(':algotrader-provider:algotrader-provider-common')
+    compile 'org.jdom:jdom2:2.0.6'
 }

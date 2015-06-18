@@ -1,5 +1,3 @@
 dependencies {
-    compile project(':algotrader-core')
-    compile project(':algotrader-backtest')
     compile project(':algotrader-provider:algotrader-provider-common')
 }
