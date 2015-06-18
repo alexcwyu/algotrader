@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.integration;
 
 import com.lmax.disruptor.RingBuffer;
+import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.data.Bar;
 import com.unisoft.algotrader.event.data.MarketDataContainer;
 import com.unisoft.algotrader.event.data.Quote;
@@ -21,7 +22,7 @@ public class DataPublisher {
         publishQuote(quote.instId, quote.dateTime, quote.bid, quote.ask, quote.bidSize, quote.askSize);
     }
 
-    public void publishQuote(String instId,
+    public void publishQuote(InstId instId,
                              long dateTime,
                              double bid,
                              double ask,
@@ -51,7 +52,7 @@ public class DataPublisher {
     }
 
 
-    public void publishTrade(String instId,
+    public void publishTrade(InstId instId,
                              long dateTime,
                              double price,
                              int size){
@@ -74,7 +75,7 @@ public class DataPublisher {
     public void publishBar(Bar bar){
         publishBar(bar.instId, bar.dateTime, bar.size, bar.high, bar.low, bar.open, bar.close, bar.volume, bar.openInt);
     }
-    public void publishBar(String instId,
+    public void publishBar(InstId instId,
                            long dateTime,
                            int size,
                            double high,

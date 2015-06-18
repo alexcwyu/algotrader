@@ -1,5 +1,6 @@
 package com.unisoft.algotrader.networking;
 
+import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.data.Bar;
 import com.unisoft.algotrader.event.data.Quote;
 import com.unisoft.algotrader.event.data.Trade;
@@ -178,7 +179,7 @@ public abstract class AbstractPubSubTest {
 
             }
 
-            Trade trade = new Trade("HSI", System.currentTimeMillis(), 99, 85);
+            Trade trade = new Trade(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(), System.currentTimeMillis(), 99, 85);
             while (count<expected)
             {
 
@@ -188,7 +189,7 @@ public abstract class AbstractPubSubTest {
 //                    header.msgId = count;
 //                    header.typeId = serializer.getId(trade.getClass());
 
-                    trade.instId = "HSI";
+                    trade.instId = InstId.Builder.as().symbol("HSI").exchId("HKEX").build();
 
 //                    serializer.serialize(header, buffer);
                     serializer.serialize(trade, buffer);

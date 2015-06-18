@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.clock.Clock;
+import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.Event;
 import com.unisoft.algotrader.event.data.Bar;
 import com.unisoft.algotrader.event.data.MarketDataHandler;
@@ -33,7 +34,7 @@ public class Portfolio extends MultiEventProcessor implements MarketDataHandler,
 
     public final Performance performance;
 
-    private final Map<String, Position> positions = Maps.newHashMap();
+    private final Map<InstId, Position> positions = Maps.newHashMap();
 
     private final List<Order> orderList = Lists.newArrayList();
 

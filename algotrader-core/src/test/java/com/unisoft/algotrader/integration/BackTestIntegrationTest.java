@@ -2,9 +2,10 @@ package com.unisoft.algotrader.integration;
 
 import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.core.*;
+import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.data.MarketDataContainer;
 import com.unisoft.algotrader.order.OrderManager;
-import com.unisoft.algotrader.provider.data.InstrumentDataManager;
+import com.unisoft.algotrader.provider.csv.InstrumentDataManager;
 import com.unisoft.algotrader.provider.execution.SimulationExecutor;
 import com.unisoft.algotrader.strategy.StrategyManager;
 import com.unisoft.algotrader.threading.disruptor.waitstrategy.NoWaitStrategy;
@@ -25,7 +26,7 @@ public class BackTestIntegrationTest {
 
     public static void main(String [] args) throws Exception{
 
-        Instrument testInstrument = new Instrument("TestInst", "TestExch", Currency.USD.ccyId);
+        Instrument testInstrument = new Instrument(InstId.Builder.as().symbol("TestInst").exchId("TestExch").build(), Currency.USD.ccyId);
         InstrumentManager.INSTANCE.add(testInstrument);
 
         ExecutorService executor;

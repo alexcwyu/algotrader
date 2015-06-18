@@ -1,9 +1,9 @@
 package com.unisoft.algotrader.provider;
 
 import com.google.common.collect.Maps;
-import com.unisoft.algotrader.provider.data.DataStore;
-import com.unisoft.algotrader.provider.data.historical.HistoricalDataProvider;
-import com.unisoft.algotrader.provider.data.realtime.RealTimeDataProvider;
+import com.unisoft.algotrader.provider.csv.DataStore;
+import com.unisoft.algotrader.provider.csv.historical.HistoricalDataProvider;
+import com.unisoft.algotrader.provider.csv.realtime.RealTimeDataProvider;
 import com.unisoft.algotrader.provider.execution.ExecutionProvider;
 
 import java.util.Map;

@@ -2,6 +2,7 @@ package com.unisoft.algotrader.event.data;
 
 import com.google.common.base.Objects;
 import com.lmax.disruptor.EventFactory;
+import com.unisoft.algotrader.core.id.InstId;
 
 import java.util.BitSet;
 
@@ -33,7 +34,7 @@ public class MarketDataContainer extends MarketData<MarketDataContainer> {
     }
 
     public MarketDataContainer(
-            String instId,
+            InstId instId,
             long dateTime,
             int size,
             Bar bar,

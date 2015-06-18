@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.core;
 
 import com.google.common.collect.Maps;
+import com.unisoft.algotrader.core.id.InstId;
 
 import java.util.Map;
 
@@ -20,13 +21,13 @@ public class InstrumentManager {
 
     }
 
-    private Map<String, Instrument> map = Maps.newConcurrentMap();
+    private Map<InstId, Instrument> map = Maps.newConcurrentMap();
 
     public void add(Instrument instrument){
         map.put(instrument.instId, instrument);
     }
 
-    public Instrument get(String instId){
+    public Instrument get(InstId instId){
         return map.get(instId);
     }
 }

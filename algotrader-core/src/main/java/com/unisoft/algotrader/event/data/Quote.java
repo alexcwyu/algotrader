@@ -2,6 +2,7 @@ package com.unisoft.algotrader.event.data;
 
 import com.google.common.base.Objects;
 import com.lmax.disruptor.EventFactory;
+import com.unisoft.algotrader.core.id.InstId;
 
 /**
  * Created by alex on 4/12/15.
@@ -21,7 +22,7 @@ public class Quote extends MarketData<Quote> {
     }
 
     public Quote(
-            String instId,
+            InstId instId,
             long dateTime,
             double bid,
             double ask,

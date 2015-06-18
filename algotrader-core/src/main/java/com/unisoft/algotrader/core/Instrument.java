@@ -1,45 +1,59 @@
 package com.unisoft.algotrader.core;
 
+import com.google.common.base.Objects;
+import com.google.common.collect.Maps;
+import com.unisoft.algotrader.core.id.InstId;
+
+import java.util.Map;
+
 /**
  * Created by alex on 5/17/15.
  */
 public class Instrument {
-    public final String instId;
-    public final String exchId;
+
+    public final InstId instId;
     public final String ccyId;
+    public Map<String, InstId> altIds = Maps.newHashMap();
     public double factor = 1;
     public double margin = 0;
 
 
-    public Instrument(String instId, String exchId, String ccyId){
+    public Instrument(InstId instId, String ccyId){
         this.instId = instId;
-        this.exchId = exchId;
         this.ccyId = ccyId;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Instrument)) return false;
+        Instrument that = (Instrument) o;
+        return Objects.equal(factor, that.factor) &&
+                Objects.equal(margin, that.margin) &&
+                Objects.equal(instId, that.instId) &&
+                Objects.equal(ccyId, that.ccyId);
+    }
 
-    public static class InstrumentBuilder {
-        private String instId;
-        private String exchId;
-        private String ccyId;
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(instId, ccyId, factor, margin);
+    }
 
-        public InstrumentBuilder setInstId(String instId) {
-            this.instId = instId;
-            return this;
-        }
+    @Override
+    public String toString() {
+        return "Instrument{" +
+                "instId=" + instId +
+                ", ccyId='" + ccyId + '\'' +
+                ", factor=" + factor +
+                ", margin=" + margin +
+                '}';
+    }
 
-        public InstrumentBuilder setExchId(String exchId) {
-            this.exchId = exchId;
-            return this;
-        }
+    public void addAltId(String providerId, InstId instId){
+        this.altIds.put(providerId, instId);
+    }
 
-        public InstrumentBuilder setCcyId(String ccyId) {
-            this.ccyId = ccyId;
-            return this;
-        }
-
-        public Instrument createInstrument() {
-            return new Instrument(instId, exchId, ccyId);
-        }
+    public InstId getAltId(String providerId){
+        return this.altIds.get(providerId);
     }
 }

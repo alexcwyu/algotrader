@@ -4,9 +4,10 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import com.unisoft.algotrader.core.Portfolio;
 import com.unisoft.algotrader.core.PortfolioManager;
+import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.data.MarketDataContainer;
 import com.unisoft.algotrader.provider.SubscriptionKey;
-import com.unisoft.algotrader.provider.data.historical.DummyDataProvider;
+import com.unisoft.algotrader.provider.csv.historical.DummyDataProvider;
 import com.unisoft.algotrader.strategy.Strategy;
 import com.unisoft.algotrader.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.apache.logging.log4j.LogManager;
@@ -76,7 +77,7 @@ public class CSVPublishTest {
         Thread.sleep(5000);
 
         LOG.info("start");
-        provider.subscribe(SubscriptionKey.createDailySubscriptionKey("HSI"), 20110101, 20141231);
+        provider.subscribe(SubscriptionKey.createDailySubscriptionKey(InstId.Builder.as().symbol("HSI").exchId("HKEX").build()), 20110101, 20141231);
 
         latch.await();
 

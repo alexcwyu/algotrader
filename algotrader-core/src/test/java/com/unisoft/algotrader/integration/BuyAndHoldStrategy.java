@@ -6,6 +6,7 @@ import com.unisoft.algotrader.core.Account;
 import com.unisoft.algotrader.core.OrdType;
 import com.unisoft.algotrader.core.Portfolio;
 import com.unisoft.algotrader.core.Side;
+import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.SampleEventFactory;
 import com.unisoft.algotrader.event.data.Bar;
 import com.unisoft.algotrader.event.data.MarketDataContainer;
@@ -57,7 +58,7 @@ public class BuyAndHoldStrategy extends Strategy {
         createAndSendMarketOrder(trade.instId);
     }
 
-    private void createAndSendMarketOrder(String instId){
+    private void createAndSendMarketOrder(InstId instId){
         if (longOrder == null){
             longOrder = SampleEventFactory.createOrder(instId, Side.Buy, OrdType.Market, 9000, 0.0);
             sendOrder(longOrder);

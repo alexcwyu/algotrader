@@ -7,4 +7,8 @@ public interface Provider {
     String providerId();
 
     boolean connected();
+
+    default void connect(){}
+
+    default void disconnect(){}
 }

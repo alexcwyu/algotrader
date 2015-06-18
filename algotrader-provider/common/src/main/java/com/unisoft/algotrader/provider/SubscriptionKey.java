@@ -1,6 +1,8 @@
 package com.unisoft.algotrader.provider;
 
 import com.google.common.base.Objects;
+import com.unisoft.algotrader.core.Instrument;
+import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.data.Bar;
 import com.unisoft.algotrader.event.data.Quote;
 import com.unisoft.algotrader.event.data.Trade;
@@ -27,18 +29,18 @@ public class SubscriptionKey {
 
     public final Type type;
 
-    public final String instId;
+    public final InstId instId;
 
-    public final int frequency;
+    public final int barSize;
 
-    private SubscriptionKey(Type type, String instId){
+    private SubscriptionKey(Type type, InstId instId){
         this(type, instId, 0);
     }
 
-    private SubscriptionKey(Type type, String instId, int frequency){
+    private SubscriptionKey(Type type, InstId instId, int barSize){
         this.type = type;
         this.instId = instId;
-        this.frequency = frequency;
+        this.barSize = barSize;
     }
 
     @Override
@@ -46,14 +48,14 @@ public class SubscriptionKey {
         if (this == o) return true;
         if (!(o instanceof SubscriptionKey)) return false;
         SubscriptionKey that = (SubscriptionKey) o;
-        return Objects.equal(frequency, that.frequency) &&
+        return Objects.equal(barSize, that.barSize) &&
                 Objects.equal(type, that.type) &&
                 Objects.equal(instId, that.instId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(type, instId, frequency);
+        return Objects.hashCode(type, instId, barSize);
     }
 
     @Override
@@ -61,43 +63,43 @@ public class SubscriptionKey {
         return "SubscriptionKey{" +
                 "type=" + type +
                 ", instId='" + instId + '\'' +
-                ", frequency=" + frequency +
+                ", barSize=" + barSize +
                 '}';
     }
 
-    public static SubscriptionKey createBarSubscriptionKey(String instId, int frequency){
+    public static SubscriptionKey createBarSubscriptionKey(InstId instId, int frequency){
         return new SubscriptionKey(Type.Bar, instId, frequency);
     }
 
-    public static SubscriptionKey create1MBarSubscriptionKey(String instId){
+    public static SubscriptionKey create1MBarSubscriptionKey(InstId instId){
         return new SubscriptionKey(Type.Bar, instId, M1_SIZE);
     }
 
-    public static SubscriptionKey create15MBarSubscriptionKey(String instId){
+    public static SubscriptionKey create15MBarSubscriptionKey(InstId instId){
         return new SubscriptionKey(Type.Bar, instId, M15_SIZE);
     }
 
-    public static SubscriptionKey create30MBarSubscriptionKey(String instId){
+    public static SubscriptionKey create30MBarSubscriptionKey(InstId instId){
         return new SubscriptionKey(Type.Bar, instId, M30_SIZE);
     }
 
-    public static SubscriptionKey create1HBarSubscriptionKey(String instId){
+    public static SubscriptionKey create1HBarSubscriptionKey(InstId instId){
         return new SubscriptionKey(Type.Bar, instId, H1_SIZE);
     }
 
-    public static SubscriptionKey create4HBarSubscriptionKey(String instId){
+    public static SubscriptionKey create4HBarSubscriptionKey(InstId instId){
         return new SubscriptionKey(Type.Bar, instId, H4_SIZE);
     }
 
-    public static SubscriptionKey createDailySubscriptionKey(String instId){
+    public static SubscriptionKey createDailySubscriptionKey(InstId instId){
         return new SubscriptionKey(Type.Bar, instId, DAILY_SIZE);
     }
 
-    public static SubscriptionKey createTradeSubscriptionKey(String instId){
+    public static SubscriptionKey createTradeSubscriptionKey(InstId instId){
         return new SubscriptionKey(Type.Trade, instId);
     }
 
-    public static SubscriptionKey createQuoteSubscriptionKey(String instId){
+    public static SubscriptionKey createQuoteSubscriptionKey(InstId instId){
         return new SubscriptionKey(Type.Quote, instId);
     }
 

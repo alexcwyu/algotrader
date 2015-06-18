@@ -10,7 +10,7 @@ import com.unisoft.algotrader.event.data.Quote;
 import com.unisoft.algotrader.event.execution.ExecutionReport;
 import com.unisoft.algotrader.event.execution.Order;
 import com.unisoft.algotrader.order.OrderManager;
-import com.unisoft.algotrader.provider.data.InstrumentDataManager;
+import com.unisoft.algotrader.provider.csv.InstrumentDataManager;
 import com.unisoft.algotrader.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.junit.Before;
 import org.junit.Test;

@@ -6,19 +6,16 @@ import com.unisoft.algotrader.event.EventBusManager;
 import com.unisoft.algotrader.order.OrderManager;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.SubscriptionKey;
-import com.unisoft.algotrader.provider.data.BarFactory;
-import com.unisoft.algotrader.provider.data.InstrumentDataManager;
-import com.unisoft.algotrader.provider.data.historical.DummyDataProvider;
-import com.unisoft.algotrader.provider.data.historical.HistoricalDataProvider;
+import com.unisoft.algotrader.provider.csv.BarFactory;
+import com.unisoft.algotrader.provider.csv.InstrumentDataManager;
+import com.unisoft.algotrader.provider.csv.historical.HistoricalDataProvider;
 import com.unisoft.algotrader.provider.execution.SimulationExecutor;
 import com.unisoft.algotrader.provider.execution.Simulator;
-import com.unisoft.algotrader.series.TimeSeriesHelper;
 import com.unisoft.algotrader.strategy.Strategy;
 import com.unisoft.algotrader.strategy.StrategyManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

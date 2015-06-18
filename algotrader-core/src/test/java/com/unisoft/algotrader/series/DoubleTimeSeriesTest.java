@@ -65,9 +65,6 @@ public class DoubleTimeSeriesTest {
     public void should_return_correct_key(){
         long[] index = doubleTimeSeries.index();
         Assert.assertEquals(3, index.length);
-        System.out.println(index[0]);
-        System.out.println(index[1]);
-        System.out.println(index[2]);
         Assert.assertEquals(c1.getTimeInMillis(), index[0]);
         Assert.assertEquals(c2.getTimeInMillis(), index[1]);
         Assert.assertEquals(c3.getTimeInMillis(), index[2]);
