@@ -25,13 +25,13 @@ import javax.swing.Timer;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.AbstractTableModel;
 
-import apidemo.util.HtmlButton;
-import apidemo.util.NewTabbedPanel;
-import apidemo.util.NewTabbedPanel.NewTabPanel;
-import apidemo.util.TCombo;
-import apidemo.util.UpperField;
-import apidemo.util.Util;
-import apidemo.util.VerticalPanel;
+import twsapi.apidemo.util.HtmlButton;
+import twsapi.apidemo.util.NewTabbedPanel;
+import twsapi.apidemo.util.NewTabbedPanel.NewTabPanel;
+import twsapi.apidemo.util.TCombo;
+import twsapi.apidemo.util.UpperField;
+import twsapi.apidemo.util.Util;
+import twsapi.apidemo.util.VerticalPanel;
 
 import com.ib.controller.ApiController.IContractDetailsHandler;
 import com.ib.controller.ApiController.IOptHandler;

@@ -1,12 +1,13 @@
 bar:([]
- date:`date$();
- time:`time$();
+/ date:`date$();
+/ time:`time$();
  sym:`symbol$();
  size:`int$();
- open:`real$();
- high:`real$();
- low:`real$();
- close:`real$();
+ datetime:`long$();
+ open:`float$();
+ high:`float$();
+ low:`float$();
+ close:`float$();
  vol:`int$();
  openInt:`int$())
 

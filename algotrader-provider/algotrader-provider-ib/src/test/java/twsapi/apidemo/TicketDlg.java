@@ -19,14 +19,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import apidemo.util.HtmlButton;
-import apidemo.util.NewTabbedPanel;
-import apidemo.util.TCombo;
-import apidemo.util.UpperField;
-import apidemo.util.Util;
-import apidemo.util.VerticalPanel;
-import apidemo.util.VerticalPanel.HorzPanel;
-import apidemo.util.VerticalPanel.StackPanel;
+import twsapi.apidemo.util.HtmlButton;
+import twsapi.apidemo.util.NewTabbedPanel;
+import twsapi.apidemo.util.TCombo;
+import twsapi.apidemo.util.UpperField;
+import twsapi.apidemo.util.Util;
+import twsapi.apidemo.util.VerticalPanel;
+import twsapi.apidemo.util.VerticalPanel.HorzPanel;
+import twsapi.apidemo.util.VerticalPanel.StackPanel;
 
 import com.ib.client.TagValue;
 import com.ib.controller.ApiController.IOrderHandler;

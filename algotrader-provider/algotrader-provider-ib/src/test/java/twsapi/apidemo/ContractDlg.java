@@ -12,7 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingConstants;
 
 
-import apidemo.util.HtmlButton;
+import twsapi.apidemo.util.HtmlButton;
 
 import com.ib.controller.NewContract;
 

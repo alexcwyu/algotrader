@@ -1,6 +1,7 @@
 trade:([]
- date:`date$();
- time:`time$();
+/ date:`date$();
+/ time:`time$();
  sym:`symbol$();
- price:`real$();
+ datetime:`long$();
+ price:`float$();
  size:`int$())

@@ -1,9 +1,10 @@
 quote:([]
- date:`date$();
- time:`time$();
+/ date:`date$();
+/ time:`time$();
  sym:`symbol$();
- bid:`real$();
- ask:`real$();
+ datetime:`long$();
+ bid:`float$();
+ ask:`float$();
  bsize:`int$();
  asize:`int$())
 

@@ -16,11 +16,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import apidemo.util.HtmlButton;
-import apidemo.util.NewTabbedPanel;
-import apidemo.util.NewTabbedPanel.INewTab;
-import apidemo.util.TCombo;
-import apidemo.util.VerticalPanel;
+import twsapi.apidemo.util.HtmlButton;
+import twsapi.apidemo.util.NewTabbedPanel;
+import twsapi.apidemo.util.NewTabbedPanel.INewTab;
+import twsapi.apidemo.util.TCombo;
+import twsapi.apidemo.util.VerticalPanel;
 
 import com.ib.controller.ApiController.IContractDetailsHandler;
 import com.ib.controller.ApiController.IFundamentalsHandler;

@@ -15,7 +15,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.AbstractTableModel;
 
 
-import apidemo.util.HtmlButton;
+import twsapi.apidemo.util.HtmlButton;
 
 import com.ib.client.CommissionReport;
 import com.ib.client.Execution;

@@ -16,8 +16,8 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.AbstractTableModel;
 
 
-import apidemo.util.HtmlButton;
-import apidemo.util.VerticalPanel;
+import twsapi.apidemo.util.HtmlButton;
+import twsapi.apidemo.util.VerticalPanel;
 
 import com.ib.controller.NewContract;
 import com.ib.controller.NewOrder;

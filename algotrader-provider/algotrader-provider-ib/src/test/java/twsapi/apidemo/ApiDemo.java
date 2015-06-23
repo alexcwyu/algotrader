@@ -19,10 +19,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import apidemo.util.HtmlButton;
-import apidemo.util.NewLookAndFeel;
-import apidemo.util.NewTabbedPanel;
-import apidemo.util.VerticalPanel;
+import twsapi.apidemo.util.HtmlButton;
+import twsapi.apidemo.util.NewLookAndFeel;
+import twsapi.apidemo.util.NewTabbedPanel;
+import twsapi.apidemo.util.VerticalPanel;
 
 import com.ib.controller.ApiConnection.ILogger;
 import com.ib.controller.ApiController;

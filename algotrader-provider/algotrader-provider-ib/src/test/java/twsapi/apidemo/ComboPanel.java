@@ -21,16 +21,16 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.AbstractTableModel;
 
 
-import apidemo.OrdersPanel.OrderRow;
-import apidemo.OrdersPanel.OrdersModel;
-import apidemo.TopModel.TopRow;
-import apidemo.util.HtmlButton;
-import apidemo.util.NewTabbedPanel;
-import apidemo.util.TCombo;
-import apidemo.util.UpperField;
-import apidemo.util.VerticalPanel;
-import apidemo.util.NewTabbedPanel.INewTab;
-import apidemo.util.VerticalPanel.HorzPanel;
+import twsapi.apidemo.OrdersPanel.OrderRow;
+import twsapi.apidemo.OrdersPanel.OrdersModel;
+import twsapi.apidemo.TopModel.TopRow;
+import twsapi.apidemo.util.HtmlButton;
+import twsapi.apidemo.util.NewTabbedPanel;
+import twsapi.apidemo.util.TCombo;
+import twsapi.apidemo.util.UpperField;
+import twsapi.apidemo.util.VerticalPanel;
+import twsapi.apidemo.util.NewTabbedPanel.INewTab;
+import twsapi.apidemo.util.VerticalPanel.HorzPanel;
 
 import com.ib.controller.DeltaNeutralContract;
 import com.ib.controller.NewComboLeg;

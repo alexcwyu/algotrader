@@ -14,13 +14,13 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 
-import apidemo.AccountInfoPanel.PortfolioModel;
-import apidemo.util.HtmlButton;
-import apidemo.util.TCombo;
-import apidemo.util.UpperField;
-import apidemo.util.VerticalPanel;
-import apidemo.util.NewTabbedPanel.INewTab;
-import apidemo.util.VerticalPanel.HorzPanel;
+import twsapi.apidemo.AccountInfoPanel.PortfolioModel;
+import twsapi.apidemo.util.HtmlButton;
+import twsapi.apidemo.util.TCombo;
+import twsapi.apidemo.util.UpperField;
+import twsapi.apidemo.util.VerticalPanel;
+import twsapi.apidemo.util.NewTabbedPanel.INewTab;
+import twsapi.apidemo.util.VerticalPanel.HorzPanel;
 
 import com.ib.controller.Position;
 import com.ib.controller.ApiController.IAccountHandler;

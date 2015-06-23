@@ -21,10 +21,10 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 
 
-import apidemo.util.HtmlButton;
-import apidemo.util.TCombo;
-import apidemo.util.VerticalPanel;
-import apidemo.util.NewTabbedPanel.NewTabPanel;
+import twsapi.apidemo.util.HtmlButton;
+import twsapi.apidemo.util.TCombo;
+import twsapi.apidemo.util.VerticalPanel;
+import twsapi.apidemo.util.NewTabbedPanel.NewTabPanel;
 
 import com.ib.controller.Alias;
 import com.ib.controller.Group;

@@ -3,7 +3,7 @@
 
 package twsapi.apidemo;
 
-import apidemo.util.NewTabbedPanel;
+import twsapi.apidemo.util.NewTabbedPanel;
 
 public class OptionsPanel extends NewTabbedPanel {
 	private final OptionChainsPanel m_optionChains = new OptionChainsPanel();

@@ -7,7 +7,7 @@ import java.awt.Dimension;
 
 import javax.swing.BoxLayout;
 
-import apidemo.util.NewTabbedPanel.NewTabPanel;
+import twsapi.apidemo.util.NewTabbedPanel.NewTabPanel;
 
 
 public class TradingPanel extends NewTabPanel {

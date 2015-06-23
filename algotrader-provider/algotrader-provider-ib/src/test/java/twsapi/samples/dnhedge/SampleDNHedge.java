@@ -4,7 +4,7 @@
 package twsapi.samples.dnhedge;
 
 
-import samples.rfq.SimpleWrapper;
+import twsapi.samples.rfq.SimpleWrapper;
 
 import com.ib.client.Contract;
 import com.ib.client.ContractDetails;

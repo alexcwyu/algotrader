@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <Appenders>
-        <exxeleron.sample.Console name="exxeleron.sample.Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{10} - %msg%n"/>
-        </exxeleron.sample.Console>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
     </Appenders>
     <Appenders>
         <!-- Async Loggers will auto-flush in batches, so switch off immediateFlush. -->
@@ -14,8 +14,8 @@
         </RandomAccessFile>
     </Appenders>
     <Loggers>
-        <Logger name = "console" level="error">
-            <AppenderRef ref="exxeleron.sample.Console"/>
+        <Logger name = "Console" level="info">
+            <AppenderRef ref="Console"/>
         </Logger>
         <Root level="info" includeLocation="false">
             <AppenderRef ref="RandomAccessFile"/>

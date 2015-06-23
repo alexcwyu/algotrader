@@ -18,13 +18,13 @@ import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
 
 
-import apidemo.OrdersPanel.OrdersModel;
-import apidemo.util.HtmlButton;
-import apidemo.util.TCombo;
-import apidemo.util.UpperField;
-import apidemo.util.VerticalPanel.BorderPanel;
-import apidemo.util.VerticalPanel.HorzPanel;
-import apidemo.util.VerticalPanel.StackPanel;
+import twsapi.apidemo.OrdersPanel.OrdersModel;
+import twsapi.apidemo.util.HtmlButton;
+import twsapi.apidemo.util.TCombo;
+import twsapi.apidemo.util.UpperField;
+import twsapi.apidemo.util.VerticalPanel.BorderPanel;
+import twsapi.apidemo.util.VerticalPanel.HorzPanel;
+import twsapi.apidemo.util.VerticalPanel.StackPanel;
 
 import com.ib.controller.Bar;
 import com.ib.controller.NewContract;

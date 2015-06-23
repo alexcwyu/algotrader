@@ -24,7 +24,7 @@ import com.exxeleron.qjava.QException;
 public class Console {
 
     public static void main( final String[] args ) throws IOException {
-        final QConnection q = new QBasicConnection(args.length >= 1 ? args[0] : "localhost", args.length >= 2 ? Integer.parseInt(args[1]) : 5001, "user",
+        final QConnection q = new QBasicConnection(args.length >= 1 ? args[0] : "localhost", args.length >= 2 ? Integer.parseInt(args[1]) : 5000, "user",
                 "pwd");
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 

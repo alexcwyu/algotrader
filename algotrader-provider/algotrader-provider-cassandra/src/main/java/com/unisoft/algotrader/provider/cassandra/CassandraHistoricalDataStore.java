@@ -21,6 +21,7 @@ import static com.datastax.driver.core.querybuilder.QueryBuilder.*;
 /**
  * Created by alex on 6/18/15.
  */
+//TODO batch insert
 public class CassandraHistoricalDataStore implements DataStore, HistoricalDataProvider {
 
     private static final Logger LOG = LogManager.getLogger(CassandraHistoricalDataStore.class);
@@ -37,9 +38,9 @@ public class CassandraHistoricalDataStore implements DataStore, HistoricalDataPr
     private static final String TABLE_TRADE = "trade";
     private static final String TABLE_QUOTE = "quote";
 
-    private AtomicBoolean connected = new AtomicBoolean(false);
+    private final AtomicBoolean connected = new AtomicBoolean(false);
 
-    private CassandraConfig config;
+    private final CassandraConfig config;
     private Cluster cluster;
     private Session session;
 

@@ -26,8 +26,8 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 
 
-import apidemo.util.NewTabbedPanel;
-import apidemo.util.NewTabbedPanel.INewTab;
+import twsapi.apidemo.util.*;
+import twsapi.apidemo.util.NewTabbedPanel.INewTab;
 
 import com.ib.controller.MarketValueTag;
 import com.ib.controller.Position;

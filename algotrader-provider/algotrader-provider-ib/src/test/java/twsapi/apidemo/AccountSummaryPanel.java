@@ -12,10 +12,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import apidemo.AccountInfoPanel.Table;
-import apidemo.util.HtmlButton;
-import apidemo.util.NewTabbedPanel.NewTabPanel;
-import apidemo.util.VerticalPanel;
+import twsapi.apidemo.AccountInfoPanel.Table;
+import twsapi.apidemo.util.HtmlButton;
+import twsapi.apidemo.util.NewTabbedPanel.NewTabPanel;
+import twsapi.apidemo.util.VerticalPanel;
 
 import com.ib.controller.AccountSummaryTag;
 import com.ib.controller.ApiController.IAccountSummaryHandler;
