@@ -3,20 +3,16 @@
 
 package twsapi.apidemo;
 
-import java.awt.BorderLayout;
-
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-
+import com.ib.controller.ApiController.IMarketValueSummaryHandler;
+import com.ib.controller.MarketValueTag;
 import twsapi.apidemo.AccountInfoPanel.MktValModel;
 import twsapi.apidemo.AccountInfoPanel.Table;
 import twsapi.apidemo.util.HtmlButton;
-import twsapi.apidemo.util.VerticalPanel;
 import twsapi.apidemo.util.NewTabbedPanel.NewTabPanel;
+import twsapi.apidemo.util.VerticalPanel;
 
-import com.ib.controller.ApiController.IMarketValueSummaryHandler;
-import com.ib.controller.MarketValueTag;
+import javax.swing.*;
+import java.awt.*;
 
 public class MarketValueSummaryPanel extends NewTabPanel implements IMarketValueSummaryHandler {
 	private MktValModel m_model = new MktValModel();

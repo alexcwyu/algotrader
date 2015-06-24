@@ -2,7 +2,6 @@ package com.unisoft.algotrader.provider.csv;
 
 import com.google.common.collect.Maps;
 import com.lmax.disruptor.RingBuffer;
-import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.Event;
 import com.unisoft.algotrader.event.EventBusManager;
 import com.unisoft.algotrader.event.data.*;
@@ -27,7 +26,7 @@ public class InstrumentDataManager extends MultiEventProcessor implements Market
             onTrade(data.trade);
     }
 
-    public InstrumentData getInstrumentData(InstId instId){
+    public InstrumentData getInstrumentData(int instId){
         InstrumentData data = map.get(instId);
         if (data == null){
             data = new InstrumentData(instId);
@@ -55,17 +54,17 @@ public class InstrumentDataManager extends MultiEventProcessor implements Market
     }
 
     public static class InstrumentData {
-        public final InstId instId;
+        public final int instId;
         public Bar bar;
         public Quote quote;
         public Trade trade;
 
-        public InstrumentData(InstId instId){
+        public InstrumentData(int instId){
             this.instId = instId;
         }
     }
 
-    public Map<InstId, InstrumentData> map = Maps.newHashMap();
+    public Map<Integer, InstrumentData> map = Maps.newHashMap();
 
     public static final InstrumentDataManager INSTANCE;
 

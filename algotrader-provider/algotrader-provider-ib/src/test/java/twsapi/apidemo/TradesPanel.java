@@ -3,25 +3,19 @@
 
 package twsapi.apidemo;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.border.TitledBorder;
-import javax.swing.table.AbstractTableModel;
-
-
-import twsapi.apidemo.util.HtmlButton;
-
 import com.ib.client.CommissionReport;
 import com.ib.client.Execution;
 import com.ib.client.ExecutionFilter;
-import com.ib.controller.NewContract;
 import com.ib.controller.ApiController.ITradeReportHandler;
+import com.ib.controller.NewContract;
+import twsapi.apidemo.util.HtmlButton;
+
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.AbstractTableModel;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TradesPanel extends JPanel implements ITradeReportHandler {
 	private ArrayList<FullExec> m_trades = new ArrayList<FullExec>();

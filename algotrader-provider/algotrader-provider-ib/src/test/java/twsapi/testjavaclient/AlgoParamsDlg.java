@@ -3,26 +3,15 @@
 
 package twsapi.testjavaclient;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.awt.Window;
+import com.ib.client.Order;
+import com.ib.client.TagValue;
+
+import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
-
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.table.AbstractTableModel;
-
-import com.ib.client.Order;
-import com.ib.client.TagValue;
 
 public class AlgoParamsDlg extends JDialog {
 

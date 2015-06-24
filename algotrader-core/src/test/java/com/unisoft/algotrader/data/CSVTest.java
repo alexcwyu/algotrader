@@ -1,6 +1,5 @@
 package com.unisoft.algotrader.data;
 
-import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.data.Bar;
 import com.univocity.parsers.common.ParsingContext;
 import com.univocity.parsers.common.processor.ObjectRowProcessor;
@@ -52,7 +51,7 @@ public class CSVTest {
         String[] row;
         int size = 60*60*24;
         while ((row = parser.parseNext()) != null) {
-            Bar bar = new Bar(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(),
+            Bar bar = new Bar(1,
                     size,
             FORMAT.parse(row[0]).getTime(),
             Double.parseDouble(row[1]),

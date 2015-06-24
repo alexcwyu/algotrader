@@ -3,7 +3,7 @@
 
 package twsapi.apidemo.util;
 
-import javax.swing.JComboBox;
+import javax.swing.*;
 
 public class TCombo<T> extends JComboBox {
 	public TCombo( T... strs) {

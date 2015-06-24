@@ -3,36 +3,25 @@
 
 package twsapi.apidemo;
 
- import static com.ib.controller.Formats.fmt0;
+import com.ib.controller.ApiController.IAccountHandler;
+import com.ib.controller.MarketValueTag;
+import com.ib.controller.Position;
+import com.ib.controller.Types.SecType;
+import twsapi.apidemo.util.NewTabbedPanel;
+import twsapi.apidemo.util.NewTabbedPanel.INewTab;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-
-import javax.swing.DefaultListModel;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
-
-import twsapi.apidemo.util.*;
-import twsapi.apidemo.util.NewTabbedPanel.INewTab;
-
-import com.ib.controller.MarketValueTag;
-import com.ib.controller.Position;
-import com.ib.controller.ApiController.IAccountHandler;
-import com.ib.controller.Types.SecType;
+import static com.ib.controller.Formats.fmt0;
 
 public class AccountInfoPanel extends JPanel implements INewTab, IAccountHandler {
 	private DefaultListModel m_acctList = new DefaultListModel();

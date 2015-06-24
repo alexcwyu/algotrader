@@ -3,18 +3,15 @@
 
 package twsapi.apidemo;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-
-import javax.swing.JPanel;
-
+import com.ib.controller.NewContract;
+import com.ib.controller.Types.Right;
+import com.ib.controller.Types.SecType;
 import twsapi.apidemo.util.TCombo;
 import twsapi.apidemo.util.UpperField;
 import twsapi.apidemo.util.VerticalPanel;
 
-import com.ib.controller.NewContract;
-import com.ib.controller.Types.Right;
-import com.ib.controller.Types.SecType;
+import javax.swing.*;
+import java.awt.*;
 
 public class ContractPanel extends JPanel {
 	protected UpperField m_symbol = new UpperField();

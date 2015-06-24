@@ -1,7 +1,6 @@
 package com.unisoft.algotrader.event.data;
 
 import com.lmax.disruptor.RingBuffer;
-import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.EventBus;
 
 /**
@@ -16,7 +15,7 @@ public class RingBufferMarketDataEventBus implements EventBus.MarketDataEventBus
     }
 
     @Override
-    public void publishBar(InstId instId, int size, long dateTime, double open, double high, double low, double close, long volume, long openInt) {
+    public void publishBar(int instId, int size, long dateTime, double open, double high, double low, double close, long volume, long openInt) {
 
         long sequence = marketDataRB.next();
         MarketDataContainer event = marketDataRB.get(sequence);
@@ -32,7 +31,7 @@ public class RingBufferMarketDataEventBus implements EventBus.MarketDataEventBus
     }
 
     @Override
-    public void publishQuote(InstId instId, long dateTime, double bid, double ask, int bidSize, int askSize) {
+    public void publishQuote(int instId, long dateTime, double bid, double ask, int bidSize, int askSize) {
         long sequence = marketDataRB.next();
         MarketDataContainer event = marketDataRB.get(sequence);
         event.reset();
@@ -46,7 +45,7 @@ public class RingBufferMarketDataEventBus implements EventBus.MarketDataEventBus
     }
 
     @Override
-    public void publishTrade(InstId instId, long dateTime, double price, int size) {
+    public void publishTrade(int instId, long dateTime, double price, int size) {
         long sequence = marketDataRB.next();
         MarketDataContainer event = marketDataRB.get(sequence);
         event.reset();

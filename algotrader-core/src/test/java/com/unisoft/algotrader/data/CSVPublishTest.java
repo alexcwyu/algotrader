@@ -2,9 +2,10 @@ package com.unisoft.algotrader.data;
 
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.util.DaemonThreadFactory;
+import com.unisoft.algotrader.core.Instrument;
+import com.unisoft.algotrader.core.InstrumentManager;
 import com.unisoft.algotrader.core.Portfolio;
 import com.unisoft.algotrader.core.PortfolioManager;
-import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.data.MarketDataContainer;
 import com.unisoft.algotrader.event.data.RingBufferMarketDataEventBus;
 import com.unisoft.algotrader.provider.SubscriptionKey;
@@ -24,6 +25,8 @@ import java.util.concurrent.Executors;
 public class CSVPublishTest {
 
 
+    private static Instrument testInstrument = InstrumentManager.INSTANCE.createStock("HSI", "HKEX", "HKD");
+
     private static final Logger LOG = LogManager.getLogger(CSVPublishTest.class);
 
     static class CountDownStrategy extends Strategy {
@@ -39,7 +42,7 @@ public class CSVPublishTest {
 
         @Override
         public void onMarketDataContainer(MarketDataContainer data){
-            LOG.info("id {}, onMarketDataContainer {}", strategyId, data);
+            LOG.info("instId {}, onMarketDataContainer {}", strategyId, data);
             count ++;
             if (count==exp){
                 latch.countDown();
@@ -78,7 +81,7 @@ public class CSVPublishTest {
         Thread.sleep(5000);
 
         LOG.info("start");
-        provider.subscribe(new RingBufferMarketDataEventBus(marketDataRB), SubscriptionKey.createDailySubscriptionKey(InstId.Builder.as().symbol("HSI").exchId("HKEX").build()), 20110101, 20141231);
+        provider.subscribe(new RingBufferMarketDataEventBus(marketDataRB), SubscriptionKey.createDailySubscriptionKey(testInstrument.instId), 20110101, 20141231);
 
         latch.await();
 

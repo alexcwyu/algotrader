@@ -1,6 +1,5 @@
 package com.unisoft.algotrader.event;
 
-import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.data.Bar;
 import com.unisoft.algotrader.event.data.Quote;
 import com.unisoft.algotrader.event.data.Trade;
@@ -10,7 +9,7 @@ import com.unisoft.algotrader.event.data.Trade;
  */
 public interface EventBus {
     interface BarEventBus extends EventBus{
-        void publishBar(InstId instId,
+        void publishBar(int instId,
                                int size,
                                long dateTime,
                                double open,
@@ -20,7 +19,7 @@ public interface EventBus {
                                long volume,
                                long openInt);
 
-        default void setBar(Bar bar, InstId instId,
+        default void setBar(Bar bar, int instId,
                             int size,
                             long dateTime,
                             double open,
@@ -43,14 +42,14 @@ public interface EventBus {
     }
 
     interface QuoteEventBus extends EventBus{
-        void publishQuote( InstId instId,
+        void publishQuote( int instId,
                            long dateTime,
                            double bid,
                            double ask,
                            int bidSize,
                            int askSize);
 
-        default void setQuote(Quote quote, InstId instId,
+        default void setQuote(Quote quote, int instId,
                          long dateTime,
                          double bid,
                          double ask,
@@ -68,12 +67,12 @@ public interface EventBus {
     }
 
     interface TradeEventBus extends EventBus{
-        void publishTrade(InstId instId,
+        void publishTrade(int instId,
                           long dateTime,
                           double price,
                           int size);
 
-        default void setTrade(Trade trade, InstId instId,
+        default void setTrade(Trade trade, int instId,
                               long dateTime,
                               double price,
                               int size){

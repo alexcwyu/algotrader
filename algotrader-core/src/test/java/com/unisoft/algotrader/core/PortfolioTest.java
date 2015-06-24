@@ -1,6 +1,5 @@
 package com.unisoft.algotrader.core;
 
-import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.data.Bar;
 import com.unisoft.algotrader.event.data.Quote;
 import com.unisoft.algotrader.event.data.Trade;
@@ -26,9 +25,9 @@ public class PortfolioTest {
     public static long ordId = 0;
     public static long execId = 100;
     public static String portfolioId = "TestPortfolio";
-    private static Instrument instrument1 = new Instrument(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(),"HKD");
-    private static Instrument instrument2 = new Instrument(InstId.Builder.as().symbol("0005.HK").exchId("HKEX").build(),"HKD");
-    private static Instrument instrument3= new Instrument(InstId.Builder.as().symbol("0959.HK").exchId("HKEX").build(),"HKD");
+    private static Instrument instrument1 = InstrumentManager.INSTANCE.createStock("0005.HK", "HKEX", "HKD");
+    private static Instrument instrument2 = InstrumentManager.INSTANCE.createStock("0959.HK", "HKEX", "HKD");
+    private static Instrument instrument3 = InstrumentManager.INSTANCE.createStock("2628.HK", "HKEX", "HKD");
 
     private Account account;
     private Portfolio portfolio;
@@ -76,7 +75,7 @@ public class PortfolioTest {
 
         assertEquals(0.0, portfolio.positionValue(), 0.0);
 
-        Order order = limitOrder(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(), 10000, 2, Side.Buy);
+        Order order = limitOrder(instrument1.instId, 10000, 2, Side.Buy);
         ExecutionReport er = executionReport(order);
         order.add(er);
         portfolio.add(order);
@@ -84,7 +83,7 @@ public class PortfolioTest {
         //10000 * 2
         assertEquals(20000, portfolio.positionValue(), 0.0);
 
-        order = limitOrder(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(), 10000, 1, Side.Buy);
+        order = limitOrder(instrument1.instId, 10000, 1, Side.Buy);
         er = executionReport(order);
         order.add(er);
         portfolio.add(order);
@@ -92,7 +91,7 @@ public class PortfolioTest {
         //10000 * 3
         assertEquals(30000, portfolio.positionValue(), 0.0);
 
-        order = limitOrder(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(), 18000, 1, Side.Buy);
+        order = limitOrder(instrument1.instId, 18000, 1, Side.Buy);
         er = executionReport(order);
         order.add(er);
         portfolio.add(order);
@@ -100,7 +99,7 @@ public class PortfolioTest {
         //18000 * 4
         assertEquals(72000, portfolio.positionValue(), 0.0);
 
-        order = limitOrder(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(), 20000, 6, Side.Sell);
+        order = limitOrder(instrument1.instId, 20000, 6, Side.Sell);
         er = executionReport(order);
         order.add(er);
         portfolio.add(order);
@@ -108,14 +107,14 @@ public class PortfolioTest {
         //-20000 * 2
         assertEquals(-40000, portfolio.positionValue(), 0.0);
 
-        order = limitOrder(InstId.Builder.as().symbol("0005.HK").exchId("HKEX").build(), 2000, 50, Side.Buy);
+        order = limitOrder(instrument2.instId, 2000, 50, Side.Buy);
         er = executionReport(order);
         order.add(er);
         portfolio.add(order);
         //(-20000 * 2) + 2000 * 50
         assertEquals(60000, portfolio.positionValue(), 0.0);
 
-        order = limitOrder(InstId.Builder.as().symbol("0959.HK").exchId("HKEX").build(), 85, 10, Side.Buy);
+        order = limitOrder(instrument3.instId, 85, 10, Side.Buy);
         er = executionReport(order);
         order.add(er);
         portfolio.add(order);
@@ -125,18 +124,18 @@ public class PortfolioTest {
 
 
         //(-20000 * 2) + 2000 * 50 + 88 * 10
-        portfolio.onTrade(new Trade(InstId.Builder.as().symbol("0959.HK").exchId("HKEX").build(), System.currentTimeMillis(), 88, 1));
+        portfolio.onTrade(new Trade(instrument3.instId, System.currentTimeMillis(), 88, 1));
         assertEquals(60880, portfolio.positionValue(), 0.0);
 
         //(-21000 * 2) + 2000 * 50 + 88 * 10
-        portfolio.onQuote(new Quote(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(), System.currentTimeMillis(), 19000, 21000, 1, 1));
+        portfolio.onQuote(new Quote(instrument1.instId, System.currentTimeMillis(), 19000, 21000, 1, 1));
         assertEquals(58880, portfolio.positionValue(), 0.0);
 
         //(-21000 * 2) + 2000 * 50 + 87 * 10
-        portfolio.onQuote(new Quote(InstId.Builder.as().symbol("0959.HK").exchId("HKEX").build(), System.currentTimeMillis(), 87, 89, 1, 1));
+        portfolio.onQuote(new Quote(instrument3.instId, System.currentTimeMillis(), 87, 89, 1, 1));
         assertEquals(58870, portfolio.positionValue(), 0.0);
 
-        portfolio.onBar(new Bar(InstId.Builder.as().symbol("0005.HK").exchId("HKEX").build(), 60, System.currentTimeMillis(), 2000, 2100, 1900, 2050, 1, 1));
+        portfolio.onBar(new Bar(instrument2.instId, 60, System.currentTimeMillis(), 2000, 2100, 1900, 2050, 1, 1));
 
         //(-21000 * 2) + 2050 * 50 + 87 * 10
         assertEquals(61370, portfolio.positionValue(), 0.0);
@@ -145,17 +144,17 @@ public class PortfolioTest {
     @Test
     public void test_position_value_with_marketdate_update() {
 
-        Order order = limitOrder(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(), 20000, 2, Side.Sell);
+        Order order = limitOrder(instrument1.instId, 20000, 2, Side.Sell);
         ExecutionReport er = executionReport(order);
         order.add(er);
         portfolio.add(order);
 
-        order = limitOrder(InstId.Builder.as().symbol("0005.HK").exchId("HKEX").build(), 2000, 50, Side.Buy);
+        order = limitOrder(instrument2.instId, 2000, 50, Side.Buy);
         er = executionReport(order);
         order.add(er);
         portfolio.add(order);
 
-        order = limitOrder(InstId.Builder.as().symbol("0959.HK").exchId("HKEX").build(), 85, 10, Side.Buy);
+        order = limitOrder(instrument3.instId, 85, 10, Side.Buy);
         er = executionReport(order);
         order.add(er);
         portfolio.add(order);
@@ -166,18 +165,18 @@ public class PortfolioTest {
 
 
         //(-20000 * 2) + 2000 * 50 + 88 * 10
-        portfolio.onTrade(new Trade(InstId.Builder.as().symbol("0959.HK").exchId("HKEX").build(), System.currentTimeMillis(), 88, 1));
+        portfolio.onTrade(new Trade(instrument3.instId, System.currentTimeMillis(), 88, 1));
         assertEquals(60880, portfolio.positionValue(), 0.0);
 
         //(-21000 * 2) + 2000 * 50 + 88 * 10
-        portfolio.onQuote(new Quote(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(), System.currentTimeMillis(), 19000, 21000, 1, 1));
+        portfolio.onQuote(new Quote(instrument1.instId, System.currentTimeMillis(), 19000, 21000, 1, 1));
         assertEquals(58880, portfolio.positionValue(), 0.0);
 
         //(-21000 * 2) + 2000 * 50 + 87 * 10
-        portfolio.onQuote(new Quote(InstId.Builder.as().symbol("0959.HK").exchId("HKEX").build(), System.currentTimeMillis(), 87, 89, 1, 1));
+        portfolio.onQuote(new Quote(instrument3.instId, System.currentTimeMillis(), 87, 89, 1, 1));
         assertEquals(58870, portfolio.positionValue(), 0.0);
 
-        portfolio.onBar(new Bar(InstId.Builder.as().symbol("0005.HK").exchId("HKEX").build(), 60, System.currentTimeMillis(), 2000, 2100, 1900, 2050, 1, 1));
+        portfolio.onBar(new Bar(instrument2.instId, 60, System.currentTimeMillis(), 2000, 2100, 1900, 2050, 1, 1));
 
         //(-21000 * 2) + 2050 * 50 + 87 * 10
         assertEquals(61370, portfolio.positionValue(), 0.0);
@@ -241,13 +240,13 @@ public class PortfolioTest {
 
     @Test
     public void test_cash_flow(){
-        Order order = limitOrder(InstId.Builder.as().symbol("0005.HK").exchId("HKEX").build(), 2000, 50, Side.Buy);
+        Order order = limitOrder(instrument2.instId, 2000, 50, Side.Buy);
         ExecutionReport er = executionReport(order);
         order.add(er);
         portfolio.add(order);
         assertEquals(-100000, portfolio.cashFlow(), 0.0);
 
-        order = limitOrder(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(), 20000, 2, Side.Sell);
+        order = limitOrder(instrument1.instId, 20000, 2, Side.Sell);
         er = executionReport(order);
         order.add(er);
         portfolio.add(order);
@@ -258,7 +257,7 @@ public class PortfolioTest {
 
     @Test
     public void test_net_cash_flow(){
-        Order order = limitOrder(InstId.Builder.as().symbol("0005.HK").exchId("HKEX").build(), 2000, 50, Side.Buy);
+        Order order = limitOrder(instrument2.instId, 2000, 50, Side.Buy);
         ExecutionReport er = executionReport(order);
         order.add(er);
         order.commissions.add(new Commission.AbsoluteCommission(1000));
@@ -266,7 +265,7 @@ public class PortfolioTest {
         assertEquals(-101000, portfolio.cashFlow(), 0.0);
 
 
-        order = limitOrder(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(), 20000, 2, Side.Sell);
+        order = limitOrder(instrument1.instId, 20000, 2, Side.Sell);
         er = executionReport(order);
         order.add(er);
         order.commissions.add(new Commission.PerShareCommission(50));
@@ -279,7 +278,7 @@ public class PortfolioTest {
 
         assertValue(account, portfolio, 1_000_000, 0.0, 1_000_000, 0.0, 0.0, 1_000_000);
 
-        Order buyOrder = limitOrder(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(), 10000, 2, Side.Buy);
+        Order buyOrder = limitOrder(instrument1.instId, 10000, 2, Side.Buy);
         ExecutionReport er1 = executionReport(buyOrder, 10000, 2);
         buyOrder.add(er1);
         portfolio.add(buyOrder);
@@ -293,7 +292,7 @@ public class PortfolioTest {
                 1_000_000);
 
 
-        Order sellOrder1 = limitOrder(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(), 15000, 1, Side.Sell);
+        Order sellOrder1 = limitOrder(instrument1.instId, 15000, 1, Side.Sell);
         ExecutionReport er2 = executionReport(sellOrder1, 15000, 1);
         sellOrder1.add(er2);
         portfolio.add(sellOrder1);
@@ -308,7 +307,7 @@ public class PortfolioTest {
                 1_010_000);
 
 
-        Order sellOrder2 = limitOrder(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(), 20000, 1, Side.Sell);
+        Order sellOrder2 = limitOrder(instrument1.instId, 20000, 1, Side.Sell);
         ExecutionReport er3 = executionReport(sellOrder2, 20000, 1);
         sellOrder2.add(er3);
         portfolio.add(sellOrder2);
@@ -343,7 +342,7 @@ public class PortfolioTest {
     }
 
 
-    private Order limitOrder(InstId instId, double limitPx, double qty, Side side){
+    private Order limitOrder(int instId, double limitPx, double qty, Side side){
 
         Order order = new Order();
         order.orderId = ordId ++ ;

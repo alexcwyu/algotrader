@@ -3,45 +3,26 @@
 
 package twsapi.apidemo;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.table.AbstractTableModel;
-
-
+import com.ib.controller.ApiController.IContractDetailsHandler;
+import com.ib.controller.ApiController.IEfpHandler;
+import com.ib.controller.*;
+import com.ib.controller.Types.Action;
+import com.ib.controller.Types.SecType;
 import twsapi.apidemo.OrdersPanel.OrderRow;
 import twsapi.apidemo.OrdersPanel.OrdersModel;
 import twsapi.apidemo.TopModel.TopRow;
-import twsapi.apidemo.util.HtmlButton;
-import twsapi.apidemo.util.NewTabbedPanel;
-import twsapi.apidemo.util.TCombo;
-import twsapi.apidemo.util.UpperField;
-import twsapi.apidemo.util.VerticalPanel;
+import twsapi.apidemo.util.*;
 import twsapi.apidemo.util.NewTabbedPanel.INewTab;
 import twsapi.apidemo.util.VerticalPanel.HorzPanel;
 
-import com.ib.controller.DeltaNeutralContract;
-import com.ib.controller.NewComboLeg;
-import com.ib.controller.NewContract;
-import com.ib.controller.NewContractDetails;
-import com.ib.controller.NewOrder;
-import com.ib.controller.NewOrderState;
-import com.ib.controller.ApiController.IContractDetailsHandler;
-import com.ib.controller.ApiController.IEfpHandler;
-import com.ib.controller.Types.Action;
-import com.ib.controller.Types.SecType;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.AbstractTableModel;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 
 public class ComboPanel extends JPanel implements INewTab {

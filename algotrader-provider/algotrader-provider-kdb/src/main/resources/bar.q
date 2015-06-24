@@ -1,7 +1,7 @@
 bar:([]
 / date:`date$();
 / time:`time$();
- sym:`symbol$();
+ instId:`int$();
  size:`int$();
  datetime:`long$();
  open:`float$();

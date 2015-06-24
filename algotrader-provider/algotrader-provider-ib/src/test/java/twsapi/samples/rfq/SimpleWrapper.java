@@ -3,21 +3,13 @@
 
 package twsapi.samples.rfq;
 
+import com.ib.client.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import com.ib.client.CommissionReport;
-import com.ib.client.Contract;
-import com.ib.client.ContractDetails;
-import com.ib.client.EClientSocket;
-import com.ib.client.EWrapper;
-import com.ib.client.Execution;
-import com.ib.client.Order;
-import com.ib.client.OrderState;
-import com.ib.client.UnderComp;
 
 
 public class SimpleWrapper implements EWrapper {
@@ -67,7 +59,7 @@ public class SimpleWrapper implements EWrapper {
 	}
 
 	public void error(int id, int errorCode, String errorMsg) {
-		logIn("Error id=" + id + " code=" + errorCode + " msg=" + errorMsg);
+		logIn("Error instId=" + id + " code=" + errorCode + " msg=" + errorMsg);
 	}
 
 	public void connectionClosed() {

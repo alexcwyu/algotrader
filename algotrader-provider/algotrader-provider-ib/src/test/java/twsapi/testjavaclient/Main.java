@@ -3,10 +3,8 @@
 
 package twsapi.testjavaclient;
 
-import java.awt.Component;
-
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
+import java.awt.*;
 
 public class Main {
 

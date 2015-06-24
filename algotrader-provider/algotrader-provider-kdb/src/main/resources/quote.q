@@ -1,7 +1,7 @@
 quote:([]
 / date:`date$();
 / time:`time$();
- sym:`symbol$();
+ instId:`int$();
  datetime:`long$();
  bid:`float$();
  ask:`float$();

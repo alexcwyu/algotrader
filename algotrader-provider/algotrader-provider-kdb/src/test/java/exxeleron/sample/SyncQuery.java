@@ -13,14 +13,15 @@ package exxeleron.sample; /**
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import java.io.IOException;
-import java.util.Arrays;
 
 import com.exxeleron.qjava.QBasicConnection;
 import com.exxeleron.qjava.QConnection;
-import com.exxeleron.qjava.QMessage;
 import com.exxeleron.qjava.QConnection.MessageType;
 import com.exxeleron.qjava.QException;
+import com.exxeleron.qjava.QMessage;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 public class SyncQuery {
 

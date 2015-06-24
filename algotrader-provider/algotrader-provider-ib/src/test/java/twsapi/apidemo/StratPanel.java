@@ -3,21 +3,13 @@
 
 package twsapi.apidemo;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.TreeMap;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.border.TitledBorder;
-
-
+import com.ib.controller.ApiController.IHistoricalDataHandler;
+import com.ib.controller.ApiController.IRealTimeBarHandler;
+import com.ib.controller.Bar;
+import com.ib.controller.NewContract;
+import com.ib.controller.Types.BarSize;
+import com.ib.controller.Types.DurationUnit;
+import com.ib.controller.Types.WhatToShow;
 import twsapi.apidemo.OrdersPanel.OrdersModel;
 import twsapi.apidemo.util.HtmlButton;
 import twsapi.apidemo.util.TCombo;
@@ -26,13 +18,11 @@ import twsapi.apidemo.util.VerticalPanel.BorderPanel;
 import twsapi.apidemo.util.VerticalPanel.HorzPanel;
 import twsapi.apidemo.util.VerticalPanel.StackPanel;
 
-import com.ib.controller.Bar;
-import com.ib.controller.NewContract;
-import com.ib.controller.ApiController.IHistoricalDataHandler;
-import com.ib.controller.ApiController.IRealTimeBarHandler;
-import com.ib.controller.Types.BarSize;
-import com.ib.controller.Types.DurationUnit;
-import com.ib.controller.Types.WhatToShow;
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.TreeMap;
 
 
 public class StratPanel extends StackPanel implements IHistoricalDataHandler, IRealTimeBarHandler {

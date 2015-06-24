@@ -1,6 +1,8 @@
 package com.unisoft.algotrader.provider.yahoo;
 
 import com.google.common.collect.Lists;
+import com.unisoft.algotrader.core.Instrument;
+import com.unisoft.algotrader.core.InstrumentManager;
 import com.unisoft.algotrader.event.EventBus;
 import com.unisoft.algotrader.provider.SubscriptionKey;
 import com.unisoft.algotrader.provider.csv.historical.HistoricalDataProvider;
@@ -82,7 +84,8 @@ public class YahooHistoricalDataProvider implements HistoricalDataProvider {
             Calendar toDateCal = Calendar.getInstance();
             toDateCal.setTime(toDate);
 
-            String url = String.format(URL, key.instId,
+            Instrument instrument = InstrumentManager.INSTANCE.get(key.instId);
+            String url = String.format(URL, instrument.symbol,
                     fromDateCal.get(Calendar.MONTH), fromDateCal.get(Calendar.DATE), fromDateCal.get(Calendar.YEAR),
                     toDateCal.get(Calendar.MONTH), toDateCal.get(Calendar.DATE), toDateCal.get(Calendar.YEAR));
             return url;

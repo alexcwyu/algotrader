@@ -3,17 +3,10 @@
 
 package twsapi.testjavaclient;
 
-import java.awt.BorderLayout;
-import java.awt.Frame;
-import java.awt.GridLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 public class ConnectDlg extends JDialog {
     public static int LAST_CLIENT_ID = 0;
@@ -70,7 +63,7 @@ public class ConnectDlg extends JDialog {
         m_rc = false;
 
         try {
-            // set id
+            // set instId
             m_retIpAddress = m_ipAddress.getText();
             m_retPort = Integer.parseInt( m_port.getText() );
             m_retClientId = Integer.parseInt( m_clientId.getText() );

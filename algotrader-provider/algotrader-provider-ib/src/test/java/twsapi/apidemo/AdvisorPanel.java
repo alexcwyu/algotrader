@@ -3,36 +3,25 @@
 
 package twsapi.apidemo;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.util.ArrayList;
+import com.ib.controller.Alias;
+import com.ib.controller.ApiController.IAdvisorHandler;
+import com.ib.controller.Group;
+import com.ib.controller.Profile;
+import com.ib.controller.Profile.Type;
+import com.ib.controller.Types.FADataType;
+import com.ib.controller.Types.Method;
+import twsapi.apidemo.util.HtmlButton;
+import twsapi.apidemo.util.NewTabbedPanel.NewTabPanel;
+import twsapi.apidemo.util.TCombo;
+import twsapi.apidemo.util.VerticalPanel;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
-
-
-import twsapi.apidemo.util.HtmlButton;
-import twsapi.apidemo.util.TCombo;
-import twsapi.apidemo.util.VerticalPanel;
-import twsapi.apidemo.util.NewTabbedPanel.NewTabPanel;
-
-import com.ib.controller.Alias;
-import com.ib.controller.Group;
-import com.ib.controller.Profile;
-import com.ib.controller.ApiController.IAdvisorHandler;
-import com.ib.controller.Profile.Type;
-import com.ib.controller.Types.FADataType;
-import com.ib.controller.Types.Method;
+import java.awt.*;
+import java.util.ArrayList;
 
 public class AdvisorPanel extends NewTabPanel implements IAdvisorHandler {
 	static DefaultCellEditor DEF_CELL_EDITOR = new DefaultCellEditor( new JTextField() );

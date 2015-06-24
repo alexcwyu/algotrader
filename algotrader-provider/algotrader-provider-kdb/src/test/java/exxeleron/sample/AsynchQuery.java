@@ -13,13 +13,14 @@ package exxeleron.sample; /**
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import java.io.IOException;
-import java.util.Random;
 
 import com.exxeleron.qjava.QCallbackConnection;
 import com.exxeleron.qjava.QErrorMessage;
 import com.exxeleron.qjava.QMessage;
 import com.exxeleron.qjava.QMessagesListener;
+
+import java.io.IOException;
+import java.util.Random;
 
 public class AsynchQuery {
 

@@ -3,17 +3,7 @@
 
 package twsapi.apidemo.util;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JTable;
-import javax.swing.Timer;
-import javax.swing.UIDefaults;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -25,6 +15,9 @@ import javax.swing.plaf.metal.MetalLabelUI;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class NewLookAndFeel extends MetalLookAndFeel {
     @Override protected void initClassDefaults(UIDefaults table) {

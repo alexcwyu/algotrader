@@ -13,28 +13,17 @@ package exxeleron.sample; /**
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+
+import com.exxeleron.qjava.*;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
-
-import com.exxeleron.qjava.QCallbackConnection;
-import com.exxeleron.qjava.QErrorMessage;
-import com.exxeleron.qjava.QMessage;
-import com.exxeleron.qjava.QMessagesListener;
-import com.exxeleron.qjava.QTable;
 
 public class TickClient {
 

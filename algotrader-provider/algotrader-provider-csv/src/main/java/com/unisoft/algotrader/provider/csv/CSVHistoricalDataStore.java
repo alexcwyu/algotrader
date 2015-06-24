@@ -181,7 +181,7 @@ public class CSVHistoricalDataStore implements DataStore, HistoricalDataProvider
 //                    continue;
 //                if (time >toDateTime)
 //                    break;
-//                eventBus.publishBar(subscriptionKey.instId, subscriptionKey.barSize, time,
+//                eventBus.publishBar(subscriptionKey.altInstId, subscriptionKey.barSize, time,
 //                        Double.parseDouble(row[1]), Double.parseDouble(row[2]), Double.parseDouble(row[3]), Double.parseDouble(row[4]), Long.parseLong(row[5]), 0);
 //
 //            }

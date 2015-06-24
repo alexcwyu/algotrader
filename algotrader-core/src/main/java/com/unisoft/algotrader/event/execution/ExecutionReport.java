@@ -6,7 +6,6 @@ import com.unisoft.algotrader.core.OrdStatus;
 import com.unisoft.algotrader.core.OrdType;
 import com.unisoft.algotrader.core.Side;
 import com.unisoft.algotrader.core.TimeInForce;
-import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.Event;
 
 /**
@@ -17,7 +16,7 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
 
     public long execId;
     public long orderId;
-    public InstId instId;
+    public int instId;
 
     public long transactionTime;
 

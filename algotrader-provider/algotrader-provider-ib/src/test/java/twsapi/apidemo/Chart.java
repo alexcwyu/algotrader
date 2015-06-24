@@ -3,14 +3,11 @@
 
 package twsapi.apidemo;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.util.ArrayList;
-
-import javax.swing.JComponent;
-
 import com.ib.controller.Bar;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
 
 public class Chart extends JComponent {
 	private static final int width = 5;

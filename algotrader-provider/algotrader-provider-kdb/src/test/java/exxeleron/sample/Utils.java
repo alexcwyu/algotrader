@@ -13,13 +13,14 @@ package exxeleron.sample; /**
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import java.lang.reflect.Array;
 
 import com.exxeleron.qjava.QDictionary;
+import com.exxeleron.qjava.QDictionary.KeyValuePair;
 import com.exxeleron.qjava.QKeyedTable;
 import com.exxeleron.qjava.QTable;
-import com.exxeleron.qjava.QDictionary.KeyValuePair;
 import com.exxeleron.qjava.QTable.Row;
+
+import java.lang.reflect.Array;
 
 public final class Utils {
 

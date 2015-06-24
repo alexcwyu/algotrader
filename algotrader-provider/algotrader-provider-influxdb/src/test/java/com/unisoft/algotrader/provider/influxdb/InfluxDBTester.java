@@ -4,7 +4,6 @@ import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Serie;
 
-
 import java.util.concurrent.TimeUnit;
 
 /**

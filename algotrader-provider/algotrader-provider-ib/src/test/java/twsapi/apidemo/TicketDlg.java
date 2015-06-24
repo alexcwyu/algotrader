@@ -3,50 +3,21 @@
 
 package twsapi.apidemo;
 
-import static com.ib.controller.Formats.fmt;
-
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.Box;
-import javax.swing.JCheckBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-
-import twsapi.apidemo.util.HtmlButton;
-import twsapi.apidemo.util.NewTabbedPanel;
-import twsapi.apidemo.util.TCombo;
-import twsapi.apidemo.util.UpperField;
-import twsapi.apidemo.util.Util;
-import twsapi.apidemo.util.VerticalPanel;
+import com.ib.client.TagValue;
+import com.ib.controller.ApiController.IOrderHandler;
+import com.ib.controller.*;
+import com.ib.controller.Types.Action;
+import com.ib.controller.Types.*;
+import twsapi.apidemo.util.*;
 import twsapi.apidemo.util.VerticalPanel.HorzPanel;
 import twsapi.apidemo.util.VerticalPanel.StackPanel;
 
-import com.ib.client.TagValue;
-import com.ib.controller.ApiController.IOrderHandler;
-import com.ib.controller.NewContract;
-import com.ib.controller.NewOrder;
-import com.ib.controller.NewOrderState;
-import com.ib.controller.OrderStatus;
-import com.ib.controller.OrderType;
-import com.ib.controller.Types.Action;
-import com.ib.controller.Types.AlgoParam;
-import com.ib.controller.Types.AlgoStrategy;
-import com.ib.controller.Types.ComboParam;
-import com.ib.controller.Types.HedgeType;
-import com.ib.controller.Types.Method;
-import com.ib.controller.Types.OcaType;
-import com.ib.controller.Types.ReferencePriceType;
-import com.ib.controller.Types.Rule80A;
-import com.ib.controller.Types.TimeInForce;
-import com.ib.controller.Types.TriggerMethod;
-import com.ib.controller.Types.VolatilityType;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import static com.ib.controller.Formats.fmt;
 
 public class TicketDlg extends JDialog {
 	private boolean m_editContract;

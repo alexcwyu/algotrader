@@ -4,7 +4,6 @@ import com.google.common.collect.Maps;
 import com.unisoft.algotrader.core.OrdStatus;
 import com.unisoft.algotrader.core.Portfolio;
 import com.unisoft.algotrader.core.PortfolioManager;
-import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.Event;
 import com.unisoft.algotrader.event.EventBusManager;
 import com.unisoft.algotrader.event.execution.*;
@@ -34,7 +33,7 @@ public class OrderManager extends MultiEventProcessor implements OrderHandler , 
     private AtomicLong ordId = new AtomicLong();
 
 
-    private Map<InstId, Map<Long, Order>> orderMap = Maps.newConcurrentMap();
+    private Map<Integer, Map<Long, Order>> orderMap = Maps.newConcurrentMap();
 
     public OrderManager(){
         super(new NoWaitStrategy(),  null, EventBusManager.INSTANCE.executionReportRB, EventBusManager.INSTANCE.orderRB, EventBusManager.INSTANCE.orderStatusRB);
@@ -44,14 +43,14 @@ public class OrderManager extends MultiEventProcessor implements OrderHandler , 
         return ordId.getAndIncrement();
     }
 
-    public Map<Long, Order> getOrders(InstId instId){
+    public Map<Long, Order> getOrders(int instId){
         if (!orderMap.containsKey(instId))
             orderMap.putIfAbsent(instId, Maps.newHashMap());
         return orderMap.get(instId);
     }
 
 
-    public Order getOrder(InstId instId, long orderId){
+    public Order getOrder(int instId, long orderId){
         if (orderMap.containsKey(instId))
             return orderMap.get(instId).get(orderId);
         return null;

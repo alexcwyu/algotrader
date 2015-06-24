@@ -3,29 +3,22 @@
 
 package twsapi.apidemo;
 
-import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
-import javax.swing.JCheckBox;
-import javax.swing.JList;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-
+import com.ib.controller.ApiController.IAccountHandler;
+import com.ib.controller.Position;
+import com.ib.controller.Types.ExerciseType;
+import com.ib.controller.Types.SecType;
 import twsapi.apidemo.AccountInfoPanel.PortfolioModel;
 import twsapi.apidemo.util.HtmlButton;
+import twsapi.apidemo.util.NewTabbedPanel.INewTab;
 import twsapi.apidemo.util.TCombo;
 import twsapi.apidemo.util.UpperField;
 import twsapi.apidemo.util.VerticalPanel;
-import twsapi.apidemo.util.NewTabbedPanel.INewTab;
 import twsapi.apidemo.util.VerticalPanel.HorzPanel;
 
-import com.ib.controller.Position;
-import com.ib.controller.ApiController.IAccountHandler;
-import com.ib.controller.Types.ExerciseType;
-import com.ib.controller.Types.SecType;
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 
 public class ExercisePanel extends HorzPanel implements INewTab, IAccountHandler {

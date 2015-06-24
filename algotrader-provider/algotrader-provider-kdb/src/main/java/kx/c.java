@@ -1,10 +1,14 @@
 package kx; //jar cf c.jar kx/*.class
 
-import java.net.*;
 import java.io.*;
-import java.sql.*;
 import java.lang.reflect.Array;
-import java.text.*;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.UUID;
 
 //tick: c c=new c("",5010);Object[]x={"GE",new Double(2.5),new Integer(23)};c.k(".u.upd","trade",x);

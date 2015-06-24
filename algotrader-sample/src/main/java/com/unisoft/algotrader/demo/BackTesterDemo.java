@@ -2,9 +2,7 @@ package com.unisoft.algotrader.demo;
 
 import com.unisoft.algotrader.backtest.BackTester;
 import com.unisoft.algotrader.core.Currency;
-import com.unisoft.algotrader.core.Instrument;
 import com.unisoft.algotrader.core.Performance;
-import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.EventBusManager;
 import com.unisoft.algotrader.provider.csv.historical.DummyDataProvider;
 import com.unisoft.algotrader.series.TimeSeriesHelper;
@@ -22,7 +20,7 @@ public class BackTesterDemo {
 
     private static final Logger LOG = LogManager.getLogger(BackTesterDemo.class);
 
-    public static Instrument testInstrument = new Instrument(InstId.Builder.as().symbol("TestInst").exchId("TestExch").build(), Currency.HKD.ccyId);
+
 
 
     public static void main(String [] args) throws Exception{
@@ -31,7 +29,7 @@ public class BackTesterDemo {
         CountDownLatch latch = new CountDownLatch(1);
         Strategy strategy = new CountDownStrategy("Sid", latch, 20, EventBusManager.INSTANCE.marketDataRB);
 
-        BackTester backTester = new BackTester(strategy, provider, Currency.HKD, 100000, testInstrument, 20110101, 20110111);
+        BackTester backTester = new BackTester(strategy, provider, Currency.HKD, 100000, Sample.testInstrument, 20110101, 20110111);
 
         backTester.run();
 

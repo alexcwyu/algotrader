@@ -1,7 +1,6 @@
 package com.unisoft.algotrader.provider;
 
 import com.google.common.base.Objects;
-import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.data.Bar;
 import com.unisoft.algotrader.event.data.Quote;
 import com.unisoft.algotrader.event.data.Trade;
@@ -28,15 +27,15 @@ public class SubscriptionKey {
 
     public final Type type;
 
-    public final InstId instId;
+    public final int instId;
 
     public final int barSize;
 
-    private SubscriptionKey(Type type, InstId instId){
+    private SubscriptionKey(Type type, int instId){
         this(type, instId, 0);
     }
 
-    private SubscriptionKey(Type type, InstId instId, int barSize){
+    private SubscriptionKey(Type type, int instId, int barSize){
         this.type = type;
         this.instId = instId;
         this.barSize = barSize;
@@ -66,39 +65,39 @@ public class SubscriptionKey {
                 '}';
     }
 
-    public static SubscriptionKey createBarSubscriptionKey(InstId instId, int frequency){
+    public static SubscriptionKey createBarSubscriptionKey(int instId, int frequency){
         return new SubscriptionKey(Type.Bar, instId, frequency);
     }
 
-    public static SubscriptionKey create1MBarSubscriptionKey(InstId instId){
+    public static SubscriptionKey create1MBarSubscriptionKey(int instId){
         return new SubscriptionKey(Type.Bar, instId, M1_SIZE);
     }
 
-    public static SubscriptionKey create15MBarSubscriptionKey(InstId instId){
+    public static SubscriptionKey create15MBarSubscriptionKey(int instId){
         return new SubscriptionKey(Type.Bar, instId, M15_SIZE);
     }
 
-    public static SubscriptionKey create30MBarSubscriptionKey(InstId instId){
+    public static SubscriptionKey create30MBarSubscriptionKey(int instId){
         return new SubscriptionKey(Type.Bar, instId, M30_SIZE);
     }
 
-    public static SubscriptionKey create1HBarSubscriptionKey(InstId instId){
+    public static SubscriptionKey create1HBarSubscriptionKey(int instId){
         return new SubscriptionKey(Type.Bar, instId, H1_SIZE);
     }
 
-    public static SubscriptionKey create4HBarSubscriptionKey(InstId instId){
+    public static SubscriptionKey create4HBarSubscriptionKey(int instId){
         return new SubscriptionKey(Type.Bar, instId, H4_SIZE);
     }
 
-    public static SubscriptionKey createDailySubscriptionKey(InstId instId){
+    public static SubscriptionKey createDailySubscriptionKey(int instId){
         return new SubscriptionKey(Type.Bar, instId, DAILY_SIZE);
     }
 
-    public static SubscriptionKey createTradeSubscriptionKey(InstId instId){
+    public static SubscriptionKey createTradeSubscriptionKey(int instId){
         return new SubscriptionKey(Type.Trade, instId);
     }
 
-    public static SubscriptionKey createQuoteSubscriptionKey(InstId instId){
+    public static SubscriptionKey createQuoteSubscriptionKey(int instId){
         return new SubscriptionKey(Type.Quote, instId);
     }
 

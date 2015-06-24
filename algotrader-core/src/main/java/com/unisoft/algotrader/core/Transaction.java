@@ -1,7 +1,6 @@
 package com.unisoft.algotrader.core;
 
 import com.google.common.collect.Lists;
-import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.execution.ExecutionReport;
 import com.unisoft.algotrader.event.execution.Order;
 
@@ -15,7 +14,7 @@ public class Transaction {
 
     public long id;
     public long dataTime;
-    public InstId instId;
+    public int instId;
     public long orderId;
     public long execId;
     public String strategyId;

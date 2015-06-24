@@ -4,7 +4,6 @@ import com.exxeleron.qjava.QBasicConnection;
 import com.exxeleron.qjava.QConnection;
 import com.exxeleron.qjava.QMessage;
 import com.exxeleron.qjava.QTable;
-import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.EventBus;
 import com.unisoft.algotrader.event.data.Bar;
 import com.unisoft.algotrader.event.data.LogMarketDataEventBus;
@@ -152,7 +151,7 @@ public class KDBHistoricalDataStore implements DataStore, HistoricalDataProvider
                 for (int i = 0; i < table.getRowsCount(); i++) {
                     QTable.Row row = table.get(i);
 
-                    eventBus.publishBar(InstId.Builder.as().symbol((String) row.get(0)).build(),
+                    eventBus.publishBar((int)row.get(0),
                             (int) row.get(1), (long) row.get(2), (double) row.get(3), (double) row.get(4),
                             (double) row.get(5), (double) row.get(6), (int) row.get(7), (int) row.get(8));
                 }
@@ -177,7 +176,7 @@ public class KDBHistoricalDataStore implements DataStore, HistoricalDataProvider
                 for (int i = 0; i < table.getRowsCount(); i++) {
                     QTable.Row row = table.get(i);
 
-                    eventBus.publishQuote(InstId.Builder.as().symbol((String) row.get(0)).build(),
+                    eventBus.publishQuote((int)row.get(0),
                             (long) row.get(1), (double) row.get(2), (double) row.get(3),
                             (int) row.get(4), (int) row.get(5));
                 }
@@ -202,7 +201,7 @@ public class KDBHistoricalDataStore implements DataStore, HistoricalDataProvider
                 for (int i = 0; i < table.getRowsCount(); i++) {
                     QTable.Row row = table.get(i);
 
-                    eventBus.publishTrade(InstId.Builder.as().symbol((String) row.get(0)).build(),
+                    eventBus.publishTrade((int)row.get(0),
                             (long) row.get(1), (double) row.get(2), (int) row.get(3));
                 }
             }
@@ -216,7 +215,7 @@ public class KDBHistoricalDataStore implements DataStore, HistoricalDataProvider
     }
 
     public static String buildBarInsertQuery(Bar bar){
-        return new StringBuilder(BAR_INSERT_PREFIX).append(bar.instId.symbol).append(INSERT_FIELD_SEP)
+        return new StringBuilder(BAR_INSERT_PREFIX).append(bar.instId).append(INSERT_FIELD_SEP)
                 .append(bar.size).append(INSERT_FIELD_SEP)
                 .append(bar.dateTime).append(INSERT_FIELD_SEP)
                 .append(bar.open).append(FLOAT_FIELD).append(INSERT_FIELD_SEP)
@@ -229,14 +228,14 @@ public class KDBHistoricalDataStore implements DataStore, HistoricalDataProvider
 
 
     public static String buildTradeInsertQuery(Trade trade){
-        return new StringBuilder(TRADE_INSERT_PREFIX).append(trade.instId.symbol).append(INSERT_FIELD_SEP)
+        return new StringBuilder(TRADE_INSERT_PREFIX).append(trade.instId).append(INSERT_FIELD_SEP)
                 .append(trade.dateTime).append(INSERT_FIELD_SEP)
                 .append(trade.price).append(FLOAT_FIELD).append(INSERT_FIELD_SEP)
                 .append(trade.size).append(INSERT_SUFFIX).toString();
     }
 
     public static String buildQuoteInsertQuery(Quote quote){
-        return new StringBuilder(QUOTE_INSERT_PREFIX).append(quote.instId.symbol).append(INSERT_FIELD_SEP)
+        return new StringBuilder(QUOTE_INSERT_PREFIX).append(quote.instId).append(INSERT_FIELD_SEP)
                 .append(quote.dateTime).append(INSERT_FIELD_SEP)
                 .append(quote.bid).append(FLOAT_FIELD).append(INSERT_FIELD_SEP)
                 .append(quote.ask).append(FLOAT_FIELD).append(INSERT_FIELD_SEP)
@@ -245,20 +244,20 @@ public class KDBHistoricalDataStore implements DataStore, HistoricalDataProvider
     }
 
     public static String buildBarSelectQuery(SubscriptionKey subscriptionKey, Date fromDate, Date toDate){
-        return new StringBuilder(BAR_SELECT_PREFIX).append(subscriptionKey.instId.symbol)
+        return new StringBuilder(BAR_SELECT_PREFIX).append(subscriptionKey.instId)
                 .append(SIZE_EQ).append(subscriptionKey.barSize)
                 .append(DT_GE).append(fromDate.getTime())
                 .append(DT_LT).append(toDate.getTime()).toString();
     }
 
     public static String buildTradeSelectQuery(SubscriptionKey subscriptionKey, Date fromDate, Date toDate){
-        return new StringBuilder(TRADE_SELECT_PREFIX).append(subscriptionKey.instId.symbol)
+        return new StringBuilder(TRADE_SELECT_PREFIX).append(subscriptionKey.instId)
                 .append(DT_GE).append(fromDate.getTime())
                 .append(DT_LT).append(toDate.getTime()).toString();
     }
 
     public static String buildQuoteSelectQuery(SubscriptionKey subscriptionKey, Date fromDate, Date toDate){
-        return new StringBuilder(QUOTE_SELECT_PREFIX).append(subscriptionKey.instId.symbol)
+        return new StringBuilder(QUOTE_SELECT_PREFIX).append(subscriptionKey.instId)
                 .append(DT_GE).append(fromDate.getTime())
                 .append(DT_LT).append(toDate.getTime()).toString();
     }
@@ -267,12 +266,12 @@ public class KDBHistoricalDataStore implements DataStore, HistoricalDataProvider
 
         KDBHistoricalDataStore store = new KDBHistoricalDataStore(new KDBConfig());
         store.connect();
-        InstId id = InstId.Builder.as().symbol("IBM").exchId("NASDAQ").build();
+        int instId =100;
         for (int i = 0 ; i < 10; i ++) {
             long time = YYYYMMDD_FORMAT.parse((20000101 + i)+"").getTime();
-            Bar bar = new Bar(id, 86400, time,88, 98, 86, 92, 20000);
-            Quote quote = new Quote(id, time, 98, 100, 9800, 8800);
-            Trade trade = new Trade(id, time, 99, 8800);
+            Bar bar = new Bar(instId, 86400, time,88, 98, 86, 92, 20000);
+            Quote quote = new Quote(instId, time, 98, 100, 9800, 8800);
+            Trade trade = new Trade(instId, time, 99, 8800);
 
             store.onBar(bar);
             store.onQuote(quote);
@@ -280,9 +279,9 @@ public class KDBHistoricalDataStore implements DataStore, HistoricalDataProvider
         }
 
         LogMarketDataEventBus logger = new LogMarketDataEventBus();
-        store.subscribe(logger, SubscriptionKey.createDailySubscriptionKey(id), 20000101, 20000112);
-        store.subscribe(logger, SubscriptionKey.createQuoteSubscriptionKey(id), 20000101, 20000112);
-        store.subscribe(logger, SubscriptionKey.createTradeSubscriptionKey(id), 20000101, 20000112);
+        store.subscribe(logger, SubscriptionKey.createDailySubscriptionKey(instId), 20000101, 20000112);
+        store.subscribe(logger, SubscriptionKey.createQuoteSubscriptionKey(instId), 20000101, 20000112);
+        store.subscribe(logger, SubscriptionKey.createTradeSubscriptionKey(instId), 20000101, 20000112);
 
     }
 }

@@ -3,16 +3,11 @@
 
 package twsapi.testjavaclient;
 
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class FAAllocationInfoDlg extends JDialog {
     IBGridBagPanel mainJPanel = new IBGridBagPanel();

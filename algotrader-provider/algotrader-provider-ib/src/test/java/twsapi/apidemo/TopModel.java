@@ -3,22 +3,19 @@
 
 package twsapi.apidemo;
 
-import static com.ib.controller.Formats.fmt;
-import static com.ib.controller.Formats.fmtPct;
-import static com.ib.controller.Formats.*;
-
-import java.awt.Color;
-import java.util.ArrayList;
-
-import javax.swing.JLabel;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellRenderer;
-
 import com.ib.controller.ApiController.TopMktDataAdapter;
 import com.ib.controller.Formats;
 import com.ib.controller.NewContract;
 import com.ib.controller.NewTickType;
 import com.ib.controller.Types.MktDataType;
+
+import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
+import java.awt.*;
+import java.util.ArrayList;
+
+import static com.ib.controller.Formats.*;
 
 class TopModel extends AbstractTableModel {
 	private ArrayList<TopRow> m_rows = new ArrayList<TopRow>();

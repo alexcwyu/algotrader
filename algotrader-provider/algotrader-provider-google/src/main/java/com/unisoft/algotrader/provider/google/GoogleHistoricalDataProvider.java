@@ -1,6 +1,8 @@
 package com.unisoft.algotrader.provider.google;
 
 import com.google.common.collect.Lists;
+import com.unisoft.algotrader.core.Instrument;
+import com.unisoft.algotrader.core.InstrumentManager;
 import com.unisoft.algotrader.event.EventBus;
 import com.unisoft.algotrader.provider.SubscriptionKey;
 import com.unisoft.algotrader.provider.csv.historical.HistoricalDataProvider;
@@ -79,9 +81,12 @@ public class GoogleHistoricalDataProvider implements HistoricalDataProvider {
 
     protected String getURL(SubscriptionKey key, Date fromDate, Date toDate){
         try {
+
+            Instrument instrument = InstrumentManager.INSTANCE.get(key.instId);
+
             String fromDateStr = URLEncoder.encode(DATE_FORMAT.format(fromDate), "UTF-8");
             String toDateStr = URLEncoder.encode(DATE_FORMAT.format(toDate), "UTF-8");
-            String url = String.format(URL, key.instId, fromDateStr, toDateStr);
+            String url = String.format(URL, instrument.symbol, fromDateStr, toDateStr);
             return url;
         }catch (UnsupportedEncodingException e){
             throw new RuntimeException(e);

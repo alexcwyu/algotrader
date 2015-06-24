@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.networking;
 
-import com.unisoft.algotrader.core.id.InstId;
+import com.unisoft.algotrader.core.Instrument;
+import com.unisoft.algotrader.core.InstrumentManager;
 import com.unisoft.algotrader.event.data.Bar;
 import com.unisoft.algotrader.event.data.Quote;
 import com.unisoft.algotrader.event.data.Trade;
@@ -23,6 +24,7 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class AbstractPubSubTest {
 
+    private static Instrument testInstrument = InstrumentManager.INSTANCE.createStock("HSI", "HKEX", "HKD");
     public static int ITER = 100_000_000;
 
     public static void printSubRate(
@@ -73,7 +75,7 @@ public abstract class AbstractPubSubTest {
                 Trade trade = serializer.deserialize(wrapped);
 
                 //assert header.msgId == count;
-                //assert trade.instId == count;
+                //assert trade.altInstId == count;
                 count++;
                 if (count == expected)
                     latch.countDown();
@@ -179,7 +181,7 @@ public abstract class AbstractPubSubTest {
 
             }
 
-            Trade trade = new Trade(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(), System.currentTimeMillis(), 99, 85);
+            Trade trade = new Trade(testInstrument.instId, System.currentTimeMillis(), 99, 85);
             while (count<expected)
             {
 
@@ -189,7 +191,7 @@ public abstract class AbstractPubSubTest {
 //                    header.msgId = count;
 //                    header.typeId = serializer.getId(trade.getClass());
 
-                    trade.instId = InstId.Builder.as().symbol("HSI").exchId("HKEX").build();
+                    trade.instId = testInstrument.instId;
 
 //                    serializer.serialize(header, buffer);
                     serializer.serialize(trade, buffer);

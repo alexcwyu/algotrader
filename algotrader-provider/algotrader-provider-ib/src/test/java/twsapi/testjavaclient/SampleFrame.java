@@ -3,32 +3,16 @@
 
 package twsapi.testjavaclient;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import com.ib.client.*;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
 import java.util.Vector;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
-import com.ib.client.AnyWrapperMsgGenerator;
-import com.ib.client.CommissionReport;
-import com.ib.client.Contract;
-import com.ib.client.ContractDetails;
-import com.ib.client.EClientSocket;
-import com.ib.client.EWrapper;
-import com.ib.client.EWrapperMsgGenerator;
-import com.ib.client.Execution;
-import com.ib.client.Order;
-import com.ib.client.OrderState;
-import com.ib.client.TagValue;
-import com.ib.client.UnderComp;
 
 class SampleFrame extends JFrame implements EWrapper {
     private static final int NOT_AN_FA_ACCOUNT_ERROR = 321 ;
@@ -912,7 +896,7 @@ class SampleFrame extends JFrame implements EWrapper {
     	        avgFillPrice, permId, parentId, lastFillPrice, clientId, whyHeld);
         m_TWS.add(  msg);
 
-        // make sure id for next order is at least orderId+1
+        // make sure instId for next order is at least orderId+1
         m_orderDlg.setIdAtLeast( orderId + 1);
     }
 
@@ -975,7 +959,7 @@ class SampleFrame extends JFrame implements EWrapper {
         if ( depthDialog != null ) {
             depthDialog.updateMktDepth( tickerId, position, "", operation, side, price, size);
         } else {
-            System.err.println("cannot find dialog that corresponds to request id ["+tickerId+"]");
+            System.err.println("cannot find dialog that corresponds to request instId ["+tickerId+"]");
         }
 
 
@@ -987,12 +971,12 @@ class SampleFrame extends JFrame implements EWrapper {
         if ( depthDialog != null ) {
             depthDialog.updateMktDepth( tickerId, position, marketMaker, operation, side, price, size);
         } else {
-            System.err.println("cannot find dialog that corresponds to request id ["+tickerId+"]");
+            System.err.println("cannot find dialog that corresponds to request instId ["+tickerId+"]");
         }
     }
 
     public void nextValidId( int orderId) {
-        // received next valid order id
+        // received next valid order instId
     	String msg = EWrapperMsgGenerator.nextValidId( orderId);
         m_TWS.add(msg) ;
         m_orderDlg.setIdAtLeast( orderId);
@@ -1024,7 +1008,7 @@ class SampleFrame extends JFrame implements EWrapper {
             if ( depthDialog != null ) {
                 depthDialog.reset();
             } else {
-                System.err.println("cannot find dialog that corresponds to request id ["+id+"]");
+                System.err.println("cannot find dialog that corresponds to request instId ["+id+"]");
             }
         }
     }

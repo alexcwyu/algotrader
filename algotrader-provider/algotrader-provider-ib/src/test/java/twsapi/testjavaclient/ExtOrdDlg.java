@@ -3,21 +3,12 @@
 
 package twsapi.testjavaclient;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import com.ib.client.Order;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-
-import com.ib.client.Order;
 
 public class ExtOrdDlg extends JDialog {
     public Order 		m_order = new Order();

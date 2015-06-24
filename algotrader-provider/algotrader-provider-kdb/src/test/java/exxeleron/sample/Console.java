@@ -13,13 +13,14 @@ package exxeleron.sample; /**
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 import com.exxeleron.qjava.QBasicConnection;
 import com.exxeleron.qjava.QConnection;
 import com.exxeleron.qjava.QException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Console {
 

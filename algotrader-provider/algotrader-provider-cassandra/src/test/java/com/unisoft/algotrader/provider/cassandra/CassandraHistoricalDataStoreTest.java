@@ -1,6 +1,5 @@
 package com.unisoft.algotrader.provider.cassandra;
 
-import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.data.Bar;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -29,9 +28,9 @@ public class CassandraHistoricalDataStoreTest {
 
     @Test
     public void testInsertBar(){
-        Bar bar1 = new Bar(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(),  60,Calendar.getInstance().getTime().getTime(),
+        Bar bar1 = new Bar(1,  60,Calendar.getInstance().getTime().getTime(),
                 500, 9999, 100, 600);
-        Bar bar2 = new Bar(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(),  60, Calendar.getInstance().getTime().getTime()+1,
+        Bar bar2 = new Bar(1,  60, Calendar.getInstance().getTime().getTime()+1,
                 600, 20000, 120, 700);
         cassandraHistoricalDataStore.onBar(bar1);
         cassandraHistoricalDataStore.onBar(bar2);

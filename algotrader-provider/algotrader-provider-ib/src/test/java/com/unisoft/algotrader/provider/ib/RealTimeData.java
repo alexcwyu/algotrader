@@ -4,17 +4,10 @@ package com.unisoft.algotrader.provider.ib;
  * Created by alex on 6/20/15.
  */
 // Import Java utilities and Interactive Brokers API
+
+import com.ib.client.*;
+
 import java.util.Vector;
-import com.ib.client.Contract;
-import com.ib.client.ContractDetails;
-import com.ib.client.EClientSocket;
-import com.ib.client.EWrapper;
-import com.ib.client.Execution;
-import com.ib.client.Order;
-import com.ib.client.OrderState;
-import com.ib.client.TagValue;
-import com.ib.client.CommissionReport;
-import com.ib.client.UnderComp;
 
 // RealTimeData Class is an implementation of the
 // IB API EWrapper class

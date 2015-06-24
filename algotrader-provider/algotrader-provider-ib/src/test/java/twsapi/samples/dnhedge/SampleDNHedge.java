@@ -4,12 +4,11 @@
 package twsapi.samples.dnhedge;
 
 
-import twsapi.samples.rfq.SimpleWrapper;
-
 import com.ib.client.Contract;
 import com.ib.client.ContractDetails;
 import com.ib.contracts.OptContract;
 import com.ib.contracts.StkContract;
+import twsapi.samples.rfq.SimpleWrapper;
 
 
 public class SampleDNHedge extends SimpleWrapper {
@@ -169,7 +168,7 @@ public class SampleDNHedge extends SimpleWrapper {
 
             if (m_status == Status.SecDef) {
 
-               error ("Could not find hedge contract id");
+               error ("Could not find hedge contract instId");
                return;
 
             }
@@ -224,7 +223,7 @@ public class SampleDNHedge extends SimpleWrapper {
 
    public void error(int id, int errorCode, String errorMsg) {
 
-      consoleMsg("Error id=" + id + " code=" + errorCode + " msg=" + errorMsg);
+      consoleMsg("Error instId=" + id + " code=" + errorCode + " msg=" + errorMsg);
 
       if (errorCode >= 2100 && errorCode < 2200) {
          return;

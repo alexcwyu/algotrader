@@ -3,12 +3,8 @@
 
 package twsapi.testjavaclient;
 
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
 
 class IBGridBagPanel extends JPanel {
     private static final Insets oneInsets = new Insets(1, 1, 1, 1);

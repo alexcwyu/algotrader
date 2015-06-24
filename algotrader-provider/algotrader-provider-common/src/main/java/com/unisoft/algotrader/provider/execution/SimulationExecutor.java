@@ -5,7 +5,6 @@ import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.clock.Clock;
 import com.unisoft.algotrader.core.OrdStatus;
 import com.unisoft.algotrader.core.OrdType;
-import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.Event;
 import com.unisoft.algotrader.event.data.*;
 import com.unisoft.algotrader.event.execution.*;
@@ -45,8 +44,8 @@ public class SimulationExecutor extends MultiEventProcessor implements Execution
     private StopOrderHandler stopOrderHandler;
     private TrailingStopOrderHandler trailingStopOrderHandler;
 
-    private Map<InstId, Map<Long, Order>> orderMap = Maps.newConcurrentMap();
-    private Map<InstId, Quote> quoteMap = Maps.newHashMap();
+    private Map<Integer, Map<Long, Order>> orderMap = Maps.newConcurrentMap();
+    private Map<Integer, Quote> quoteMap = Maps.newHashMap();
 
     public SimulatorConfig config = new SimulatorConfig();
     private Clock clock = Clock.CLOCK;

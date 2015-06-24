@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <sbe:messageSchema xmlns:sbe="http://www.fixprotocol.org/ns/simple/1.0"
                    package="com.unisoft.algotrader.event.data.sbe"
-                   id="1"
+                   instId="1"
                    version="0"
                    semanticVersion="5.2"
                    description="Code generation unit test support"
@@ -49,31 +49,31 @@
             <choice name="cruiseControl">2</choice>
         </set>
     </types>
-    <sbe:message name="Quote" id="1" description="Quote">
-        <field name="symbolId" id="1" type="uint32"/>
-        <field name="datetime" id="2" type="uint64"/>
-        <field name="bid" id="3" type="double"/>
-        <field name="ask" id="4" type="double"/>
-        <field name="bidVol" id="5" type="uint32"/>
-        <field name="askVol" id="6" type="uint32"/>
+    <sbe:message name="Quote" instId="1" description="Quote">
+        <field name="symbolId" instId="1" type="uint32"/>
+        <field name="datetime" instId="2" type="uint64"/>
+        <field name="bid" instId="3" type="double"/>
+        <field name="ask" instId="4" type="double"/>
+        <field name="bidVol" instId="5" type="uint32"/>
+        <field name="askVol" instId="6" type="uint32"/>
     </sbe:message>
 
-    <sbe:message name="Trade" id="2" description="Trade">
-        <field name="symbolId" id="1" type="uint32"/>
-        <field name="datetime" id="2" type="uint64"/>
-        <field name="price" id="3" type="double"/>
-        <field name="tradeVol" id="4" type="uint32"/>
+    <sbe:message name="Trade" instId="2" description="Trade">
+        <field name="symbolId" instId="1" type="uint32"/>
+        <field name="datetime" instId="2" type="uint64"/>
+        <field name="price" instId="3" type="double"/>
+        <field name="tradeVol" instId="4" type="uint32"/>
     </sbe:message>
 
-    <sbe:message name="Bar" id="3" description="Bar">
-        <field name="symbolId" id="1" type="uint32"/>
-        <field name="datetime" id="2" type="uint64"/>
-        <field name="barSize" id="3" type="double"/>
-        <field name="high" id="4" type="double"/>
-        <field name="low" id="5" type="double"/>
-        <field name="open" id="5" type="double"/>
-        <field name="close" id="5" type="double"/>
-        <field name="volume" id="5" type="uint64"/>
-        <field name="openInt" id="6" type="uint64"/>
+    <sbe:message name="Bar" instId="3" description="Bar">
+        <field name="symbolId" instId="1" type="uint32"/>
+        <field name="datetime" instId="2" type="uint64"/>
+        <field name="barSize" instId="3" type="double"/>
+        <field name="high" instId="4" type="double"/>
+        <field name="low" instId="5" type="double"/>
+        <field name="open" instId="5" type="double"/>
+        <field name="close" instId="5" type="double"/>
+        <field name="volume" instId="5" type="uint64"/>
+        <field name="openInt" instId="6" type="uint64"/>
     </sbe:message>
 </sbe:messageSchema>

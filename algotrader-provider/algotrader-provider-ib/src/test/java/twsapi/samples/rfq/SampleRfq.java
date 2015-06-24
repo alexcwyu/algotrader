@@ -4,11 +4,7 @@
 package twsapi.samples.rfq;
 
 
-import com.ib.client.ComboLeg;
-import com.ib.client.Contract;
-import com.ib.client.ContractDetails;
-import com.ib.client.TickType;
-import com.ib.client.UnderComp;
+import com.ib.client.*;
 import com.ib.contracts.ComboContract;
 import com.ib.contracts.FutContract;
 import com.ib.contracts.OptContract;
@@ -489,7 +485,7 @@ public class SampleRfq extends SimpleWrapper {
    }
 
    public void error(int id, int errorCode, String errorMsg) {
-      consoleMsg("Error id=" + id + " code=" + errorCode + " msg=" + errorMsg);
+      consoleMsg("Error instId=" + id + " code=" + errorCode + " msg=" + errorMsg);
       if (errorCode >= 2100 && errorCode < 2200) {
          return;
       }

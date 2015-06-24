@@ -4,7 +4,6 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.lmax.disruptor.EventFactory;
 import com.unisoft.algotrader.core.*;
-import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.Event;
 
 import java.util.List;
@@ -15,7 +14,7 @@ import java.util.List;
 public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>  {
 
     public long orderId;
-    public InstId instId;
+    public int instId;
     public long dateTime;
 
     public OrdType ordType;

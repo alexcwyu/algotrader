@@ -3,28 +3,19 @@
 
 package twsapi.apidemo;
 
-import java.awt.BorderLayout;
+import com.ib.controller.ApiController.ILiveOrderHandler;
+import com.ib.controller.*;
+import twsapi.apidemo.util.HtmlButton;
+import twsapi.apidemo.util.VerticalPanel;
+
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.AbstractTableModel;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.border.TitledBorder;
-import javax.swing.table.AbstractTableModel;
-
-
-import twsapi.apidemo.util.HtmlButton;
-import twsapi.apidemo.util.VerticalPanel;
-
-import com.ib.controller.NewContract;
-import com.ib.controller.NewOrder;
-import com.ib.controller.NewOrderState;
-import com.ib.controller.OrderStatus;
-import com.ib.controller.OrderType;
-import com.ib.controller.ApiController.ILiveOrderHandler;
 
 public class OrdersPanel extends JPanel {
 	private OrdersModel m_model = new OrdersModel();

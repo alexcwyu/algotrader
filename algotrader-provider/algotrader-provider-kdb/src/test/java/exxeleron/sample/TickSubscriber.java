@@ -13,14 +13,11 @@ package exxeleron.sample; /**
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
+import com.exxeleron.qjava.*;
+
 import java.io.IOException;
 import java.util.Arrays;
-
-import com.exxeleron.qjava.QCallbackConnection;
-import com.exxeleron.qjava.QErrorMessage;
-import com.exxeleron.qjava.QMessage;
-import com.exxeleron.qjava.QMessagesListener;
-import com.exxeleron.qjava.QTable;
 
 public class TickSubscriber {
 

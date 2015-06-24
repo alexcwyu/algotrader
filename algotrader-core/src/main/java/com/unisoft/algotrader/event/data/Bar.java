@@ -1,7 +1,6 @@
 package com.unisoft.algotrader.event.data;
 
 import com.google.common.base.Objects;
-import com.unisoft.algotrader.core.id.InstId;
 
 /**
  * Created by alex on 4/12/15.
@@ -39,7 +38,7 @@ public class Bar extends MarketData<Bar> {
 
 
     public Bar(
-            InstId instId,
+            int instId,
             int size,
             long dateTime,
             double open,
@@ -50,7 +49,7 @@ public class Bar extends MarketData<Bar> {
     }
 
     public Bar(
-            InstId instId,
+            int instId,
             int size,
             long dateTime,
             double open,
@@ -62,7 +61,7 @@ public class Bar extends MarketData<Bar> {
     }
 
     public Bar(
-            InstId instId,
+            int instId,
             int size,
             long dateTime,
             double open,

@@ -1,7 +1,6 @@
 package com.unisoft.algotrader.event.data;
 
 import com.google.common.base.Objects;
-import com.unisoft.algotrader.core.id.InstId;
 
 /**
  * Created by alex on 4/12/15.
@@ -13,7 +12,7 @@ public class Trade extends MarketData<Trade> {
 
     }
 
-    public Trade(InstId instId,
+    public Trade(int instId,
                  long dateTime,
                  double price,
                  int size){

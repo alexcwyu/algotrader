@@ -3,7 +3,6 @@ package com.unisoft.algotrader.provider.execution;
 import com.google.common.collect.Lists;
 import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.core.*;
-import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.data.Bar;
 import com.unisoft.algotrader.event.data.MarketDataContainer;
 import com.unisoft.algotrader.event.data.Quote;
@@ -33,7 +32,7 @@ public class SimulationExecutorIntegrationTest {
 
     public static String mockStrategyId = "MockStrategy";
     public static long ordId = 0;
-    public static Instrument testInstrument = new Instrument(InstId.Builder.as().symbol("TestInst").exchId("TestExch").build(), Currency.HKD.ccyId);
+    public static Instrument testInstrument = InstrumentManager.INSTANCE.createStock("TestInst", "TestExch", Currency.USD.ccyId);
 
     class MockStrategy extends Strategy{
 

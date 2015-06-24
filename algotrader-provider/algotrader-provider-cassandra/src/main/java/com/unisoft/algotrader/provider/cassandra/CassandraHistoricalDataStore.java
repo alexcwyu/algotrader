@@ -2,7 +2,6 @@ package com.unisoft.algotrader.provider.cassandra;
 
 import com.datastax.driver.core.*;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
-import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.EventBus;
 import com.unisoft.algotrader.event.data.Bar;
 import com.unisoft.algotrader.event.data.Quote;
@@ -79,21 +78,21 @@ public class CassandraHistoricalDataStore implements DataStore, HistoricalDataPr
     public void onBar(Bar bar) {
         PreparedStatement statement = session.prepare(BAR_INSERT_STATEMENT);
         BoundStatement boundStatement = new BoundStatement(statement);
-        session.execute(boundStatement.bind(bar.instId.toString(), bar.size, new Date(bar.dateTime), bar.open, bar.high, bar.low, bar.close, bar.volume, bar.openInt));
+        session.execute(boundStatement.bind(bar.instId, bar.size, new Date(bar.dateTime), bar.open, bar.high, bar.low, bar.close, bar.volume, bar.openInt));
     }
 
     @Override
     public void onQuote(Quote quote) {
         PreparedStatement statement = session.prepare(QUOTE_INSERT_STATEMENT);
         BoundStatement boundStatement = new BoundStatement(statement);
-        session.execute(boundStatement.bind(quote.instId.toString(), new Date(quote.dateTime), quote.bid, quote.ask, quote.bidSize, quote.askSize));
+        session.execute(boundStatement.bind(quote.instId, new Date(quote.dateTime), quote.bid, quote.ask, quote.bidSize, quote.askSize));
     }
 
     @Override
     public void onTrade(Trade trade) {
         PreparedStatement statement = session.prepare(TRADE_INSERT_STATEMENT);
         BoundStatement boundStatement = new BoundStatement(statement);
-        session.execute(boundStatement.bind(trade.instId.toString(), new Date(trade.dateTime), trade.price, trade.size));
+        session.execute(boundStatement.bind(trade.instId, new Date(trade.dateTime), trade.price, trade.size));
     }
 
     /// PROVIDER
@@ -116,12 +115,12 @@ public class CassandraHistoricalDataStore implements DataStore, HistoricalDataPr
 
     private void queryBar(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate){
         Statement select = QueryBuilder.select().all().from(config.keyspace, TABLE_BAR)
-                .where(eq(COL_INSTID, subscriptionKey.instId.toString()))
+                .where(eq(COL_INSTID, subscriptionKey.instId))
                 .and(eq(COL_BARSIZE, subscriptionKey.barSize))
                 .and(gte(COL_DATETIME, fromDate)).and(lt(COL_DATETIME, toDate));
         ResultSet results = session.execute(select);
         for (Row row : results) {
-            eventBus.publishBar(InstId.parse(row.getString(0)), row.getInt(1), row.getDate(2).getTime(), row.getDouble(3), row.getDouble(4), row.getDouble(5), row.getDouble(6), row.getLong(7), row.getLong(8));
+            eventBus.publishBar(row.getInt(0), row.getInt(1), row.getDate(2).getTime(), row.getDouble(3), row.getDouble(4), row.getDouble(5), row.getDouble(6), row.getLong(7), row.getLong(8));
         }
     }
 
@@ -131,7 +130,7 @@ public class CassandraHistoricalDataStore implements DataStore, HistoricalDataPr
                 .and(gte(COL_DATETIME, fromDate)).and(lt(COL_DATETIME, toDate));
         ResultSet results = session.execute(select);
         for (Row row : results) {
-            eventBus.publishQuote(InstId.parse(row.getString(0)), row.getDate(1).getTime(), row.getDouble(2), row.getDouble(3), row.getInt(4), row.getInt(5));
+            eventBus.publishQuote(row.getInt(0), row.getDate(1).getTime(), row.getDouble(2), row.getDouble(3), row.getInt(4), row.getInt(5));
         }
     }
 
@@ -141,7 +140,7 @@ public class CassandraHistoricalDataStore implements DataStore, HistoricalDataPr
                 .and(gte(COL_DATETIME, fromDate)).and(lt(COL_DATETIME, toDate));
         ResultSet results = session.execute(select);
         for (Row row : results) {
-            eventBus.publishTrade(InstId.parse(row.getString(0)), row.getDate(1).getTime(), row.getDouble(2), row.getInt(3));
+            eventBus.publishTrade(row.getInt(0), row.getDate(1).getTime(), row.getDouble(2), row.getInt(3));
         }
     }
 }

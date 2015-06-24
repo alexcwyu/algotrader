@@ -3,32 +3,16 @@
 
 package twsapi.testjavaclient;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.GridBagConstraints;
+import com.ib.client.*;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.Vector;
-
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-
-import com.ib.client.Contract;
-import com.ib.client.MarketDataType;
-import com.ib.client.Order;
-import com.ib.client.TagValue;
-import com.ib.client.UnderComp;
 
 public class OrderDlg extends JDialog {
     final static String ALL_GENERIC_TICK_TAGS = "100,101,104,105,106,107,165,221,225,233,236,258,293,294,295,318";
@@ -141,7 +125,7 @@ public class OrderDlg extends JDialog {
         gbc.weighty = 100 ;
         gbc.fill = GridBagConstraints.BOTH ;
         gbc.gridheight = 1 ;
-        // create id panel
+        // create instId panel
         IBGridBagPanel pId = new IBGridBagPanel();
         pId.setBorder( BorderFactory.createTitledBorder( "Message Id") );
 
@@ -411,7 +395,7 @@ public class OrderDlg extends JDialog {
         m_rc = false;
 
         try {
-            // set id
+            // set instId
             m_id = Integer.parseInt( m_Id.getText() );
 
             // set contract fields
@@ -490,7 +474,7 @@ public class OrderDlg extends JDialog {
 
     void setIdAtLeast( int id) {
         try {
-            // set id field to at least id
+            // set instId field to at least instId
             int curId = Integer.parseInt( m_Id.getText() );
             if( curId < id) {
                 m_Id.setText( String.valueOf( id) );

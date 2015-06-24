@@ -3,18 +3,13 @@
 
 package twsapi.apidemo;
 
-import java.awt.BorderLayout;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.SwingConstants;
-
-
+import com.ib.controller.NewContract;
 import twsapi.apidemo.util.HtmlButton;
 
-import com.ib.controller.NewContract;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 class ContractDlg extends JDialog {
 	ContractPanel m_contractPanel;

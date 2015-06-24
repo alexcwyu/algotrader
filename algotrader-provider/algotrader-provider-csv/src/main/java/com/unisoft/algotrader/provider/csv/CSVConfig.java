@@ -1,5 +1,7 @@
 package com.unisoft.algotrader.provider.csv;
 
+import com.unisoft.algotrader.core.Instrument;
+import com.unisoft.algotrader.core.InstrumentManager;
 import com.unisoft.algotrader.provider.SubscriptionKey;
 
 import java.text.SimpleDateFormat;
@@ -28,13 +30,14 @@ public interface CSVConfig {
 
 
     static String getFileName(SubscriptionKey key){
+        Instrument instrument = InstrumentManager.INSTANCE.get(key.instId);
         switch (key.type){
             case Bar:
-                return String.format(BAR_FILENAME_FORMAT, key.instId, key.barSize);
+                return String.format(BAR_FILENAME_FORMAT, instrument.symbol, key.barSize);
             case Trade:
-                return String.format(TRADE_FILENAME_FORMAT, key.instId);
+                return String.format(TRADE_FILENAME_FORMAT, instrument.symbol);
             case Quote:
-                return String.format(QUOTE_FILENAME_FORMAT, key.instId);
+                return String.format(QUOTE_FILENAME_FORMAT, instrument.symbol);
             default:
                 throw new UnsupportedOperationException();
         }

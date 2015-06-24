@@ -3,36 +3,6 @@
 
 package twsapi.apidemo;
 
-import static com.ib.controller.Formats.fmtNz;
-import static com.ib.controller.Formats.fmtPct;
-
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.Timer;
-import javax.swing.border.TitledBorder;
-import javax.swing.table.AbstractTableModel;
-
-import twsapi.apidemo.util.HtmlButton;
-import twsapi.apidemo.util.NewTabbedPanel;
-import twsapi.apidemo.util.NewTabbedPanel.NewTabPanel;
-import twsapi.apidemo.util.TCombo;
-import twsapi.apidemo.util.UpperField;
-import twsapi.apidemo.util.Util;
-import twsapi.apidemo.util.VerticalPanel;
-
 import com.ib.controller.ApiController.IContractDetailsHandler;
 import com.ib.controller.ApiController.IOptHandler;
 import com.ib.controller.ApiController.TopMktDataAdapter;
@@ -41,6 +11,21 @@ import com.ib.controller.NewContractDetails;
 import com.ib.controller.NewTickType;
 import com.ib.controller.Types.Right;
 import com.ib.controller.Types.SecType;
+import twsapi.apidemo.util.*;
+import twsapi.apidemo.util.NewTabbedPanel.NewTabPanel;
+
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.AbstractTableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+import static com.ib.controller.Formats.fmtNz;
+import static com.ib.controller.Formats.fmtPct;
 
 public class OptionChainsPanel extends JPanel {
 	private NewContract m_underContract = new NewContract();

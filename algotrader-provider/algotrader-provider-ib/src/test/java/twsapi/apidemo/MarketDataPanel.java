@@ -3,50 +3,25 @@
 
 package twsapi.apidemo;
 
-import java.awt.BorderLayout;
-import java.awt.Desktop;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.io.File;
-import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.HashSet;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.SwingUtilities;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellRenderer;
-
-
-import twsapi.apidemo.util.HtmlButton;
-import twsapi.apidemo.util.NewTabbedPanel;
-import twsapi.apidemo.util.TCombo;
-import twsapi.apidemo.util.UpperField;
-import twsapi.apidemo.util.VerticalPanel;
-import twsapi.apidemo.util.NewTabbedPanel.NewTabPanel;
-import twsapi.apidemo.util.VerticalPanel.StackPanel;
-
 import com.ib.client.ScannerSubscription;
-import com.ib.controller.Bar;
-import com.ib.controller.Instrument;
-import com.ib.controller.NewContract;
-import com.ib.controller.NewContractDetails;
-import com.ib.controller.ScanCode;
 import com.ib.controller.ApiController.IDeepMktDataHandler;
 import com.ib.controller.ApiController.IHistoricalDataHandler;
 import com.ib.controller.ApiController.IRealTimeBarHandler;
 import com.ib.controller.ApiController.IScannerHandler;
-import com.ib.controller.Types.BarSize;
-import com.ib.controller.Types.DeepSide;
-import com.ib.controller.Types.DeepType;
-import com.ib.controller.Types.DurationUnit;
-import com.ib.controller.Types.MktDataType;
-import com.ib.controller.Types.WhatToShow;
+import com.ib.controller.*;
+import com.ib.controller.Types.*;
+import twsapi.apidemo.util.*;
+import twsapi.apidemo.util.NewTabbedPanel.NewTabPanel;
+import twsapi.apidemo.util.VerticalPanel.StackPanel;
+
+import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
+import java.awt.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class MarketDataPanel extends JPanel {
 	private final NewContract m_contract = new NewContract();

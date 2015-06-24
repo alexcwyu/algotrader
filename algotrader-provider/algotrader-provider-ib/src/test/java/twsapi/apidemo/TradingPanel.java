@@ -3,11 +3,10 @@
 
 package twsapi.apidemo;
 
-import java.awt.Dimension;
-
-import javax.swing.BoxLayout;
-
 import twsapi.apidemo.util.NewTabbedPanel.NewTabPanel;
+
+import javax.swing.*;
+import java.awt.*;
 
 
 public class TradingPanel extends NewTabPanel {

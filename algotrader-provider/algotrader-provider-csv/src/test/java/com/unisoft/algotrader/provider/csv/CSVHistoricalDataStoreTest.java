@@ -1,6 +1,5 @@
 package com.unisoft.algotrader.provider.csv;
 
-import com.unisoft.algotrader.core.id.InstId;
 import com.unisoft.algotrader.event.data.Bar;
 import org.junit.Test;
 
@@ -22,9 +21,9 @@ public class CSVHistoricalDataStoreTest {
         StringWriter sw = new StringWriter();
         CSVHistoricalDataStore csvImport = new CSVHistoricalDataStore(sw);
 
-        Bar bar1 = new Bar(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(),  60, 19999,
+        Bar bar1 = new Bar(1,  60, 19999,
                 500, 9999, 100, 600);
-        Bar bar2 = new Bar(InstId.Builder.as().symbol("HSI").exchId("HKEX").build(),  60, 20000,
+        Bar bar2 = new Bar(1,  60, 20000,
                 600, 20000, 120, 700);
 
         csvImport.onBar(bar1);

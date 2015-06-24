@@ -4,26 +4,6 @@
 package twsapi.apidemo;
 
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-
-import javax.swing.Box;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
-
-import twsapi.apidemo.util.HtmlButton;
-import twsapi.apidemo.util.NewLookAndFeel;
-import twsapi.apidemo.util.NewTabbedPanel;
-import twsapi.apidemo.util.VerticalPanel;
-
 import com.ib.controller.ApiConnection.ILogger;
 import com.ib.controller.ApiController;
 import com.ib.controller.ApiController.IBulletinHandler;
@@ -31,6 +11,15 @@ import com.ib.controller.ApiController.IConnectionHandler;
 import com.ib.controller.ApiController.ITimeHandler;
 import com.ib.controller.Formats;
 import com.ib.controller.Types.NewsType;
+import twsapi.apidemo.util.HtmlButton;
+import twsapi.apidemo.util.NewLookAndFeel;
+import twsapi.apidemo.util.NewTabbedPanel;
+import twsapi.apidemo.util.VerticalPanel;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.util.ArrayList;
 
 public class ApiDemo implements IConnectionHandler {
 	static { NewLookAndFeel.register(); }
@@ -97,7 +86,7 @@ public class ApiDemo implements IConnectionHandler {
         m_frame.setVisible( true);
         m_frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
         
-        // make initial connection to local host, port 7496, client id 0
+        // make initial connection to local host, port 7496, client instId 0
 		m_controller.connect( "127.0.0.1", 7496, 0);
     }
 	
@@ -269,7 +258,7 @@ public class ApiDemo implements IConnectionHandler {
 // we should default to auto-updating client zero with new trades and open orders
 
 // NOTES TO USERS
-// you can get all orders and trades by setting "master id" in the TWS API config
+// you can get all orders and trades by setting "master instId" in the TWS API config
 // reqManagedAccts() is not needed because managed accounts are sent down on login
 // TickType.LAST_TIME comes for all top mkt data requests
 // all option ticker requests trigger option model calc and response

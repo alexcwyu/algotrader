@@ -3,23 +3,14 @@
 
 package twsapi.testjavaclient;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.GridBagConstraints;
+import com.ib.client.ScannerSubscription;
+import com.ib.client.TagValue;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
-
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import com.ib.client.ScannerSubscription;
-import com.ib.client.TagValue;
 
 public class ScannerDlg extends JDialog {
     public static final int NO_SELECTION = 0;
@@ -87,7 +78,7 @@ public class ScannerDlg extends JDialog {
         gbc.weighty = 100;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridheight = 1;
-        // create id panel
+        // create instId panel
         IBGridBagPanel pId = new IBGridBagPanel();
         pId.setBorder( BorderFactory.createTitledBorder( "Message Id") );
 
@@ -204,7 +195,7 @@ public class ScannerDlg extends JDialog {
         m_userSelection = NO_SELECTION;
 
         try {
-            // set id
+            // set instId
             m_id = Integer.parseInt( m_Id.getText().trim() );
             m_subscription.numberOfRows(parseInt(m_numberOfRows));
             m_subscription.instrument(m_instrument.getText().trim());

@@ -3,30 +3,22 @@
 
 package twsapi.apidemo;
 
-import java.awt.BorderLayout;
-import java.awt.Desktop;
-import java.io.File;
-import java.io.FileWriter;
-import java.util.ArrayList;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-
+import com.ib.controller.ApiController.IContractDetailsHandler;
+import com.ib.controller.ApiController.IFundamentalsHandler;
+import com.ib.controller.NewContract;
+import com.ib.controller.NewContractDetails;
+import com.ib.controller.Types.FundamentalType;
 import twsapi.apidemo.util.HtmlButton;
 import twsapi.apidemo.util.NewTabbedPanel;
 import twsapi.apidemo.util.NewTabbedPanel.INewTab;
 import twsapi.apidemo.util.TCombo;
 import twsapi.apidemo.util.VerticalPanel;
 
-import com.ib.controller.ApiController.IContractDetailsHandler;
-import com.ib.controller.ApiController.IFundamentalsHandler;
-import com.ib.controller.NewContract;
-import com.ib.controller.NewContractDetails;
-import com.ib.controller.Types.FundamentalType;
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.ArrayList;
 
 public class ContractInfoPanel extends JPanel {
 	private final NewContract m_contract = new NewContract();
