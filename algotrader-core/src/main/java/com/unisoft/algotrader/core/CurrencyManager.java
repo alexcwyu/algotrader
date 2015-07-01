@@ -24,7 +24,7 @@ public class CurrencyManager {
     private Map<String, Currency> map = Maps.newConcurrentMap();
 
     public void add(Currency currency){
-        map.put(currency.ccyId, currency);
+        map.put(currency.getCcyId(), currency);
     }
 
     public Currency get(String ccyId){

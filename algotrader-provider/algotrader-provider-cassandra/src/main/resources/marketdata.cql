@@ -1,8 +1,8 @@
 // table to store historical stock quote data
 
-CREATE KEYSPACE IF NOT EXISTS algotrader WITH replication ={'class':'SimpleStrategy','replication_factor':1};
+CREATE KEYSPACE IF NOT EXISTS marketdata WITH replication ={'class':'SimpleStrategy','replication_factor':1};
 
-USE algotrader;
+USE marketdata;
 
 CREATE TABLE IF NOT EXISTS bar (
   instid varchar, // stock symbol

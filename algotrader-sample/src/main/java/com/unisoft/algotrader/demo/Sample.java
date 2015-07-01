@@ -9,5 +9,5 @@ import com.unisoft.algotrader.core.InstrumentManager;
  */
 public class Sample {
     public static Instrument testInstrument =
-            InstrumentManager.INSTANCE.createStock("TestInst", "TestExch", Currency.HKD.ccyId);
+            InstrumentManager.INSTANCE.createStock("TestInst", "TestExch", Currency.HKD.getCcyId());
 }

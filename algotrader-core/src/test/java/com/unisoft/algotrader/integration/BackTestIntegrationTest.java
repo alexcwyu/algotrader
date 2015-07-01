@@ -25,7 +25,7 @@ public class BackTestIntegrationTest {
 
     public static void main(String [] args) throws Exception{
 
-        Instrument testInstrument = InstrumentManager.INSTANCE.createStock("TestInst", "TestExch", Currency.USD.ccyId);
+        Instrument testInstrument = InstrumentManager.INSTANCE.createStock("TestInst", "TestExch", Currency.USD.getCcyId());
 
         ExecutorService executor;
         RingBuffer<MarketDataContainer> marketDataRB;

@@ -32,7 +32,7 @@ public class SimulationExecutorIntegrationTest {
 
     public static String mockStrategyId = "MockStrategy";
     public static long ordId = 0;
-    public static Instrument testInstrument = InstrumentManager.INSTANCE.createStock("TestInst", "TestExch", Currency.USD.ccyId);
+    public static Instrument testInstrument = InstrumentManager.INSTANCE.createStock("TestInst", "TestExch", Currency.USD.getCcyId());
 
     class MockStrategy extends Strategy{
 
