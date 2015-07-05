@@ -76,8 +76,8 @@ public class Position implements MarketDataHandler {
 
     public double getValue(){
         Instrument instrument =instrument();
-        if (instrument() != null && instrument.factor != 0){
-            return price() * amount() * instrument.factor;
+        if (instrument() != null && instrument.getFactor() != 0){
+            return price() * amount() * instrument.getFactor();
         }
         return price() * amount();
     }
@@ -99,18 +99,18 @@ public class Position implements MarketDataHandler {
         double realizedCost = 0;
 
         double amount = order.amount();
-        this.marketPrice = order.lastPrice;
+        this.marketPrice = order.getLastPrice();
 
         int sign = sign(order);
 
         if (orderList.size() == 0) {
             fPnLTransactionIndex = 0;
-            qtyLeft = order.filledQty;
+            qtyLeft = order.getFilledQty();
         } else {
             if ((side() == PositionSide.Long && sign < 0) ||
                     (side() == PositionSide.Short && sign > 0)) {
                 int index = fPnLTransactionIndex + 1;
-                double qty = order.filledQty;
+                double qty = order.getFilledQty();
 
                 double totalFilled = 0;
 
@@ -120,23 +120,23 @@ public class Position implements MarketDataHandler {
 
                 Order firstOrder = orderList.get(fPnLTransactionIndex);
 
-                realizedCost += qtyFilled * (order.transactionCost() / order.filledQty
-                        + firstOrder.transactionCost() / firstOrder.filledQty);
+                realizedCost += qtyFilled * (order.transactionCost() / order.getFilledQty()
+                        + firstOrder.transactionCost() / firstOrder.getFilledQty());
 
-                pnl += (order.avgPrice - firstOrder.avgPrice) * qtyFilled * -sign;
+                pnl += (order.getAvgPrice() - firstOrder.getAvgPrice()) * qtyFilled * -sign;
 
                 while (qty > totalFilled && index < orderList.size()) {
                     Order nextOrder = orderList.get(index);
 
                     if (sign(nextOrder) != sign) {
 
-                        qtyFilled = Math.min(qty - totalFilled, nextOrder.filledQty);
+                        qtyFilled = Math.min(qty - totalFilled, nextOrder.getFilledQty());
 
-                        realizedCost += qtyFilled * (order.transactionCost() / order.filledQty + nextOrder.transactionCost() / nextOrder.filledQty);
+                        realizedCost += qtyFilled * (order.transactionCost() / order.getFilledQty() + nextOrder.transactionCost() / nextOrder.getFilledQty());
 
-                        pnl += (order.avgPrice - nextOrder.avgPrice) * qtyFilled * -sign;
+                        pnl += (order.getAvgPrice() - nextOrder.getAvgPrice()) * qtyFilled * -sign;
 
-                        totalFilled += nextOrder.filledQty;
+                        totalFilled += nextOrder.getFilledQty();
                     }
                     index++;
                 }
@@ -152,115 +152,32 @@ public class Position implements MarketDataHandler {
 
         }
         Instrument instrument =instrument();
-        if (instrument.factor != 0)
-            pnl *= instrument.factor;
+        if (instrument.getFactor() != 0)
+            pnl *= instrument.getFactor();
 
-        order.pnl = pnl - order.transactionCost();
-        order.realizedPnl = (pnl - realizedCost);
+        order.setPnl(pnl - order.transactionCost());
+        order.setRealizedPnl((pnl - realizedCost));
 
         switch (order.side) {
             case Buy:
             case BuyMinus:
-                qtyBought += order.filledQty;
+                qtyBought += order.getFilledQty();
                 break;
 
             case Sell:
             case SellPlus:
-                qtySold += order.filledQty;
+                qtySold += order.getFilledQty();
                 break;
 
             case SellShort:
             case SellShortExempt:
-                qtySoldShort += order.filledQty;
+                qtySoldShort += order.getFilledQty();
                 break;
             default:
                 throw new UnsupportedOperationException("Transaction Side is not supported : " + order.side);
         }
         orderList.add(order);
     }
-
-//    public void addTranscation(Transaction transaction) {
-//        double pnl = 0;
-//        double realizedCost = 0;
-//
-//        double amount = transaction.getAmount();
-//
-//        int sign = sign(transaction);
-//
-//        if (transactionList.size() == 0) {
-//            fPnLTransactionIndex = 0;
-//            qtyLeft = transaction.qty;
-//        } else {
-//            if ((side() == PositionSide.Long && sign < 0) ||
-//                    (side() == PositionSide.Short && sign > 0)) {
-//                int index = fPnLTransactionIndex + 1;
-//                double qty = transaction.qty;
-//
-//                double totalFilled = 0;
-//
-//                double qtyFilled = Math.min(qty, qtyLeft);
-//
-//                totalFilled += qtyLeft;
-//
-//                Transaction firstTranscation = transactionList.get(fPnLTransactionIndex);
-//
-//                realizedCost += qtyFilled * (transaction.transactionCost() / transaction.qty
-//                        + firstTranscation.transactionCost() / firstTranscation.qty);
-//
-//                pnl += (transaction.marketPrice - firstTranscation.marketPrice) * qtyFilled * -sign;
-//
-//                while (qty > totalFilled && index < transactionList.size()) {
-//                    Transaction nextTransaction = transactionList.get(index);
-//
-//                    if (sign(nextTransaction) != sign) {
-//
-//                        qtyFilled = Math.min(qty - totalFilled, nextTransaction.qty);
-//
-//                        realizedCost += qtyFilled * (transaction.transactionCost() / transaction.qty + nextTransaction.transactionCost() / nextTransaction.qty);
-//
-//                        pnl += (transaction.marketPrice - nextTransaction.marketPrice) * qtyFilled * -sign;
-//
-//                        totalFilled += nextTransaction.qty;
-//                    }
-//                    index++;
-//                }
-//
-//                qtyLeft = Math.abs(qty - totalFilled);
-//
-//                if (qty == totalFilled && index == transactionList.size() || qty > totalFilled)
-//                    fPnLTransactionIndex = transactionList.size();
-//                else
-//                    fPnLTransactionIndex = index - 1;
-//
-//            }
-//
-//        }
-//        if (instrument.factor != 0)
-//            pnl *= instrument.factor;
-//
-//        transaction.pnl = pnl - transaction.transactionCost();
-//        transaction.realizedPnl = (pnl - realizedCost);
-//
-//        switch (transaction.side) {
-//            case Buy:
-//            case BuyMinus:
-//                qtyBought += transaction.qty;
-//                break;
-//
-//            case Sell:
-//            case SellPlus:
-//                qtySold += transaction.qty;
-//                break;
-//
-//            case SellShort:
-//            case SellShortExempt:
-//                qtySoldShort += transaction.qty;
-//                break;
-//            default:
-//                throw new UnsupportedOperationException("Transaction Side is not supported : " + transaction.side);
-//        }
-//        transactionList.add(transaction);
-//    }
 
     public double cashFlow() {
         double cashFlow = 0;
@@ -306,7 +223,7 @@ public class Position implements MarketDataHandler {
 
         double qtyFilled = qtyLeft;
 
-        pnl += (price - orderList.get(fPnLTransactionIndex).avgPrice) - qtyFilled * -sign;
+        pnl += (price - orderList.get(fPnLTransactionIndex).getAvgPrice()) - qtyFilled * -sign;
 
         int index = fPnLTransactionIndex +1;
 
@@ -314,13 +231,13 @@ public class Position implements MarketDataHandler {
 
             Order order = orderList.get(index);
 
-            pnl += (price - order.avgPrice) * qtyFilled * -sign;
+            pnl += (price - order.getAvgPrice()) * qtyFilled * -sign;
 
             index++;
         }
         Instrument instrument =instrument();
-        if (instrument.factor != 0)
-            pnl *= instrument.factor;
+        if (instrument.getFactor() != 0)
+            pnl *= instrument.getFactor();
 
         return pnl;
 

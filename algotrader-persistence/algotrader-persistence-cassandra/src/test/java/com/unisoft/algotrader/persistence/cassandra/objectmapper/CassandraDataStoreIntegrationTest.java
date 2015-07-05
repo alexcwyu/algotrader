@@ -101,19 +101,19 @@ public class CassandraDataStoreIntegrationTest {
         PortfolioManager.INSTANCE.add(portfolio);
 
         Clock.CLOCK.setDateTime(System.currentTimeMillis());
-        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument2.instId, Side.Buy, OrdType.Limit, 9000, 98, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
+        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument2.getInstId(), Side.Buy, OrdType.Limit, 9000, 98, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
         ExecutionReport executionReport = SampleEventFactory.createExecutionReport(order);
         order.add(executionReport);
         portfolio.add(order);
 
         Clock.CLOCK.setDateTime(System.currentTimeMillis());
-        Order order2 = SampleEventFactory.createOrder(SampleEventFactory.testInstrument2.instId, Side.Sell, OrdType.Limit, 10000, 108, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
+        Order order2 = SampleEventFactory.createOrder(SampleEventFactory.testInstrument2.getInstId(), Side.Sell, OrdType.Limit, 10000, 108, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
         ExecutionReport executionReport2 = SampleEventFactory.createExecutionReport(order2);
         order2.add(executionReport2);
         portfolio.add(order2);
 
         Clock.CLOCK.setDateTime(System.currentTimeMillis());
-        Order order3 = SampleEventFactory.createOrder(SampleEventFactory.testInstrument2.instId, Side.Buy, OrdType.Limit, 1000, 88, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
+        Order order3 = SampleEventFactory.createOrder(SampleEventFactory.testInstrument2.getInstId(), Side.Buy, OrdType.Limit, 1000, 88, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
         ExecutionReport executionReport3 = SampleEventFactory.createExecutionReport(order3);
         order3.add(executionReport3);
         portfolio.add(order3);

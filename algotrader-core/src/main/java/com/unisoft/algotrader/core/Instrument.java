@@ -17,40 +17,47 @@ import java.util.Map;
 public class Instrument{
 
     @PrimaryKey("inst_id")
-    public int instId;
-    public InstType type;
-    public String name;
-    public String symbol;
+    private int instId;
+
+    private InstType type;
+
+    private String name;
+
+    private String symbol;
+
     @Column("exch_id")
-    public String exchId;
+    private String exchId;
+
     @Column("ccy_id")
-    public String ccyId;
+    private String ccyId;
 
     @Column("und_inst_id")
-    public int underlyingInstId;
+    private int underlyingInstId;
 
     //derivative
-    public double factor = 1;
-    @Column("expiry_date")
-    public Date expiryDate = null;
-    public double strike = 0.0;
-    @Column("put_call")
-    public PutCall putCall = null;
+    private double factor = 1;
 
-    public double margin = 0;
+    @Column("expiry_date")
+    private Date expiryDate = null;
+
+    private double strike = 0.0;
+
+    @Column("put_call")
+    private PutCall putCall = null;
+
+    private double margin = 0;
 
     @Column("alt_symbols")
-    public Map<String, String> altSymbols = Maps.newHashMap();
+    private Map<String, String> altSymbols = Maps.newHashMap();
 
     @Column("alt_exchids")
-    public Map<String, String> altExchIds = Maps.newHashMap();
+    private Map<String, String> altExchIds = Maps.newHashMap();
 
-    public String sector;
-    public String group;
+    private String sector;
 
+    private String group;
 
     public Instrument(){
-
     }
 
     public Instrument(int instId, InstType type, String symbol, String exchId, String ccyId){
@@ -101,16 +108,8 @@ public class Instrument{
         this.altSymbols.put(providerId, symbol);
     }
 
-    public String getAltSymbol(String providerId){
-        return this.altSymbols.get(providerId);
-    }
-
     public void addAltExchId(String providerId, String exchId){
         this.altExchIds.put(providerId, exchId);
-    }
-
-    public String getAltExchId(String providerId){
-        return this.altExchIds.get(providerId);
     }
 
 //    /**
@@ -150,43 +149,13 @@ public class Instrument{
             return symbol + SEPARATOR + exchId;
         }
     }
-//
-//    public static class Classification{
-//        public final String group;
-//        public final String sector;
-//
-//        public Classification(String group, String sector) {
-//            this.group = group;
-//            this.sector = sector;
-//        }
-//
-//        @Override
-//        public boolean equals(Object o) {
-//            if (this == o) return true;
-//            if (!(o instanceof Classification)) return false;
-//            Classification that = (Classification) o;
-//            return Objects.equal(group, that.group) &&
-//                    Objects.equal(sector, that.sector);
-//        }
-//
-//        @Override
-//        public int hashCode() {
-//            return Objects.hashCode(group, sector);
-//        }
-//
-//        @Override
-//        public String toString() {
-//            return "Classification{" +
-//                    "group='" + group + '\'' +
-//                    ", sector='" + sector + '\'' +
-//                    '}';
-//        }
-//    }
+
     @OrdinalEnum
     public static enum PutCall{
         Put,
         Call
     }
+
     @OrdinalEnum
     public static enum InstType{
         Stock,
@@ -195,5 +164,133 @@ public class Instrument{
         Index,
         FX,
         ETF,
+    }
+
+    public int getInstId() {
+        return instId;
+    }
+
+    public void setInstId(int instId) {
+        this.instId = instId;
+    }
+
+    public InstType getType() {
+        return type;
+    }
+
+    public void setType(InstType type) {
+        this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
+
+    public String getExchId() {
+        return exchId;
+    }
+
+    public void setExchId(String exchId) {
+        this.exchId = exchId;
+    }
+
+    public String getCcyId() {
+        return ccyId;
+    }
+
+    public void setCcyId(String ccyId) {
+        this.ccyId = ccyId;
+    }
+
+    public int getUnderlyingInstId() {
+        return underlyingInstId;
+    }
+
+    public void setUnderlyingInstId(int underlyingInstId) {
+        this.underlyingInstId = underlyingInstId;
+    }
+
+    public double getFactor() {
+        return factor;
+    }
+
+    public void setFactor(double factor) {
+        this.factor = factor;
+    }
+
+    public Date getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    public double getStrike() {
+        return strike;
+    }
+
+    public void setStrike(double strike) {
+        this.strike = strike;
+    }
+
+    public PutCall getPutCall() {
+        return putCall;
+    }
+
+    public void setPutCall(PutCall putCall) {
+        this.putCall = putCall;
+    }
+
+    public double getMargin() {
+        return margin;
+    }
+
+    public void setMargin(double margin) {
+        this.margin = margin;
+    }
+
+    public Map<String, String> getAltSymbols() {
+        return altSymbols;
+    }
+
+    public void setAltSymbols(Map<String, String> altSymbols) {
+        this.altSymbols = altSymbols;
+    }
+
+
+    public Map<String, String> getAltExchIds() {
+        return altExchIds;
+    }
+
+    public void setAltExchIds(Map<String, String> altExchIds) {
+        this.altExchIds = altExchIds;
+    }
+    public String getSector() {
+        return sector;
+    }
+
+    public void setSector(String sector) {
+        this.sector = sector;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 }

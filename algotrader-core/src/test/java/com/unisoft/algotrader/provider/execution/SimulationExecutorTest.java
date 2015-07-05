@@ -56,8 +56,8 @@ public class SimulationExecutorTest {
 
     @Test
     public void test_fill_market_order_immediate_on_current_quote(){
-        InstrumentDataManager.INSTANCE.onQuote(createQuote(SampleEventFactory.testInstrument.instId, 89, 91, 98000, 98000));
-        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.Market, 98000, 0);
+        InstrumentDataManager.INSTANCE.onQuote(createQuote(SampleEventFactory.testInstrument.getInstId(), 89, 91, 98000, 98000));
+        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.Market, 98000, 0);
         orderManager.onOrder(order);
 
         ArgumentCaptor<ExecutionReport> argument1 = ArgumentCaptor.forClass(ExecutionReport.class);
@@ -71,7 +71,7 @@ public class SimulationExecutorTest {
 
     @Test
     public void test_fill_market_order_on_next_quote(){
-        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.Market, 98000, 0);
+        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.Market, 98000, 0);
         orderManager.onOrder(order);
 
         ArgumentCaptor<ExecutionReport> argument1 = ArgumentCaptor.forClass(ExecutionReport.class);
@@ -79,7 +79,7 @@ public class SimulationExecutorTest {
         ExecutionReport er = argument1.getValue();
         assertNotFill(er);
 
-        simulationExecutor.onQuote(createQuote(SampleEventFactory.testInstrument.instId, 89, 91, 98000, 98000));
+        simulationExecutor.onQuote(createQuote(SampleEventFactory.testInstrument.getInstId(), 89, 91, 98000, 98000));
 
         ArgumentCaptor<ExecutionReport> argument2 = ArgumentCaptor.forClass(ExecutionReport.class);
         verify(orderManager, atLeast(1)).onExecutionReport(argument2.capture());
@@ -91,8 +91,8 @@ public class SimulationExecutorTest {
     @Test
     public void test_fill_limit_order_on_current_quote(){
 
-        InstrumentDataManager.INSTANCE.onQuote(createQuote(SampleEventFactory.testInstrument.instId, 89, 91, 98000, 98000));
-        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.Limit, 98000, 91);
+        InstrumentDataManager.INSTANCE.onQuote(createQuote(SampleEventFactory.testInstrument.getInstId(), 89, 91, 98000, 98000));
+        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.Limit, 98000, 91);
         orderManager.onOrder(order);
 
         ArgumentCaptor<ExecutionReport> argument1 = ArgumentCaptor.forClass(ExecutionReport.class);
@@ -105,8 +105,8 @@ public class SimulationExecutorTest {
     @Test
     public void test_fill_limit_order_on_next_quote(){
 
-        InstrumentDataManager.INSTANCE.onQuote(createQuote(SampleEventFactory.testInstrument.instId, 89, 91, 98000, 98000));
-        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.Limit, 98000, 89);
+        InstrumentDataManager.INSTANCE.onQuote(createQuote(SampleEventFactory.testInstrument.getInstId(), 89, 91, 98000, 98000));
+        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.Limit, 98000, 89);
         orderManager.onOrder(order);
 
         ArgumentCaptor<ExecutionReport> argument1 = ArgumentCaptor.forClass(ExecutionReport.class);
@@ -116,7 +116,7 @@ public class SimulationExecutorTest {
         ExecutionReport lastReport = reportList.get(0);
         assertNotFill(lastReport);
 
-        simulationExecutor.onQuote(createQuote(SampleEventFactory.testInstrument.instId, 86, 88, 98000, 98000));
+        simulationExecutor.onQuote(createQuote(SampleEventFactory.testInstrument.getInstId(), 86, 88, 98000, 98000));
         ArgumentCaptor<ExecutionReport> argument2 = ArgumentCaptor.forClass(ExecutionReport.class);
         verify(orderManager, atLeast(1)).onExecutionReport(argument2.capture());
         reportList = argument2.getAllValues();
@@ -126,9 +126,9 @@ public class SimulationExecutorTest {
 
     @Test
     public void test_fill_stop_order_on_current_quote(){
-        Quote quote = createQuote(SampleEventFactory.testInstrument.instId, 89, 91, 98000, 98000);
+        Quote quote = createQuote(SampleEventFactory.testInstrument.getInstId(), 89, 91, 98000, 98000);
         InstrumentDataManager.INSTANCE.onQuote(quote);
-        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.Stop, 98000, 0, 89.5);
+        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.Stop, 98000, 0, 89.5);
         orderManager.onOrder(order);
 
         ArgumentCaptor<ExecutionReport> argument1 = ArgumentCaptor.forClass(ExecutionReport.class);
@@ -142,7 +142,7 @@ public class SimulationExecutorTest {
     @Test
     public void test_fill_stop_order_on_next_quote(){
 
-        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.Stop, 98000, 0, 89.5);
+        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.Stop, 98000, 0, 89.5);
         orderManager.onOrder(order);
 
         ArgumentCaptor<ExecutionReport> argument1 = ArgumentCaptor.forClass(ExecutionReport.class);
@@ -153,7 +153,7 @@ public class SimulationExecutorTest {
         assertNotFill(lastReport);
 
 
-        simulationExecutor.onQuote(createQuote(SampleEventFactory.testInstrument.instId, 86, 90, 98000, 98000));
+        simulationExecutor.onQuote(createQuote(SampleEventFactory.testInstrument.getInstId(), 86, 90, 98000, 98000));
 
         ArgumentCaptor<ExecutionReport> argument2 = ArgumentCaptor.forClass(ExecutionReport.class);
         verify(orderManager, atLeast(1)).onExecutionReport(argument2.capture());
@@ -164,7 +164,7 @@ public class SimulationExecutorTest {
 
     @Test
     public void test_stop_limit_order_become_ready_on_next_quote(){
-        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.StopLimit, 98000, 85, 89.5);
+        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.StopLimit, 98000, 85, 89.5);
         orderManager.onOrder(order);
 
         ArgumentCaptor<ExecutionReport> argument = ArgumentCaptor.forClass(ExecutionReport.class);
@@ -175,7 +175,7 @@ public class SimulationExecutorTest {
         assertNotFill(lastReport);
         assertFalse(order.stopLimitReady);
 
-        Quote quote = createQuote(SampleEventFactory.testInstrument.instId, 86, 90, 98000, 98000);
+        Quote quote = createQuote(SampleEventFactory.testInstrument.getInstId(), 86, 90, 98000, 98000);
         simulationExecutor.onQuote(quote);
 
         argument = ArgumentCaptor.forClass(ExecutionReport.class);
@@ -186,7 +186,7 @@ public class SimulationExecutorTest {
         assertNotFill(lastReport);
         assertTrue(order.stopLimitReady);
 
-        quote = createQuote(SampleEventFactory.testInstrument.instId, 83, 84, 98000, 98000);
+        quote = createQuote(SampleEventFactory.testInstrument.getInstId(), 83, 84, 98000, 98000);
         simulationExecutor.onQuote(quote);
         argument = ArgumentCaptor.forClass(ExecutionReport.class);
         verify(orderManager, atLeast(1)).onExecutionReport(argument.capture());
@@ -198,9 +198,9 @@ public class SimulationExecutorTest {
 
     @Test
     public void test_stop_limit_order_become_ready_on_current_quote(){
-        Quote quote = createQuote(SampleEventFactory.testInstrument.instId, 89, 91, 98000, 98000);
+        Quote quote = createQuote(SampleEventFactory.testInstrument.getInstId(), 89, 91, 98000, 98000);
         InstrumentDataManager.INSTANCE.onQuote(quote);
-        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.StopLimit, 98000, 85, 89.5);
+        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.StopLimit, 98000, 85, 89.5);
         orderManager.onOrder(order);
 
         ArgumentCaptor<ExecutionReport> argument = ArgumentCaptor.forClass(ExecutionReport.class);
@@ -211,7 +211,7 @@ public class SimulationExecutorTest {
         assertNotFill(lastReport);
         assertTrue(order.stopLimitReady);
 
-        quote = createQuote(SampleEventFactory.testInstrument.instId, 84, 85, 98000, 98000);
+        quote = createQuote(SampleEventFactory.testInstrument.getInstId(), 84, 85, 98000, 98000);
         simulationExecutor.onQuote(quote);
         argument = ArgumentCaptor.forClass(ExecutionReport.class);
         verify(orderManager, atLeast(1)).onExecutionReport(argument.capture());
@@ -223,9 +223,9 @@ public class SimulationExecutorTest {
     @Test
     public void test_fill_trailing_stop_order_on_next_quote(){
 
-        Quote quote = createQuote(SampleEventFactory.testInstrument.instId, 89, 91, 98000, 98000);
+        Quote quote = createQuote(SampleEventFactory.testInstrument.getInstId(), 89, 91, 98000, 98000);
         InstrumentDataManager.INSTANCE.onQuote(quote);
-        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.TrailingStop, 98000, 0, 10);
+        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.TrailingStop, 98000, 0, 10);
         orderManager.onOrder(order);
 
         ArgumentCaptor<ExecutionReport> argument = ArgumentCaptor.forClass(ExecutionReport.class);
@@ -236,7 +236,7 @@ public class SimulationExecutorTest {
         assertNotFill(lastReport);
         assertEquals(101, order.trailingStopExecPrice, 0.0);
 
-        quote = createQuote(SampleEventFactory.testInstrument.instId, 100, 101, 98000, 98000);
+        quote = createQuote(SampleEventFactory.testInstrument.getInstId(), 100, 101, 98000, 98000);
         simulationExecutor.onQuote(quote);
         argument = ArgumentCaptor.forClass(ExecutionReport.class);
         verify(orderManager, atLeast(1)).onExecutionReport(argument.capture());
@@ -249,9 +249,9 @@ public class SimulationExecutorTest {
     @Test
     public void test_change_trailing_exec_price_when_price_drop(){
 
-        Quote quote = createQuote(SampleEventFactory.testInstrument.instId, 89, 91, 98000, 98000);
+        Quote quote = createQuote(SampleEventFactory.testInstrument.getInstId(), 89, 91, 98000, 98000);
         InstrumentDataManager.INSTANCE.onQuote(quote);
-        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.TrailingStop, 98000, 0, 10);
+        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.TrailingStop, 98000, 0, 10);
         orderManager.onOrder(order);
 
         ArgumentCaptor<ExecutionReport> argument = ArgumentCaptor.forClass(ExecutionReport.class);
@@ -263,7 +263,7 @@ public class SimulationExecutorTest {
         assertEquals(quote.ask + order.stopPrice, order.trailingStopExecPrice, 0.0);
 
 
-        quote = createQuote(SampleEventFactory.testInstrument.instId, 77, 78, 98000, 98000);
+        quote = createQuote(SampleEventFactory.testInstrument.getInstId(), 77, 78, 98000, 98000);
         simulationExecutor.onQuote(quote);
         argument = ArgumentCaptor.forClass(ExecutionReport.class);
         verify(orderManager, atLeast(1)).onExecutionReport(argument.capture());
@@ -277,9 +277,9 @@ public class SimulationExecutorTest {
     @Test
     public void test_no_change_trailing_exec_price_when_price_up(){
 
-        Quote quote = createQuote(SampleEventFactory.testInstrument.instId, 89, 91, 98000, 98000);
+        Quote quote = createQuote(SampleEventFactory.testInstrument.getInstId(), 89, 91, 98000, 98000);
         InstrumentDataManager.INSTANCE.onQuote(quote);
-        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.TrailingStop, 98000, 0, 10);
+        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.TrailingStop, 98000, 0, 10);
         orderManager.onOrder(order);
 
         ArgumentCaptor<ExecutionReport> argument = ArgumentCaptor.forClass(ExecutionReport.class);
@@ -291,7 +291,7 @@ public class SimulationExecutorTest {
         assertEquals(quote.ask + order.stopPrice, order.trailingStopExecPrice, 0.0);
 
 
-        quote = createQuote(SampleEventFactory.testInstrument.instId, 99, 100, 98000, 98000);
+        quote = createQuote(SampleEventFactory.testInstrument.getInstId(), 99, 100, 98000, 98000);
         simulationExecutor.onQuote(quote);
         argument = ArgumentCaptor.forClass(ExecutionReport.class);
         verify(orderManager, atLeast(1)).onExecutionReport(argument.capture());

@@ -33,11 +33,11 @@ public interface CSVConfig {
         Instrument instrument = InstrumentManager.INSTANCE.get(key.instId);
         switch (key.type){
             case Bar:
-                return String.format(BAR_FILENAME_FORMAT, instrument.symbol, key.barSize);
+                return String.format(BAR_FILENAME_FORMAT, instrument.getSymbol(), key.barSize);
             case Trade:
-                return String.format(TRADE_FILENAME_FORMAT, instrument.symbol);
+                return String.format(TRADE_FILENAME_FORMAT, instrument.getSymbol());
             case Quote:
-                return String.format(QUOTE_FILENAME_FORMAT, instrument.symbol);
+                return String.format(QUOTE_FILENAME_FORMAT, instrument.getSymbol());
             default:
                 throw new UnsupportedOperationException();
         }

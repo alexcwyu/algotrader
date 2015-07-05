@@ -27,8 +27,8 @@ public class QuoteProcessorTest {
 
     @Before
     public void setup(){
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.Limit, 800, 88);
-        quote = SampleEventFactory.createQuote(SampleEventFactory.testInstrument.instId, 95, 98, 500, 600);
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.Limit, 800, 88);
+        quote = SampleEventFactory.createQuote(SampleEventFactory.testInstrument.getInstId(), 95, 98, 500, 600);
     }
 
     @Test

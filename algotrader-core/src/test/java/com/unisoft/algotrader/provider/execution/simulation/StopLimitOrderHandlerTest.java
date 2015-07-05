@@ -50,14 +50,14 @@ public class StopLimitOrderHandlerTest {
         config = new SimulatorConfig();
         handler = new StopLimitOrderHandler(config, executor);
 
-        noFillOrderBuy1 = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.StopLimit, 800, 50, 200);
-        noFillOrderBuy2 = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.StopLimit, 800, 50, 50);
-        noFillOrderSell1 = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.StopLimit, 1000, 200, 50);
-        noFillOrderSell2 = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.StopLimit, 1000, 200, 200);
+        noFillOrderBuy1 = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.StopLimit, 800, 50, 200);
+        noFillOrderBuy2 = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.StopLimit, 800, 50, 50);
+        noFillOrderSell1 = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Sell, OrdType.StopLimit, 1000, 200, 50);
+        noFillOrderSell2 = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Sell, OrdType.StopLimit, 1000, 200, 200);
 
-        quote = SampleEventFactory.createQuote(SampleEventFactory.testInstrument.instId, 95, 98, 550, 600);
-        trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 99, 500);
-        bar = SampleEventFactory.createBar(SampleEventFactory.testInstrument.instId, 87, 92, 60, 88);
+        quote = SampleEventFactory.createQuote(SampleEventFactory.testInstrument.getInstId(), 95, 98, 550, 600);
+        trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.getInstId(), 99, 500);
+        bar = SampleEventFactory.createBar(SampleEventFactory.testInstrument.getInstId(), 87, 92, 60, 88);
     }
 
     @Test
@@ -148,7 +148,7 @@ public class StopLimitOrderHandlerTest {
 
     @Test
     public void test_fill_on_quote(){
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.StopLimit, 50, 100, 98);
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.StopLimit, 50, 100, 98);
         handler.process(order, quote);
         assertTrue(order.stopLimitReady);
         verify(executor, times(0)).execute(any(), anyDouble(), anyDouble());
@@ -157,7 +157,7 @@ public class StopLimitOrderHandlerTest {
 
         reset(executor);
 
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.StopLimit, 100, 90, 95);
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Sell, OrdType.StopLimit, 100, 90, 95);
         handler.process(order, quote);
         assertTrue(order.stopLimitReady);
         verify(executor, times(0)).execute(any(), anyDouble(), anyDouble());
@@ -168,7 +168,7 @@ public class StopLimitOrderHandlerTest {
 
     @Test
     public void test_fill_on_bar(){
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.StopLimit, 50, 60, 92);
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.StopLimit, 50, 60, 92);
         handler.process(order, bar);
         assertTrue(order.stopLimitReady);
         verify(executor, times(0)).execute(any(), anyDouble(), anyDouble());
@@ -177,7 +177,7 @@ public class StopLimitOrderHandlerTest {
 
         reset(executor);
 
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.StopLimit, 100, 92, 60);
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Sell, OrdType.StopLimit, 100, 92, 60);
         handler.process(order, bar);
         assertTrue(order.stopLimitReady);
         verify(executor, times(0)).execute(any(), anyDouble(), anyDouble());
@@ -188,7 +188,7 @@ public class StopLimitOrderHandlerTest {
 
     @Test
     public void test_fill_on_trade(){
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.StopLimit, 50, 99, 99);
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.StopLimit, 50, 99, 99);
         handler.process(order, trade);
         assertTrue(order.stopLimitReady);
         verify(executor, times(0)).execute(any(), anyDouble(), anyDouble());
@@ -197,7 +197,7 @@ public class StopLimitOrderHandlerTest {
 
         reset(executor);
 
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.StopLimit, 100, 99, 99);
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Sell, OrdType.StopLimit, 100, 99, 99);
         handler.process(order, trade);
         assertTrue(order.stopLimitReady);
         verify(executor, times(0)).execute(any(), anyDouble(), anyDouble());
@@ -209,7 +209,7 @@ public class StopLimitOrderHandlerTest {
     @Test
     public void test_fill_on_price_qty(){
 
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.StopLimit, 50, 90, 98);
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.StopLimit, 50, 90, 98);
         handler.process(order, 98, 100);
         assertTrue(order.stopLimitReady);
         verify(executor, times(0)).execute(any(), anyDouble(), anyDouble());
@@ -218,7 +218,7 @@ public class StopLimitOrderHandlerTest {
 
         reset(executor);
 
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.StopLimit, 100, 100, 95);
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Sell, OrdType.StopLimit, 100, 100, 95);
         handler.process(order, 95, 100);
         assertTrue(order.stopLimitReady);
         verify(executor, times(0)).execute(any(), anyDouble(), anyDouble());

@@ -181,7 +181,7 @@ public abstract class AbstractPubSubTest {
 
             }
 
-            Trade trade = new Trade(testInstrument.instId, System.currentTimeMillis(), 99, 85);
+            Trade trade = new Trade(testInstrument.getInstId(), System.currentTimeMillis(), 99, 85);
             while (count<expected)
             {
 
@@ -191,7 +191,7 @@ public abstract class AbstractPubSubTest {
 //                    header.msgId = count;
 //                    header.typeId = serializer.getId(trade.getClass());
 
-                    trade.instId = testInstrument.instId;
+                    trade.instId = testInstrument.getInstId();
 
 //                    serializer.serialize(header, buffer);
                     serializer.serialize(trade, buffer);

@@ -74,7 +74,7 @@ public class BackTestIntegrationTest {
         executor.submit(()->{
 
             for (int i =0; i< 100; i ++){
-                dataPublisher.publishTrade(testInstrument.instId, System.currentTimeMillis(), 100+i, 1000);
+                dataPublisher.publishTrade(testInstrument.getInstId(), System.currentTimeMillis(), 100+i, 1000);
                 try {
                     Thread.sleep(1000);
                 }catch(Exception e){

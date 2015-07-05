@@ -235,7 +235,7 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
         return netCashFlow() - transactionCost();
     }
     public double margin(){
-        double margin = InstrumentManager.INSTANCE.get(instId).margin * filledQty;
+        double margin = InstrumentManager.INSTANCE.get(instId).getMargin() * filledQty;
         return margin;
     }
 

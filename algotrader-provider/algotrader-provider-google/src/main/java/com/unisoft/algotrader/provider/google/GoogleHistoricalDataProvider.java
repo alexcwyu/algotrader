@@ -86,7 +86,7 @@ public class GoogleHistoricalDataProvider implements HistoricalDataProvider {
 
             String fromDateStr = URLEncoder.encode(DATE_FORMAT.format(fromDate), "UTF-8");
             String toDateStr = URLEncoder.encode(DATE_FORMAT.format(toDate), "UTF-8");
-            String url = String.format(URL, instrument.symbol, fromDateStr, toDateStr);
+            String url = String.format(URL, instrument.getSymbol(), fromDateStr, toDateStr);
             return url;
         }catch (UnsupportedEncodingException e){
             throw new RuntimeException(e);

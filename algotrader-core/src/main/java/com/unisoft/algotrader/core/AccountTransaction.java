@@ -18,7 +18,9 @@ public class AccountTransaction {
 
     @Field(name = "ccy_id")
     private String ccyId;
+
     private double value;
+
     private String text;
 
     public AccountTransaction(){

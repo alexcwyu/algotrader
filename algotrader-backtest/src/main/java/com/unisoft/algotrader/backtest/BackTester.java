@@ -98,7 +98,7 @@ public class BackTester {
     public void run(){
         executor.submit(barFactory);
         executor.submit(simulator);
-        dataProvider.subscribe(new RingBufferMarketDataEventBus(EventBusManager.INSTANCE.rawMarketDataRB), SubscriptionKey.createDailySubscriptionKey(instrument.instId), fromDate, toDate);
+        dataProvider.subscribe(new RingBufferMarketDataEventBus(EventBusManager.INSTANCE.rawMarketDataRB), SubscriptionKey.createDailySubscriptionKey(instrument.getInstId()), fromDate, toDate);
     }
 
     public Performance getPerformance(){

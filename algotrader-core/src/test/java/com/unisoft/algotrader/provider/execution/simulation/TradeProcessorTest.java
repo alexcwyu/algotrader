@@ -26,8 +26,8 @@ public class TradeProcessorTest {
 
     @Before
     public void setup(){
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.Limit, 800, 88);
-        trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 99, 500);
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.Limit, 800, 88);
+        trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.getInstId(), 99, 500);
     }
 
     @Test

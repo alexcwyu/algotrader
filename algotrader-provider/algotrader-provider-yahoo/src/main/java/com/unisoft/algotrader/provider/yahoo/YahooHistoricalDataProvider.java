@@ -85,7 +85,7 @@ public class YahooHistoricalDataProvider implements HistoricalDataProvider {
             toDateCal.setTime(toDate);
 
             Instrument instrument = InstrumentManager.INSTANCE.get(key.instId);
-            String url = String.format(URL, instrument.symbol,
+            String url = String.format(URL, instrument.getSymbol(),
                     fromDateCal.get(Calendar.MONTH), fromDateCal.get(Calendar.DATE), fromDateCal.get(Calendar.YEAR),
                     toDateCal.get(Calendar.MONTH), toDateCal.get(Calendar.DATE), toDateCal.get(Calendar.YEAR));
             return url;

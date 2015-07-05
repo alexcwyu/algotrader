@@ -81,7 +81,7 @@ public class CSVPublishTest {
         Thread.sleep(5000);
 
         LOG.info("start");
-        provider.subscribe(new RingBufferMarketDataEventBus(marketDataRB), SubscriptionKey.createDailySubscriptionKey(testInstrument.instId), 20110101, 20141231);
+        provider.subscribe(new RingBufferMarketDataEventBus(marketDataRB), SubscriptionKey.createDailySubscriptionKey(testInstrument.getInstId()), 20110101, 20141231);
 
         latch.await();
 

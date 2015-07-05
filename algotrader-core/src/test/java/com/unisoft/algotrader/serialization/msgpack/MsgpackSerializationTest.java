@@ -34,12 +34,12 @@ public class MsgpackSerializationTest {
 
     @Test
     public void testSingleMessage()throws Exception{
-        Trade trade = new Trade(testInstrument.instId, System.currentTimeMillis(), 121,85);
+        Trade trade = new Trade(testInstrument.getInstId(), System.currentTimeMillis(), 121,85);
         byte [] traderByte = serializer.serialize(trade);
         Trade trade2 = serializer.deserialize(traderByte);
         assertEquals(trade, trade2);
 
-        Quote quote = new Quote(testInstrument.instId, System.currentTimeMillis(), 121,122, 50,90);
+        Quote quote = new Quote(testInstrument.getInstId(), System.currentTimeMillis(), 121,122, 50,90);
         byte [] quoteByte = serializer.serialize(quote);
         Quote quote2 = serializer.deserialize(quoteByte);
         assertEquals(quote, quote2);
@@ -53,10 +53,10 @@ public class MsgpackSerializationTest {
         Object obj = null;
         for (int i =0; i< test ; i ++) {
             if (obj == null || obj.getClass() == Trade.class) {
-                obj = new Quote(testInstrument.instId, System.currentTimeMillis(), i, 122, 50, 90);
+                obj = new Quote(testInstrument.getInstId(), System.currentTimeMillis(), i, 122, 50, 90);
             }
             else {
-                obj = new Trade(testInstrument.instId, System.currentTimeMillis(), i, 85);
+                obj = new Trade(testInstrument.getInstId(), System.currentTimeMillis(), i, 85);
             }
 
             MessageHeader header = new MessageHeader();
@@ -83,7 +83,7 @@ public class MsgpackSerializationTest {
 
         int test = 10;
         for (int i =0; i< test ; i ++) {
-            Trade obj = new Trade(testInstrument.instId, System.currentTimeMillis(), i, 85);
+            Trade obj = new Trade(testInstrument.getInstId(), System.currentTimeMillis(), i, 85);
 
             MessageHeader header = new MessageHeader();
             header.msgId = i;

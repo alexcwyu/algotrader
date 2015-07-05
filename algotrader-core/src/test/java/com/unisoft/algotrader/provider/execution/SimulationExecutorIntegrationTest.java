@@ -312,7 +312,7 @@ public class SimulationExecutorIntegrationTest {
     private Order createOrder(Side side, OrdType type, double qty, double price){
         Order order = new Order();
         order.orderId = ordId++;
-        order.instId = testInstrument.instId;
+        order.instId = testInstrument.getInstId();
         order.strategyId = mockStrategyId;
         order.execProviderId = simulationExecutor.providerId();
         order.side= side;
@@ -326,13 +326,13 @@ public class SimulationExecutorIntegrationTest {
                               double ask,
                               int bidSize,
                               int askSize){
-        return new Quote(testInstrument.instId, System.currentTimeMillis(),
+        return new Quote(testInstrument.getInstId(), System.currentTimeMillis(),
                 bid,ask,bidSize,askSize);
     }
 
     private Trade createTrade(double price,
                               int size){
-        return new Trade(testInstrument.instId, System.currentTimeMillis(), price,size);
+        return new Trade(testInstrument.getInstId(), System.currentTimeMillis(), price,size);
     }
 
     private Bar createBar(
@@ -340,6 +340,6 @@ public class SimulationExecutorIntegrationTest {
             double high,
             double low,
             double close){
-        return new Bar(testInstrument.instId, 60, System.currentTimeMillis(), open, high, low, close, 0, 0);
+        return new Bar(testInstrument.getInstId(), 60, System.currentTimeMillis(), open, high, low, close, 0, 0);
     }
 }

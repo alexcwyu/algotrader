@@ -43,12 +43,12 @@ public class LimitOrderHandlerTest {
         config = new SimulatorConfig();
         handler = new LimitOrderHandler(config, executor);
 
-        noFillOrderBuy = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.Limit, 800, 50);
-        noFillOrderSell = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.Limit, 1000, 200);
+        noFillOrderBuy = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.Limit, 800, 50);
+        noFillOrderSell = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Sell, OrdType.Limit, 1000, 200);
 
-        quote = SampleEventFactory.createQuote(SampleEventFactory.testInstrument.instId, 95, 98, 550, 600);
-        trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 99, 500);
-        bar = SampleEventFactory.createBar(SampleEventFactory.testInstrument.instId, 87, 92, 60, 88);
+        quote = SampleEventFactory.createQuote(SampleEventFactory.testInstrument.getInstId(), 95, 98, 550, 600);
+        trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.getInstId(), 99, 500);
+        bar = SampleEventFactory.createBar(SampleEventFactory.testInstrument.getInstId(), 87, 92, 60, 88);
     }
 
     @Test
@@ -71,13 +71,13 @@ public class LimitOrderHandlerTest {
 
     @Test
     public void test_fill_on_quote(){
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.Limit, 50, 98);
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.Limit, 50, 98);
         handler.process(order, quote);
         verify(executor, times(1)).execute(order, quote.ask, quote.askSize);
 
         reset(executor);
 
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.Limit, 100, 95);
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Sell, OrdType.Limit, 100, 95);
         handler.process(order, quote);
         verify(executor, times(1)).execute(order, quote.bid, quote.bidSize);
     }
@@ -85,13 +85,13 @@ public class LimitOrderHandlerTest {
 
     @Test
     public void test_fill_on_bar(){
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.Limit, 50, 98);
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.Limit, 50, 98);
         handler.process(order, bar);
         verify(executor, times(1)).execute(order, order.limitPrice, order.ordQty);
 
         reset(executor);
 
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.Limit, 100, 90);
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Sell, OrdType.Limit, 100, 90);
         handler.process(order, bar);
         verify(executor, times(1)).execute(order, order.limitPrice, order.ordQty);
     }
@@ -99,27 +99,27 @@ public class LimitOrderHandlerTest {
 
     @Test
     public void test_fill_on_trade(){
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.Limit, 50, 99);
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.Limit, 50, 99);
         handler.process(order, trade);
         verify(executor, times(1)).execute(order, trade.price, order.ordQty);
 
         reset(executor);
 
 
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.Limit, 50, 100);
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.Limit, 50, 100);
         handler.process(order, trade);
         verify(executor, times(1)).execute(order, trade.price, order.ordQty);
 
         reset(executor);
 
 
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.Limit, 100, 99);
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Sell, OrdType.Limit, 100, 99);
         handler.process(order, trade);
         verify(executor, times(1)).execute(order, trade.price, order.ordQty);
         reset(executor);
 
 
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.Limit, 100, 98);
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Sell, OrdType.Limit, 100, 98);
         handler.process(order, trade);
         verify(executor, times(1)).execute(order, trade.price, order.ordQty);
     }
@@ -128,13 +128,13 @@ public class LimitOrderHandlerTest {
     @Test
     public void test_fill_on_price_qty(){
 
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.Limit, 50, 98);
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.Limit, 50, 98);
         handler.process(order, 97, 100);
         verify(executor, times(1)).execute(order, 97, 100);
 
         reset(executor);
 
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.Limit, 100, 95);
+        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Sell, OrdType.Limit, 100, 95);
         handler.process(order, 96, 100);
         verify(executor, times(1)).execute(order, 96, 100);
     }

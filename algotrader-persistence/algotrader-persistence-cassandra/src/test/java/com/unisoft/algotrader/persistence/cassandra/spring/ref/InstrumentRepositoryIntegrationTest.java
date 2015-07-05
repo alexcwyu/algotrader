@@ -71,8 +71,8 @@ public class InstrumentRepositoryIntegrationTest extends BaseIntegrationTest {
         inst1.addAltExchId("IB", "SEHK");
         inst1.addAltExchId("Esignal", "SEHK");
 
-        inst1.sector = "Finance";
-        inst1.sector = "Banking";
+        inst1.setSector("Finance");
+        inst1.setGroup("Banking");
 
 //        Map<String, UDTValue> altIds = new HashMap();
 //
@@ -90,22 +90,22 @@ public class InstrumentRepositoryIntegrationTest extends BaseIntegrationTest {
 //        }
 
         session.execute(insertPreparedStatement.bind(
-                inst1.instId,
-                inst1.type.name(),
-                inst1.name,
-                inst1.symbol,
-                inst1.exchId,
-                inst1.ccyId,
-                inst1.underlyingInstId,
-                inst1.factor,
-                inst1.expiryDate,
-                inst1.strike,
-                inst1.putCall!=null ? inst1.putCall.name():null,
-                inst1.margin,
-                inst1.sector,
-                inst1.group,
-                inst1.altSymbols,
-                inst1.altExchIds));
+                inst1.getInstId(),
+                inst1.getType().name(),
+                inst1.getName(),
+                inst1.getSymbol(),
+                inst1.getExchId(),
+                inst1.getCcyId(),
+                inst1.getUnderlyingInstId(),
+                inst1.getFactor(),
+                inst1.getExpiryDate(),
+                inst1.getStrike(),
+                inst1.getPutCall()!=null ? inst1.getPutCall().name():null,
+                inst1.getMargin(),
+                inst1.getSector(),
+                inst1.getGroup(),
+                inst1.getAltSymbols(),
+                inst1.getAltExchIds()));
 
     }
 }

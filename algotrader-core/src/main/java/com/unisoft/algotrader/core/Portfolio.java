@@ -75,9 +75,9 @@ public class Portfolio{
 
         double newDebt = addOrderToPosition(order);
 
-        Currency currency = CurrencyManager.INSTANCE.get(InstrumentManager.INSTANCE.get(order.instId).ccyId);
-        AccountTransaction accountTransaction = new AccountTransaction(order.orderId, order.dateTime,
-                currency, order.cashFlow() + newDebt, order.text);
+        Currency currency = CurrencyManager.INSTANCE.get(InstrumentManager.INSTANCE.get(order.getInstId()).getCcyId());
+        AccountTransaction accountTransaction = new AccountTransaction(order.getOrderId(), order.getDateTime(),
+                currency, order.cashFlow() + newDebt, order.getText());
         getAccount().add(accountTransaction);
         performance.valueChanged();
 
@@ -90,7 +90,7 @@ public class Portfolio{
     }
 
     private double addOrderToPosition(Order order){
-        Position position = positions.get(order.instId);
+        Position position = positions.get(order.getInstId());
 
         boolean positionOpened = false;
         boolean positionChanged = false;
@@ -107,10 +107,10 @@ public class Portfolio{
 
         if (position == null){
             // open position
-            position = new Position(order.instId, portfolioId);
+            position = new Position(order.getInstId(), portfolioId);
             position.add(order);
 
-            positions.put(order.instId, position);
+            positions.put(order.getInstId(), position);
 
             // TODO handle margin
             if (orderMargin != 0)
@@ -121,8 +121,8 @@ public class Portfolio{
                 closeDebt = 0;
                 openDebt  = orderDebt;
 
-                position.margin = orderMargin;
-                position.debt = orderDebt;
+                position.setMargin(orderMargin);
+                position.setDebt(orderDebt);
             }
 
             positionOpened = true;
@@ -140,53 +140,53 @@ public class Portfolio{
                     closeDebt = 0;
                     openDebt  = orderDebt;
 
-                    position.margin += orderMargin;
-                    position.debt   += orderDebt;
+                    position.setMargin(position.getMargin() + orderMargin);
+                    position.setDebt(position.getDebt() + closeDebt);
                 }
 
 
                 // close or close / open position
                 if ((position.side() == PositionSide.Short && order.side == Side.Buy)||
                         (position.side() == PositionSide.Long && (order.side == Side.Sell || order.side == Side.SellShort))){
-                    if(position.qty() == order.filledQty){
+                    if(position.qty() == order.getFilledQty()){
                         //fully close
-                        closeMargin = position.margin;
+                        closeMargin = position.getMargin();
                         openMargin = 0;
 
-                        closeDebt = position.debt;
+                        closeDebt = position.getDebt();
                         openDebt = 0;
 
-                        position.margin = 0;
-                        position.debt = 0;
+                        position.setMargin(0);
+                        position.setDebt(0);
                     }
-                    else if (position.qty() > order.filledQty){
+                    else if (position.qty() > order.getFilledQty()){
                         // partially close
                         closeMargin = orderMargin;
                         openMargin = 0;
 
-                        closeDebt = position.debt * order.filledQty / position.qty();
+                        closeDebt = position.getDebt() * order.getFilledQty() / position.qty();
                         openDebt = 0;
 
-                        position.margin -= orderMargin;
-                        position.debt -= closeDebt;
+                        position.setMargin(position.getMargin() - orderMargin);
+                        position.setDebt(position.getDebt() - closeDebt);
                     }
                     else {
                         // close and open
-                        double qty = order.filledQty - position.qty();
-                        double value = qty * order.avgPrice;
+                        double qty = order.getFilledQty() - position.qty();
+                        double value = qty * order.getAvgPrice();
 
-                        Instrument instrument = InstrumentManager.INSTANCE.get(order.instId);
-                        if (instrument.factor != 0)
-                            value *= instrument.factor;
+                        Instrument instrument = InstrumentManager.INSTANCE.get(order.getInstId());
+                        if (instrument.getFactor() != 0)
+                            value *= instrument.getFactor();
 
-                        closeMargin = position.margin;
-                        openMargin = instrument.margin * qty;
+                        closeMargin = position.getMargin();
+                        openMargin = instrument.getMargin() * qty;
 
-                        closeDebt = position.debt;
+                        closeDebt = position.getDebt();
                         openDebt = value - openMargin;
 
-                        position.margin = openMargin;
-                        position.debt = openDebt;
+                        position.setMargin(openMargin);
+                        position.setDebt(openDebt);
                     }
                 }
             }
@@ -196,7 +196,7 @@ public class Portfolio{
             if (position.qty() == 0){
 
                 //close position
-                positions.remove(order.instId);
+                positions.remove(order.getInstId());
 
                 positionClosed = true;
             }
@@ -221,10 +221,10 @@ public class Portfolio{
     }
 
     public double marginValue(){
-        return positions.values().stream().mapToDouble(position -> position.margin).sum();
+        return positions.values().stream().mapToDouble(position -> position.getMargin()).sum();
     }
     public double debtValue(){
-        return positions.values().stream().mapToDouble(position -> position.debt).sum();
+        return positions.values().stream().mapToDouble(position -> position.getDebt()).sum();
     }
 
     public double coreEquity(){

@@ -21,11 +21,9 @@ public class InstrumentManager {
         INSTANCE = new InstrumentManager();
     }
 
-
     private InstrumentManager(){
 
     }
-
 
     private final AtomicInteger counter = new AtomicInteger(0);
     private final Lock lock = new ReentrantLock();
@@ -34,11 +32,11 @@ public class InstrumentManager {
 
 
     public boolean add(Instrument instrument){
-        InstId instId = new InstId(instrument.symbol, instrument.exchId);
+        InstId instId = new InstId(instrument.getSymbol(), instrument.getExchId());
 
         if (!instIdMap.containsKey(instId)) {
             instIdMap.put(instId, instrument);
-            idMap.put(instrument.instId, instrument);
+            idMap.put(instrument.getInstId(), instrument);
             return true;
         }
         return false;

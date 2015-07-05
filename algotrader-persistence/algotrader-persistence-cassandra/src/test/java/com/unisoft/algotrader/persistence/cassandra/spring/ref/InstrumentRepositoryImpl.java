@@ -91,28 +91,28 @@ public class InstrumentRepositoryImpl implements InstrumentRepositoryCustom {
     private BoundStatement bindInsert(Instrument instrument){
         BoundStatement boundStatement =
                 insertPreparedStatement.bind();
-        boundStatement.setInt(INST_ID, instrument.instId);
-        boundStatement.setString(TYPE, instrument.type.name());
-        boundStatement.setString(NAME, instrument.name);
-        boundStatement.setString(SYMBOL, instrument.symbol);
-        boundStatement.setString(EXCH_ID, instrument.exchId);
-        boundStatement.setString(CCY_ID, instrument.ccyId);
-        boundStatement.setInt(UND_INST_ID, instrument.underlyingInstId);
-        boundStatement.setDouble(FACTOR, instrument.factor);
-        if (instrument.expiryDate !=null) {
-            boundStatement.setDate(EXPIRY_DATE, instrument.expiryDate);
+        boundStatement.setInt(INST_ID, instrument.getInstId());
+        boundStatement.setString(TYPE, instrument.getType().name());
+        boundStatement.setString(NAME, instrument.getName());
+        boundStatement.setString(SYMBOL, instrument.getSymbol());
+        boundStatement.setString(EXCH_ID, instrument.getExchId());
+        boundStatement.setString(CCY_ID, instrument.getCcyId());
+        boundStatement.setInt(UND_INST_ID, instrument.getUnderlyingInstId());
+        boundStatement.setDouble(FACTOR, instrument.getFactor());
+        if (instrument.getExpiryDate() !=null) {
+            boundStatement.setDate(EXPIRY_DATE, instrument.getExpiryDate());
         }
         else{
             boundStatement.setToNull(EXPIRY_DATE);
         }
-        boundStatement.setDouble(STRIKE, instrument.strike);
-        if (instrument.putCall != null){
-            boundStatement.setString(PUT_CALL, instrument.putCall.name());
+        boundStatement.setDouble(STRIKE, instrument.getStrike());
+        if (instrument.getPutCall() != null){
+            boundStatement.setString(PUT_CALL, instrument.getPutCall().name());
         }
         else{
             boundStatement.setToNull(PUT_CALL);
         }
-        boundStatement.setDouble(MARGIN, instrument.margin);
+        boundStatement.setDouble(MARGIN, instrument.getMargin());
 
 //        Map<String, UDTValue> altIds = new HashMap();
 //        for (Map.Entry<String, Instrument.InstId> entry : instrument.altIds.entrySet()) {
@@ -130,10 +130,10 @@ public class InstrumentRepositoryImpl implements InstrumentRepositoryCustom {
 //        boundStatement.setMap(ALT_IDS, altIds);
 //        boundStatement.setMap(CLASSIFICATION, classification);
 
-        boundStatement.setString(SECTOR, instrument.sector);
-        boundStatement.setString(GROUP, instrument.group);
-        boundStatement.setMap(ALT_SYMBOLS, instrument.altSymbols);
-        boundStatement.setMap(ALT_EXCHIDS, instrument.altExchIds);
+        boundStatement.setString(SECTOR, instrument.getSector());
+        boundStatement.setString(GROUP, instrument.getGroup());
+        boundStatement.setMap(ALT_SYMBOLS, instrument.getAltSymbols());
+        boundStatement.setMap(ALT_EXCHIDS, instrument.getAltExchIds());
 
         return boundStatement;
     }
@@ -185,16 +185,16 @@ public class InstrumentRepositoryImpl implements InstrumentRepositoryCustom {
                     row.getString(EXCH_ID),
                     row.getString(CCY_ID)
             );
-            instrument.underlyingInstId = row.getInt(UND_INST_ID);
-            instrument.factor = row.getDouble(FACTOR);
+            instrument.setUnderlyingInstId(row.getInt(UND_INST_ID));
+            instrument.setFactor(row.getDouble(FACTOR));
             if (!row.isNull(EXPIRY_DATE))
-                instrument.expiryDate = row.getDate(EXPIRY_DATE);
+                instrument.setExpiryDate(row.getDate(EXPIRY_DATE));
 
-            instrument.strike = row.getDouble(STRIKE);
+            instrument.setStrike(row.getDouble(STRIKE));
             if (!row.isNull(PUT_CALL))
-                instrument.putCall = Instrument.PutCall.valueOf(row.getString(PUT_CALL));
+                instrument.setPutCall(Instrument.PutCall.valueOf(row.getString(PUT_CALL)));
 
-            instrument.margin = row.getDouble(MARGIN);
+            instrument.setMargin(row.getDouble(MARGIN));
 
 //            Map<String, UDTValue> rawAltIds = row.getMap(ALT_IDS, String.class, UDTValue.class);
 //            //Map<String, Instrument.InstId> altIds = new HashMap();
@@ -212,10 +212,10 @@ public class InstrumentRepositoryImpl implements InstrumentRepositoryCustom {
 //                instrument.addClassification(entry.getKey(), new Instrument.Classification(entry.getValue().getString(GROUP), entry.getValue().getString(SECTOR)));
 //            }
 
-            instrument.sector = row.getString(SECTOR);
-            instrument.group = row.getString(GROUP);
-            instrument.altSymbols = row.getMap(ALT_SYMBOLS, String.class, String.class);
-            instrument.altExchIds = row.getMap(ALT_EXCHIDS, String.class, String.class);
+            instrument.setSector(row.getString(SECTOR));
+            instrument.setGroup(row.getString(GROUP));
+            instrument.setAltSymbols(row.getMap(ALT_SYMBOLS, String.class, String.class));
+            instrument.setAltExchIds(row.getMap(ALT_EXCHIDS, String.class, String.class));
 
             return instrument;
         }

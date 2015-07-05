@@ -16,6 +16,7 @@ public class AccountPosition {
 
     @Field(name = "ccy_id")
     private String ccyId;
+
     private double value;
 
     @FrozenValue
