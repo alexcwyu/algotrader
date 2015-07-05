@@ -39,10 +39,6 @@ public class ModelSerializationTest {
         serializer.register(TimeInForce.class);
         serializer.register(Side.class);
         serializer.register(ExecutionReport.class);
-        serializer.register(Commission.class);
-        serializer.register(Commission.AbsoluteCommission.class);
-        serializer.register(Commission.PercentCommission.class);
-        serializer.register(Commission.PerShareCommission.class);
         serializer.register(Order.class);
 
         serializer.register(TLongArrayList.class);

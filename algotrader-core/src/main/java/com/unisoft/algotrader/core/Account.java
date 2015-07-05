@@ -103,8 +103,8 @@ public class Account {
     }
 
     public double value(Currency currency){
-        if (accountPositions.containsKey(currency)){
-            return accountPositions.get(currency).getValue();
+        if (accountPositions.containsKey(currency.getCcyId())){
+            return accountPositions.get(currency.getCcyId()).getValue();
         }
         return 0.0;
     }
