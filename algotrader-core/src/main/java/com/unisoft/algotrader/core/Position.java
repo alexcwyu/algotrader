@@ -24,8 +24,8 @@ public class Position implements MarketDataHandler {
     private double qtySold;
     private double qtySoldShort;
 
-    protected double margin;
-    protected double debt;
+    private double margin;
+    private double debt;
 
     private List<Order> orderList = Lists.newArrayList();
     private int fPnLTransactionIndex = -1;

@@ -8,16 +8,16 @@ import com.datastax.driver.mapping.annotations.ClusteringColumn;
 public abstract class RefData {
 
     @ClusteringColumn(value = 1)
-    protected long businesstime;
+    private long businesstime;
 
     @ClusteringColumn(value = 2)
-    protected long systemtime;
+    private long systemtime;
 
-    protected String updatedUser;
+    private String updatedUser;
 
-    protected String updatedReason;
+    private String updatedReason;
 
-    protected boolean active = true;
+    private boolean active = true;
 
     public RefData(){
         this(System.currentTimeMillis(), System.currentTimeMillis());
