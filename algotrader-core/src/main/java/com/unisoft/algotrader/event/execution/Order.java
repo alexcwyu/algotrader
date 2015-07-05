@@ -130,30 +130,35 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
         if (!(o instanceof Order)) return false;
         Order<?> order = (Order<?>) o;
         return Objects.equal(orderId, order.orderId) &&
+                Objects.equal(instId, order.instId) &&
                 Objects.equal(dateTime, order.dateTime) &&
                 Objects.equal(limitPrice, order.limitPrice) &&
+                Objects.equal(stopPrice, order.stopPrice) &&
                 Objects.equal(ordQty, order.ordQty) &&
                 Objects.equal(filledQty, order.filledQty) &&
-                Objects.equal(stopPrice, order.stopPrice) &&
                 Objects.equal(avgPrice, order.avgPrice) &&
+                Objects.equal(lastQty, order.lastQty) &&
+                Objects.equal(lastPrice, order.lastPrice) &&
                 Objects.equal(stopLimitReady, order.stopLimitReady) &&
                 Objects.equal(trailingStopExecPrice, order.trailingStopExecPrice) &&
-                Objects.equal(instId, order.instId) &&
+                Objects.equal(pnl, order.pnl) &&
+                Objects.equal(realizedPnl, order.realizedPnl) &&
                 Objects.equal(ordType, order.ordType) &&
+                Objects.equal(ordStatus, order.ordStatus) &&
                 Objects.equal(tif, order.tif) &&
                 Objects.equal(side, order.side) &&
                 Objects.equal(execProviderId, order.execProviderId) &&
                 Objects.equal(portfolioId, order.portfolioId) &&
                 Objects.equal(strategyId, order.strategyId) &&
                 Objects.equal(text, order.text) &&
-                Objects.equal(ordStatus, order.ordStatus);
+                Objects.equal(executionReports, order.executionReports) &&
+                Objects.equal(commissions, order.commissions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(orderId, instId, dateTime, ordType, limitPrice, ordQty, filledQty, stopPrice, avgPrice, stopLimitReady, trailingStopExecPrice, tif, side, execProviderId, portfolioId, strategyId, text, ordStatus);
+        return Objects.hashCode(orderId, instId, dateTime, ordType, ordStatus, limitPrice, stopPrice, ordQty, filledQty, avgPrice, lastQty, lastPrice, stopLimitReady, trailingStopExecPrice, tif, side, execProviderId, portfolioId, strategyId, text, executionReports, commissions, pnl, realizedPnl);
     }
-
 
     public static final EventFactory<Order> FACTORY = new EventFactory(){
         @Override

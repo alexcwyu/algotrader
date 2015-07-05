@@ -27,7 +27,7 @@ public class Account {
     @FrozenValue
     private Map<String, AccountPosition> accountPositions = Maps.newHashMap();
 
-    protected Account(){
+    public Account(){
 
     }
 

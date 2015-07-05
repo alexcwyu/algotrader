@@ -22,7 +22,7 @@ public class AccountPosition {
     @Field(name = "transactions")
     private List<AccountTransaction> accountTransactions = Lists.newArrayList();
 
-    protected AccountPosition(){}
+    public AccountPosition(){}
 
     public AccountPosition(String ccyId){
         this.ccyId = ccyId;

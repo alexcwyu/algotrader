@@ -22,7 +22,7 @@ public class ObjectMapperTester {
         SimpleClient client = new SimpleClient();
         client.connect("127.0.0.1");
         MappingManager manager = new MappingManager(client.getSession());
-        Mapper<Account> accountMappermapper = manager.mapper(Account.class);
+        Mapper<Account2> accountMappermapper = manager.mapper(Account2.class);
 //        UDTMapper<Address> addressUDTMapper = new MappingManager(client.getSession())
 //                .udtMapper(Address.class);
 
@@ -31,23 +31,23 @@ public class ObjectMapperTester {
         //List<Phone> phones = new ArrayList<Phone>();
         //phones.add(phone);
         Address address = new Address("25800 Arnold Drive", "Sonoma", 95476);
-        Account account = new Account("John Doe", "jd@example.com", address);
+        Account2 account = new Account2("John Doe", "jd@example.com", address);
         accountMappermapper.save(account);
 
 
-        Account account2 = new Account("Peter Pan", "pp@example.com", address);
+        Account2 account2 = new Account2("Peter Pan", "pp@example.com", address);
         accountMappermapper.save(account2);
 
-        Account account3 = new Account("Jon Lee", "jl@example.com", address);
+        Account2 account3 = new Account2("Jon Lee", "jl@example.com", address);
         accountMappermapper.save(account3);
 
-        Account whose = accountMappermapper.get("jd@example.com");
-        System.out.println("Account name: " + whose.getName());
-        Account whose2 = accountMappermapper.get("jl@example.com");
-        System.out.println("Account name: " + whose2.getName());
+        Account2 whose = accountMappermapper.get("jd@example.com");
+        System.out.println("Account2 name: " + whose.getName());
+        Account2 whose2 = accountMappermapper.get("jl@example.com");
+        System.out.println("Account2 name: " + whose2.getName());
 
         AccountAccessor accessor = manager.createAccessor(AccountAccessor.class);
-        Account a = accessor.byEmail("pp@example.com");
+        Account2 a = accessor.byEmail("pp@example.com");
 
             System.out.println(a);
 
@@ -105,7 +105,7 @@ public class ObjectMapperTester {
     interface AccountAccessor {
 
         @Query("SELECT * FROM complex.accounts where email = :email")
-        Account byEmail(@Param("email") String email);
+        Account2 byEmail(@Param("email") String email);
     }
 
     public static void main(String [] args){

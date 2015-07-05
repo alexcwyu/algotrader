@@ -8,7 +8,7 @@ import com.datastax.driver.mapping.annotations.Table;
 import com.google.common.base.Objects;
 
 @Table(keyspace = "complex", name = "accounts")
-public class Account {
+public class Account2 {
     @PartitionKey
     private String email;
     private String name;
@@ -16,10 +16,10 @@ public class Account {
     @Frozen
     private Address address;
 
-    public Account() {
+    public Account2() {
     }
 
-    public Account(String name, String email, Address address) {
+    public Account2(String name, String email, Address address) {
         this.name = name;
         this.email = email;
         this.address = address;
@@ -51,8 +51,8 @@ public class Account {
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof Account) {
-            Account that = (Account) other;
+        if (other instanceof Account2) {
+            Account2 that = (Account2) other;
             return Objects.equal(this.name, that.name) &&
                     Objects.equal(this.email, that.email);
         }

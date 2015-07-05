@@ -359,12 +359,13 @@ public class Position implements MarketDataHandler {
                 Objects.equal(fPnLTransactionIndex, position.fPnLTransactionIndex) &&
                 Objects.equal(qtyLeft, position.qtyLeft) &&
                 Objects.equal(portfolioId, position.portfolioId) &&
-                Objects.equal(orderList, position.orderList);
+                Objects.equal(orderList, position.orderList) &&
+                Objects.equal(instrument, position.instrument);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(instId, portfolioId, marketPrice, qtyBought, qtySold, qtySoldShort, margin, debt, orderList, fPnLTransactionIndex, qtyLeft);
+        return Objects.hashCode(instId, portfolioId, marketPrice, qtyBought, qtySold, qtySoldShort, margin, debt, orderList, fPnLTransactionIndex, qtyLeft, instrument);
     }
 
     public int getInstId() {

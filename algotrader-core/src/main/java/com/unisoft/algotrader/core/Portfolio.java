@@ -39,7 +39,7 @@ public class Portfolio{
     @Transient
     private Account account;
 
-    protected Portfolio(){
+    public Portfolio(){
     }
 
     public Portfolio(String portfolioId){

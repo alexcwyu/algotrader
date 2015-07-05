@@ -21,7 +21,7 @@ public class AccountTransaction {
     private double value;
     private String text;
 
-    protected AccountTransaction(){
+    public AccountTransaction(){
 
     }
 
@@ -68,16 +68,16 @@ public class AccountTransaction {
         if (this == o) return true;
         if (!(o instanceof AccountTransaction)) return false;
         AccountTransaction that = (AccountTransaction) o;
-        return Objects.equal(datetime, that.datetime) &&
+        return Objects.equal(orderId, that.orderId) &&
+                Objects.equal(datetime, that.datetime) &&
                 Objects.equal(value, that.value) &&
-                Objects.equal(orderId, that.orderId) &&
                 Objects.equal(ccyId, that.ccyId) &&
                 Objects.equal(text, that.text);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode( datetime, ccyId, value, orderId, text);
+        return Objects.hashCode(orderId, datetime, ccyId, value, text);
     }
 
     public long getOrderId() {

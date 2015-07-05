@@ -98,6 +98,7 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
         ExecutionReport<?> that = (ExecutionReport<?>) o;
         return Objects.equal(execId, that.execId) &&
                 Objects.equal(orderId, that.orderId) &&
+                Objects.equal(instId, that.instId) &&
                 Objects.equal(transactionTime, that.transactionTime) &&
                 Objects.equal(limitPrice, that.limitPrice) &&
                 Objects.equal(stopPrice, that.stopPrice) &&
@@ -106,7 +107,6 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
                 Objects.equal(lastPrice, that.lastPrice) &&
                 Objects.equal(filledQty, that.filledQty) &&
                 Objects.equal(avgPrice, that.avgPrice) &&
-                Objects.equal(instId, that.instId) &&
                 Objects.equal(ordType, that.ordType) &&
                 Objects.equal(ordStatus, that.ordStatus) &&
                 Objects.equal(tif, that.tif) &&

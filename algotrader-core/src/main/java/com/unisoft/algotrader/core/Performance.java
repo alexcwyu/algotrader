@@ -71,7 +71,7 @@ public class Performance {
     @Transient
     private Clock clock;
 
-    protected Performance(){}
+    public Performance(){}
 
     public Performance(Portfolio portfolio, Clock clock){
         this.portfolio = portfolio;
@@ -244,7 +244,7 @@ public class Performance {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(portfolioId, enabled, equitySeries, coreEquitySeries, pnlSeries, drawdownSeries, drawdownPercentSeries, equity, coreEquity, lowEquity, highEquity, pnl, drawdown, drawdownPercent, currentDrawdown, currentRunUp);
+        return Objects.hashCode(portfolioId, enabled, equity, coreEquity, lowEquity, highEquity, pnl, drawdown, drawdownPercent, currentDrawdown, currentRunUp, equitySeries, coreEquitySeries, pnlSeries, drawdownSeries, drawdownPercentSeries);
     }
 
     @Override
