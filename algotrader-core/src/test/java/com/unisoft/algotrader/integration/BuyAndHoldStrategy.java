@@ -76,7 +76,7 @@ public class BuyAndHoldStrategy extends Strategy {
     }
 
     public void sendOrder(Order order){
-        order.portfolioId = portfolio.portfolioId;
+        order.portfolioId = portfolio.getPortfolioId();
         order.strategyId = strategyId;
         orderManager.onOrder(order);
     }

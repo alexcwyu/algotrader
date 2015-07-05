@@ -47,7 +47,7 @@ class CountDownStrategy extends Strategy {
             //order.limitPrice = bar.close;
             order.strategyId = this.strategyId;
             order.execProviderId = "Simulated";
-            order.portfolioId = portfolio.portfolioId;
+            order.portfolioId = portfolio.getPortfolioId();
             order.ordType = OrdType.Market;
             order.side = Side.Buy;
             order.ordQty = 500;
@@ -67,7 +67,7 @@ class CountDownStrategy extends Strategy {
             order.limitPrice = data.bar.close;
             order.strategyId = this.strategyId;
             order.execProviderId = "Simulated";
-            order.portfolioId = portfolio.portfolioId;
+            order.portfolioId = portfolio.getPortfolioId();
             order.side = Side.Buy;
             order.ordQty = 500;
             OrderManager.INSTANCE.onOrder(order);

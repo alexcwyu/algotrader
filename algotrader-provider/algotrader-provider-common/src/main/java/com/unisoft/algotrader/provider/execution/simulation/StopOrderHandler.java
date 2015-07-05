@@ -19,12 +19,12 @@ public class StopOrderHandler extends AbstractStopLimitOrderHandler {
         switch (order.side) {
             case Buy:
             case BuyMinus:
-                if (price >= order.stopPx)
+                if (price >= order.stopPrice)
                     return simulationExecutor.execute(order, price, qty);
                 break;
             case Sell:
             case SellShort:
-                if (price <= order.stopPx)
+                if (price <= order.stopPrice)
                     return simulationExecutor.execute(order, price, qty);
                 break;
             default:
@@ -39,13 +39,13 @@ public class StopOrderHandler extends AbstractStopLimitOrderHandler {
         switch (order.side) {
             case Buy:
             case BuyMinus:
-                if (bar.high >= order.stopPx)
-                    return simulationExecutor.execute(order, order.stopPx, qty);
+                if (bar.high >= order.stopPrice)
+                    return simulationExecutor.execute(order, order.stopPrice, qty);
                 break;
             case Sell:
             case SellShort:
-                if (bar.low <= order.stopPx)
-                    return simulationExecutor.execute(order, order.stopPx, qty);
+                if (bar.low <= order.stopPrice)
+                    return simulationExecutor.execute(order, order.stopPrice, qty);
                 break;
             default:
                 throw new UnsupportedOperationException("Order side is not supported : " + order.side);

@@ -25,7 +25,7 @@ public class Transaction {
     public String comment;
     public Currency currency;
 
-    public List<Commission> commissions = Lists.newArrayList();
+    public List<Double> commissions = Lists.newArrayList();
 
     public double pnl;
     public double realizedPnl;
@@ -36,7 +36,7 @@ public class Transaction {
         this.orderId = order.orderId;
         this.strategyId = order.strategyId;
         this.side = order.side;
-        this.price = order.avgPx;
+        this.price = order.avgPrice;
         this.qty = order.filledQty;
         this.comment = order.text;
 
@@ -50,7 +50,7 @@ public class Transaction {
         this.execId = execId;
 
         this.side = executionReport.side;
-        this.price = executionReport.avgPx;
+        this.price = executionReport.avgPrice;
         this.qty = executionReport.filledQty;
         this.comment = executionReport.text;
 
@@ -82,13 +82,11 @@ public class Transaction {
 
 
     public double transactionCost(){
-//        double cost = 0.0;
-//        for (Commission commission : commissions){
-//            cost += commission.apply(this);
-//        }
-//        return cost;
-
-        throw new UnsupportedOperationException("");
+        double cost = 0.0;
+        for (double commission : commissions){
+            cost += commission;
+        }
+        return cost;
     }
 
     public double cashFlow(){

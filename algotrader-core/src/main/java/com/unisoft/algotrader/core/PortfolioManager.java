@@ -24,7 +24,7 @@ public class PortfolioManager {
     private Map<String, Portfolio> map = Maps.newConcurrentMap();
 
     public void add(Portfolio portfolio){
-        map.put(portfolio.portfolioId, portfolio);
+        map.put(portfolio.getPortfolioId(), portfolio);
     }
 
     public Portfolio get(String portfolioId){

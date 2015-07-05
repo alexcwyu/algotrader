@@ -1,7 +1,5 @@
 package com.unisoft.algotrader.persistence.cassandra.spring;
 
-import com.unisoft.algotrader.core.Currency;
-
 import java.io.Serializable;
 
 /**

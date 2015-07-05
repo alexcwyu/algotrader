@@ -148,7 +148,7 @@ public class SimulationExecutorIntegrationTest {
         assertNotFilled(strategy.executionReports.get(0));
         ExecutionReport report = strategy.executionReports.get(1);
         assertEquals(1000, report.filledQty, 0.0);
-        assertEquals(91, report.avgPx, 0.0);
+        assertEquals(91, report.avgPrice, 0.0);
 
 
         Order order2 = createOrder(Side.Sell, OrdType.Market, 900,0);
@@ -157,7 +157,7 @@ public class SimulationExecutorIntegrationTest {
         assertNotFilled(strategy.executionReports.get(2));
         ExecutionReport report2 = strategy.executionReports.get(3);
         assertEquals(900, report2.filledQty, 0.0);
-        assertEquals(89, report2.avgPx, 0.0);
+        assertEquals(89, report2.avgPrice, 0.0);
 
     }
 
@@ -183,7 +183,7 @@ public class SimulationExecutorIntegrationTest {
         ExecutionReport report = strategy.executionReports.get(1);
 
         assertEquals(1000, report.filledQty, 0.0);
-        assertEquals(90, report.avgPx, 0.0);
+        assertEquals(90, report.avgPrice, 0.0);
     }
 
 
@@ -201,7 +201,7 @@ public class SimulationExecutorIntegrationTest {
         assertNotFilled(strategy.executionReports.get(0));
         ExecutionReport report = strategy.executionReports.get(1);
         assertEquals(1000, report.filledQty, 0.0);
-        assertEquals(89.5, report.avgPx, 0.0);
+        assertEquals(89.5, report.avgPrice, 0.0);
 
 
         Order order2 = createOrder(Side.Sell, OrdType.Market, 900,0);
@@ -210,7 +210,7 @@ public class SimulationExecutorIntegrationTest {
         assertNotFilled(strategy.executionReports.get(2));
         ExecutionReport report2 = strategy.executionReports.get(3);
         assertEquals(900, report2.filledQty, 0.0);
-        assertEquals(89.5, report2.avgPx, 0.0);
+        assertEquals(89.5, report2.avgPrice, 0.0);
     }
 
     @Test
@@ -232,7 +232,7 @@ public class SimulationExecutorIntegrationTest {
         assertTrue(strategy.executionReports.size() == 2);
         ExecutionReport report = strategy.executionReports.get(1);
         assertEquals(1000, report.filledQty, 0.0);
-        assertEquals(95, report.avgPx, 0.0);
+        assertEquals(95, report.avgPrice, 0.0);
     }
 
     @Test
@@ -250,7 +250,7 @@ public class SimulationExecutorIntegrationTest {
         assertNotFilled(strategy.executionReports.get(0));
         ExecutionReport report = strategy.executionReports.get(1);
         assertEquals(1000, report.filledQty, 0.0);
-        assertEquals(92, report.avgPx, 0.0);
+        assertEquals(92, report.avgPrice, 0.0);
 
 
         Order order2 = createOrder(Side.Sell, OrdType.Market, 900,0);
@@ -259,7 +259,7 @@ public class SimulationExecutorIntegrationTest {
         assertNotFilled(strategy.executionReports.get(2));
         ExecutionReport report2 = strategy.executionReports.get(3);
         assertEquals(900, report2.filledQty, 0.0);
-        assertEquals(92, report2.avgPx, 0.0);
+        assertEquals(92, report2.avgPrice, 0.0);
     }
 
     @Test
@@ -281,7 +281,7 @@ public class SimulationExecutorIntegrationTest {
         assertTrue(strategy.executionReports.size() == 2);
         ExecutionReport report = strategy.executionReports.get(1);
         assertEquals(1000, report.filledQty, 0.0);
-        assertEquals(500, report.avgPx, 0.0);
+        assertEquals(500, report.avgPrice, 0.0);
     }
 
     @Test
@@ -305,7 +305,7 @@ public class SimulationExecutorIntegrationTest {
     private void assertNotFilled(ExecutionReport report){
         assertEquals(OrdStatus.New, report.ordStatus);
         assertEquals(0.0, report.filledQty, 0.0);
-        assertEquals(0.0, report.avgPx, 0.0);
+        assertEquals(0.0, report.avgPrice, 0.0);
     }
 
 

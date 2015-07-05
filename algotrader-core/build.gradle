@@ -27,6 +27,7 @@ dependencies {
     compile "com.google.guava:guava:${guavaVersion}"
     compile "uk.co.real-logic:Agrona:${agronaVersion}"
     compile "net.sf.trove4j:trove4j:${trove4jVersion}"
+    compile 'org.apache.commons:commons-lang3:3.4'
 
     //logging
     //compile "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"

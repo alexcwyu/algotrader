@@ -2,8 +2,6 @@ package com.unisoft.algotrader.persistence.cassandra.objectmapper;
 
 import com.datastax.driver.mapping.annotations.UDT;
 
-import java.util.List;
-
 /**
  * Created by alex on 6/28/15.
  */

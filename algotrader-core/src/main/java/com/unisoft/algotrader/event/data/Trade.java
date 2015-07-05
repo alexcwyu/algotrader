@@ -1,10 +1,12 @@
 package com.unisoft.algotrader.event.data;
 
 import com.google.common.base.Objects;
+import org.msgpack.annotation.Message;
 
 /**
  * Created by alex on 4/12/15.
  */
+@Message
 public class Trade extends MarketData<Trade> {
     public double price = 0.0;
     public int size = 0;

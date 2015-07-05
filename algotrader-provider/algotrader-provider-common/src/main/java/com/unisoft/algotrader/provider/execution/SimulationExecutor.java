@@ -80,13 +80,13 @@ public class SimulationExecutor extends MultiEventProcessor implements Execution
         report.ordType = order.ordType;
         report.side = order.side;
         report.limitPrice = order.limitPrice;
-        report.stopPx = order.stopPx;
+        report.stopPrice = order.stopPrice;
         report.ordQty = order.ordQty;
 
 
         report.filledQty = order.filledQty + qty;
         if (report.filledQty != 0) {
-            report.avgPx = (order.avgPx * order.filledQty + price * qty) / (order.filledQty + qty);
+            report.avgPrice = (order.avgPrice * order.filledQty + price * qty) / (order.filledQty + qty);
         }
 
         report.lastQty = qty;

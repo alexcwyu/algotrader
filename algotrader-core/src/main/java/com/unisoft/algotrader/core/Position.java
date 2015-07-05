@@ -1,11 +1,14 @@
 package com.unisoft.algotrader.core;
 
+import com.datastax.driver.mapping.annotations.Transient;
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.event.data.Bar;
 import com.unisoft.algotrader.event.data.MarketDataHandler;
 import com.unisoft.algotrader.event.data.Quote;
 import com.unisoft.algotrader.event.data.Trade;
 import com.unisoft.algotrader.event.execution.Order;
+import org.msgpack.annotation.Ignore;
 
 import java.util.List;
 
@@ -13,25 +16,30 @@ import java.util.List;
  * Created by alex on 5/25/15.
  */
 public class Position implements MarketDataHandler {
+    private int instId;
+    private String portfolioId;
 
-    public final Instrument instrument;
-    public final Portfolio portfolio;
+    private double marketPrice;
+    private double qtyBought;
+    private double qtySold;
+    private double qtySoldShort;
 
-    public double marketPrice;
-    public double qtyBought;
-    public double qtySold;
-    public double qtySoldShort;
-
-    public double margin;
-    public double debt;
+    protected double margin;
+    protected double debt;
 
     private List<Order> orderList = Lists.newArrayList();
     private int fPnLTransactionIndex = -1;
     private double qtyLeft;
 
-    public Position(Instrument instrument, Portfolio portfolio){
-        this.instrument = instrument;
-        this.portfolio = portfolio;
+    @Ignore
+    @Transient
+    private Instrument instrument;
+
+    protected Position(){}
+
+    public Position(int instId, String portfolioId){
+        this.instId = instId;
+        this.portfolioId = portfolioId;
     }
 
     public double amount(){
@@ -59,8 +67,16 @@ public class Position implements MarketDataHandler {
         return marketPrice;
     }
 
+    private Instrument instrument() {
+        if (instrument == null) {
+            instrument = InstrumentManager.INSTANCE.get(instId);
+        }
+        return instrument;
+    }
+
     public double getValue(){
-        if (instrument != null && instrument.factor != 0){
+        Instrument instrument =instrument();
+        if (instrument() != null && instrument.factor != 0){
             return price() * amount() * instrument.factor;
         }
         return price() * amount();
@@ -75,6 +91,7 @@ public class Position implements MarketDataHandler {
     public double value(){
         return price() * qty();
     }
+
 
 
     public void add(Order order) {
@@ -106,7 +123,7 @@ public class Position implements MarketDataHandler {
                 realizedCost += qtyFilled * (order.transactionCost() / order.filledQty
                         + firstOrder.transactionCost() / firstOrder.filledQty);
 
-                pnl += (order.avgPx - firstOrder.avgPx) * qtyFilled * -sign;
+                pnl += (order.avgPrice - firstOrder.avgPrice) * qtyFilled * -sign;
 
                 while (qty > totalFilled && index < orderList.size()) {
                     Order nextOrder = orderList.get(index);
@@ -117,7 +134,7 @@ public class Position implements MarketDataHandler {
 
                         realizedCost += qtyFilled * (order.transactionCost() / order.filledQty + nextOrder.transactionCost() / nextOrder.filledQty);
 
-                        pnl += (order.avgPx - nextOrder.avgPx) * qtyFilled * -sign;
+                        pnl += (order.avgPrice - nextOrder.avgPrice) * qtyFilled * -sign;
 
                         totalFilled += nextOrder.filledQty;
                     }
@@ -134,6 +151,7 @@ public class Position implements MarketDataHandler {
             }
 
         }
+        Instrument instrument =instrument();
         if (instrument.factor != 0)
             pnl *= instrument.factor;
 
@@ -288,7 +306,7 @@ public class Position implements MarketDataHandler {
 
         double qtyFilled = qtyLeft;
 
-        pnl += (price - orderList.get(fPnLTransactionIndex).avgPx) - qtyFilled * -sign;
+        pnl += (price - orderList.get(fPnLTransactionIndex).avgPrice) - qtyFilled * -sign;
 
         int index = fPnLTransactionIndex +1;
 
@@ -296,10 +314,11 @@ public class Position implements MarketDataHandler {
 
             Order order = orderList.get(index);
 
-            pnl += (price - order.avgPx) * qtyFilled * -sign;
+            pnl += (price - order.avgPrice) * qtyFilled * -sign;
 
             index++;
         }
+        Instrument instrument =instrument();
         if (instrument.factor != 0)
             pnl *= instrument.factor;
 
@@ -324,4 +343,124 @@ public class Position implements MarketDataHandler {
     public void onTrade(Trade trade) {
         this.marketPrice = trade.price;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Position)) return false;
+        Position position = (Position) o;
+        return Objects.equal(instId, position.instId) &&
+                Objects.equal(marketPrice, position.marketPrice) &&
+                Objects.equal(qtyBought, position.qtyBought) &&
+                Objects.equal(qtySold, position.qtySold) &&
+                Objects.equal(qtySoldShort, position.qtySoldShort) &&
+                Objects.equal(margin, position.margin) &&
+                Objects.equal(debt, position.debt) &&
+                Objects.equal(fPnLTransactionIndex, position.fPnLTransactionIndex) &&
+                Objects.equal(qtyLeft, position.qtyLeft) &&
+                Objects.equal(portfolioId, position.portfolioId) &&
+                Objects.equal(orderList, position.orderList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(instId, portfolioId, marketPrice, qtyBought, qtySold, qtySoldShort, margin, debt, orderList, fPnLTransactionIndex, qtyLeft);
+    }
+
+    public int getInstId() {
+        return instId;
+    }
+
+    public void setInstId(int instId) {
+        this.instId = instId;
+    }
+
+    public String getPortfolioId() {
+        return portfolioId;
+    }
+
+    public void setPortfolioId(String portfolioId) {
+        this.portfolioId = portfolioId;
+    }
+
+    public double getMarketPrice() {
+        return marketPrice;
+    }
+
+    public void setMarketPrice(double marketPrice) {
+        this.marketPrice = marketPrice;
+    }
+
+    public double getQtyBought() {
+        return qtyBought;
+    }
+
+    public void setQtyBought(double qtyBought) {
+        this.qtyBought = qtyBought;
+    }
+
+    public double getQtySold() {
+        return qtySold;
+    }
+
+    public void setQtySold(double qtySold) {
+        this.qtySold = qtySold;
+    }
+
+    public double getQtySoldShort() {
+        return qtySoldShort;
+    }
+
+    public void setQtySoldShort(double qtySoldShort) {
+        this.qtySoldShort = qtySoldShort;
+    }
+
+    public double getMargin() {
+        return margin;
+    }
+
+    public void setMargin(double margin) {
+        this.margin = margin;
+    }
+
+    public double getDebt() {
+        return debt;
+    }
+
+    public void setDebt(double debt) {
+        this.debt = debt;
+    }
+
+    public List<Order> getOrderList() {
+        return orderList;
+    }
+
+    public void setOrderList(List<Order> orderList) {
+        this.orderList = orderList;
+    }
+
+    public int getfPnLTransactionIndex() {
+        return fPnLTransactionIndex;
+    }
+
+    public void setfPnLTransactionIndex(int fPnLTransactionIndex) {
+        this.fPnLTransactionIndex = fPnLTransactionIndex;
+    }
+
+    public double getQtyLeft() {
+        return qtyLeft;
+    }
+
+    public void setQtyLeft(double qtyLeft) {
+        this.qtyLeft = qtyLeft;
+    }
+
+    public Instrument getInstrument() {
+        return instrument;
+    }
+
+    public void setInstrument(Instrument instrument) {
+        this.instrument = instrument;
+    }
+
 }

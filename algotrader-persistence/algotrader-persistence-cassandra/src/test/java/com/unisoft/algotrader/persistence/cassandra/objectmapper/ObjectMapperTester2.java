@@ -1,20 +1,13 @@
 package com.unisoft.algotrader.persistence.cassandra.objectmapper;
 
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.UDTValue;
-import com.datastax.driver.core.UserType;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 import com.datastax.driver.mapping.Result;
 import com.datastax.driver.mapping.annotations.Accessor;
 import com.datastax.driver.mapping.annotations.Param;
 import com.datastax.driver.mapping.annotations.Query;
-import com.google.common.collect.ImmutableList;
 import com.unisoft.algotrader.core.Currency;
 import com.unisoft.algotrader.core.Exchange;
-import com.unisoft.algotrader.core.Instrument;
-
-import java.util.UUID;
 
 /**
  * Created by alex on 6/28/15.

@@ -167,7 +167,7 @@ public class TrailingStopOrderHandlerTest {
         order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.TrailingStop, 50, 0, 10);
         trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 99, 500);
         handler.process(order, trade);
-        //trade.price + order.stoppx = 99 + 10 = 109
+        //trade.price + order.stopPrice = 99 + 10 = 109
         assertEquals(109, order.trailingStopExecPrice, 0.0);
         //price move up, trailing close remaining unchanged
         trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 88, 80);
@@ -181,7 +181,7 @@ public class TrailingStopOrderHandlerTest {
         order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.TrailingStop, 50, 0, 10);
         trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 99, 500);
         handler.process(order, trade);
-        //trade.price + order.stoppx = 99 - 10 = 89
+        //trade.price + order.stopPrice = 99 - 10 = 89
         assertEquals(89, order.trailingStopExecPrice, 0.0);
         //price move up, trailing close remaining unchanged
         trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 108, 80);
@@ -196,7 +196,7 @@ public class TrailingStopOrderHandlerTest {
         order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.TrailingStop, 50, 0, 10);
         trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 99, 500);
         handler.process(order, trade);
-        //trade.price + order.stoppx = 99 + 10 = 109
+        //trade.price + order.stopPrice = 99 + 10 = 109
         assertEquals(109, order.trailingStopExecPrice, 0.0);
         //price move up, trailing close remaining unchanged
         trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 108, 80);
@@ -210,7 +210,7 @@ public class TrailingStopOrderHandlerTest {
         order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.TrailingStop, 50, 0, 10);
         trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 99, 500);
         handler.process(order, trade);
-        //trade.price + order.stoppx = 99 - 10 = 89
+        //trade.price + order.stopPrice = 99 - 10 = 89
         assertEquals(89, order.trailingStopExecPrice, 0.0);
         //price move up, trailing close remaining unchanged
         trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.instId, 88, 80);

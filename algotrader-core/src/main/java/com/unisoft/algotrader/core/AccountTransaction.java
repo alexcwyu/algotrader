@@ -1,52 +1,122 @@
 package com.unisoft.algotrader.core;
 
+import com.datastax.driver.mapping.annotations.Field;
+import com.datastax.driver.mapping.annotations.UDT;
+import com.google.common.base.Objects;
+
 /**
  * Created by alex on 5/29/15.
  */
+
+@UDT(name = "account_transaction", keyspace = "trading")
 public class AccountTransaction {
-    public int accountTransactionid;
-    public long datetime;
-    public Currency currency;
-    public double value;
 
-    public long transcationId;
-    public long orderId;
+    @Field(name = "order_id")
+    private long orderId;
 
-    public String text;
+    private long datetime;
 
-    public AccountTransaction(){
+    @Field(name = "ccy_id")
+    private String ccyId;
+    private double value;
+    private String text;
+
+    protected AccountTransaction(){
 
     }
 
-    public AccountTransaction(long datetime, Currency currency, double value, String text){
-        this.currency = currency;
+    public AccountTransaction(Currency currency, double value){
+        this(System.currentTimeMillis(), currency.getCcyId(), value, "");
+    }
+
+    public AccountTransaction(long orderId, long datetime, Currency currency, double value, String text){
+        this(orderId, datetime, currency.getCcyId(), value, text);
+    }
+
+    public AccountTransaction(long orderId, long datetime, String ccyId, double value, String text){
+        this.orderId = orderId;
+        this.datetime = datetime;
+        this.ccyId = ccyId;
         this.value = value;
         this.text = text;
     }
 
-
-    public AccountTransaction(long datetime, Currency currency, double value){
-        this(datetime, currency, value, "");
+    public AccountTransaction(long datetime, Currency currency, double value, String text){
+        this(datetime, currency.getCcyId(), value, text);
     }
 
-    public AccountTransaction(Currency currency, double value){
-        this(System.currentTimeMillis(), currency, value, "");
-    }
-
-    public AccountTransaction(Currency currency, double value, String text){
-        this(System.currentTimeMillis(), currency, value, text);
+    public AccountTransaction(long datetime, String ccyId, double value, String text){
+        this.datetime = datetime;
+        this.ccyId = ccyId;
+        this.value = value;
+        this.text = text;
     }
 
     @Override
     public String toString() {
         return "AccountTransaction{" +
-                "accountTransactionid=" + accountTransactionid +
-                ", datetime=" + datetime +
-                ", currency=" + currency +
-                ", value=" + value +
-                ", transcationId=" + transcationId +
-                ", orderId=" + orderId +
-                ", text='" + text + '\'' +
+                ", getDatetime=" + datetime +
+                ", currency=" + ccyId +
+                ", getValue=" + value +
+                ", getOrderId=" + orderId +
+                ", getText='" + text + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AccountTransaction)) return false;
+        AccountTransaction that = (AccountTransaction) o;
+        return Objects.equal(datetime, that.datetime) &&
+                Objects.equal(value, that.value) &&
+                Objects.equal(orderId, that.orderId) &&
+                Objects.equal(ccyId, that.ccyId) &&
+                Objects.equal(text, that.text);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode( datetime, ccyId, value, orderId, text);
+    }
+
+    public long getOrderId() {
+        return orderId;
+    }
+
+    public long getDatetime() {
+        return datetime;
+    }
+
+    public String getCcyId() {
+        return ccyId;
+    }
+
+    public double getValue() {
+        return value;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setOrderId(long orderId) {
+        this.orderId = orderId;
+    }
+
+    public void setDatetime(long datetime) {
+        this.datetime = datetime;
+    }
+
+    public void setCcyId(String ccyId) {
+        this.ccyId = ccyId;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

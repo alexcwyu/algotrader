@@ -14,28 +14,12 @@ public class Exchange{
     private String exchId;
     private String name;
 
+    protected Exchange(){
+    }
+
     public Exchange(String exchId, String name) {
         this.exchId = exchId;
         this.name = name;
-    }
-
-    public static class ExchangeBuilder {
-        private String exchId;
-        private String name;
-
-        public ExchangeBuilder setExchId(String exchId) {
-            this.exchId = exchId;
-            return this;
-        }
-
-        public ExchangeBuilder setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public Exchange createExchange() {
-            return new Exchange(exchId, name);
-        }
     }
 
     public String getExchId() {

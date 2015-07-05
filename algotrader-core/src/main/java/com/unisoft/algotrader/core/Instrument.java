@@ -2,7 +2,7 @@ package com.unisoft.algotrader.core;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
-import org.springframework.data.annotation.Transient;
+import org.msgpack.annotation.OrdinalEnum;
 import org.springframework.data.cassandra.mapping.Column;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
@@ -118,10 +118,12 @@ public class Instrument{
 //     */
     public static final class InstId {
 
-        public final String symbol;
-        public final String exchId;
+        public String symbol;
+        public String exchId;
 
         public final static String SEPARATOR = "@";
+
+        protected InstId(){}
 
         public InstId(String symbol, String exchId) {
             this.symbol = symbol;
@@ -180,12 +182,12 @@ public class Instrument{
 //                    '}';
 //        }
 //    }
-
+    @OrdinalEnum
     public static enum PutCall{
         Put,
         Call
     }
-
+    @OrdinalEnum
     public static enum InstType{
         Stock,
         Future,

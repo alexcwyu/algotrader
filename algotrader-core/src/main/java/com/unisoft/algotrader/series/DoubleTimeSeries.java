@@ -1,21 +1,17 @@
 package com.unisoft.algotrader.series;
 
+import com.datastax.driver.mapping.annotations.Field;
+import com.datastax.driver.mapping.annotations.UDT;
 import com.google.common.base.Objects;
-import gnu.trove.list.TDoubleList;
-import gnu.trove.list.TLongList;
-import gnu.trove.list.array.TDoubleArrayList;
-import gnu.trove.list.array.TLongArrayList;
-import gnu.trove.map.TLongIntMap;
-import gnu.trove.map.hash.TLongIntHashMap;
+import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
  * Created by alex on 5/25/15.
  */
+
+@UDT(name = "double_time_series", keyspace = "trading")
 public class DoubleTimeSeries implements Iterable<DoubleTimeSeries.Tuple>{
 
 
@@ -78,13 +74,25 @@ public class DoubleTimeSeries implements Iterable<DoubleTimeSeries.Tuple>{
         }
     }
 
+//
+//    private TLongArrayList datetimeSeries = new TLongArrayList();
+//    private TLongIntHashMap indexMap = new TLongIntHashMap();
+//    private TDoubleArrayList dataSeries = new TDoubleArrayList();
 
-    private TLongList datetimeSeries = new TLongArrayList();
-    private TLongIntMap index = new TLongIntHashMap();
-    private TDoubleList dataSeries = new TDoubleArrayList();
 
+    @Field(name = "datetime_series")
+    private List<Long> datetimeSeries = new ArrayList();
 
+    @Field(name = "index_map")
+    private Map<Long, Integer> indexMap = new HashMap();
+
+    @Field(name = "data_series")
+    private List<Double> dataSeries = new ArrayList();
+
+    @Field(name = "curr_idx")
     private int currIdx = 0;
+
+    @Field(name = "curr_time")
     private long currTime = Long.MIN_VALUE;
 
     public void add(Date date, double data){
@@ -94,7 +102,7 @@ public class DoubleTimeSeries implements Iterable<DoubleTimeSeries.Tuple>{
     public void add(long date, double data){
         assert date >= currTime;
         currTime = date;
-        index.put(date, currIdx++);
+        indexMap.put(date, currIdx++);
         dataSeries.add(data);
         datetimeSeries.add(date);
 
@@ -119,7 +127,7 @@ public class DoubleTimeSeries implements Iterable<DoubleTimeSeries.Tuple>{
     }
 
     protected int getIndex(long datetime){
-        return index.containsKey(datetime) ? index.get(datetime) : -1;
+        return indexMap.containsKey(datetime) ? indexMap.get(datetime) : -1;
     }
 
     public double ago(int ago){
@@ -128,7 +136,9 @@ public class DoubleTimeSeries implements Iterable<DoubleTimeSeries.Tuple>{
     }
 
     public long [] index(){
-        long [] idx =index.keys();
+        List<Long> idxList = new ArrayList<>(indexMap.keySet());
+        long[] idx = ArrayUtils.toPrimitive(idxList.toArray(new Long[idxList.size()]));
+       //long [] idx =indexMap.keySet().toArray();
         Arrays.sort(idx);
         return idx;
     }
@@ -171,6 +181,67 @@ public class DoubleTimeSeries implements Iterable<DoubleTimeSeries.Tuple>{
 
 
     public Iterator<Tuple> iterator() {
-        return new DoubleTimeSeriesIterator(datetimeSeries.toArray(), dataSeries.toArray());
+        long[] date = ArrayUtils.toPrimitive(datetimeSeries.toArray(new Long[datetimeSeries.size()]));
+        double[] data = ArrayUtils.toPrimitive(dataSeries.toArray(new Double[dataSeries.size()]));
+        return new DoubleTimeSeriesIterator(date, data);
+
+        //return new DoubleTimeSeriesIterator(datetimeSeries.toArray(), dataSeries.toArray());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DoubleTimeSeries)) return false;
+        DoubleTimeSeries tuples = (DoubleTimeSeries) o;
+        return Objects.equal(currIdx, tuples.currIdx) &&
+                Objects.equal(currTime, tuples.currTime) &&
+                Objects.equal(datetimeSeries, tuples.datetimeSeries) &&
+                Objects.equal(indexMap, tuples.indexMap) &&
+                Objects.equal(dataSeries, tuples.dataSeries);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(datetimeSeries, indexMap, dataSeries, currIdx, currTime);
+    }
+
+    public List<Long> getDatetimeSeries() {
+        return datetimeSeries;
+    }
+
+    public void setDatetimeSeries(List<Long> datetimeSeries) {
+        this.datetimeSeries = datetimeSeries;
+    }
+
+    public Map<Long, Integer> getIndexMap() {
+        return indexMap;
+    }
+
+    public void setIndexMap(Map<Long, Integer> indexMap) {
+        this.indexMap = indexMap;
+    }
+
+    public List<Double> getDataSeries() {
+        return dataSeries;
+    }
+
+    public void setDataSeries(List<Double> dataSeries) {
+        this.dataSeries = dataSeries;
+    }
+
+    public int getCurrIdx() {
+        return currIdx;
+    }
+
+    public void setCurrIdx(int currIdx) {
+        this.currIdx = currIdx;
+    }
+
+    public long getCurrTime() {
+        return currTime;
+    }
+
+    public void setCurrTime(long currTime) {
+        this.currTime = currTime;
     }
 }

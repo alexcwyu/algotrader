@@ -1,37 +1,38 @@
 package com.unisoft.algotrader.core;
 
 import com.google.common.base.Objects;
-import org.springframework.data.cassandra.mapping.Column;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
 /**
  * Created by alex on 5/17/15.
  */
-
 @Table("currency")
 public class Currency{
     @PrimaryKey("ccy_id")
     private String ccyId;
     private String name;
 
-    public static Currency USD = new CurrencyBuilder().setCcyId("USD").setName("US Dollar").createCurrency();
-    public static Currency HKD = new CurrencyBuilder().setCcyId("HKD").setName("HK Dollar").createCurrency();
+    public static Currency USD = new Currency("USD","US Dollar");
+    public static Currency HKD = new Currency("HKD","HK Dollar");
 
 
-    public static Currency CNY = new CurrencyBuilder().setCcyId("CNY").setName("Chinese Yuan Renminbi").createCurrency();
-    public static Currency RUR = new CurrencyBuilder().setCcyId("RUR").setName("Russian Ruble").createCurrency();
-    public static Currency AUD = new CurrencyBuilder().setCcyId("AUD").setName("Australian Dollar").createCurrency();
-    public static Currency NZD = new CurrencyBuilder().setCcyId("NZD").setName("New Zealand Dollar").createCurrency();
-    public static Currency CAD = new CurrencyBuilder().setCcyId("CAD").setName("Canadian Dollar").createCurrency();
+    public static Currency CNY = new Currency("CNY","Chinese Yuan Renminbi");
+    public static Currency RUR = new Currency("RUR","Russian Ruble");
+    public static Currency AUD = new Currency("AUD","Australian Dollar");
+    public static Currency NZD = new Currency("NZD","New Zealand Dollar");
+    public static Currency CAD = new Currency("CAD","Canadian Dollar");
 
-    public static Currency GBP = new CurrencyBuilder().setCcyId("GBP").setName("British Pound").createCurrency();
-    public static Currency EUR = new CurrencyBuilder().setCcyId("EUR").setName("Euro").createCurrency();
-    public static Currency JPY = new CurrencyBuilder().setCcyId("JPY").setName("Japanese Yen").createCurrency();
-    public static Currency CHF = new CurrencyBuilder().setCcyId("CHF").setName("Swiss Franc").createCurrency();
-    public static Currency SGD = new CurrencyBuilder().setCcyId("SGD").setName("Singapore Dollar").createCurrency();
-    public static Currency KRW = new CurrencyBuilder().setCcyId("KRW").setName("Korean (South) Won").createCurrency();
-    public static Currency INR = new CurrencyBuilder().setCcyId("KRW").setName("Indian Rupee").createCurrency();
+    public static Currency GBP = new Currency("GBP","British Pound");
+    public static Currency EUR = new Currency("EUR","Euro");
+    public static Currency JPY = new Currency("JPY","Japanese Yen");
+    public static Currency CHF = new Currency("CHF","Swiss Franc");
+    public static Currency SGD = new Currency("SGD","Singapore Dollar");
+    public static Currency KRW = new Currency("KRW","Korean (South) Won");
+    public static Currency INR = new Currency("KRW","Indian Rupee");
+
+    protected Currency(){
+    }
 
     public Currency(String ccyId, String name) {
         super();
@@ -39,25 +40,6 @@ public class Currency{
         this.name = name;
 
         CurrencyManager.INSTANCE.add(this);
-    }
-
-    public static class CurrencyBuilder {
-        private String ccyId;
-        private String name;
-
-        public CurrencyBuilder setCcyId(String ccyId) {
-            this.ccyId = ccyId;
-            return this;
-        }
-
-        public CurrencyBuilder setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public Currency createCurrency() {
-            return new Currency(ccyId, name);
-        }
     }
 
     @Override

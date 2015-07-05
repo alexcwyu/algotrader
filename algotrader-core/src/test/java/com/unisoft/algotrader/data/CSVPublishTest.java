@@ -63,11 +63,11 @@ public class CSVPublishTest {
 
 
         CountDownLatch latch = new CountDownLatch(5);
-        CountDownStrategy strategy1 = new CountDownStrategy("strategy1", portfolio.portfolioId, latch, 10, marketDataRB);
-        CountDownStrategy strategy2 = new CountDownStrategy("strategy2", portfolio.portfolioId, latch, 10, marketDataRB);
-        CountDownStrategy strategy3 = new CountDownStrategy("strategy3", portfolio.portfolioId, latch, 10, marketDataRB);
-        CountDownStrategy strategy4 = new CountDownStrategy("strategy4", portfolio.portfolioId, latch, 10, marketDataRB);
-        CountDownStrategy strategy5 = new CountDownStrategy("strategy5", portfolio.portfolioId, latch, 10, marketDataRB);
+        CountDownStrategy strategy1 = new CountDownStrategy("strategy1", portfolio.getPortfolioId(), latch, 10, marketDataRB);
+        CountDownStrategy strategy2 = new CountDownStrategy("strategy2", portfolio.getPortfolioId(), latch, 10, marketDataRB);
+        CountDownStrategy strategy3 = new CountDownStrategy("strategy3", portfolio.getPortfolioId(), latch, 10, marketDataRB);
+        CountDownStrategy strategy4 = new CountDownStrategy("strategy4", portfolio.getPortfolioId(), latch, 10, marketDataRB);
+        CountDownStrategy strategy5 = new CountDownStrategy("strategy5", portfolio.getPortfolioId(), latch, 10, marketDataRB);
 
         ExecutorService executor = Executors.newFixedThreadPool(8, DaemonThreadFactory.INSTANCE);
         executor.submit(strategy1);

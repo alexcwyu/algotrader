@@ -2,21 +2,14 @@ package com.unisoft.algotrader.persistence.cassandra.spring.ref;
 
 import com.datastax.driver.core.*;
 import com.datastax.driver.core.exceptions.DriverException;
-import com.datastax.driver.core.schemabuilder.UDTType;
-import com.unisoft.algotrader.core.Currency;
 import com.unisoft.algotrader.core.Instrument;
-import org.springframework.cassandra.core.PreparedStatementBinder;
 import org.springframework.cassandra.core.PreparedStatementCreator;
 import org.springframework.cassandra.core.RowMapper;
 import org.springframework.data.cassandra.core.CassandraOperations;
 
 import javax.inject.Inject;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static com.datastax.driver.core.querybuilder.QueryBuilder.*;
-import static com.datastax.driver.core.querybuilder.QueryBuilder.bindMarker;
 
 /**
  * Created by alex on 6/30/15.

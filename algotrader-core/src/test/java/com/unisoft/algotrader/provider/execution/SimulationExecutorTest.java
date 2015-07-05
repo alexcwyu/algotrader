@@ -48,9 +48,9 @@ public class SimulationExecutorTest {
         assertEquals(OrdStatus.New, er.ordStatus);
         assertEquals(0.0, er.filledQty, 0.0);
     }
-    private void assertFill(ExecutionReport er, double avgPx, double qty){
+    private void assertFill(ExecutionReport er, double avgPrice, double qty){
         assertEquals(OrdStatus.Filled, er.ordStatus);
-        assertEquals(avgPx, er.avgPx, 0.0);
+        assertEquals(avgPrice, er.avgPrice, 0.0);
         assertEquals(qty, er.filledQty, 0.0);
     }
 
@@ -260,7 +260,7 @@ public class SimulationExecutorTest {
         assertEquals(1, reportList.size());
         ExecutionReport lastReport = reportList.get(0);
         assertNotFill(lastReport);
-        assertEquals(quote.ask + order.stopPx, order.trailingStopExecPrice, 0.0);
+        assertEquals(quote.ask + order.stopPrice, order.trailingStopExecPrice, 0.0);
 
 
         quote = createQuote(SampleEventFactory.testInstrument.instId, 77, 78, 98000, 98000);
@@ -270,7 +270,7 @@ public class SimulationExecutorTest {
         reportList = argument.getAllValues();
         lastReport = reportList.get(reportList.size()-1);
         assertNotFill(lastReport);
-        assertEquals(quote.ask + order.stopPx, order.trailingStopExecPrice, 0.0);
+        assertEquals(quote.ask + order.stopPrice, order.trailingStopExecPrice, 0.0);
     }
 
 
@@ -288,7 +288,7 @@ public class SimulationExecutorTest {
         assertEquals(1, reportList.size());
         ExecutionReport lastReport = reportList.get(0);
         assertNotFill(lastReport);
-        assertEquals(quote.ask + order.stopPx, order.trailingStopExecPrice, 0.0);
+        assertEquals(quote.ask + order.stopPrice, order.trailingStopExecPrice, 0.0);
 
 
         quote = createQuote(SampleEventFactory.testInstrument.instId, 99, 100, 98000, 98000);

@@ -4,16 +4,14 @@ package com.unisoft.algotrader.persistence.cassandra.spring.ref;
  * Created by alex on 6/28/15.
  */
 
-import com.datastax.driver.core.*;
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.Session;
 import com.google.common.collect.ImmutableSet;
-import com.unisoft.algotrader.core.Exchange;
 import com.unisoft.algotrader.core.Instrument;
 import com.unisoft.algotrader.persistence.cassandra.spring.BaseIntegrationTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.not;

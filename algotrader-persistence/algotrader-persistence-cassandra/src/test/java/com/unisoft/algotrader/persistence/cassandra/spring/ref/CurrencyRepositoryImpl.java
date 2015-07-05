@@ -8,10 +8,6 @@ import javax.inject.Inject;
 
 import static com.datastax.driver.core.querybuilder.QueryBuilder.bindMarker;
 import static com.datastax.driver.core.querybuilder.QueryBuilder.insertInto;
-import static com.datastax.driver.core.querybuilder.QueryBuilder.ttl;
-import static com.datastax.driver.core.querybuilder.QueryBuilder.update;
-
-import com.datastax.driver.core.Session;
 
 /**
  * Created by alex on 6/30/15.

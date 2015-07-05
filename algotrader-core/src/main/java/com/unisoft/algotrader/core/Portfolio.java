@@ -1,22 +1,12 @@
 package com.unisoft.algotrader.core;
 
+import com.datastax.driver.mapping.annotations.*;
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.clock.Clock;
-import com.unisoft.algotrader.event.Event;
-import com.unisoft.algotrader.event.data.Bar;
-import com.unisoft.algotrader.event.data.MarketDataHandler;
-import com.unisoft.algotrader.event.data.Quote;
-import com.unisoft.algotrader.event.data.Trade;
-import com.unisoft.algotrader.event.execution.ExecutionHandler;
-import com.unisoft.algotrader.event.execution.ExecutionReport;
 import com.unisoft.algotrader.event.execution.Order;
-import com.unisoft.algotrader.event.execution.OrderHandler;
-import com.unisoft.algotrader.threading.MultiEventProcessor;
-import com.unisoft.algotrader.threading.disruptor.waitstrategy.NoWaitStrategy;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.msgpack.annotation.Ignore;
 
 import java.util.List;
 import java.util.Map;
@@ -24,78 +14,82 @@ import java.util.Map;
 /**
  * Created by alex on 5/23/15.
  */
-public class Portfolio extends MultiEventProcessor implements MarketDataHandler, OrderHandler, ExecutionHandler {
+@Table(keyspace = "trading", name = "portfolios")
+public class Portfolio{
 
-    private static final Logger LOG = LogManager.getLogger(Portfolio.class);
+    @PartitionKey
+    @Column(name ="portfolio_id")
+    private String portfolioId;
+
+    @Column(name ="account_name")
+    private String accountName;
+
+    @Frozen
+    private Performance performance;
+
+    @Ignore
+    @Transient
+    private Map<Integer, Position> positions = Maps.newHashMap();
+
+    @Ignore
+    @Transient
+    private List<Order> orderList = Lists.newArrayList();
+
+    @Ignore
+    @Transient
     private Account account;
 
-    public final String portfolioId;
-
-    public final Performance performance;
-
-    private final Map<Integer, Position> positions = Maps.newHashMap();
-
-    private final List<Order> orderList = Lists.newArrayList();
-
-    public Portfolio(String portfolioId, RingBuffer... providers){
-        this(portfolioId, new Account("test"), providers);
+    protected Portfolio(){
     }
 
-    public Portfolio(String portfolioId, Account account, RingBuffer... providers){
-        super(new NoWaitStrategy(),  null, providers);
-        this.account = account;
+    public Portfolio(String portfolioId){
+        this(portfolioId, AccountManager.DEFAULT_ACCOUNT.getName());
+    }
+
+    public Portfolio(String portfolioId, String accountName){
+        this.accountName = accountName;
         this.portfolioId = portfolioId;
         this.performance = new Performance(this, Clock.CLOCK);
-
-        PortfolioManager.INSTANCE.add(this);
     }
 
-    @Override
-    public void onEvent(Event event) {
-        event.on(this);
+    public Performance getPerformance(){
+        return performance;
     }
 
-    @Override
-    public void onBar(Bar bar) {
-        if (positions.containsKey(bar.instId)){
-            positions.get(bar.instId).onBar(bar);
+    public Map<Integer, Position> getPositions(){
+        return positions;
+    }
+
+    public List<Order> getOrderList(){
+        return orderList;
+    }
+
+    private Account getAccount(){
+        if (account == null){
+            account = AccountManager.INSTANCE.get(accountName);
         }
-        logStatus();
-    }
-
-    @Override
-    public void onQuote(Quote quote) {
-        if (positions.containsKey(quote.instId)){
-            positions.get(quote.instId).onQuote(quote);
-        }
-        logStatus();
-    }
-
-    @Override
-    public void onTrade(Trade trade) {
-        if (positions.containsKey(trade.instId)){
-            positions.get(trade.instId).onTrade(trade);
-        }
-        logStatus();
-    }
-
-
-    private void logStatus(){
-        LOG.info("positionValue={}, value={}, cashFlow={}, netCashFlow={}, totalEquity={}",
-                positionValue(), value(), cashFlow(), netCashFlow(), totalEquity());
-    }
-    @Override
-    public void onExecutionReport(ExecutionReport executionReport) {
-    }
-
-    @Override
-    public void onOrder(Order order) {
-        add(order);
-        logStatus();
+        return account;
     }
 
     public void add(Order order){
 
+        double newDebt = addOrderToPosition(order);
+
+        Currency currency = CurrencyManager.INSTANCE.get(InstrumentManager.INSTANCE.get(order.instId).ccyId);
+        AccountTransaction accountTransaction = new AccountTransaction(order.orderId, order.dateTime,
+                currency, order.cashFlow() + newDebt, order.text);
+        getAccount().add(accountTransaction);
+        performance.valueChanged();
+
+    }
+
+    public void reconstruct(){
+        for(Order order : orderList){
+            addOrderToPosition(order);
+        }
+    }
+
+    private double addOrderToPosition(Order order){
         Position position = positions.get(order.instId);
 
         boolean positionOpened = false;
@@ -113,9 +107,7 @@ public class Portfolio extends MultiEventProcessor implements MarketDataHandler,
 
         if (position == null){
             // open position
-
-            Instrument instrument = InstrumentManager.INSTANCE.get(order.instId);
-            position = new Position(instrument, this);
+            position = new Position(order.instId, portfolioId);
             position.add(order);
 
             positions.put(order.instId, position);
@@ -130,7 +122,7 @@ public class Portfolio extends MultiEventProcessor implements MarketDataHandler,
                 openDebt  = orderDebt;
 
                 position.margin = orderMargin;
-                position.debt   = orderDebt;
+                position.debt = orderDebt;
             }
 
             positionOpened = true;
@@ -181,7 +173,7 @@ public class Portfolio extends MultiEventProcessor implements MarketDataHandler,
                     else {
                         // close and open
                         double qty = order.filledQty - position.qty();
-                        double value = qty * order.avgPx;
+                        double value = qty * order.avgPrice;
 
                         Instrument instrument = InstrumentManager.INSTANCE.get(order.instId);
                         if (instrument.factor != 0)
@@ -212,14 +204,7 @@ public class Portfolio extends MultiEventProcessor implements MarketDataHandler,
 
         orderList.add(order);
 
-        Currency currency = CurrencyManager.INSTANCE.get(InstrumentManager.INSTANCE.get(order.instId).ccyId);
-        AccountTransaction accountTransaction = new AccountTransaction(order.dateTime,
-                currency, order.cashFlow() + openDebt - closeDebt, order.text);
-        accountTransaction.orderId = order.orderId;
-        //accountTransaction.transcationId = transaction.instId;
-        account.add(accountTransaction);
-        performance.valueChanged();
-
+        return openDebt - closeDebt;
     }
 
     public double positionValue(){
@@ -228,7 +213,7 @@ public class Portfolio extends MultiEventProcessor implements MarketDataHandler,
 
 
     public double accountValue(){
-        return account.value();
+        return getAccount().value();
     }
 
     public double value(){
@@ -277,4 +262,53 @@ public class Portfolio extends MultiEventProcessor implements MarketDataHandler,
         return positions.values().stream().mapToDouble(position -> position.netCashFlow()).sum();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Portfolio)) return false;
+        Portfolio portfolio = (Portfolio) o;
+        return Objects.equal(portfolioId, portfolio.portfolioId) &&
+                Objects.equal(accountName, portfolio.accountName) &&
+                Objects.equal(performance, portfolio.performance) &&
+                Objects.equal(positions, portfolio.positions) &&
+                Objects.equal(orderList, portfolio.orderList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(portfolioId, accountName, performance, positions, orderList);
+    }
+
+    public String getPortfolioId() {
+        return portfolioId;
+    }
+
+    public void setPortfolioId(String portfolioId) {
+        this.portfolioId = portfolioId;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public void setPerformance(Performance performance) {
+        this.performance = performance;
+    }
+
+
+    public void setPositions(Map<Integer, Position> positions) {
+        this.positions = positions;
+    }
+
+    public void setOrderList(List<Order> orderList) {
+        this.orderList = orderList;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 }

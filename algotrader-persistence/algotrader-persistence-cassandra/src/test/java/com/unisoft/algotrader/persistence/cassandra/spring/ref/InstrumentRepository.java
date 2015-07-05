@@ -5,7 +5,6 @@ package com.unisoft.algotrader.persistence.cassandra.spring.ref;
  */
 
 import com.unisoft.algotrader.core.Instrument;
-import com.unisoft.algotrader.persistence.cassandra.spring.BaseRepository;
 import org.springframework.data.repository.Repository;
 
 public interface InstrumentRepository extends Repository<Instrument, Integer>, InstrumentRepositoryCustom {

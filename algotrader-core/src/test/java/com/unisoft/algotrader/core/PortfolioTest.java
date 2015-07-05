@@ -31,6 +31,7 @@ public class PortfolioTest {
 
     private Account account;
     private Portfolio portfolio;
+    private PortfolioProcessor portfolioProcessor;
 
     @BeforeClass
     public static void init() {
@@ -42,7 +43,9 @@ public class PortfolioTest {
     @Before
     public void setup() {
         account = new Account("Test Account", "Test",  Currency.HKD, 1_000_000);
-        portfolio = new Portfolio(portfolioId, account);
+        AccountManager.INSTANCE.add(account);
+        portfolio = new Portfolio(portfolioId, account.getName());
+        portfolioProcessor = new PortfolioProcessor(portfolio);
     }
 
     @Test
@@ -124,18 +127,18 @@ public class PortfolioTest {
 
 
         //(-20000 * 2) + 2000 * 50 + 88 * 10
-        portfolio.onTrade(new Trade(instrument3.instId, System.currentTimeMillis(), 88, 1));
+        portfolioProcessor.onTrade(new Trade(instrument3.instId, System.currentTimeMillis(), 88, 1));
         assertEquals(60880, portfolio.positionValue(), 0.0);
 
         //(-21000 * 2) + 2000 * 50 + 88 * 10
-        portfolio.onQuote(new Quote(instrument1.instId, System.currentTimeMillis(), 19000, 21000, 1, 1));
+        portfolioProcessor.onQuote(new Quote(instrument1.instId, System.currentTimeMillis(), 19000, 21000, 1, 1));
         assertEquals(58880, portfolio.positionValue(), 0.0);
 
         //(-21000 * 2) + 2000 * 50 + 87 * 10
-        portfolio.onQuote(new Quote(instrument3.instId, System.currentTimeMillis(), 87, 89, 1, 1));
+        portfolioProcessor.onQuote(new Quote(instrument3.instId, System.currentTimeMillis(), 87, 89, 1, 1));
         assertEquals(58870, portfolio.positionValue(), 0.0);
 
-        portfolio.onBar(new Bar(instrument2.instId, 60, System.currentTimeMillis(), 2000, 2100, 1900, 2050, 1, 1));
+        portfolioProcessor.onBar(new Bar(instrument2.instId, 60, System.currentTimeMillis(), 2000, 2100, 1900, 2050, 1, 1));
 
         //(-21000 * 2) + 2050 * 50 + 87 * 10
         assertEquals(61370, portfolio.positionValue(), 0.0);
@@ -165,18 +168,18 @@ public class PortfolioTest {
 
 
         //(-20000 * 2) + 2000 * 50 + 88 * 10
-        portfolio.onTrade(new Trade(instrument3.instId, System.currentTimeMillis(), 88, 1));
+        portfolioProcessor.onTrade(new Trade(instrument3.instId, System.currentTimeMillis(), 88, 1));
         assertEquals(60880, portfolio.positionValue(), 0.0);
 
         //(-21000 * 2) + 2000 * 50 + 88 * 10
-        portfolio.onQuote(new Quote(instrument1.instId, System.currentTimeMillis(), 19000, 21000, 1, 1));
+        portfolioProcessor.onQuote(new Quote(instrument1.instId, System.currentTimeMillis(), 19000, 21000, 1, 1));
         assertEquals(58880, portfolio.positionValue(), 0.0);
 
         //(-21000 * 2) + 2000 * 50 + 87 * 10
-        portfolio.onQuote(new Quote(instrument3.instId, System.currentTimeMillis(), 87, 89, 1, 1));
+        portfolioProcessor.onQuote(new Quote(instrument3.instId, System.currentTimeMillis(), 87, 89, 1, 1));
         assertEquals(58870, portfolio.positionValue(), 0.0);
 
-        portfolio.onBar(new Bar(instrument2.instId, 60, System.currentTimeMillis(), 2000, 2100, 1900, 2050, 1, 1));
+        portfolioProcessor.onBar(new Bar(instrument2.instId, 60, System.currentTimeMillis(), 2000, 2100, 1900, 2050, 1, 1));
 
         //(-21000 * 2) + 2050 * 50 + 87 * 10
         assertEquals(61370, portfolio.positionValue(), 0.0);
@@ -260,7 +263,7 @@ public class PortfolioTest {
         Order order = limitOrder(instrument2.instId, 2000, 50, Side.Buy);
         ExecutionReport er = executionReport(order);
         order.add(er);
-        order.commissions.add(new Commission.AbsoluteCommission(1000));
+        order.commissions.add(new Commission.AbsoluteCommission(1000).apply(order));
         portfolio.add(order);
         assertEquals(-101000, portfolio.cashFlow(), 0.0);
 
@@ -268,7 +271,7 @@ public class PortfolioTest {
         order = limitOrder(instrument1.instId, 20000, 2, Side.Sell);
         er = executionReport(order);
         order.add(er);
-        order.commissions.add(new Commission.PerShareCommission(50));
+        order.commissions.add(new Commission.PerShareCommission(50).apply(order));
         portfolio.add(order);
         assertEquals(-61100, portfolio.cashFlow(), 0.0);
     }
@@ -337,19 +340,19 @@ public class PortfolioTest {
     }
 
     private void logDebug(Account account, Portfolio portfolio, String stage){
-        LOG.info("stage = {}, account.value={}, portfolio.positionValue={}, portfolio.value={}, portfolio.cashFlow={}, portfolio.netCashFlow={}, portfolio.totalEquity={}",
+        LOG.info("stage = {}, account.getValue={}, portfolio.positionValue={}, portfolio.getValue={}, portfolio.cashFlow={}, portfolio.netCashFlow={}, portfolio.totalEquity={}",
                 stage, account.value(), portfolio.positionValue(), portfolio.value(), portfolio.cashFlow(), portfolio.netCashFlow(), portfolio.totalEquity());
     }
 
 
-    private Order limitOrder(int instId, double limitPx, double qty, Side side){
+    private Order limitOrder(int instId, double limitPrice, double qty, Side side){
 
         Order order = new Order();
         order.orderId = ordId ++ ;
         order.instId = instId;
         order.dateTime = System.currentTimeMillis();
         order.ordType = OrdType.Limit;
-        order.limitPrice = limitPx;
+        order.limitPrice = limitPrice;
         order.ordQty = qty;
         order.side = side;
         order.tif = TimeInForce.Day;
@@ -362,7 +365,7 @@ public class PortfolioTest {
         return executionReport(order, order.limitPrice, order.ordQty);
     }
 
-    private ExecutionReport executionReport(Order order, double fillPx, double filledQty){
+    private ExecutionReport executionReport(Order order, double fillPrice, double filledQty){
 
         ExecutionReport er = new ExecutionReport();
         er.orderId = order.orderId;
@@ -377,10 +380,10 @@ public class PortfolioTest {
         er.tif = order.tif;
 
         er.filledQty = filledQty;
-        er.avgPx = fillPx;
+        er.avgPrice = fillPrice;
 
         er.lastQty = filledQty;
-        er.lastPrice = fillPx;
+        er.lastPrice = fillPrice;
         er.ordStatus = OrdStatus.Filled;
 
         return er;

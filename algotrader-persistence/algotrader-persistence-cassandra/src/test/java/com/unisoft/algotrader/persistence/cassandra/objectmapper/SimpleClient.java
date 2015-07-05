@@ -4,12 +4,7 @@ package com.unisoft.algotrader.persistence.cassandra.objectmapper;
  * Created by alex on 6/28/15.
  */
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Host;
-import com.datastax.driver.core.Metadata;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.Session;
+import com.datastax.driver.core.*;
 
 public class SimpleClient {
     private Cluster cluster;

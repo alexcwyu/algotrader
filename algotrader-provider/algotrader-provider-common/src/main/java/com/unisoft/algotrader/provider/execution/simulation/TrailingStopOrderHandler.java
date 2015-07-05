@@ -37,7 +37,7 @@ public class TrailingStopOrderHandler extends AbstractStopLimitOrderHandler {
         switch (order.side) {
             case Buy:
             case BuyMinus:
-                order.trailingStopExecPrice = Math.min(order.trailingStopExecPrice, price + order.stopPx);
+                order.trailingStopExecPrice = Math.min(order.trailingStopExecPrice, price + order.stopPrice);
 
                 if (price >= order.trailingStopExecPrice) {
                     return simulationExecutor.execute(order, price, qty);
@@ -45,7 +45,7 @@ public class TrailingStopOrderHandler extends AbstractStopLimitOrderHandler {
                 break;
             case Sell:
             case SellShort:
-                order.trailingStopExecPrice = Math.max(order.trailingStopExecPrice, price - order.stopPx);
+                order.trailingStopExecPrice = Math.max(order.trailingStopExecPrice, price - order.stopPrice);
 
                 if (price <= order.trailingStopExecPrice) {
                     return simulationExecutor.execute(order, price, qty);
@@ -64,7 +64,7 @@ public class TrailingStopOrderHandler extends AbstractStopLimitOrderHandler {
         switch (order.side) {
             case Buy:
             case BuyMinus:
-                order.trailingStopExecPrice = Math.min(order.trailingStopExecPrice, bar.low + order.stopPx);
+                order.trailingStopExecPrice = Math.min(order.trailingStopExecPrice, bar.low + order.stopPrice);
 
                 if (bar.high >= order.trailingStopExecPrice) {
                     return simulationExecutor.execute(order, order.trailingStopExecPrice, qty);
@@ -72,7 +72,7 @@ public class TrailingStopOrderHandler extends AbstractStopLimitOrderHandler {
                 break;
             case Sell:
             case SellShort:
-                order.trailingStopExecPrice = Math.max(order.trailingStopExecPrice, bar.high - order.stopPx);
+                order.trailingStopExecPrice = Math.max(order.trailingStopExecPrice, bar.high - order.stopPrice);
 
                 if (bar.low <= order.trailingStopExecPrice) {
                     return simulationExecutor.execute(order, order.trailingStopExecPrice, qty);

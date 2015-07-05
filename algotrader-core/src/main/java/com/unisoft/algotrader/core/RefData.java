@@ -1,8 +1,6 @@
 package com.unisoft.algotrader.core;
 
 import com.datastax.driver.mapping.annotations.ClusteringColumn;
-import com.datastax.driver.mapping.annotations.Column;
-import com.datastax.driver.mapping.annotations.PartitionKey;
 
 /**
  * Created by alex on 6/29/15.

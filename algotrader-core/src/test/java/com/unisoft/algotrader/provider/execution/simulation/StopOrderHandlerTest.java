@@ -90,13 +90,13 @@ public class StopOrderHandlerTest {
     public void test_fill_on_bar(){
         order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Buy, OrdType.Stop, 50, 0, 92);
         handler.process(order, bar);
-        verify(executor, times(1)).execute(order, order.stopPx, order.ordQty);
+        verify(executor, times(1)).execute(order, order.stopPrice, order.ordQty);
 
         reset(executor);
 
         order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.instId, Side.Sell, OrdType.Stop, 100, 0, 90);
         handler.process(order, bar);
-        verify(executor, times(1)).execute(order, order.stopPx, order.ordQty);
+        verify(executor, times(1)).execute(order, order.stopPrice, order.ordQty);
     }
 
 

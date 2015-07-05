@@ -21,7 +21,7 @@ public class StopLimitOrderHandler extends AbstractStopLimitOrderHandler {
             case Buy:
             case BuyMinus:
                 if (!order.stopLimitReady) {
-                    if (price >= order.stopPx) {
+                    if (price >= order.stopPrice) {
                         order.stopLimitReady = true;
                     }
                 } else {
@@ -34,7 +34,7 @@ public class StopLimitOrderHandler extends AbstractStopLimitOrderHandler {
             case SellShort:
 
                 if (!order.stopLimitReady) {
-                    if (price <= order.stopPx) {
+                    if (price <= order.stopPrice) {
                         order.stopLimitReady = true;
                     }
                 } else {
@@ -56,7 +56,7 @@ public class StopLimitOrderHandler extends AbstractStopLimitOrderHandler {
             case Buy:
             case BuyMinus:
                 if (!order.stopLimitReady) {
-                    if (bar.high >= order.stopPx) {
+                    if (bar.high >= order.stopPrice) {
                         order.stopLimitReady = true;
                     }
                 } else {
@@ -69,7 +69,7 @@ public class StopLimitOrderHandler extends AbstractStopLimitOrderHandler {
             case SellShort:
 
                 if (!order.stopLimitReady) {
-                    if (bar.low <= order.stopPx) {
+                    if (bar.low <= order.stopPrice) {
                         order.stopLimitReady = true;
                     }
                 } else {

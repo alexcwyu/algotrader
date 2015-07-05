@@ -48,7 +48,9 @@ public class BackTester {
         InstrumentManager.INSTANCE.add(instrument);
 
         this.account = new Account("TestAccount", "TestAccount", currency, initialValue);
-        this.portfolio = new Portfolio("TestPortfolio", account);
+
+        AccountManager.INSTANCE.add(account);
+        this.portfolio = new Portfolio("TestPortfolio", account.getName());
         PortfolioManager.INSTANCE.add(portfolio);
 
         this.strategy = strategy;
@@ -100,7 +102,7 @@ public class BackTester {
     }
 
     public Performance getPerformance(){
-        return portfolio.performance;
+        return portfolio.getPerformance();
     }
 
 }

@@ -31,6 +31,7 @@ public class BackTestIntegrationTest {
         RingBuffer<MarketDataContainer> marketDataRB;
         Account account;
         Portfolio portfolio;
+        PortfolioProcessor portfolioProcessor;
         BuyAndHoldStrategy strategy;
         OrderManager orderManager;
         SimulationExecutor simulationExecutor;
@@ -46,12 +47,14 @@ public class BackTestIntegrationTest {
 
         account = new Account("Test Account", "Test Account", Currency.USD, 1000000);
 
-        portfolio = new Portfolio("Test Portfolio", account, marketDataRB);
+        AccountManager.INSTANCE.add(account);
+        portfolio = new Portfolio("Test Portfolio", account.getName());
+        portfolioProcessor = new PortfolioProcessor(portfolio, marketDataRB);
         PortfolioManager.INSTANCE.add(portfolio);
 
         orderManager = new OrderManager();
 
-        strategy = new BuyAndHoldStrategy(orderManager, portfolio.portfolioId, marketDataRB);
+        strategy = new BuyAndHoldStrategy(orderManager, portfolio.getPortfolioId(), marketDataRB);
 
 
         simulationExecutor = new SimulationExecutor(orderManager, instrumentDataManager, marketDataRB);
@@ -62,7 +65,7 @@ public class BackTestIntegrationTest {
         StrategyManager.INSTANCE.register(strategy);
 
         executor.submit(strategy);
-        executor.submit(portfolio);
+        executor.submit(portfolioProcessor);
         executor.submit(simulationExecutor);
         executor.submit(instrumentDataManager);
 

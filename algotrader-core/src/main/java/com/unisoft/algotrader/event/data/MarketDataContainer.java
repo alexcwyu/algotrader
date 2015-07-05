@@ -2,12 +2,14 @@ package com.unisoft.algotrader.event.data;
 
 import com.google.common.base.Objects;
 import com.lmax.disruptor.EventFactory;
+import org.msgpack.annotation.Message;
 
 import java.util.BitSet;
 
 /**
  * Created by alex on 4/12/15.
  */
+@Message
 public class MarketDataContainer extends MarketData<MarketDataContainer> {
 
     public static final int BAR_BIT = 1;
