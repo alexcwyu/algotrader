@@ -43,7 +43,7 @@ public class Portfolio{
     }
 
     public Portfolio(String portfolioId){
-        this(portfolioId, AccountManager.DEFAULT_ACCOUNT.getName());
+        this(portfolioId, AccountManager.DEFAULT_ACCOUNT.getAccountId());
     }
 
     public Portfolio(String portfolioId, String accountName){

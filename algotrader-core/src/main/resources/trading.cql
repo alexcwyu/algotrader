@@ -22,11 +22,11 @@ CREATE TYPE account_position (
 
 
 CREATE TABLE IF NOT EXISTS accounts (
+  account_id text,
   name text,
-  description text,
   ccy_id text,
   positions map<text, frozen<account_position>>,
-  PRIMARY KEY (name)
+  PRIMARY KEY (account_id)
 );
 
 

@@ -48,7 +48,7 @@ public class BackTestIntegrationTest {
         account = new Account("Test Account", "Test Account", Currency.USD, 1000000);
 
         AccountManager.INSTANCE.add(account);
-        portfolio = new Portfolio("Test Portfolio", account.getName());
+        portfolio = new Portfolio("Test Portfolio", account.getAccountId());
         portfolioProcessor = new PortfolioProcessor(portfolio, marketDataRB);
         PortfolioManager.INSTANCE.add(portfolio);
 

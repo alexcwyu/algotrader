@@ -44,7 +44,7 @@ public class PortfolioTest {
     public void setup() {
         account = new Account("Test Account", "Test",  Currency.HKD, 1_000_000);
         AccountManager.INSTANCE.add(account);
-        portfolio = new Portfolio(portfolioId, account.getName());
+        portfolio = new Portfolio(portfolioId, account.getAccountId());
         portfolioProcessor = new PortfolioProcessor(portfolio);
     }
 

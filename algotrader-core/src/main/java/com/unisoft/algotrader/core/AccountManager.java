@@ -26,7 +26,7 @@ public class AccountManager {
     private Map<String, Account> map = Maps.newConcurrentMap();
 
     public void add(Account account){
-        map.put(account.getName(), account);
+        map.put(account.getAccountId(), account);
     }
 
     public Account get(String name){

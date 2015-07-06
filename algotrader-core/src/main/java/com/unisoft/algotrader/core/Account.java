@@ -16,9 +16,10 @@ import java.util.Map;
 @Table(keyspace = "trading", name = "accounts")
 public class Account {
     @PartitionKey
-    private String name;
+    @Column(name ="account_id")
+    private String accountId;
 
-    private String description;
+    private String name;
 
     @Column(name ="ccy_id")
     private String ccyId;
@@ -31,34 +32,34 @@ public class Account {
 
     }
 
-    public Account(String name){
-        this(name,"", CurrencyManager.DEFAULT_CURRENCY);
+    public Account(String accountId){
+        this(accountId,"", CurrencyManager.DEFAULT_CURRENCY);
     }
 
-    public Account(String name, Currency currency){
-        this(name,"", currency);
+    public Account(String accountId, Currency currency){
+        this(accountId,"", currency);
     }
 
-    public Account(String name, String description, Currency currency){
-        this.name        = name;
-        this.description = description;
+    public Account(String accountId, String name, Currency currency){
+        this.accountId = accountId;
+        this.name = name;
         this.ccyId    = currency.getCcyId();
     }
 
-    public Account(String name, String description, Currency currency, double initialValue){
-        this.name        = name;
-        this.description = description;
+    public Account(String accountId, String name, Currency currency, double initialValue){
+        this.accountId = accountId;
+        this.name = name;
         this.ccyId    = currency.getCcyId();
 
         deposit(System.currentTimeMillis(), currency, initialValue, "Initial Deposit");
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setCcyId(String ccyId) {
@@ -73,12 +74,12 @@ public class Account {
         return ccyId;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public String getName() {
         return name;
+    }
+
+    public String getAccountId() {
+        return accountId;
     }
 
     public Map<String, AccountPosition> getAccountPositions() {
@@ -133,23 +134,23 @@ public class Account {
         if (this == o) return true;
         if (!(o instanceof Account)) return false;
         Account account = (Account) o;
-        return Objects.equal(name, account.name) &&
-                Objects.equal(description, account.description) &&
+        return Objects.equal(accountId, account.accountId) &&
+                Objects.equal(name, account.name) &&
                 Objects.equal(ccyId, account.ccyId) &&
                 Objects.equal(accountPositions, account.accountPositions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(name, description, ccyId, accountPositions);
+        return Objects.hashCode(accountId, name, ccyId, accountPositions);
     }
 
     @Override
     public String toString() {
         return "Account{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", currency=" + ccyId +
+                "accountId='" + accountId + '\'' +
+                ", name='" + name + '\'' +
+                ", ccyId=" + ccyId +
                 ", accountPositions=" + accountPositions +
                 '}';
     }
