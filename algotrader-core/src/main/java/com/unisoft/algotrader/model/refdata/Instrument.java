@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Created by alex on 5/17/15.
  */
-@Table(keyspace = "refdata", name = "instrument")
+@Table(keyspace = "refdata", name = "instruments")
 public class Instrument{
 
     @PartitionKey

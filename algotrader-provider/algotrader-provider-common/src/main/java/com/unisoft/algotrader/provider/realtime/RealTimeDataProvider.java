@@ -1,6 +1,6 @@
-package com.unisoft.algotrader.provider.csv.realtime;
+package com.unisoft.algotrader.provider.realtime;
 
-import com.unisoft.algotrader.provider.csv.DataProvider;
+import com.unisoft.algotrader.provider.DataProvider;
 
 /**
  * Created by alex on 5/17/15.

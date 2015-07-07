@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.series;
+package com.unisoft.algotrader.model.series;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

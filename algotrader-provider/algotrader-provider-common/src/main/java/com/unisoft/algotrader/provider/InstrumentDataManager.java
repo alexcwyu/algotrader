@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.provider.csv;
+package com.unisoft.algotrader.provider;
 
 import com.google.common.collect.Maps;
 import com.lmax.disruptor.RingBuffer;

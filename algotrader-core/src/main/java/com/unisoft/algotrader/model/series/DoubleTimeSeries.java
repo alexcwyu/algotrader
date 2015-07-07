@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.series;
+package com.unisoft.algotrader.model.series;
 
 import com.datastax.driver.mapping.annotations.Field;
 import com.datastax.driver.mapping.annotations.UDT;

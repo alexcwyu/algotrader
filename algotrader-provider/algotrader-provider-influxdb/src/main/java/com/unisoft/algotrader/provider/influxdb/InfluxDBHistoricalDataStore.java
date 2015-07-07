@@ -5,8 +5,8 @@ import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
 import com.unisoft.algotrader.provider.SubscriptionKey;
-import com.unisoft.algotrader.provider.csv.DataStore;
-import com.unisoft.algotrader.provider.csv.historical.HistoricalDataProvider;
+import com.unisoft.algotrader.provider.DataStore;
+import com.unisoft.algotrader.provider.historical.HistoricalDataProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

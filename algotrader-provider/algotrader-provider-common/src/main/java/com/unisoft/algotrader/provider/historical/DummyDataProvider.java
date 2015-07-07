@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.provider.csv.historical;
+package com.unisoft.algotrader.provider.historical;
 
 import com.unisoft.algotrader.model.event.EventBus;
 import com.unisoft.algotrader.provider.SubscriptionKey;

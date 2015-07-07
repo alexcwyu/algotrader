@@ -6,7 +6,7 @@ import com.datastax.driver.mapping.annotations.Transient;
 import com.datastax.driver.mapping.annotations.UDT;
 import com.google.common.base.Objects;
 import com.unisoft.algotrader.clock.Clock;
-import com.unisoft.algotrader.series.DoubleTimeSeries;
+import com.unisoft.algotrader.model.series.DoubleTimeSeries;
 import org.msgpack.annotation.Ignore;
 
 /**

@@ -9,8 +9,8 @@ import com.google.common.base.Objects;
 /**
  * Created by alex on 5/17/15.
  */
-@Table(keyspace = "refdata", name = "currency")
-public class Currency implements RefData{
+@Table(keyspace = "refdata", name = "currencies")
+public class Currency{
 
     @PartitionKey
     @Column(name ="ccy_id" )
@@ -83,64 +83,5 @@ public class Currency implements RefData{
 
     public void setName(String name) {
         this.name = name;
-    }
-
-
-
-    @ClusteringColumn(value = 0)
-    private long businesstime = 0;
-
-    @ClusteringColumn(value = 1)
-    private long systemtime = 0;
-
-    private boolean active = true;
-
-    @Column(name ="updated_user" )
-    private String updatedUser;
-
-    @Column(name ="updated_reason" )
-    private String updatedReason;
-
-
-
-
-    public long getBusinesstime() {
-        return businesstime;
-    }
-
-    public void setBusinesstime(long businesstime) {
-        this.businesstime = businesstime;
-    }
-
-    public long getSystemtime() {
-        return systemtime;
-    }
-
-    public void setSystemtime(long systemtime) {
-        this.systemtime = systemtime;
-    }
-
-    public String getUpdatedUser() {
-        return updatedUser;
-    }
-
-    public void setUpdatedUser(String updatedUser) {
-        this.updatedUser = updatedUser;
-    }
-
-    public String getUpdatedReason() {
-        return updatedReason;
-    }
-
-    public void setUpdatedReason(String updatedReason) {
-        this.updatedReason = updatedReason;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 }

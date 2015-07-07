@@ -9,6 +9,8 @@ import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Exchange;
 import com.unisoft.algotrader.model.refdata.Instrument;
 
+import java.util.List;
+
 /**
  * Created by alex on 7/7/15.
  */
@@ -20,6 +22,7 @@ public class CassandraRefDataStore implements RefDataStore{
     private MappingManager mappingManager;
     private CurrencyAccessor currencyAccessor;
     private ExchangeAccessor exchangeAccessor;
+    private InstrumentAccessor instrumentAccessor;
 
     public CassandraRefDataStore() {
         this(Cluster.builder().withProtocolVersion(ProtocolVersion.V3).addContactPoint("localhost").build(), "refdata");
@@ -35,42 +38,55 @@ public class CassandraRefDataStore implements RefDataStore{
         this.mappingManager = new MappingManager(session);
         this.currencyAccessor = mappingManager.createAccessor(CurrencyAccessor.class);
         this.exchangeAccessor = mappingManager.createAccessor(ExchangeAccessor.class);
+        this.instrumentAccessor = mappingManager.createAccessor(InstrumentAccessor.class);
     }
 
     public void saveCurrency(Currency currency) {
         Mapper<Currency> mapper = mappingManager.mapper(Currency.class);
-        long time = System.currentTimeMillis();
-        currency.setBusinesstime(time);
-        currency.setSystemtime(time);
         mapper.save(currency);
     }
 
     public Currency getCurrency(String ccyId) {
-        return currencyAccessor.getOne(ccyId);
+        Mapper<Currency> mapper = mappingManager.mapper(Currency.class);
+        return mapper.get(ccyId);
+        //return currencyAccessor.get(ccyId);
     }
+
+    @Override
+    public List<Currency> getAllCurrencies() {
+        return currencyAccessor.getAll().all();
+    }
+
 
     public void saveExchange(Exchange exchange) {
         Mapper<Exchange> mapper = mappingManager.mapper(Exchange.class);
-        long time = System.currentTimeMillis();
-        exchange.setBusinesstime(time);
-        exchange.setSystemtime(time);
         mapper.save(exchange);
     }
 
     public Exchange getExchange(String exchId) {
-        return exchangeAccessor.getOne(exchId);
+        //return exchangeAccessor.get(exchId);
+        Mapper<Exchange> mapper = mappingManager.mapper(Exchange.class);
+        return mapper.get(exchId);
     }
+
+    @Override
+    public List<Exchange> getAllExchanges() {
+        return exchangeAccessor.getAll().all();
+    }
+
 
     public void saveInstrument(Instrument instrument) {
         Mapper<Instrument> mapper = mappingManager.mapper(Instrument.class);
-//            long time = System.currentTimeMillis();
-//            instrument.setBusinessTime(time);
-//            instrument.setSystemtime(time);
         mapper.save(instrument);
     }
 
     public Instrument getInstrument(int instId) {
+        //return instrumentAccessor.get(instId);
         Mapper<Instrument> mapper = mappingManager.mapper(Instrument.class);
         return mapper.get(instId);
+    }
+    @Override
+    public List<Instrument> getAllInstruments() {
+        return instrumentAccessor.getAll().all();
     }
 }

@@ -12,15 +12,12 @@ import com.unisoft.algotrader.model.refdata.Currency;
  */
 @Accessor
 public interface CurrencyAccessor {
-    @Query("SELECT * FROM refdata.currency WHERE ccy_id = :ccy_id LIMIT 1")
-    Currency getOne(@Param("ccy_id") String ccy_id);
+    @Query("SELECT * FROM refdata.currencies WHERE ccy_id = :ccy_id")
+    Currency get(@Param("ccy_id") String ccy_id);
 
-    @Query("SELECT * FROM refdata.currency WHERE ccy_id = :ccy_id")
-    Result<Currency> get(@Param("ccy_id") String ccy_id);
-
-    @Query("SELECT * FROM refdata.currency")
+    @Query("SELECT * FROM refdata.currencies")
     Result<Currency> getAll();
 
-    @Query("SELECT * FROM refdata.currency")
+    @Query("SELECT * FROM refdata.currencies")
     ListenableFuture<Result<Currency>> getAllAsync();
 }

@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.series;
+package com.unisoft.algotrader.model.series;
 
 import gnu.trove.map.TLongIntMap;
 import gnu.trove.map.hash.TLongIntHashMap;

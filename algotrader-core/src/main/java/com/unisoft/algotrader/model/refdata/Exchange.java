@@ -1,7 +1,5 @@
 package com.unisoft.algotrader.model.refdata;
 
-
-import com.datastax.driver.mapping.annotations.ClusteringColumn;
 import com.datastax.driver.mapping.annotations.Column;
 import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
@@ -10,7 +8,7 @@ import com.google.common.base.Objects;
 /**
  * Created by alex on 5/17/15.
  */
-@Table(keyspace = "refdata", name = "exchange")
+@Table(keyspace = "refdata", name = "exchanges")
 public class Exchange{
     @PartitionKey
     @Column(name ="exch_id" )
@@ -61,59 +59,5 @@ public class Exchange{
                 "exchId='" + exchId + '\'' +
                 ", name='" + name + '\'' +
                 '}';
-    }
-
-    @ClusteringColumn(value = 0)
-    private long businesstime = 0;
-
-    @ClusteringColumn(value = 1)
-    private long systemtime = 0;
-
-    private boolean active = true;
-
-    @Column(name ="updated_user" )
-    private String updatedUser;
-
-    @Column(name ="updated_reason" )
-    private String updatedReason;
-
-    public long getBusinesstime() {
-        return businesstime;
-    }
-
-    public void setBusinesstime(long businesstime) {
-        this.businesstime = businesstime;
-    }
-
-    public long getSystemtime() {
-        return systemtime;
-    }
-
-    public void setSystemtime(long systemtime) {
-        this.systemtime = systemtime;
-    }
-
-    public String getUpdatedUser() {
-        return updatedUser;
-    }
-
-    public void setUpdatedUser(String updatedUser) {
-        this.updatedUser = updatedUser;
-    }
-
-    public String getUpdatedReason() {
-        return updatedReason;
-    }
-
-    public void setUpdatedReason(String updatedReason) {
-        this.updatedReason = updatedReason;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 }

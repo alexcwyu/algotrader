@@ -1,27 +1,77 @@
 package com.unisoft.algotrader.model.refdata;
 
+import com.datastax.driver.mapping.annotations.ClusteringColumn;
+import com.datastax.driver.mapping.annotations.Column;
+
 /**
  * Created by alex on 6/29/15.
  */
-public interface RefData {
+public abstract class RefData {
 
-    public long getBusinesstime();
+    @ClusteringColumn(value = 1)
+    @Column(name ="business_time" )
+    private long businessTime = 0;
 
-    public void setBusinesstime(long businesstime);
+    @ClusteringColumn(value = 2)
+    @Column(name ="system_time" )
+    private long systemTime = 0;
 
-    public long getSystemtime();
+    private boolean active = true;
 
-    public void setSystemtime(long systemtime);
+    @Column(name ="updated_user" )
+    private String updatedUser;
 
-    public String getUpdatedUser();
+    @Column(name ="updated_reason" )
+    private String updatedReason;
 
-    public void setUpdatedUser(String updatedUser);
 
-    public String getUpdatedReason();
+    public RefData(){
+        this(0,0);
+    }
 
-    public void setUpdatedReason(String updatedReason);
+    public RefData(long businessTime, long systemTime){
+        this.businessTime = businessTime;
+        this.systemTime = systemTime;
+    }
 
-    public boolean isActive();
 
-    public void setActive(boolean active);
+    public long getBusinessTime() {
+        return businessTime;
+    }
+
+    public void setBusinessTime(long businessTime) {
+        this.businessTime = businessTime;
+    }
+
+    public long getSystemTime() {
+        return systemTime;
+    }
+
+    public void setSystemTime(long systemTime) {
+        this.systemTime = systemTime;
+    }
+
+    public String getUpdatedUser() {
+        return updatedUser;
+    }
+
+    public void setUpdatedUser(String updatedUser) {
+        this.updatedUser = updatedUser;
+    }
+
+    public String getUpdatedReason() {
+        return updatedReason;
+    }
+
+    public void setUpdatedReason(String updatedReason) {
+        this.updatedReason = updatedReason;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }

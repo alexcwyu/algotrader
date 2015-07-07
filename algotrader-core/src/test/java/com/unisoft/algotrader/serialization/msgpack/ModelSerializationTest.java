@@ -6,7 +6,7 @@ import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Exchange;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.*;
-import com.unisoft.algotrader.series.DoubleTimeSeries;
+import com.unisoft.algotrader.model.series.DoubleTimeSeries;
 import gnu.trove.list.array.TDoubleArrayList;
 import gnu.trove.list.array.TLongArrayList;
 import gnu.trove.map.hash.TLongIntHashMap;

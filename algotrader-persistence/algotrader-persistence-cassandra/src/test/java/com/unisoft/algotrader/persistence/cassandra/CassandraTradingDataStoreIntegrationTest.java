@@ -1,15 +1,11 @@
-package com.unisoft.algotrader.persistence.cassandra.objectmapper;
+package com.unisoft.algotrader.persistence.cassandra;
 
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.clock.Clock;
 import com.unisoft.algotrader.model.event.SampleEventFactory;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
-import com.unisoft.algotrader.model.refdata.Currency;
-import com.unisoft.algotrader.model.refdata.Exchange;
 import com.unisoft.algotrader.model.trading.*;
-import com.unisoft.algotrader.persistence.cassandra.CassandraRefDataStore;
-import com.unisoft.algotrader.persistence.cassandra.CassandraTradingDataStore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -19,7 +15,7 @@ import static org.junit.Assert.assertNotNull;
  * Created by alex on 7/2/15.
  */
 
-public class CassandraDataStoreIntegrationTest {
+public class CassandraTradingDataStoreIntegrationTest {
 
     @Test
     public void testSaveLoad() throws Exception {
@@ -98,25 +94,6 @@ public class CassandraDataStoreIntegrationTest {
 
         assertEquals(portfolio, loadedPortfolio);
         assertEquals(account, loadedAccount);
-
     }
 
-    @Test
-    public void testSaveLoadRefData() throws Exception {
-
-        CassandraRefDataStore store = new CassandraRefDataStore();
-        store.connect();
-
-        Currency currency = new Currency("USD", "US Dollar");
-        store.saveCurrency(currency);
-        Currency currency2 = store.getCurrency(currency.getCcyId());
-
-        assertEquals(currency, currency2);
-
-        Exchange exchange = new Exchange("SEHK", "Hong Kong Stock Exchange");
-        store.saveExchange(exchange);
-        Exchange exchange1 = store.getExchange(exchange.getExchId());
-
-        assertEquals(exchange, exchange1);
-    }
 }

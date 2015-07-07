@@ -1,12 +1,9 @@
-package com.unisoft.algotrader.order;
+package com.unisoft.algotrader.model.trading;
 
 import com.google.common.collect.Maps;
 import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.model.event.EventBusManager;
 import com.unisoft.algotrader.model.event.execution.*;
-import com.unisoft.algotrader.model.trading.OrdStatus;
-import com.unisoft.algotrader.model.trading.Portfolio;
-import com.unisoft.algotrader.model.trading.PortfolioManager;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.strategy.Strategy;
 import com.unisoft.algotrader.strategy.StrategyManager;
