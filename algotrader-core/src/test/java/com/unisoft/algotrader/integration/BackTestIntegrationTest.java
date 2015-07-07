@@ -6,7 +6,6 @@ import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.refdata.InstrumentManager;
 import com.unisoft.algotrader.model.trading.*;
-import com.unisoft.algotrader.model.trading.OrderManager;
 import com.unisoft.algotrader.provider.InstrumentDataManager;
 import com.unisoft.algotrader.provider.execution.SimulationExecutor;
 import com.unisoft.algotrader.strategy.StrategyManager;

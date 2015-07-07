@@ -5,11 +5,12 @@ import com.unisoft.algotrader.clock.Clock;
 import com.unisoft.algotrader.model.event.SampleEventFactory;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
+import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.trading.*;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * Created by alex on 7/2/15.
@@ -17,12 +18,67 @@ import static org.junit.Assert.assertNotNull;
 
 public class CassandraTradingDataStoreIntegrationTest {
 
+
+    private static CassandraTradingDataStore store;
+
+    @BeforeClass
+    public static void init(){
+        store = new CassandraTradingDataStore();
+        store.connect();
+    }
+
+    @Test
+    public void testSaveLoadAccount(){
+        Account account = new Account("TA1", "Testing Account 1", Currency.HKD, 1000000);
+        store.saveAccount(account);
+        Account account1 = store.getAccount(account.getAccountId());
+        assertEquals(account, account1);
+
+        assertTrue(store.getAllAccounts().contains(account));
+
+    }
+
+
+    @Test
+    public void testSaveLoadPortfolio(){
+        Portfolio portfolio = new Portfolio("TP1", "TA1");
+        store.savePortfolio(portfolio);
+        Portfolio portfolio1 = store.getPortfolio(portfolio.getPortfolioId());
+        assertEquals(portfolio, portfolio1);
+
+        assertTrue(store.getAllPortfolios().contains(portfolio));
+
+    }
+
+    @Test
+    public void testSaveLoadOrder(){
+        Order order = SampleEventFactory.createOrder(1001, Side.Buy, OrdType.Limit, 9000, 98, 0.0, TimeInForce.Day, "Provider1", "Portfolio1", "Strategy1");
+
+        store.saveOrder(order);
+        Order order1 = store.getOrder(order.getOrderId());
+        assertEquals(order, order1);
+
+        assertTrue(store.getAllOrders().contains(order));
+        assertTrue(store.getOrdersByInstId(order.getInstId()).contains(order));
+        assertTrue(store.getOrdersByPortfolioId(order.getPortfolioId()).contains(order));
+        assertTrue(store.getOrdersByStrategyId(order.getStrategyId()).contains(order));
+    }
+
+    @Test
+    public void testSaveLoadExecutionReport(){
+        ExecutionReport executionReport = SampleEventFactory.createExecutionReport(1102, 1001, Side.Buy, OrdType.Limit, 9000, 98, 0.0, TimeInForce.Day, OrdStatus.New, 0, 0, 0, 0);
+
+        store.saveExecutionReport(executionReport);
+        ExecutionReport executionReport1 = store.getExecutionReport(executionReport.getExecId());
+        assertEquals(executionReport, executionReport1);
+
+        assertTrue(store.getAllExecutionReports().contains(executionReport));
+        assertTrue(store.getExecutionReportsByInstId(executionReport.getInstId()).contains(executionReport));
+        assertTrue(store.getExecutionReportsByOrderId(executionReport.getOrderId()).contains(executionReport));
+    }
+
     @Test
     public void testSaveLoad() throws Exception {
-
-        CassandraTradingDataStore store = new CassandraTradingDataStore();
-        store.connect();
-
         Account account = AccountManager.DEFAULT_ACCOUNT;
 
         Portfolio portfolio = SampleEventFactory.createPortfolio("TestPortfolio", account.getAccountId());
@@ -95,5 +151,7 @@ public class CassandraTradingDataStoreIntegrationTest {
         assertEquals(portfolio, loadedPortfolio);
         assertEquals(account, loadedAccount);
     }
+
+
 
 }

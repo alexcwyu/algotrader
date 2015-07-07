@@ -8,6 +8,9 @@ import com.datastax.driver.mapping.MappingManager;
 import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Exchange;
 import com.unisoft.algotrader.model.refdata.Instrument;
+import com.unisoft.algotrader.persistence.cassandra.accessor.CurrencyAccessor;
+import com.unisoft.algotrader.persistence.cassandra.accessor.ExchangeAccessor;
+import com.unisoft.algotrader.persistence.cassandra.accessor.InstrumentAccessor;
 
 import java.util.List;
 
@@ -41,11 +44,13 @@ public class CassandraRefDataStore implements RefDataStore{
         this.instrumentAccessor = mappingManager.createAccessor(InstrumentAccessor.class);
     }
 
+    @Override
     public void saveCurrency(Currency currency) {
         Mapper<Currency> mapper = mappingManager.mapper(Currency.class);
         mapper.save(currency);
     }
 
+    @Override
     public Currency getCurrency(String ccyId) {
         Mapper<Currency> mapper = mappingManager.mapper(Currency.class);
         return mapper.get(ccyId);
@@ -58,11 +63,13 @@ public class CassandraRefDataStore implements RefDataStore{
     }
 
 
+    @Override
     public void saveExchange(Exchange exchange) {
         Mapper<Exchange> mapper = mappingManager.mapper(Exchange.class);
         mapper.save(exchange);
     }
 
+    @Override
     public Exchange getExchange(String exchId) {
         //return exchangeAccessor.get(exchId);
         Mapper<Exchange> mapper = mappingManager.mapper(Exchange.class);
@@ -75,11 +82,13 @@ public class CassandraRefDataStore implements RefDataStore{
     }
 
 
+    @Override
     public void saveInstrument(Instrument instrument) {
         Mapper<Instrument> mapper = mappingManager.mapper(Instrument.class);
         mapper.save(instrument);
     }
 
+    @Override
     public Instrument getInstrument(int instId) {
         //return instrumentAccessor.get(instId);
         Mapper<Instrument> mapper = mappingManager.mapper(Instrument.class);

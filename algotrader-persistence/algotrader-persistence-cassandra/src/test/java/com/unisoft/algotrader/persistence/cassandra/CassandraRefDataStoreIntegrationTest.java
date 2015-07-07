@@ -8,6 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by alex on 7/8/15.
@@ -29,6 +30,7 @@ public class CassandraRefDataStoreIntegrationTest {
         Currency currency2 = store.getCurrency(currency.getCcyId());
 
         assertEquals(currency, currency2);
+        assertTrue(store.getAllCurrencies().contains(currency));
     }
 
     @Test
@@ -38,6 +40,7 @@ public class CassandraRefDataStoreIntegrationTest {
         Exchange exchange1 = store.getExchange(exchange.getExchId());
 
         assertEquals(exchange, exchange1);
+        assertTrue(store.getAllExchanges().contains(exchange));
     }
 
     @Test
@@ -48,5 +51,6 @@ public class CassandraRefDataStoreIntegrationTest {
         Instrument instrument1 = store.getInstrument(instrument.getInstId());
 
         assertEquals(instrument, instrument1);
+        assertTrue(store.getAllInstruments().contains(instrument));
     }
 }

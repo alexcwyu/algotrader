@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.persistence.cassandra;
+package com.unisoft.algotrader.persistence.cassandra.accessor;
 
 import com.datastax.driver.mapping.Result;
 import com.datastax.driver.mapping.annotations.Accessor;

@@ -1,8 +1,8 @@
 package com.unisoft.algotrader.provider.historical;
 
 import com.unisoft.algotrader.model.event.EventBus;
-import com.unisoft.algotrader.provider.SubscriptionKey;
 import com.unisoft.algotrader.provider.DataProvider;
+import com.unisoft.algotrader.provider.SubscriptionKey;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

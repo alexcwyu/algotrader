@@ -58,6 +58,28 @@ public class SampleEventFactory {
         return createExecutionReport(order, OrdStatus.Filled, order.ordQty, filledPrice, order.ordQty, filledPrice);
     }
 
+    public static ExecutionReport createExecutionReport(long orderId, int instId, Side side, OrdType type, double qty, double price, double stopPrice, TimeInForce tif, OrdStatus ordStatus, double lastQty, double lastPrice, double filledQty, double avgPrice){
+        ExecutionReport er = new ExecutionReport();
+        er.execId = ++execId;
+        er.orderId = orderId;
+        er.instId = instId;
+        er.side= side;
+        er.ordType = type;
+        er.ordQty=qty;
+        er.limitPrice = price;
+        er.stopPrice = stopPrice;
+        er.tif = tif;
+
+        er.transactionTime = System.currentTimeMillis();
+        er.ordStatus = ordStatus;
+        er.lastQty = lastQty;
+        er.lastPrice = lastPrice;
+        er.filledQty = filledQty;
+        er.avgPrice = avgPrice;
+
+        return er;
+    }
+
     public static ExecutionReport createExecutionReport(Order order, OrdStatus ordStatus, double lastQty, double lastPrice, double filledQty, double avgPrice){
         ExecutionReport er = new ExecutionReport();
         er.execId = ++execId;
