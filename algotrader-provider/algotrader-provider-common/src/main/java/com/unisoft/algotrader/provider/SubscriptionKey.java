@@ -1,9 +1,9 @@
 package com.unisoft.algotrader.provider;
 
 import com.google.common.base.Objects;
-import com.unisoft.algotrader.event.data.Bar;
-import com.unisoft.algotrader.event.data.Quote;
-import com.unisoft.algotrader.event.data.Trade;
+import com.unisoft.algotrader.model.event.data.Bar;
+import com.unisoft.algotrader.model.event.data.Quote;
+import com.unisoft.algotrader.model.event.data.Trade;
 
 /**
  * Created by alex on 6/16/15.

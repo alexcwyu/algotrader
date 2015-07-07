@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.threading.disruptor.perf;
 
-import com.unisoft.algotrader.event.Event;
+import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.threading.MultiEventProcessor;
 import com.unisoft.algotrader.threading.disruptor.waitstrategy.YieldMultiBufferWaitStrategy;
 

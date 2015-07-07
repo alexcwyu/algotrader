@@ -16,8 +16,8 @@
 package com.unisoft.algotrader.threading.disruptor.dsl;
 
 import com.lmax.disruptor.EventFactory;
-import com.unisoft.algotrader.event.Event;
-import com.unisoft.algotrader.event.EventHandler;
+import com.unisoft.algotrader.model.event.Event;
+import com.unisoft.algotrader.model.event.EventHandler;
 
 public final class TestEvent implements Event
 {

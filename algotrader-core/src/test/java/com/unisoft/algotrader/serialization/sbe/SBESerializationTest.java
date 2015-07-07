@@ -1,7 +1,7 @@
 package com.unisoft.algotrader.serialization.sbe;
 
-import com.unisoft.algotrader.event.data.sbe.MessageHeader;
-import com.unisoft.algotrader.event.data.sbe.Quote;
+import com.unisoft.algotrader.model.event.data.sbe.MessageHeader;
+import com.unisoft.algotrader.model.event.data.sbe.Quote;
 import org.junit.Test;
 import uk.co.real_logic.agrona.concurrent.UnsafeBuffer;
 

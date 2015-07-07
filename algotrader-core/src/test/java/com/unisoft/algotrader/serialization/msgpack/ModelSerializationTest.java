@@ -1,10 +1,11 @@
 package com.unisoft.algotrader.serialization.msgpack;
 
-import com.unisoft.algotrader.core.*;
-import com.unisoft.algotrader.event.execution.ExecutionReport;
-import com.unisoft.algotrader.event.execution.Order;
+import com.unisoft.algotrader.model.event.execution.ExecutionReport;
+import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Exchange;
+import com.unisoft.algotrader.model.refdata.Instrument;
+import com.unisoft.algotrader.model.trading.*;
 import com.unisoft.algotrader.series.DoubleTimeSeries;
 import gnu.trove.list.array.TDoubleArrayList;
 import gnu.trove.list.array.TLongArrayList;

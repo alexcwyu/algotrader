@@ -1,7 +1,7 @@
 package com.unisoft.algotrader.provider.execution.simulation;
 
-import com.unisoft.algotrader.event.data.Trade;
-import com.unisoft.algotrader.event.execution.Order;
+import com.unisoft.algotrader.model.event.data.Trade;
+import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.provider.execution.SimulatorConfig;
 
 /**

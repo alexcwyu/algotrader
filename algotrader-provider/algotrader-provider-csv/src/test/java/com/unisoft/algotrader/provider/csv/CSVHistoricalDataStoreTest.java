@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.csv;
 
-import com.unisoft.algotrader.event.data.Bar;
+import com.unisoft.algotrader.model.event.data.Bar;
 import org.junit.Test;
 
 import java.io.StringWriter;

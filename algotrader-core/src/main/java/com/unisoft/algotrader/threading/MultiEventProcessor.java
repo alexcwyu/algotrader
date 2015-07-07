@@ -1,7 +1,7 @@
 package com.unisoft.algotrader.threading;
 
 import com.lmax.disruptor.*;
-import com.unisoft.algotrader.event.Event;
+import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.threading.disruptor.waitstrategy.MultiBufferWaitStrategy;
 import com.unisoft.algotrader.threading.disruptor.waitstrategy.NoWaitStrategy;
 

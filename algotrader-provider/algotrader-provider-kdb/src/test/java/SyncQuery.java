@@ -16,7 +16,7 @@
 
 import com.exxeleron.qjava.*;
 import com.exxeleron.qjava.QConnection.MessageType;
-import com.unisoft.algotrader.event.data.Trade;
+import com.unisoft.algotrader.model.event.data.Trade;
 
 import java.io.IOException;
 import java.util.Date;

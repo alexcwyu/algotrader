@@ -1,10 +1,10 @@
 package com.unisoft.algotrader.provider.execution;
 
-import com.unisoft.algotrader.event.data.Bar;
-import com.unisoft.algotrader.event.data.MarketData;
-import com.unisoft.algotrader.event.data.Quote;
-import com.unisoft.algotrader.event.data.Trade;
-import com.unisoft.algotrader.event.execution.Order;
+import com.unisoft.algotrader.model.event.data.Bar;
+import com.unisoft.algotrader.model.event.data.MarketData;
+import com.unisoft.algotrader.model.event.data.Quote;
+import com.unisoft.algotrader.model.event.data.Trade;
+import com.unisoft.algotrader.model.event.execution.Order;
 
 /**
  * Created by alex on 6/6/15.

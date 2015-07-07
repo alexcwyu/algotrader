@@ -2,9 +2,9 @@ package com.unisoft.algotrader.provider.csv;
 
 import com.google.common.collect.Maps;
 import com.lmax.disruptor.RingBuffer;
-import com.unisoft.algotrader.event.Event;
-import com.unisoft.algotrader.event.EventBusManager;
-import com.unisoft.algotrader.event.data.*;
+import com.unisoft.algotrader.model.event.Event;
+import com.unisoft.algotrader.model.event.EventBusManager;
+import com.unisoft.algotrader.model.event.data.*;
 import com.unisoft.algotrader.threading.MultiEventProcessor;
 import com.unisoft.algotrader.threading.disruptor.waitstrategy.NoWaitStrategy;
 

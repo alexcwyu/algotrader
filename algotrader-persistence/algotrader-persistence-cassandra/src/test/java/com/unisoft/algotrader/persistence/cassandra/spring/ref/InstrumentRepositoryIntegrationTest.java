@@ -8,7 +8,7 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
 import com.google.common.collect.ImmutableSet;
-import com.unisoft.algotrader.core.Instrument;
+import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.cassandra.spring.BaseIntegrationTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,10 +2,10 @@ package com.unisoft.algotrader.provider.cassandra;
 
 import com.datastax.driver.core.*;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
-import com.unisoft.algotrader.event.EventBus;
-import com.unisoft.algotrader.event.data.Bar;
-import com.unisoft.algotrader.event.data.Quote;
-import com.unisoft.algotrader.event.data.Trade;
+import com.unisoft.algotrader.model.event.EventBus;
+import com.unisoft.algotrader.model.event.data.Bar;
+import com.unisoft.algotrader.model.event.data.Quote;
+import com.unisoft.algotrader.model.event.data.Trade;
 import com.unisoft.algotrader.provider.SubscriptionKey;
 import com.unisoft.algotrader.provider.csv.DataStore;
 import com.unisoft.algotrader.provider.csv.historical.HistoricalDataProvider;

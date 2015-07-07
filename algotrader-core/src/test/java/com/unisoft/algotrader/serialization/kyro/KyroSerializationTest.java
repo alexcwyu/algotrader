@@ -1,10 +1,10 @@
 package com.unisoft.algotrader.serialization.kyro;
 
-import com.unisoft.algotrader.core.Instrument;
-import com.unisoft.algotrader.core.InstrumentManager;
-import com.unisoft.algotrader.event.data.Bar;
-import com.unisoft.algotrader.event.data.Quote;
-import com.unisoft.algotrader.event.data.Trade;
+import com.unisoft.algotrader.model.event.data.Bar;
+import com.unisoft.algotrader.model.event.data.Quote;
+import com.unisoft.algotrader.model.event.data.Trade;
+import com.unisoft.algotrader.model.refdata.Instrument;
+import com.unisoft.algotrader.model.refdata.InstrumentManager;
 import com.unisoft.algotrader.serialization.MessageHeader;
 import com.unisoft.algotrader.serialization.kryo.KryoSerializer;
 import org.junit.BeforeClass;

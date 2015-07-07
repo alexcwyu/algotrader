@@ -1,9 +1,9 @@
 package com.unisoft.algotrader.provider.yahoo;
 
 import com.google.common.collect.Lists;
-import com.unisoft.algotrader.core.Instrument;
-import com.unisoft.algotrader.core.InstrumentManager;
-import com.unisoft.algotrader.event.EventBus;
+import com.unisoft.algotrader.model.event.EventBus;
+import com.unisoft.algotrader.model.refdata.Instrument;
+import com.unisoft.algotrader.model.refdata.InstrumentManager;
 import com.unisoft.algotrader.provider.SubscriptionKey;
 import com.unisoft.algotrader.provider.csv.historical.HistoricalDataProvider;
 import org.apache.logging.log4j.LogManager;

@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.persistence.cassandra.spring.ref;
 
-import com.unisoft.algotrader.core.Instrument;
+import com.unisoft.algotrader.model.refdata.Instrument;
 
 /**
  * Created by alex on 6/30/15.

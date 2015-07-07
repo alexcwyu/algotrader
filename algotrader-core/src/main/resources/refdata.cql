@@ -26,16 +26,6 @@ CREATE TABLE IF NOT EXISTS exchange (
   PRIMARY KEY (exch_id, businesstime, systemtime)
 )WITH CLUSTERING ORDER BY (businesstime DESC, systemtime DESC);
 
-//CREATE TYPE inst_classification (
-//   group text,
-//   sector text,
-//);
-
-//CREATE TYPE inst_id (
-//   symbol text,
-//   exch_id text,
-//);
-
 
 //CREATE TABLE IF NOT EXISTS instrument (
 //  instId int,

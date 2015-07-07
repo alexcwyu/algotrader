@@ -2,12 +2,12 @@ package com.unisoft.algotrader.data;
 
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.util.DaemonThreadFactory;
-import com.unisoft.algotrader.core.Instrument;
-import com.unisoft.algotrader.core.InstrumentManager;
-import com.unisoft.algotrader.core.Portfolio;
-import com.unisoft.algotrader.core.PortfolioManager;
-import com.unisoft.algotrader.event.data.MarketDataContainer;
-import com.unisoft.algotrader.event.data.RingBufferMarketDataEventBus;
+import com.unisoft.algotrader.model.event.data.MarketDataContainer;
+import com.unisoft.algotrader.model.event.data.RingBufferMarketDataEventBus;
+import com.unisoft.algotrader.model.refdata.Instrument;
+import com.unisoft.algotrader.model.refdata.InstrumentManager;
+import com.unisoft.algotrader.model.trading.Portfolio;
+import com.unisoft.algotrader.model.trading.PortfolioManager;
 import com.unisoft.algotrader.provider.SubscriptionKey;
 import com.unisoft.algotrader.provider.csv.historical.DummyDataProvider;
 import com.unisoft.algotrader.strategy.Strategy;

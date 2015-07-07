@@ -1,10 +1,10 @@
 package com.unisoft.algotrader.integration;
 
 import com.lmax.disruptor.RingBuffer;
-import com.unisoft.algotrader.event.data.Bar;
-import com.unisoft.algotrader.event.data.MarketDataContainer;
-import com.unisoft.algotrader.event.data.Quote;
-import com.unisoft.algotrader.event.data.Trade;
+import com.unisoft.algotrader.model.event.data.Bar;
+import com.unisoft.algotrader.model.event.data.MarketDataContainer;
+import com.unisoft.algotrader.model.event.data.Quote;
+import com.unisoft.algotrader.model.event.data.Trade;
 
 /**
  * Created by alex on 6/8/15.

@@ -1,9 +1,9 @@
 package com.unisoft.algotrader.demo;
 
 import com.unisoft.algotrader.backtest.BackTester;
+import com.unisoft.algotrader.model.event.EventBusManager;
 import com.unisoft.algotrader.model.refdata.Currency;
-import com.unisoft.algotrader.core.Performance;
-import com.unisoft.algotrader.event.EventBusManager;
+import com.unisoft.algotrader.model.trading.Performance;
 import com.unisoft.algotrader.provider.csv.historical.DummyDataProvider;
 import com.unisoft.algotrader.series.TimeSeriesHelper;
 import com.unisoft.algotrader.strategy.Strategy;

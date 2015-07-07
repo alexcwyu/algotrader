@@ -1,10 +1,12 @@
 package com.unisoft.algotrader.backtest;
 
 import com.lmax.disruptor.util.DaemonThreadFactory;
-import com.unisoft.algotrader.core.*;
-import com.unisoft.algotrader.event.EventBusManager;
-import com.unisoft.algotrader.event.data.RingBufferMarketDataEventBus;
+import com.unisoft.algotrader.model.event.EventBusManager;
+import com.unisoft.algotrader.model.event.data.RingBufferMarketDataEventBus;
 import com.unisoft.algotrader.model.refdata.Currency;
+import com.unisoft.algotrader.model.refdata.Instrument;
+import com.unisoft.algotrader.model.refdata.InstrumentManager;
+import com.unisoft.algotrader.model.trading.*;
 import com.unisoft.algotrader.order.OrderManager;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.SubscriptionKey;

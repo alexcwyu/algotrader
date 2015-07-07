@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.threading.disruptor.perf;
 
-import com.unisoft.algotrader.event.EventHandler;
+import com.unisoft.algotrader.model.event.EventHandler;
 
 /**
  * Created by alex on 6/13/15.

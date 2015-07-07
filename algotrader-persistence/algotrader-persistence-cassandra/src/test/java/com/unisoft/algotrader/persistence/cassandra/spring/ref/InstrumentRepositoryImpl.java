@@ -2,7 +2,7 @@ package com.unisoft.algotrader.persistence.cassandra.spring.ref;
 
 import com.datastax.driver.core.*;
 import com.datastax.driver.core.exceptions.DriverException;
-import com.unisoft.algotrader.core.Instrument;
+import com.unisoft.algotrader.model.refdata.Instrument;
 import org.springframework.cassandra.core.PreparedStatementCreator;
 import org.springframework.cassandra.core.RowMapper;
 import org.springframework.data.cassandra.core.CassandraOperations;

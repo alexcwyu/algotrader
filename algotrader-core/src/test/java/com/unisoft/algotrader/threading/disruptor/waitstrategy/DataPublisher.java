@@ -1,7 +1,7 @@
 package com.unisoft.algotrader.threading.disruptor.waitstrategy;
 
 import com.lmax.disruptor.RingBuffer;
-import com.unisoft.algotrader.event.data.MarketData;
+import com.unisoft.algotrader.model.event.data.MarketData;
 
 import java.util.concurrent.CyclicBarrier;
 

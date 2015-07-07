@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.csv;
 
-import com.unisoft.algotrader.event.data.MarketDataHandler;
+import com.unisoft.algotrader.model.event.data.MarketDataHandler;
 import com.unisoft.algotrader.provider.Provider;
 
 /**

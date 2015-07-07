@@ -1,23 +1,15 @@
 package com.unisoft.algotrader.persistence.cassandra.objectmapper;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.ProtocolVersion;
-import com.datastax.driver.core.Session;
-import com.datastax.driver.mapping.Mapper;
-import com.datastax.driver.mapping.MappingManager;
-import com.datastax.driver.mapping.Result;
-import com.datastax.driver.mapping.annotations.Accessor;
-import com.datastax.driver.mapping.annotations.Param;
-import com.datastax.driver.mapping.annotations.Query;
 import com.google.common.collect.Lists;
-import com.google.common.util.concurrent.ListenableFuture;
 import com.unisoft.algotrader.clock.Clock;
-import com.unisoft.algotrader.core.*;
-import com.unisoft.algotrader.event.SampleEventFactory;
-import com.unisoft.algotrader.event.execution.ExecutionReport;
-import com.unisoft.algotrader.event.execution.Order;
+import com.unisoft.algotrader.model.event.SampleEventFactory;
+import com.unisoft.algotrader.model.event.execution.ExecutionReport;
+import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Exchange;
+import com.unisoft.algotrader.model.trading.*;
+import com.unisoft.algotrader.persistence.cassandra.CassandraRefDataStore;
+import com.unisoft.algotrader.persistence.cassandra.CassandraTradingDataStore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -29,166 +21,10 @@ import static org.junit.Assert.assertNotNull;
 
 public class CassandraDataStoreIntegrationTest {
 
-    @Accessor
-    public interface CurrencyAccessor {
-        @Query("SELECT * FROM refdata.currency WHERE ccy_id = :ccy_id LIMIT 1")
-        Currency getOne(@Param("ccy_id") String ccy_id);
-
-        @Query("SELECT * FROM refdata.currency WHERE ccy_id = :ccy_id")
-        Result<Currency> get(@Param("ccy_id") String ccy_id);
-
-        @Query("SELECT * FROM refdata.currency")
-        Result<Currency> getAll();
-
-        @Query("SELECT * FROM refdata.currency")
-        ListenableFuture<Result<Currency>> getAllAsync();
-    }
-
-    @Accessor
-    public interface ExchangeAccessor {
-        @Query("SELECT * FROM refdata.exchange WHERE exch_id = :exch_id LIMIT 1")
-        Exchange getOne(@Param("exch_id") String exch_id);
-
-        @Query("SELECT * FROM refdata.exchange WHERE exch_id = :exch_id")
-        Result<Exchange> get(@Param("exch_id") String exch_id);
-
-        @Query("SELECT * FROM refdata.exchange")
-        Result<Exchange> getAll();
-
-        @Query("SELECT * FROM refdata.exchange")
-        ListenableFuture<Result<Exchange>> getAllAsync();
-    }
-
-    public static class RefDataStore{
-
-        private Cluster cluster;
-        private String keySpace;
-        private Session session;
-        private MappingManager mappingManager;
-        private CurrencyAccessor currencyAccessor;
-        private ExchangeAccessor exchangeAccessor;
-
-        public RefDataStore() {
-            this(Cluster.builder().withProtocolVersion(ProtocolVersion.V3).addContactPoint("localhost").build(), "refdata");
-        }
-
-        public RefDataStore(Cluster cluster, String keySpace) {
-            this.cluster = cluster;
-            this.keySpace = keySpace;
-        }
-
-        public void connect() {
-            this.session = cluster.connect(keySpace);
-            this.mappingManager = new MappingManager(session);
-            this.currencyAccessor = mappingManager.createAccessor(CurrencyAccessor.class);
-            this.exchangeAccessor = mappingManager.createAccessor(ExchangeAccessor.class);
-        }
-
-        public void saveCurrency(Currency currency) {
-            Mapper<Currency> mapper = mappingManager.mapper(Currency.class);
-            long time = System.currentTimeMillis();
-            currency.setBusinesstime(time);
-            currency.setSystemtime(time);
-            mapper.save(currency);
-        }
-
-        public Currency getCurrency(String ccyId) {
-            return currencyAccessor.getOne(ccyId);
-        }
-
-        public void saveExchange(Exchange exchange) {
-            Mapper<Exchange> mapper = mappingManager.mapper(Exchange.class);
-            long time = System.currentTimeMillis();
-            exchange.setBusinesstime(time);
-            exchange.setSystemtime(time);
-            mapper.save(exchange);
-        }
-
-        public Exchange getExchange(String exchId) {
-            return exchangeAccessor.getOne(exchId);
-        }
-
-        public void saveInstrument(Instrument instrument) {
-            Mapper<Instrument> mapper = mappingManager.mapper(Instrument.class);
-//            long time = System.currentTimeMillis();
-//            instrument.setBusinessTime(time);
-//            instrument.setSystemtime(time);
-            mapper.save(instrument);
-        }
-
-        public Instrument getInstrument(String instId) {
-            Mapper<Instrument> mapper = mappingManager.mapper(Instrument.class);
-            return mapper.get(instId);
-        }
-    }
-
-    public static class CassandraDataStore {
-
-        private Cluster cluster;
-        private Session session;
-        private String keySpace;
-        private MappingManager mappingManager;
-
-        public CassandraDataStore() {
-            this(Cluster.builder().withProtocolVersion(ProtocolVersion.V3).addContactPoint("localhost").build(), "trading");
-        }
-
-        public CassandraDataStore(Cluster cluster,String keySpace) {
-            this.cluster = cluster;
-            this.keySpace = keySpace;
-        }
-
-        public void connect() {
-            this.session = cluster.connect(keySpace);
-            this.mappingManager = new MappingManager(session);
-        }
-
-
-        public void saveAccount(Account account) {
-            Mapper<Account> mapper = mappingManager.mapper(Account.class);
-            mapper.save(account);
-        }
-
-        public Account getAccount(String accountId) {
-            Mapper<Account> mapper = mappingManager.mapper(Account.class);
-            return mapper.get(accountId);
-        }
-
-        public void savePortfolio(Portfolio portfolio) {
-            Mapper<Portfolio> mapper = mappingManager.mapper(Portfolio.class);
-            mapper.save(portfolio);
-        }
-
-        public Portfolio getPortfolio(String portfolioId) {
-            Mapper<Portfolio> mapper = mappingManager.mapper(Portfolio.class);
-            return mapper.get(portfolioId);
-        }
-
-        public void saveExecutionReport(ExecutionReport er) {
-            Mapper<ExecutionReport> mapper = mappingManager.mapper(ExecutionReport.class);
-            mapper.save(er);
-        }
-
-        public ExecutionReport getExecutionReport(long execId) {
-            Mapper<ExecutionReport> mapper = mappingManager.mapper(ExecutionReport.class);
-            return mapper.get(execId);
-        }
-
-        public void saveOrder(Order order) {
-            Mapper<Order> mapper = mappingManager.mapper(Order.class);
-            mapper.save(order);
-        }
-
-        public Order getOrder(long orderId) {
-            Mapper<Order> mapper = mappingManager.mapper(Order.class);
-            return mapper.get(orderId);
-        }
-    }
-
     @Test
     public void testSaveLoad() throws Exception {
 
-        CassandraDataStore store = new CassandraDataStore();
+        CassandraTradingDataStore store = new CassandraTradingDataStore();
         store.connect();
 
         Account account = AccountManager.DEFAULT_ACCOUNT;
@@ -265,11 +101,10 @@ public class CassandraDataStoreIntegrationTest {
 
     }
 
-
     @Test
     public void testSaveLoadRefData() throws Exception {
 
-        RefDataStore store = new RefDataStore();
+        CassandraRefDataStore store = new CassandraRefDataStore();
         store.connect();
 
         Currency currency = new Currency("USD", "US Dollar");

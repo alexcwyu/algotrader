@@ -1,6 +1,6 @@
 package com.unisoft.algotrader;
 
-import com.unisoft.algotrader.event.data.Bar;
+import com.unisoft.algotrader.model.event.data.Bar;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

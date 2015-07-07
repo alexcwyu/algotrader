@@ -1,9 +1,11 @@
 package com.unisoft.algotrader.integration;
 
 import com.lmax.disruptor.RingBuffer;
-import com.unisoft.algotrader.core.*;
-import com.unisoft.algotrader.event.data.MarketDataContainer;
+import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.refdata.Currency;
+import com.unisoft.algotrader.model.refdata.Instrument;
+import com.unisoft.algotrader.model.refdata.InstrumentManager;
+import com.unisoft.algotrader.model.trading.*;
 import com.unisoft.algotrader.order.OrderManager;
 import com.unisoft.algotrader.provider.csv.InstrumentDataManager;
 import com.unisoft.algotrader.provider.execution.SimulationExecutor;

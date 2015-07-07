@@ -1,12 +1,12 @@
 package com.unisoft.algotrader.order;
 
 import com.google.common.collect.Maps;
-import com.unisoft.algotrader.core.OrdStatus;
-import com.unisoft.algotrader.core.Portfolio;
-import com.unisoft.algotrader.core.PortfolioManager;
-import com.unisoft.algotrader.event.Event;
-import com.unisoft.algotrader.event.EventBusManager;
-import com.unisoft.algotrader.event.execution.*;
+import com.unisoft.algotrader.model.event.Event;
+import com.unisoft.algotrader.model.event.EventBusManager;
+import com.unisoft.algotrader.model.event.execution.*;
+import com.unisoft.algotrader.model.trading.OrdStatus;
+import com.unisoft.algotrader.model.trading.Portfolio;
+import com.unisoft.algotrader.model.trading.PortfolioManager;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.strategy.Strategy;
 import com.unisoft.algotrader.strategy.StrategyManager;
@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Created by alex on 5/18/15.
  */
-public class OrderManager extends MultiEventProcessor implements OrderHandler , ExecutionHandler {
+public class OrderManager extends MultiEventProcessor implements OrderHandler, ExecutionHandler {
 
     private static final Logger LOG = LogManager.getLogger(OrderManager.class);
     public static final OrderManager INSTANCE;

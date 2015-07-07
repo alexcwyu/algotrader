@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.data;
 
-import com.unisoft.algotrader.event.data.Bar;
+import com.unisoft.algotrader.model.event.data.Bar;
 import com.univocity.parsers.common.ParsingContext;
 import com.univocity.parsers.common.processor.ObjectRowProcessor;
 import com.univocity.parsers.csv.CsvParser;

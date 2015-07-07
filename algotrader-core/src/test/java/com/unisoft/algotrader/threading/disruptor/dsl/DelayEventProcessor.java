@@ -1,7 +1,7 @@
 package com.unisoft.algotrader.threading.disruptor.dsl;
 
 import com.lmax.disruptor.LifecycleAware;
-import com.unisoft.algotrader.event.Event;
+import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.threading.MultiEventProcessor;
 
 import java.util.concurrent.BrokenBarrierException;

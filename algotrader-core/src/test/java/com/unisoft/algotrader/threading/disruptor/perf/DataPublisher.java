@@ -1,7 +1,7 @@
 package com.unisoft.algotrader.threading.disruptor.perf;
 
 import com.lmax.disruptor.RingBuffer;
-import com.unisoft.algotrader.event.Event;
+import com.unisoft.algotrader.model.event.Event;
 
 import java.util.concurrent.CyclicBarrier;
 import java.util.function.BiConsumer;

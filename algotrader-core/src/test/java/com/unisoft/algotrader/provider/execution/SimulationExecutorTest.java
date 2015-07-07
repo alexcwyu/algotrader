@@ -1,14 +1,14 @@
 package com.unisoft.algotrader.provider.execution;
 
 import com.lmax.disruptor.RingBuffer;
-import com.unisoft.algotrader.core.OrdStatus;
-import com.unisoft.algotrader.core.OrdType;
-import com.unisoft.algotrader.core.Side;
-import com.unisoft.algotrader.event.SampleEventFactory;
-import com.unisoft.algotrader.event.data.MarketDataContainer;
-import com.unisoft.algotrader.event.data.Quote;
-import com.unisoft.algotrader.event.execution.ExecutionReport;
-import com.unisoft.algotrader.event.execution.Order;
+import com.unisoft.algotrader.model.event.SampleEventFactory;
+import com.unisoft.algotrader.model.event.data.MarketDataContainer;
+import com.unisoft.algotrader.model.event.data.Quote;
+import com.unisoft.algotrader.model.event.execution.ExecutionReport;
+import com.unisoft.algotrader.model.event.execution.Order;
+import com.unisoft.algotrader.model.trading.OrdStatus;
+import com.unisoft.algotrader.model.trading.OrdType;
+import com.unisoft.algotrader.model.trading.Side;
 import com.unisoft.algotrader.order.OrderManager;
 import com.unisoft.algotrader.provider.csv.InstrumentDataManager;
 import com.unisoft.algotrader.threading.disruptor.waitstrategy.NoWaitStrategy;
@@ -18,7 +18,7 @@ import org.mockito.ArgumentCaptor;
 
 import java.util.List;
 
-import static com.unisoft.algotrader.event.SampleEventFactory.createQuote;
+import static com.unisoft.algotrader.model.event.SampleEventFactory.createQuote;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
