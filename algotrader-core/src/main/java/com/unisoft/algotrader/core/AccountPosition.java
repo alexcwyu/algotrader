@@ -5,6 +5,7 @@ import com.datastax.driver.mapping.annotations.FrozenValue;
 import com.datastax.driver.mapping.annotations.UDT;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
+import com.unisoft.algotrader.model.refdata.Currency;
 
 import java.util.List;
 

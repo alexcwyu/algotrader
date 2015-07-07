@@ -6,6 +6,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.unisoft.algotrader.clock.Clock;
 import com.unisoft.algotrader.event.execution.Order;
+import com.unisoft.algotrader.model.refdata.Currency;
+import com.unisoft.algotrader.model.refdata.CurrencyManager;
 import org.msgpack.annotation.Ignore;
 
 import java.util.List;

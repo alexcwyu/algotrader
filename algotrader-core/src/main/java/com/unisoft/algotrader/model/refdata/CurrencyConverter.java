@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.core;
+package com.unisoft.algotrader.model.refdata;
 
 /**
  * Created by alex on 5/30/15.

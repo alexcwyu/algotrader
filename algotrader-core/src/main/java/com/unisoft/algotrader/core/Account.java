@@ -6,6 +6,9 @@ import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
+import com.unisoft.algotrader.model.refdata.Currency;
+import com.unisoft.algotrader.model.refdata.CurrencyConverter;
+import com.unisoft.algotrader.model.refdata.CurrencyManager;
 
 import java.util.Map;
 

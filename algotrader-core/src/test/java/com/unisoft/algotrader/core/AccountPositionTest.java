@@ -1,5 +1,6 @@
 package com.unisoft.algotrader.core;
 
+import com.unisoft.algotrader.model.refdata.Currency;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

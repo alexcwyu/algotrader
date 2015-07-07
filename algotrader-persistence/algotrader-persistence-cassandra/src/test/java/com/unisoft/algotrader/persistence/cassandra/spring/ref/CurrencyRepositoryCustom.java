@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.persistence.cassandra.spring.ref;
 
-import com.unisoft.algotrader.core.Currency;
+import com.unisoft.algotrader.model.refdata.Currency;
 
 /**
  * Created by alex on 6/30/15.

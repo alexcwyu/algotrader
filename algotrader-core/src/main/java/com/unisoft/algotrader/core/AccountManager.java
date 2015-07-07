@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.core;
 
 import com.google.common.collect.Maps;
+import com.unisoft.algotrader.model.refdata.Currency;
 
 import java.util.Map;
 

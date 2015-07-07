@@ -9,6 +9,7 @@ import com.unisoft.algotrader.event.data.Quote;
 import com.unisoft.algotrader.event.data.Trade;
 import com.unisoft.algotrader.event.execution.ExecutionReport;
 import com.unisoft.algotrader.event.execution.Order;
+import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.order.OrderManager;
 import com.unisoft.algotrader.provider.csv.InstrumentDataManager;
 import com.unisoft.algotrader.strategy.Strategy;

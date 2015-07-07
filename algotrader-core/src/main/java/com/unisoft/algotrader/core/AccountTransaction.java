@@ -3,6 +3,7 @@ package com.unisoft.algotrader.core;
 import com.datastax.driver.mapping.annotations.Field;
 import com.datastax.driver.mapping.annotations.UDT;
 import com.google.common.base.Objects;
+import com.unisoft.algotrader.model.refdata.Currency;
 
 /**
  * Created by alex on 5/29/15.

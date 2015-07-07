@@ -6,8 +6,8 @@ import com.datastax.driver.mapping.Result;
 import com.datastax.driver.mapping.annotations.Accessor;
 import com.datastax.driver.mapping.annotations.Param;
 import com.datastax.driver.mapping.annotations.Query;
-import com.unisoft.algotrader.core.Currency;
-import com.unisoft.algotrader.core.Exchange;
+import com.unisoft.algotrader.model.refdata.Currency;
+import com.unisoft.algotrader.model.refdata.Exchange;
 
 /**
  * Created by alex on 6/28/15.

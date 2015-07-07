@@ -4,34 +4,27 @@ CREATE KEYSPACE IF NOT EXISTS refdata WITH replication ={'class':'SimpleStrategy
 
 USE refdata;
 
-//CREATE TABLE IF NOT EXISTS currency (
-//  ccyId text,
-//  businessTime bigint,
-//  systemTime bigint,
-//  name text,
-//  PRIMARY KEY (ccyId, businessTime, systemTime)
-//)WITH CLUSTERING ORDER BY (businessTime DESC, systemTime DESC);
-
 CREATE TABLE IF NOT EXISTS currency (
   ccy_id text,
+  businesstime bigint,
+  systemtime bigint,
+  active boolean,
+  updated_user text,
+  updated_reason text,
   name text,
-  PRIMARY KEY (ccy_id)
-);
-
-//CREATE TABLE IF NOT EXISTS exchange (
-//  exchId text,
-//  businessTime bigint,
-//  systemTime bigint,
-//  name text,
-//  PRIMARY KEY (exchId, businessTime, systemTime)
-//)WITH CLUSTERING ORDER BY (businessTime DESC, systemTime DESC);
+  PRIMARY KEY (ccy_id, businesstime, systemtime)
+)WITH CLUSTERING ORDER BY (businesstime DESC, systemtime DESC);
 
 CREATE TABLE IF NOT EXISTS exchange (
   exch_id text,
+  businesstime bigint,
+  systemtime bigint,
+  active boolean,
+  updated_user text,
+  updated_reason text,
   name text,
-  PRIMARY KEY (exch_id)
-);
-
+  PRIMARY KEY (exch_id, businesstime, systemtime)
+)WITH CLUSTERING ORDER BY (businesstime DESC, systemtime DESC);
 
 //CREATE TYPE inst_classification (
 //   group text,

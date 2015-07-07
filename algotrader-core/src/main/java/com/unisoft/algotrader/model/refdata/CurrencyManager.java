@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.core;
+package com.unisoft.algotrader.model.refdata;
 
 import com.google.common.collect.Maps;
 

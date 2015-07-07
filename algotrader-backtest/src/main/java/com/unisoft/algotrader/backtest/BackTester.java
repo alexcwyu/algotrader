@@ -4,6 +4,7 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 import com.unisoft.algotrader.core.*;
 import com.unisoft.algotrader.event.EventBusManager;
 import com.unisoft.algotrader.event.data.RingBufferMarketDataEventBus;
+import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.order.OrderManager;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.SubscriptionKey;
@@ -50,7 +51,7 @@ public class BackTester {
         this.account = new Account("TestAccount", "TestAccount", currency, initialValue);
 
         AccountManager.INSTANCE.add(account);
-        this.portfolio = new Portfolio("TestPortfolio", account.getName());
+        this.portfolio = new Portfolio("TestPortfolio", account.getAccountId());
         PortfolioManager.INSTANCE.add(portfolio);
 
         this.strategy = strategy;

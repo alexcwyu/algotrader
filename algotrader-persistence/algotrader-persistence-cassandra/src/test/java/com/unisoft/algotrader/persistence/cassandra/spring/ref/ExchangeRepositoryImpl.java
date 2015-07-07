@@ -1,7 +1,7 @@
 package com.unisoft.algotrader.persistence.cassandra.spring.ref;
 
 import com.datastax.driver.core.*;
-import com.unisoft.algotrader.core.Exchange;
+import com.unisoft.algotrader.model.refdata.Exchange;
 import org.springframework.data.cassandra.core.CassandraOperations;
 
 import javax.inject.Inject;

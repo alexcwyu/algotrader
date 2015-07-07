@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.demo;
 
-import com.unisoft.algotrader.core.Currency;
+import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.core.Instrument;
 import com.unisoft.algotrader.core.InstrumentManager;
 

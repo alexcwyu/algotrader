@@ -1,7 +1,7 @@
 package com.unisoft.algotrader.persistence.cassandra.spring.ref;
 
 import com.datastax.driver.core.*;
-import com.unisoft.algotrader.core.Currency;
+import com.unisoft.algotrader.model.refdata.Currency;
 import org.springframework.data.cassandra.core.CassandraOperations;
 
 import javax.inject.Inject;

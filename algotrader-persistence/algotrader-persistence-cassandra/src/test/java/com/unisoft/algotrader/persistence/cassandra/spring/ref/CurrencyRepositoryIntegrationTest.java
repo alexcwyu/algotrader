@@ -5,7 +5,7 @@ package com.unisoft.algotrader.persistence.cassandra.spring.ref;
  */
 
 import com.google.common.collect.ImmutableSet;
-import com.unisoft.algotrader.core.Currency;
+import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.persistence.cassandra.spring.BaseIntegrationTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

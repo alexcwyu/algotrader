@@ -5,6 +5,7 @@ import com.unisoft.algotrader.event.data.Quote;
 import com.unisoft.algotrader.event.data.Trade;
 import com.unisoft.algotrader.event.execution.ExecutionReport;
 import com.unisoft.algotrader.event.execution.Order;
+import com.unisoft.algotrader.model.refdata.Currency;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Before;
