@@ -11,6 +11,8 @@ import java.util.List;
  */
 public interface RefDataStore {
 
+    void connect();
+
     void saveCurrency(Currency currency);
 
     Currency getCurrency(String ccyId);

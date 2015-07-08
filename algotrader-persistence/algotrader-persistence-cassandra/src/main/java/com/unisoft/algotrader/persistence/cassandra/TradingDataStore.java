@@ -12,6 +12,8 @@ import java.util.List;
  */
 public interface TradingDataStore {
 
+    void connect();
+
     void saveAccount(Account account);
 
     Account getAccount(String accountId);

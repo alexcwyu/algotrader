@@ -60,11 +60,27 @@ public class InMemoryTradingDataStore implements TradingDataStore {
     }
 
 
+    public InMemoryTradingDataStore(){
+        this.delegateDataStore = null;
+    }
+
+    @Override
+    public void connect(){
+        if(delegateDataStore != null) {
+            delegateDataStore.connect();
+            delegateDataStore.getAllAccounts().forEach(a -> accountCache.put(a.getAccountId(), a));
+            delegateDataStore.getAllPortfolios().forEach(p -> portfolioCache.put(p.getPortfolioId(), p));
+            delegateDataStore.getAllOrders().forEach(o -> orderCache.put(o.getOrderId(), o));
+            delegateDataStore.getAllExecutionReports().forEach(er -> executionReportCache.put(er.getExecId(), er));
+        }
+    }
+
     @Override
     public void saveAccount(Account account) {
-        delegateDataStore.saveAccount(account);
+        if(delegateDataStore != null) {
+            delegateDataStore.saveAccount(account);
+        }
         accountCache.put(account.getAccountId(), account);
-
     }
 
     @Override
@@ -79,7 +95,9 @@ public class InMemoryTradingDataStore implements TradingDataStore {
 
     @Override
     public void savePortfolio(Portfolio portfolio) {
-        delegateDataStore.savePortfolio(portfolio);
+        if(delegateDataStore != null) {
+            delegateDataStore.savePortfolio(portfolio);
+        }
         portfolioCache.put(portfolio.getPortfolioId(), portfolio);
     }
 
@@ -95,7 +113,9 @@ public class InMemoryTradingDataStore implements TradingDataStore {
 
     @Override
     public void saveExecutionReport(ExecutionReport er) {
-        delegateDataStore.saveExecutionReport(er);
+        if(delegateDataStore != null) {
+            delegateDataStore.saveExecutionReport(er);
+        }
         executionReportCache.put(er.getExecId(), er);
     }
 
@@ -121,7 +141,9 @@ public class InMemoryTradingDataStore implements TradingDataStore {
 
     @Override
     public void saveOrder(Order order) {
-        delegateDataStore.saveOrder(order);
+        if(delegateDataStore != null) {
+            delegateDataStore.saveOrder(order);
+        }
         orderCache.put(order.getOrderId(), order);
     }
 

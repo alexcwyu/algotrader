@@ -45,9 +45,26 @@ public class InMemoryRefDataStore implements RefDataStore {
         this.delegateDataStore = delegateDataStore;
     }
 
+    public InMemoryRefDataStore(){
+        this.delegateDataStore = null;
+    }
+
+
+    @Override
+    public void connect(){
+        if (delegateDataStore != null) {
+            delegateDataStore.connect();
+            delegateDataStore.getAllCurrencies().forEach(c -> currencyCache.put(c.getCcyId(), c));
+            delegateDataStore.getAllExchanges().forEach(e -> exchangeCache.put(e.getExchId(), e));
+            delegateDataStore.getAllInstruments().forEach(i -> instrumentCache.put(i.getInstId(), i));
+        }
+    }
+
     @Override
     public void saveCurrency(Currency currency) {
-        delegateDataStore.saveCurrency(currency);
+        if (delegateDataStore!= null) {
+            delegateDataStore.saveCurrency(currency);
+        }
         currencyCache.put(currency.getCcyId(), currency);
     }
 
@@ -63,9 +80,10 @@ public class InMemoryRefDataStore implements RefDataStore {
 
     @Override
     public void saveExchange(Exchange exchange) {
-        delegateDataStore.saveExchange(exchange);
+        if (delegateDataStore!= null) {
+            delegateDataStore.saveExchange(exchange);
+        }
         exchangeCache.put(exchange.getExchId(), exchange);
-
     }
 
     @Override
@@ -80,7 +98,9 @@ public class InMemoryRefDataStore implements RefDataStore {
 
     @Override
     public void saveInstrument(Instrument instrument) {
-        delegateDataStore.saveInstrument(instrument);
+        if (delegateDataStore!= null) {
+            delegateDataStore.saveInstrument(instrument);
+        }
         instrumentCache.put(instrument.getInstId(), instrument);
     }
 
