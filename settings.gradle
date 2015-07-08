@@ -17,5 +17,4 @@ include 'algotrader-sample'
 include 'algotrader-integration-test'
 include 'algotrader-persistence:algotrader-persistence-cassandra'
 include 'algotrader-persistence:algotrader-persistence-common'
-include 'algotrader-model'
 

@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.persistence.cassandra;
+package com.unisoft.algotrader.persistence;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

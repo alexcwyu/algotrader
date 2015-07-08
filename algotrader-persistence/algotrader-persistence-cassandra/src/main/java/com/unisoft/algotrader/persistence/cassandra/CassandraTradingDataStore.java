@@ -9,6 +9,7 @@ import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.trading.Account;
 import com.unisoft.algotrader.model.trading.Portfolio;
+import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.persistence.cassandra.accessor.AccountAccessor;
 import com.unisoft.algotrader.persistence.cassandra.accessor.ExecutionReportAccessor;
 import com.unisoft.algotrader.persistence.cassandra.accessor.OrderAccessor;
@@ -19,7 +20,7 @@ import java.util.List;
 /**
  * Created by alex on 7/7/15.
  */
-public class CassandraTradingDataStore implements TradingDataStore{
+public class CassandraTradingDataStore implements TradingDataStore {
     private Cluster cluster;
     private Session session;
     private String keySpace;

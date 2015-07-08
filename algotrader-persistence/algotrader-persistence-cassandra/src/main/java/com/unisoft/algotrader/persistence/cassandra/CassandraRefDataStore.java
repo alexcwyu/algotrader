@@ -8,6 +8,7 @@ import com.datastax.driver.mapping.MappingManager;
 import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Exchange;
 import com.unisoft.algotrader.model.refdata.Instrument;
+import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.persistence.cassandra.accessor.CurrencyAccessor;
 import com.unisoft.algotrader.persistence.cassandra.accessor.ExchangeAccessor;
 import com.unisoft.algotrader.persistence.cassandra.accessor.InstrumentAccessor;
@@ -17,7 +18,7 @@ import java.util.List;
 /**
  * Created by alex on 7/7/15.
  */
-public class CassandraRefDataStore implements RefDataStore{
+public class CassandraRefDataStore implements RefDataStore {
 
     private Cluster cluster;
     private String keySpace;

@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.persistence.cassandra;
+package com.unisoft.algotrader.persistence;
 
 import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Exchange;
