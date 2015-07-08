@@ -1,4 +1,6 @@
 dependencies {
+    compile project(':algotrader-persistence:algotrader-persistence-common')
+
     compile "com.datastax.cassandra:cassandra-driver-core:2.1.6"
     compile "com.datastax.cassandra:cassandra-driver-mapping:2.1.6"
     compile "org.springframework.data:spring-data-cassandra:1.2.0.RELEASE"
