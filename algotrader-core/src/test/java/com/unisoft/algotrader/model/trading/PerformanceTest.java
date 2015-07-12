@@ -3,8 +3,11 @@ package com.unisoft.algotrader.model.trading;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.sound.sampled.Port;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 /**
@@ -12,90 +15,92 @@ import static org.mockito.Mockito.when;
  */
 public class PerformanceTest {
 
-    private Portfolio portfolio;
+    private PortfolioProcessor processor;
     private Performance performance;
 
 
     @Before
     public void setup() {
-        portfolio = mock(Portfolio.class);
-        performance = new Performance(portfolio, null);
+        Portfolio portfolio = new Portfolio("Test");
+        processor = spy(new PortfolioProcessor(portfolio));
+        performance = portfolio.getPerformance();
+
     }
 
     @Test
     public void test_high_equity() {
-        when(portfolio.totalEquity()).thenReturn(1000.0);
-        performance.valueChanged(0);
+        when(processor.totalEquity()).thenReturn(1000.0);
+        processor.updatePerformance(0);
         assertEquals(1000.0, performance.getHighEquity(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1100.0);
-        performance.valueChanged(1);
+        when(processor.totalEquity()).thenReturn(1100.0);
+        processor.updatePerformance(1);
         assertEquals(1100.0, performance.getHighEquity(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1200.0);
-        performance.valueChanged(2);
+        when(processor.totalEquity()).thenReturn(1200.0);
+        processor.updatePerformance(2);
         assertEquals(1200.0, performance.getHighEquity(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(950.0);
-        performance.valueChanged(3);
+        when(processor.totalEquity()).thenReturn(950.0);
+        processor.updatePerformance(3);
         assertEquals(1200.0, performance.getHighEquity(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1050.0);
-        performance.valueChanged(4);
+        when(processor.totalEquity()).thenReturn(1050.0);
+        processor.updatePerformance(4);
         assertEquals(1200.0, performance.getHighEquity(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1600.0);
-        performance.valueChanged(5);
+        when(processor.totalEquity()).thenReturn(1600.0);
+        processor.updatePerformance(5);
         assertEquals(1600.0, performance.getHighEquity(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(500.0);
-        performance.valueChanged(6);
+        when(processor.totalEquity()).thenReturn(500.0);
+        processor.updatePerformance(6);
         assertEquals(1600.0, performance.getHighEquity(), 0.0);
     }
 
     @Test
     public void test_low_equity(){
-        when(portfolio.totalEquity()).thenReturn(1000.0);
-        performance.valueChanged(0);
+        when(processor.totalEquity()).thenReturn(1000.0);
+        processor.updatePerformance(0);
         assertEquals(1000.0, performance.getLowEquity(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1100.0);
-        performance.valueChanged(1);
+        when(processor.totalEquity()).thenReturn(1100.0);
+        processor.updatePerformance(1);
         assertEquals(1100.0, performance.getLowEquity(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1200.0);
-        performance.valueChanged(2);
+        when(processor.totalEquity()).thenReturn(1200.0);
+        processor.updatePerformance(2);
         assertEquals(1200.0, performance.getLowEquity(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(950.0);
-        performance.valueChanged(3);
+        when(processor.totalEquity()).thenReturn(950.0);
+        processor.updatePerformance(3);
         assertEquals(950.0, performance.getLowEquity(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1050.0);
-        performance.valueChanged(4);
+        when(processor.totalEquity()).thenReturn(1050.0);
+        processor.updatePerformance(4);
         assertEquals(950.0, performance.getLowEquity(), 0.0);
     }
 
     @Test
     public void test_equity(){
-        when(portfolio.totalEquity()).thenReturn(1000.0);
-        performance.valueChanged(0);
+        when(processor.totalEquity()).thenReturn(1000.0);
+        processor.updatePerformance(0);
         assertEquals(1000.0, performance.getEquity(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1100.0);
-        performance.valueChanged(1);
+        when(processor.totalEquity()).thenReturn(1100.0);
+        processor.updatePerformance(1);
         assertEquals(1100.0, performance.getEquity(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1200.0);
-        performance.valueChanged(2);
+        when(processor.totalEquity()).thenReturn(1200.0);
+        processor.updatePerformance(2);
         assertEquals(1200.0, performance.getEquity(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(950.0);
-        performance.valueChanged(3);
+        when(processor.totalEquity()).thenReturn(950.0);
+        processor.updatePerformance(3);
         assertEquals(950.0, performance.getEquity(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1050.0);
-        performance.valueChanged(4);
+        when(processor.totalEquity()).thenReturn(1050.0);
+        processor.updatePerformance(4);
         assertEquals(1050.0, performance.getEquity(), 0.0);
 
 
@@ -109,24 +114,24 @@ public class PerformanceTest {
 
     @Test
     public void test_pnl(){
-        when(portfolio.totalEquity()).thenReturn(1000.0);
-        performance.valueChanged(0);
+        when(processor.totalEquity()).thenReturn(1000.0);
+        processor.updatePerformance(0);
         assertEquals(0.0, performance.getPnl(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1100.0);
-        performance.valueChanged(1);
+        when(processor.totalEquity()).thenReturn(1100.0);
+        processor.updatePerformance(1);
         assertEquals(100.0, performance.getPnl(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1200.0);
-        performance.valueChanged(2);
+        when(processor.totalEquity()).thenReturn(1200.0);
+        processor.updatePerformance(2);
         assertEquals(100.0, performance.getPnl(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(950.0);
-        performance.valueChanged(3);
+        when(processor.totalEquity()).thenReturn(950.0);
+        processor.updatePerformance(3);
         assertEquals(-250.0, performance.getPnl(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1050.0);
-        performance.valueChanged(4);
+        when(processor.totalEquity()).thenReturn(1050.0);
+        processor.updatePerformance(4);
         assertEquals(100.0, performance.getPnl(), 0.0);
 
         assertEquals(100.0, performance.getPnlSeries().getByIdx(0), 0.0);
@@ -139,48 +144,48 @@ public class PerformanceTest {
     public void test_drawdown_and_drawdown_pct(){
 
         long count = 0;
-        when(portfolio.totalEquity()).thenReturn(1000.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(1000.0);
+        processor.updatePerformance(count++);
         assertEquals(0.0, performance.getDrawdown(), 0.0);
         assertEquals(0.0, performance.getDrawdownPercent(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1100.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(1100.0);
+        processor.updatePerformance(count++);
         assertEquals(0.0, performance.getDrawdown(), 0.0);
         assertEquals(0.0, performance.getDrawdownPercent(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1050.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(1050.0);
+        processor.updatePerformance(count++);
         assertEquals(-50, performance.getDrawdown(), 0.0);
         assertEquals(Math.abs(-50.0/1100.0), performance.getDrawdownPercent(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(950.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(950.0);
+        processor.updatePerformance(count++);
         assertEquals(-150, performance.getDrawdown(), 0.0);
         assertEquals(Math.abs(-150.0/1100.0), performance.getDrawdownPercent(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(750.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(750.0);
+        processor.updatePerformance(count++);
         assertEquals((750.0 - 1100), performance.getDrawdown(), 0.0);
         assertEquals(Math.abs((750.0 - 1100.0)/1100.0), performance.getDrawdownPercent(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1200.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(1200.0);
+        processor.updatePerformance(count++);
         assertEquals(0.0, performance.getDrawdown(), 0.0);
         assertEquals(0.0, performance.getDrawdownPercent(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1350.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(1350.0);
+        processor.updatePerformance(count++);
         assertEquals(0.0, performance.getDrawdown(), 0.0);
         assertEquals(0.0, performance.getDrawdownPercent(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(650.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(650.0);
+        processor.updatePerformance(count++);
         assertEquals((650.0 - 1350), performance.getDrawdown(), 0.0);
         assertEquals(Math.abs((650.0 - 1350.0)/1350.0), performance.getDrawdownPercent(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(750.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(750.0);
+        processor.updatePerformance(count++);
         assertEquals((750 - 1350), performance.getDrawdown(), 0.0);
         assertEquals(Math.abs((750.0 - 1350.0)/1350.0), performance.getDrawdownPercent(), 0.0);
 
@@ -208,48 +213,48 @@ public class PerformanceTest {
     public void test_current_drawdown(){
 
         long count = 0;
-        when(portfolio.totalEquity()).thenReturn(1000.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(1000.0);
+        processor.updatePerformance(count++);
         assertEquals(0.0, performance.getCurrentDrawdown(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1100.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(1100.0);
+        processor.updatePerformance(count++);
         assertEquals(0.0, performance.getCurrentDrawdown(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(550.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(550.0);
+        processor.updatePerformance(count++);
         assertEquals(0.0, performance.getCurrentDrawdown(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(850.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(850.0);
+        processor.updatePerformance(count++);
         assertEquals((1.0 - 850.0 / 1100.0), performance.getCurrentDrawdown(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(950.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(950.0);
+        processor.updatePerformance(count++);
         assertEquals((1.0 - 950.0 / 1100.0), performance.getCurrentDrawdown(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1200.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(1200.0);
+        processor.updatePerformance(count++);
         assertEquals(0.0, performance.getCurrentDrawdown(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1350.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(1350.0);
+        processor.updatePerformance(count++);
         assertEquals(0.0, performance.getCurrentDrawdown(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1350.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(1350.0);
+        processor.updatePerformance(count++);
         assertEquals(0.0, performance.getCurrentDrawdown(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(650.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(650.0);
+        processor.updatePerformance(count++);
         assertEquals(0, performance.getCurrentDrawdown(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(850.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(850.0);
+        processor.updatePerformance(count++);
         assertEquals((1.0 - 850.0 / 1350.0), performance.getCurrentDrawdown(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(750.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(750.0);
+        processor.updatePerformance(count++);
         assertEquals((1.0 - 750.0 / 1350.0), performance.getCurrentDrawdown(), 0.0);
 
 
@@ -260,48 +265,48 @@ public class PerformanceTest {
     public void test_current_run_up(){
 
         long count = 0;
-        when(portfolio.totalEquity()).thenReturn(1000.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(1000.0);
+        processor.updatePerformance(count++);
         assertEquals(0.0, performance.getCurrentRunUp(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1100.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(1100.0);
+        processor.updatePerformance(count++);
         assertEquals(0.0, performance.getCurrentRunUp(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(550.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(550.0);
+        processor.updatePerformance(count++);
         assertEquals(0.0, performance.getCurrentRunUp(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(850.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(850.0);
+        processor.updatePerformance(count++);
         assertEquals((850.0 / 550.0 - 1.0), performance.getCurrentRunUp(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(950.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(950.0);
+        processor.updatePerformance(count++);
         assertEquals((950.0 / 550.0 - 1.0), performance.getCurrentRunUp(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1200.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(1200.0);
+        processor.updatePerformance(count++);
         assertEquals((950.0 / 550.0 - 1.0), performance.getCurrentRunUp(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1350.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(1350.0);
+        processor.updatePerformance(count++);
         assertEquals((950.0 / 550.0 - 1.0), performance.getCurrentRunUp(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(1350.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(1350.0);
+        processor.updatePerformance(count++);
         assertEquals((950.0 / 550.0 - 1.0), performance.getCurrentRunUp(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(650.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(650.0);
+        processor.updatePerformance(count++);
         assertEquals(0, performance.getCurrentRunUp(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(850.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(850.0);
+        processor.updatePerformance(count++);
         assertEquals((850.0 / 650.0 - 1.0), performance.getCurrentRunUp(), 0.0);
 
-        when(portfolio.totalEquity()).thenReturn(750.0);
-        performance.valueChanged(count++);
+        when(processor.totalEquity()).thenReturn(750.0);
+        processor.updatePerformance(count++);
         assertEquals((750.0 / 650.0 - 1.0), performance.getCurrentRunUp(), 0.0);
 
     }

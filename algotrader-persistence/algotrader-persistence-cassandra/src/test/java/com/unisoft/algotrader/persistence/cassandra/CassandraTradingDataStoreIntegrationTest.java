@@ -82,25 +82,26 @@ public class CassandraTradingDataStoreIntegrationTest {
         Account account = AccountManager.DEFAULT_ACCOUNT;
 
         Portfolio portfolio = SampleEventFactory.createPortfolio("TestPortfolio", account.getAccountId());
+        PortfolioProcessor portfolioProcessor = new PortfolioProcessor(portfolio);
         PortfolioManager.INSTANCE.add(portfolio);
 
         Clock.CLOCK.setDateTime(System.currentTimeMillis());
         Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument2.getInstId(), Side.Buy, OrdType.Limit, 9000, 98, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
         ExecutionReport executionReport = SampleEventFactory.createExecutionReport(order);
         order.add(executionReport);
-        portfolio.add(order);
+        portfolioProcessor.add(order);
 
         Clock.CLOCK.setDateTime(System.currentTimeMillis());
         Order order2 = SampleEventFactory.createOrder(SampleEventFactory.testInstrument2.getInstId(), Side.Sell, OrdType.Limit, 10000, 108, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
         ExecutionReport executionReport2 = SampleEventFactory.createExecutionReport(order2);
         order2.add(executionReport2);
-        portfolio.add(order2);
+        portfolioProcessor.add(order2);
 
         Clock.CLOCK.setDateTime(System.currentTimeMillis());
         Order order3 = SampleEventFactory.createOrder(SampleEventFactory.testInstrument2.getInstId(), Side.Buy, OrdType.Limit, 1000, 88, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
         ExecutionReport executionReport3 = SampleEventFactory.createExecutionReport(order3);
         order3.add(executionReport3);
-        portfolio.add(order3);
+        portfolioProcessor.add(order3);
 
         store.saveOrder(order);
         store.saveOrder(order2);
@@ -138,7 +139,7 @@ public class CassandraTradingDataStoreIntegrationTest {
 
         Account loadedAccount = store.getAccount(account.getAccountId());
         assertNotNull(loadedAccount);
-        loadedPortfolio.setAccount(loadedAccount);
+        loadedPortfolio.setAccountName(loadedAccount.getName());
 
         assertEquals(order, loadedOrder);
         assertEquals(order2, loadedOrder2);

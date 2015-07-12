@@ -41,7 +41,6 @@ CREATE TYPE IF NOT EXISTS double_time_series (
 
 
 CREATE TYPE IF NOT EXISTS performance (
-    portfolio_id text,
     enabled boolean,
     equity double,
     core_equity double,

@@ -1,6 +1,5 @@
 package com.unisoft.algotrader.model.trading;
 
-import com.datastax.driver.mapping.annotations.Transient;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.event.data.Bar;
@@ -8,9 +7,6 @@ import com.unisoft.algotrader.model.event.data.MarketDataHandler;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
 import com.unisoft.algotrader.model.event.execution.Order;
-import com.unisoft.algotrader.model.refdata.Instrument;
-import com.unisoft.algotrader.model.refdata.InstrumentManager;
-import org.msgpack.annotation.Ignore;
 
 import java.util.List;
 
@@ -22,6 +18,7 @@ public class Position implements MarketDataHandler {
     private String portfolioId;
 
     private double marketPrice;
+    private double factor;
     private double qtyBought;
     private double qtySold;
     private double qtySoldShort;
@@ -33,68 +30,63 @@ public class Position implements MarketDataHandler {
     private int fPnLTransactionIndex = -1;
     private double qtyLeft;
 
-    @Ignore
-    @Transient
-    private Instrument instrument;
-
     protected Position(){}
 
     public Position(int instId, String portfolioId){
-        this.instId = instId;
-        this.portfolioId = portfolioId;
+        this(instId, portfolioId, 0.0);
     }
 
-    public double amount(){
+    public Position(int instId, String portfolioId, double factor){
+        this.instId = instId;
+        this.portfolioId = portfolioId;
+        this.factor = factor;
+    }
+
+    public double getAmount(){
         return qtyBought - qtySold - qtySoldShort;
     }
 
-    public double qty(){
-        return Math.abs(amount());
+    public double getQty(){
+        return Math.abs(getAmount());
     }
 
-    public PositionSide side(){
-        if (amount() >= 0){
+    public PositionSide getSide(){
+        if (getAmount() >= 0){
             return PositionSide.Long;
         }
         return PositionSide.Short;
     }
 
-    public int sign(Order order){
+    public int getSign(Order order){
         return order.amount() >0 ? 1: ( order.amount()<0 ? -1 : 0);
     }
 
     //current liquidation marketPrice to the base portfolio currency
-    public double price(){
+    public double getPrice(){
         //TODO fix to use instrument pricer
         return marketPrice;
     }
 
-    private Instrument instrument() {
-        if (instrument == null) {
-            instrument = InstrumentManager.INSTANCE.get(instId);
-        }
-        return instrument;
+    public double getFactor(){
+        return factor;
     }
 
     public double getValue(){
-        Instrument instrument =instrument();
-        if (instrument() != null && instrument.getFactor() != 0){
-            return price() * amount() * instrument.getFactor();
+        if (factor != 0.0){
+            return getPrice() * getAmount() * factor;
         }
-        return price() * amount();
+        return getPrice() * getAmount();
     }
 
-    public double leverage(){
+    public double getLeverage(){
         if (margin == 0)
             return 0;
         return getValue() / margin;
     }
 
-    public double value(){
-        return price() * qty();
+    public double getAbsValue(){
+        return getPrice() * getQty();
     }
-
-
 
     public void add(Order order) {
         double pnl = 0;
@@ -103,14 +95,14 @@ public class Position implements MarketDataHandler {
         double amount = order.amount();
         this.marketPrice = order.getLastPrice();
 
-        int sign = sign(order);
+        int sign = getSign(order);
 
         if (orderList.size() == 0) {
             fPnLTransactionIndex = 0;
             qtyLeft = order.getFilledQty();
         } else {
-            if ((side() == PositionSide.Long && sign < 0) ||
-                    (side() == PositionSide.Short && sign > 0)) {
+            if ((getSide() == PositionSide.Long && sign < 0) ||
+                    (getSide() == PositionSide.Short && sign > 0)) {
                 int index = fPnLTransactionIndex + 1;
                 double qty = order.getFilledQty();
 
@@ -130,7 +122,7 @@ public class Position implements MarketDataHandler {
                 while (qty > totalFilled && index < orderList.size()) {
                     Order nextOrder = orderList.get(index);
 
-                    if (sign(nextOrder) != sign) {
+                    if (getSign(nextOrder) != sign) {
 
                         qtyFilled = Math.min(qty - totalFilled, nextOrder.getFilledQty());
 
@@ -153,9 +145,8 @@ public class Position implements MarketDataHandler {
             }
 
         }
-        Instrument instrument =instrument();
-        if (instrument.getFactor() != 0)
-            pnl *= instrument.getFactor();
+        if (factor != 0)
+            pnl *= factor;
 
         order.setPnl(pnl - order.transactionCost());
         order.setRealizedPnl((pnl - realizedCost));
@@ -181,7 +172,7 @@ public class Position implements MarketDataHandler {
         orderList.add(order);
     }
 
-    public double cashFlow() {
+    public double getCashFlow() {
         double cashFlow = 0;
         for (Order order : orderList){
             cashFlow += order.cashFlow();
@@ -190,7 +181,7 @@ public class Position implements MarketDataHandler {
     }
 
 
-    public double netCashFlow() {
+    public double getNetCashFlow() {
         double netCashFlow = 0;
         for (Order order : orderList){
             netCashFlow += order.netCashFlow();
@@ -198,30 +189,30 @@ public class Position implements MarketDataHandler {
         return netCashFlow;
     }
 
-    public double pnl(){
-        return value() + cashFlow();
+    public double getPnl(){
+        return getAbsValue() + getCashFlow();
     }
 
-    public double netPnl(){
-        return value() + netCashFlow();
+    public double getNetPnl(){
+        return getAbsValue() + getNetCashFlow();
     }
 
-    public double pnlPercent(){
-        return pnl() / orderList.get(0).value();
+    public double getPnlPercent(){
+        return getPnl() / orderList.get(0).value();
     }
 
-    public double netPnlPercent(){
-        return netPnl() / orderList.get(0).value();
+    public double getNetPnlPercent(){
+        return getNetPnl() / orderList.get(0).value();
     }
 
-    public double unrealizedPnl(){
-        if (qty() == 0)
+    public double getUnrealizedPnl(){
+        if (getQty() == 0)
             return 0;
 
         double price = this.marketPrice;
 
         double pnl = 0;
-        int sign = (side() == PositionSide.Long) ? -1 : 1;
+        int sign = (getSide() == PositionSide.Long) ? -1 : 1;
 
         double qtyFilled = qtyLeft;
 
@@ -237,9 +228,8 @@ public class Position implements MarketDataHandler {
 
             index++;
         }
-        Instrument instrument =instrument();
-        if (instrument.getFactor() != 0)
-            pnl *= instrument.getFactor();
+        if (factor != 0.0)
+            pnl *= factor;
 
         return pnl;
 
@@ -252,9 +242,9 @@ public class Position implements MarketDataHandler {
 
     @Override
     public void onQuote(Quote quote) {
-        if (side() == PositionSide.Long && quote.bid > 0)
+        if (getSide() == PositionSide.Long && quote.bid > 0)
             this.marketPrice = quote.bid;
-        else if (side() == PositionSide.Short && quote.ask > 0)
+        else if (getSide() == PositionSide.Short && quote.ask > 0)
             this.marketPrice = quote.ask;
     }
 
@@ -278,13 +268,12 @@ public class Position implements MarketDataHandler {
                 Objects.equal(fPnLTransactionIndex, position.fPnLTransactionIndex) &&
                 Objects.equal(qtyLeft, position.qtyLeft) &&
                 Objects.equal(portfolioId, position.portfolioId) &&
-                Objects.equal(orderList, position.orderList) &&
-                Objects.equal(instrument, position.instrument);
+                Objects.equal(orderList, position.orderList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(instId, portfolioId, marketPrice, qtyBought, qtySold, qtySoldShort, margin, debt, orderList, fPnLTransactionIndex, qtyLeft, instrument);
+        return Objects.hashCode(instId, portfolioId, marketPrice, qtyBought, qtySold, qtySoldShort, margin, debt, orderList, fPnLTransactionIndex, qtyLeft);
     }
 
     public int getInstId() {
@@ -373,14 +362,6 @@ public class Position implements MarketDataHandler {
 
     public void setQtyLeft(double qtyLeft) {
         this.qtyLeft = qtyLeft;
-    }
-
-    public Instrument getInstrument() {
-        return instrument;
-    }
-
-    public void setInstrument(Instrument instrument) {
-        this.instrument = instrument;
     }
 
 }

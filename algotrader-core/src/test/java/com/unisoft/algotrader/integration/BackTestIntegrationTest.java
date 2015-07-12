@@ -71,7 +71,7 @@ public class BackTestIntegrationTest {
         executor.submit(simulationExecutor);
         executor.submit(instrumentDataManager);
 
-        assertEquals(0.0, portfolio.positionValue(), 0.0);
+        assertEquals(0.0, portfolioProcessor.positionValue(), 0.0);
 
         executor.submit(()->{
 

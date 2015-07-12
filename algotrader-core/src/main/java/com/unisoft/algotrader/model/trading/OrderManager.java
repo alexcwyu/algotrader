@@ -85,10 +85,10 @@ public class OrderManager extends MultiEventProcessor implements OrderHandler, E
             order.add(executionReport);
             if (order.ordStatus == OrdStatus.Filled || order.ordStatus == OrdStatus.Cancelled || order.ordStatus == OrdStatus.Rejected){
                 if (order.filledQty > 0 && order.portfolioId != null) {
-                    Portfolio portfolio = PortfolioManager.INSTANCE.get(order.portfolioId);
-                    if (portfolio != null){
-                        portfolio.add(order);
-                    }
+//                    Portfolio portfolio = PortfolioManager.INSTANCE.get(order.portfolioId);
+//                    if (portfolio != null){
+//                        portfolio.add(order);
+//                    }
                 }
             }
         }

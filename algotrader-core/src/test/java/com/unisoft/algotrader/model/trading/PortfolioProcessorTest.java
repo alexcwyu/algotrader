@@ -21,9 +21,9 @@ import static org.mockito.Mockito.when;
 /**
  * Created by alex on 5/29/15.
  */
-public class PortfolioTest {
+public class PortfolioProcessorTest {
 
-    private static final Logger LOG = LogManager.getLogger(PortfolioTest.class);
+    private static final Logger LOG = LogManager.getLogger(PortfolioProcessorTest.class);
 
     public static long ordId = 0;
     public static long execId = 100;
@@ -53,98 +53,98 @@ public class PortfolioTest {
 
     @Test
     public void test_value(){
-        portfolio = spy(portfolio);
+        portfolioProcessor = spy(portfolioProcessor);
 
-        when(portfolio.accountValue()).thenReturn(999.0);
-        when(portfolio.positionValue()).thenReturn(10000.0);
-        assertEquals(10999.0, portfolio.value(), 0.0);
+        when(portfolioProcessor.accountValue()).thenReturn(999.0);
+        when(portfolioProcessor.positionValue()).thenReturn(10000.0);
+        assertEquals(10999.0, portfolioProcessor.value(), 0.0);
 
-        when(portfolio.accountValue()).thenReturn(888.0);
-        when(portfolio.positionValue()).thenReturn(60000.0);
-        assertEquals(60888, portfolio.value(), 0.0);
+        when(portfolioProcessor.accountValue()).thenReturn(888.0);
+        when(portfolioProcessor.positionValue()).thenReturn(60000.0);
+        assertEquals(60888, portfolioProcessor.value(), 0.0);
     }
 
 
     @Test
     public void test_account_value(){
         assertEquals(1_000_000, account.value(), 0.0);
-        assertEquals(portfolio.value(), account.value(), 0.0);
+        assertEquals(portfolioProcessor.value(), account.value(), 0.0);
 
         account.deposit(System.currentTimeMillis(), Currency.HKD, 1000, "");
         assertEquals(1_001_000, account.value(), 0.0);
-        assertEquals(portfolio.accountValue(), account.value(), 0.0);
+        assertEquals(portfolioProcessor.accountValue(), account.value(), 0.0);
 
     }
 
     @Test
     public void test_position_value(){
 
-        assertEquals(0.0, portfolio.positionValue(), 0.0);
+        assertEquals(0.0, portfolioProcessor.positionValue(), 0.0);
 
         Order order = limitOrder(instrument1.getInstId(), 10000, 2, Side.Buy);
         ExecutionReport er = executionReport(order);
         order.add(er);
-        portfolio.add(order);
+        portfolioProcessor.add(order);
 
         //10000 * 2
-        assertEquals(20000, portfolio.positionValue(), 0.0);
+        assertEquals(20000, portfolioProcessor.positionValue(), 0.0);
 
         order = limitOrder(instrument1.getInstId(), 10000, 1, Side.Buy);
         er = executionReport(order);
         order.add(er);
-        portfolio.add(order);
+        portfolioProcessor.add(order);
 
         //10000 * 3
-        assertEquals(30000, portfolio.positionValue(), 0.0);
+        assertEquals(30000, portfolioProcessor.positionValue(), 0.0);
 
         order = limitOrder(instrument1.getInstId(), 18000, 1, Side.Buy);
         er = executionReport(order);
         order.add(er);
-        portfolio.add(order);
+        portfolioProcessor.add(order);
 
         //18000 * 4
-        assertEquals(72000, portfolio.positionValue(), 0.0);
+        assertEquals(72000, portfolioProcessor.positionValue(), 0.0);
 
         order = limitOrder(instrument1.getInstId(), 20000, 6, Side.Sell);
         er = executionReport(order);
         order.add(er);
-        portfolio.add(order);
+        portfolioProcessor.add(order);
 
         //-20000 * 2
-        assertEquals(-40000, portfolio.positionValue(), 0.0);
+        assertEquals(-40000, portfolioProcessor.positionValue(), 0.0);
 
         order = limitOrder(instrument2.getInstId(), 2000, 50, Side.Buy);
         er = executionReport(order);
         order.add(er);
-        portfolio.add(order);
+        portfolioProcessor.add(order);
         //(-20000 * 2) + 2000 * 50
-        assertEquals(60000, portfolio.positionValue(), 0.0);
+        assertEquals(60000, portfolioProcessor.positionValue(), 0.0);
 
         order = limitOrder(instrument3.getInstId(), 85, 10, Side.Buy);
         er = executionReport(order);
         order.add(er);
-        portfolio.add(order);
+        portfolioProcessor.add(order);
 
         //(-20000 * 2) + 2000 * 50 + 85 * 10
-        assertEquals(60850, portfolio.positionValue(), 0.0);
+        assertEquals(60850, portfolioProcessor.positionValue(), 0.0);
 
 
         //(-20000 * 2) + 2000 * 50 + 88 * 10
         portfolioProcessor.onTrade(new Trade(instrument3.getInstId(), System.currentTimeMillis(), 88, 1));
-        assertEquals(60880, portfolio.positionValue(), 0.0);
+        assertEquals(60880, portfolioProcessor.positionValue(), 0.0);
 
         //(-21000 * 2) + 2000 * 50 + 88 * 10
         portfolioProcessor.onQuote(new Quote(instrument1.getInstId(), System.currentTimeMillis(), 19000, 21000, 1, 1));
-        assertEquals(58880, portfolio.positionValue(), 0.0);
+        assertEquals(58880, portfolioProcessor.positionValue(), 0.0);
 
         //(-21000 * 2) + 2000 * 50 + 87 * 10
         portfolioProcessor.onQuote(new Quote(instrument3.getInstId(), System.currentTimeMillis(), 87, 89, 1, 1));
-        assertEquals(58870, portfolio.positionValue(), 0.0);
+        assertEquals(58870, portfolioProcessor.positionValue(), 0.0);
 
         portfolioProcessor.onBar(new Bar(instrument2.getInstId(), 60, System.currentTimeMillis(), 2000, 2100, 1900, 2050, 1, 1));
 
         //(-21000 * 2) + 2050 * 50 + 87 * 10
-        assertEquals(61370, portfolio.positionValue(), 0.0);
+        assertEquals(61370, portfolioProcessor.positionValue(), 0.0);
     }
 
     @Test
@@ -153,39 +153,39 @@ public class PortfolioTest {
         Order order = limitOrder(instrument1.getInstId(), 20000, 2, Side.Sell);
         ExecutionReport er = executionReport(order);
         order.add(er);
-        portfolio.add(order);
+        portfolioProcessor.add(order);
 
         order = limitOrder(instrument2.getInstId(), 2000, 50, Side.Buy);
         er = executionReport(order);
         order.add(er);
-        portfolio.add(order);
+        portfolioProcessor.add(order);
 
         order = limitOrder(instrument3.getInstId(), 85, 10, Side.Buy);
         er = executionReport(order);
         order.add(er);
-        portfolio.add(order);
+        portfolioProcessor.add(order);
 
 
         //(-20000 * 2) + 2000 * 50 + 85 * 10
-        assertEquals(60850, portfolio.positionValue(), 0.0);
+        assertEquals(60850, portfolioProcessor.positionValue(), 0.0);
 
 
         //(-20000 * 2) + 2000 * 50 + 88 * 10
         portfolioProcessor.onTrade(new Trade(instrument3.getInstId(), System.currentTimeMillis(), 88, 1));
-        assertEquals(60880, portfolio.positionValue(), 0.0);
+        assertEquals(60880, portfolioProcessor.positionValue(), 0.0);
 
         //(-21000 * 2) + 2000 * 50 + 88 * 10
         portfolioProcessor.onQuote(new Quote(instrument1.getInstId(), System.currentTimeMillis(), 19000, 21000, 1, 1));
-        assertEquals(58880, portfolio.positionValue(), 0.0);
+        assertEquals(58880, portfolioProcessor.positionValue(), 0.0);
 
         //(-21000 * 2) + 2000 * 50 + 87 * 10
         portfolioProcessor.onQuote(new Quote(instrument3.getInstId(), System.currentTimeMillis(), 87, 89, 1, 1));
-        assertEquals(58870, portfolio.positionValue(), 0.0);
+        assertEquals(58870, portfolioProcessor.positionValue(), 0.0);
 
         portfolioProcessor.onBar(new Bar(instrument2.getInstId(), 60, System.currentTimeMillis(), 2000, 2100, 1900, 2050, 1, 1));
 
         //(-21000 * 2) + 2050 * 50 + 87 * 10
-        assertEquals(61370, portfolio.positionValue(), 0.0);
+        assertEquals(61370, portfolioProcessor.positionValue(), 0.0);
     }
 
     @Test
@@ -201,47 +201,47 @@ public class PortfolioTest {
     @Test
     public void test_core_equity(){
         assertEquals(1_000_000, account.value(), 0.0);
-        assertEquals(portfolio.accountValue(), account.value(), 0.0);
-        assertEquals(portfolio.coreEquity(), account.value(), 0.0);
+        assertEquals(portfolioProcessor.accountValue(), account.value(), 0.0);
+        assertEquals(portfolioProcessor.coreEquity(), account.value(), 0.0);
 
         account.deposit(System.currentTimeMillis(), Currency.HKD, 1000, "");
         assertEquals(1_001_000, account.value(), 0.0);
-        assertEquals(portfolio.accountValue(), account.value(), 0.0);
-        assertEquals(portfolio.coreEquity(), account.value(), 0.0);
+        assertEquals(portfolioProcessor.accountValue(), account.value(), 0.0);
+        assertEquals(portfolioProcessor.coreEquity(), account.value(), 0.0);
     }
 
     @Test
     public void test_total_equity(){
-        portfolio = spy(portfolio);
+        portfolioProcessor = spy(portfolioProcessor);
 
-        when(portfolio.value()).thenReturn(999.0);
-        when(portfolio.debtValue()).thenReturn(10000.0);
-        assertEquals(-9001, portfolio.totalEquity(), 0.0);
+        when(portfolioProcessor.value()).thenReturn(999.0);
+        when(portfolioProcessor.debtValue()).thenReturn(10000.0);
+        assertEquals(-9001, portfolioProcessor.totalEquity(), 0.0);
 
-        when(portfolio.value()).thenReturn(888.0);
-        when(portfolio.debtValue()).thenReturn(60000.0);
-        assertEquals(-59112, portfolio.totalEquity(), 0.0);
+        when(portfolioProcessor.value()).thenReturn(888.0);
+        when(portfolioProcessor.debtValue()).thenReturn(60000.0);
+        assertEquals(-59112, portfolioProcessor.totalEquity(), 0.0);
     }
 
     @Test
     public void test_leverage(){
-        portfolio = spy(portfolio);
+        portfolioProcessor = spy(portfolioProcessor);
 
-        when(portfolio.value()).thenReturn(10000.0);
-        when(portfolio.marginValue()).thenReturn(2000.0);
-        assertEquals(5, portfolio.leverage(), 0.0);
+        when(portfolioProcessor.value()).thenReturn(10000.0);
+        when(portfolioProcessor.marginValue()).thenReturn(2000.0);
+        assertEquals(5, portfolioProcessor.leverage(), 0.0);
 
-        when(portfolio.marginValue()).thenReturn(0.0);
-        assertEquals(0, portfolio.leverage(), 0.0);
+        when(portfolioProcessor.marginValue()).thenReturn(0.0);
+        assertEquals(0, portfolioProcessor.leverage(), 0.0);
     }
 
     @Test
     public void test_debt_equity_ratio(){
-        portfolio = spy(portfolio);
+        portfolioProcessor = spy(portfolioProcessor);
 
-        when(portfolio.totalEquity()).thenReturn(10000.0);
-        when(portfolio.debtValue()).thenReturn(2000.0);
-        assertEquals(0.2, portfolio.debtEquityRatio(), 0.0);
+        when(portfolioProcessor.totalEquity()).thenReturn(10000.0);
+        when(portfolioProcessor.debtValue()).thenReturn(2000.0);
+        assertEquals(0.2, portfolioProcessor.debtEquityRatio(), 0.0);
     }
 
     @Test
@@ -249,15 +249,15 @@ public class PortfolioTest {
         Order order = limitOrder(instrument2.getInstId(), 2000, 50, Side.Buy);
         ExecutionReport er = executionReport(order);
         order.add(er);
-        portfolio.add(order);
-        assertEquals(-100000, portfolio.cashFlow(), 0.0);
+        portfolioProcessor.add(order);
+        assertEquals(-100000, portfolioProcessor.cashFlow(), 0.0);
 
         order = limitOrder(instrument1.getInstId(), 20000, 2, Side.Sell);
         er = executionReport(order);
         order.add(er);
-        portfolio.add(order);
+        portfolioProcessor.add(order);
 
-        assertEquals(-60000, portfolio.cashFlow(), 0.0);
+        assertEquals(-60000, portfolioProcessor.cashFlow(), 0.0);
     }
 
 
@@ -267,16 +267,16 @@ public class PortfolioTest {
         ExecutionReport er = executionReport(order);
         order.add(er);
         order.commissions.add(new Commission.AbsoluteCommission(1000).apply(order));
-        portfolio.add(order);
-        assertEquals(-101000, portfolio.cashFlow(), 0.0);
+        portfolioProcessor.add(order);
+        assertEquals(-101000, portfolioProcessor.cashFlow(), 0.0);
 
 
         order = limitOrder(instrument1.getInstId(), 20000, 2, Side.Sell);
         er = executionReport(order);
         order.add(er);
         order.commissions.add(new Commission.PerShareCommission(50).apply(order));
-        portfolio.add(order);
-        assertEquals(-61100, portfolio.cashFlow(), 0.0);
+        portfolioProcessor.add(order);
+        assertEquals(-61100, portfolioProcessor.cashFlow(), 0.0);
     }
 
     @Test
@@ -287,7 +287,7 @@ public class PortfolioTest {
         Order buyOrder = limitOrder(instrument1.getInstId(), 10000, 2, Side.Buy);
         ExecutionReport er1 = executionReport(buyOrder, 10000, 2);
         buyOrder.add(er1);
-        portfolio.add(buyOrder);
+        portfolioProcessor.add(buyOrder);
 
         assertValue(account, portfolio,
                 980_000,
@@ -301,7 +301,7 @@ public class PortfolioTest {
         Order sellOrder1 = limitOrder(instrument1.getInstId(), 15000, 1, Side.Sell);
         ExecutionReport er2 = executionReport(sellOrder1, 15000, 1);
         sellOrder1.add(er2);
-        portfolio.add(sellOrder1);
+        portfolioProcessor.add(sellOrder1);
 
 
         assertValue(account, portfolio,
@@ -316,7 +316,7 @@ public class PortfolioTest {
         Order sellOrder2 = limitOrder(instrument1.getInstId(), 20000, 1, Side.Sell);
         ExecutionReport er3 = executionReport(sellOrder2, 20000, 1);
         sellOrder2.add(er3);
-        portfolio.add(sellOrder2);
+        portfolioProcessor.add(sellOrder2);
 
 
         assertValue(account, portfolio,
@@ -333,19 +333,19 @@ public class PortfolioTest {
                             double portfolioNetCashFlow, double portfolioTotalEquity){
 
         assertEquals("accountValue not match", accountValue, account.value(), 0.0);
-        assertEquals("accountValue not match", portfolio.accountValue(), account.value(), 0.0);
-        assertEquals("portfolioPositionValue not match", portfolioPositionValue, portfolio.positionValue(), 0.0);
-        assertEquals("portfolioValue not match", portfolioValue, portfolio.value(), 0.0);
-        assertEquals("portfolioCashFlow not match", portfolioCashFlow, portfolio.cashFlow(), 0.0);
-        assertEquals("portfolioNetCashFlow not match", portfolioNetCashFlow, portfolio.netCashFlow(), 0.0);
-        assertEquals("portfolioTotalEquity not match", portfolioTotalEquity, portfolio.totalEquity(), 0.0);
+        assertEquals("accountValue not match", portfolioProcessor.accountValue(), account.value(), 0.0);
+        assertEquals("portfolioPositionValue not match", portfolioPositionValue, portfolioProcessor.positionValue(), 0.0);
+        assertEquals("portfolioValue not match", portfolioValue, portfolioProcessor.value(), 0.0);
+        assertEquals("portfolioCashFlow not match", portfolioCashFlow, portfolioProcessor.cashFlow(), 0.0);
+        assertEquals("portfolioNetCashFlow not match", portfolioNetCashFlow, portfolioProcessor.netCashFlow(), 0.0);
+        assertEquals("portfolioTotalEquity not match", portfolioTotalEquity, portfolioProcessor.totalEquity(), 0.0);
 
     }
 
-    private void logDebug(Account account, Portfolio portfolio, String stage){
-        LOG.info("stage = {}, account.getValue={}, portfolio.positionValue={}, portfolio.getValue={}, portfolio.cashFlow={}, portfolio.netCashFlow={}, portfolio.totalEquity={}",
-                stage, account.value(), portfolio.positionValue(), portfolio.value(), portfolio.cashFlow(), portfolio.netCashFlow(), portfolio.totalEquity());
-    }
+//    private void logDebug(Account account, Portfolio portfolio, String stage){
+//        LOG.info("stage = {}, account.getValue={}, portfolio.positionValue={}, portfolio.getValue={}, portfolio.cashFlow={}, portfolio.netCashFlow={}, portfolio.totalEquity={}",
+//                stage, account.value(), portfolio.positionValue(), portfolio.value(), portfolio.cashFlow(), portfolio.netCashFlow(), portfolio.totalEquity());
+//    }
 
 
     private Order limitOrder(int instId, double limitPrice, double qty, Side side){

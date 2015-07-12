@@ -176,7 +176,7 @@ public class ModelSerializationTest {
 
     @Test
     public void testSerializePerformance()throws Exception{
-        Performance performance = new Performance("portfolio1");
+        Performance performance = new Performance();
 
         byte [] bytes = serializer.serialize(performance);
 

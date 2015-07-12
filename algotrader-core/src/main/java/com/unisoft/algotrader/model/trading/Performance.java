@@ -16,9 +16,6 @@ import org.msgpack.annotation.Ignore;
 @UDT(name = "performance", keyspace = "trading")
 public class Performance {
 
-    @Field(name = "portfolio_id")
-    private String portfolioId;
-
     private boolean enabled = true;
 
     private double equity            = 0;
@@ -63,58 +60,19 @@ public class Performance {
     @Frozen
     private DoubleTimeSeries drawdownPercentSeries = new DoubleTimeSeries();
 
-    @Ignore
-    @Transient
-    private Portfolio portfolio;
-
-    @Ignore
-    @Transient
-    private Clock clock;
-
     public Performance(){}
 
-    public Performance(Portfolio portfolio, Clock clock){
-        this.portfolio = portfolio;
-        this.portfolioId = portfolio.getPortfolioId();
-        this.clock = clock;
-    }
 
-
-    public Performance(String portfolioId){
-        this.portfolioId = portfolioId;
-    }
-
-
-    private Portfolio getPortfolio(){
-        if (portfolio == null){
-            portfolio = PortfolioManager.INSTANCE.get(portfolioId);
-        }
-        return portfolio;
-    }
-
-
-    private Clock getClock(){
-        if (clock == null){
-            clock = Clock.CLOCK;
-        }
-        return clock;
-    }
-
-    public void valueChanged(){
-        long dateTime = getClock().now();
-        valueChanged(dateTime);
-    }
-    public void valueChanged(long dateTime){
-        updateEquity(dateTime);
+    public void valueChanged(long dateTime, double coreEquity, double equity){
+        updateEquity(dateTime, coreEquity, equity);
         updatePnl(dateTime);
         updateDrawdown(dateTime);
     }
 
 
-    private void updateEquity(long dateTime){
-        Portfolio portfolio = getPortfolio();
-        coreEquity = portfolio.coreEquity();
-        equity = portfolio.totalEquity();
+    private void updateEquity(long dateTime, double coreEquity, double equity){
+        this.coreEquity = coreEquity;
+        this.equity = equity;
         coreEquitySeries.add(dateTime, coreEquity);
         equitySeries.add(dateTime, equity);
 
@@ -234,7 +192,6 @@ public class Performance {
                 Objects.equal(drawdownPercent, that.drawdownPercent) &&
                 Objects.equal(currentDrawdown, that.currentDrawdown) &&
                 Objects.equal(currentRunUp, that.currentRunUp) &&
-                Objects.equal(portfolioId, that.portfolioId) &&
                 Objects.equal(equitySeries, that.equitySeries) &&
                 Objects.equal(coreEquitySeries, that.coreEquitySeries) &&
                 Objects.equal(pnlSeries, that.pnlSeries) &&
@@ -244,14 +201,13 @@ public class Performance {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(portfolioId, enabled, equity, coreEquity, lowEquity, highEquity, pnl, drawdown, drawdownPercent, currentDrawdown, currentRunUp, equitySeries, coreEquitySeries, pnlSeries, drawdownSeries, drawdownPercentSeries);
+        return Objects.hashCode(enabled, equity, coreEquity, lowEquity, highEquity, pnl, drawdown, drawdownPercent, currentDrawdown, currentRunUp, equitySeries, coreEquitySeries, pnlSeries, drawdownSeries, drawdownPercentSeries);
     }
 
     @Override
     public String toString() {
         return "Performance{" +
-                "portfolioId='" + portfolioId + '\'' +
-                ", enabled=" + enabled +
+                "enabled=" + enabled +
                 ", equitySeries=" + equitySeries +
                 ", coreEquitySeries=" + coreEquitySeries +
                 ", pnlSeries=" + pnlSeries +
@@ -266,18 +222,9 @@ public class Performance {
                 ", drawdownPercent=" + drawdownPercent +
                 ", currentDrawdown=" + currentDrawdown +
                 ", currentRunUp=" + currentRunUp +
-                ", portfolio=" + portfolio +
-                ", clock=" + clock +
                 '}';
     }
 
-    public String getPortfolioId() {
-        return portfolioId;
-    }
-
-    public void setPortfolioId(String portfolioId) {
-        this.portfolioId = portfolioId;
-    }
 
     public boolean isEnabled() {
         return enabled;
