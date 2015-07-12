@@ -1,12 +1,10 @@
 package com.unisoft.algotrader.model.trading;
 
+import com.unisoft.algotrader.model.refdata.Currency;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.sound.sampled.Port;
-
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
@@ -21,7 +19,9 @@ public class PerformanceTest {
 
     @Before
     public void setup() {
-        Portfolio portfolio = new Portfolio("Test");
+        Account account = new Account("TestAccount", "", Currency.USD, 100000);
+        AccountManager.INSTANCE.add(account);
+        Portfolio portfolio = new Portfolio("Test", "TestAccount");
         processor = spy(new PortfolioProcessor(portfolio));
         performance = portfolio.getPerformance();
 

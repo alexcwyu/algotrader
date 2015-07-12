@@ -2,7 +2,7 @@ package com.unisoft.algotrader.provider.execution;
 
 import com.google.common.collect.Maps;
 import com.lmax.disruptor.RingBuffer;
-import com.unisoft.algotrader.clock.Clock;
+import com.unisoft.algotrader.model.clock.Clock;
 import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.model.event.data.*;
 import com.unisoft.algotrader.model.event.execution.*;

@@ -6,6 +6,7 @@ import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.RingBufferMarketDataEventBus;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.refdata.InstrumentManager;
+import com.unisoft.algotrader.model.trading.AccountManager;
 import com.unisoft.algotrader.model.trading.Portfolio;
 import com.unisoft.algotrader.model.trading.PortfolioManager;
 import com.unisoft.algotrader.provider.SubscriptionKey;
@@ -58,7 +59,7 @@ public class CSVPublishTest {
 
         DummyDataProvider provider = new DummyDataProvider();
 
-        Portfolio portfolio = new Portfolio("PID1");
+        Portfolio portfolio = new Portfolio("PID1", AccountManager.DEFAULT_ACCOUNT.getAccountId());
         PortfolioManager.INSTANCE.add(portfolio);
 
 

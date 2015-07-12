@@ -3,6 +3,6 @@ subprojects {
     dependencies {
         compile project(':algotrader-common')
         compile project(':algotrader-config')
-        compile project(':algotrader-core')
+        compile project(':algotrader-model')
     }
 }

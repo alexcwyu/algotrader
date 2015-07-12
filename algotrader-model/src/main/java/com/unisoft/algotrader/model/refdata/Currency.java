@@ -42,7 +42,7 @@ public class Currency{
         this.ccyId = ccyId;
         this.name = name;
 
-        CurrencyManager.INSTANCE.add(this);
+        //CurrencyManager.INSTANCE.add(this);
     }
 
     @Override

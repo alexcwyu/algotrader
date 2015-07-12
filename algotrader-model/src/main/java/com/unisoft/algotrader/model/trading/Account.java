@@ -7,8 +7,6 @@ import com.datastax.driver.mapping.annotations.Table;
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
 import com.unisoft.algotrader.model.refdata.Currency;
-import com.unisoft.algotrader.model.refdata.CurrencyConverter;
-import com.unisoft.algotrader.model.refdata.CurrencyManager;
 
 import java.util.Map;
 
@@ -36,7 +34,7 @@ public class Account {
     }
 
     public Account(String accountId){
-        this(accountId,"", CurrencyManager.DEFAULT_CURRENCY);
+        this(accountId,"", Currency.USD);
     }
 
     public Account(String accountId, Currency currency){
@@ -113,15 +111,15 @@ public class Account {
         return 0.0;
     }
 
-    public double value() {
-        double val = 0;
-
-        for(AccountPosition position : accountPositions.values()) {
-            val += CurrencyConverter.convert(position.getValue(), position.getCcyId(), ccyId);
-        }
-
-        return val;
-    }
+//    public double value() {
+//        double val = 0;
+//
+//        for(AccountPosition position : accountPositions.values()) {
+//            val += CurrencyConverter.convert(position.getValue(), position.getCcyId(), ccyId);
+//        }
+//
+//        return val;
+//    }
 
     public Map<String, Double> valueAsMap(){
 

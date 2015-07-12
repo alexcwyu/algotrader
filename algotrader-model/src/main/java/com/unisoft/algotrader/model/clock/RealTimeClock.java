@@ -1,28 +1,21 @@
-package com.unisoft.algotrader.clock;
+package com.unisoft.algotrader.model.clock;
 
 import java.util.Date;
 
 /**
  * Created by alex on 5/24/15.
  */
-public class SimulationClock implements Clock {
+public class RealTimeClock implements Clock {
     @Override
     public ClockMode getClockMode() {
-        return ClockMode.Simulation;
+        return ClockMode.Realtime;
     }
 
     @Override
     public long now() {
-        return datetime;
+        return System.currentTimeMillis();
     }
 
-    private long datetime = 0;
-
-
-    @Override
-    public void setDateTime(long date){
-        datetime = date;
-    }
 
     @Override
     public void addReminder(Date date, Object data, ReminderHandler handler) {

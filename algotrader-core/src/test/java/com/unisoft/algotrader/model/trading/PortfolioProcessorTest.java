@@ -67,12 +67,12 @@ public class PortfolioProcessorTest {
 
     @Test
     public void test_account_value(){
-        assertEquals(1_000_000, account.value(), 0.0);
-        assertEquals(portfolioProcessor.value(), account.value(), 0.0);
+        assertEquals(1_000_000, portfolioProcessor.accountValue(), 0.0);
+        assertEquals(portfolioProcessor.value(), portfolioProcessor.accountValue(), 0.0);
 
         account.deposit(System.currentTimeMillis(), Currency.HKD, 1000, "");
-        assertEquals(1_001_000, account.value(), 0.0);
-        assertEquals(portfolioProcessor.accountValue(), account.value(), 0.0);
+        assertEquals(1_001_000, portfolioProcessor.accountValue(), 0.0);
+        assertEquals(portfolioProcessor.value(), portfolioProcessor.accountValue(), 0.0);
 
     }
 
@@ -200,14 +200,14 @@ public class PortfolioProcessorTest {
 
     @Test
     public void test_core_equity(){
-        assertEquals(1_000_000, account.value(), 0.0);
-        assertEquals(portfolioProcessor.accountValue(), account.value(), 0.0);
-        assertEquals(portfolioProcessor.coreEquity(), account.value(), 0.0);
+        assertEquals(1_000_000, portfolioProcessor.accountValue(), 0.0);
+        assertEquals(portfolioProcessor.accountValue(), portfolioProcessor.value(), 0.0);
+        assertEquals(portfolioProcessor.coreEquity(), portfolioProcessor.accountValue(), 0.0);
 
         account.deposit(System.currentTimeMillis(), Currency.HKD, 1000, "");
-        assertEquals(1_001_000, account.value(), 0.0);
-        assertEquals(portfolioProcessor.accountValue(), account.value(), 0.0);
-        assertEquals(portfolioProcessor.coreEquity(), account.value(), 0.0);
+        assertEquals(1_001_000, portfolioProcessor.accountValue(), 0.0);
+        assertEquals(portfolioProcessor.accountValue(), portfolioProcessor.value(), 0.0);
+        assertEquals(portfolioProcessor.coreEquity(), portfolioProcessor.accountValue(), 0.0);
     }
 
     @Test
@@ -332,8 +332,7 @@ public class PortfolioProcessorTest {
                             double portfolioValue, double portfolioCashFlow,
                             double portfolioNetCashFlow, double portfolioTotalEquity){
 
-        assertEquals("accountValue not match", accountValue, account.value(), 0.0);
-        assertEquals("accountValue not match", portfolioProcessor.accountValue(), account.value(), 0.0);
+        assertEquals("accountValue not match", accountValue, portfolioProcessor.accountValue(), 0.0);
         assertEquals("portfolioPositionValue not match", portfolioPositionValue, portfolioProcessor.positionValue(), 0.0);
         assertEquals("portfolioValue not match", portfolioValue, portfolioProcessor.value(), 0.0);
         assertEquals("portfolioCashFlow not match", portfolioCashFlow, portfolioProcessor.cashFlow(), 0.0);

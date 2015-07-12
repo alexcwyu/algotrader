@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.clock;
+package com.unisoft.algotrader.model.clock;
 
 import java.util.Date;
 

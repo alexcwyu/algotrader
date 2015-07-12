@@ -8,7 +8,6 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.lmax.disruptor.EventFactory;
 import com.unisoft.algotrader.model.event.Event;
-import com.unisoft.algotrader.model.refdata.InstrumentManager;
 import com.unisoft.algotrader.model.trading.OrdStatus;
 import com.unisoft.algotrader.model.trading.OrdType;
 import com.unisoft.algotrader.model.trading.Side;
@@ -238,18 +237,18 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
     public double cashFlow(){
         return netCashFlow() - transactionCost();
     }
-    public double margin(){
-        double margin = InstrumentManager.INSTANCE.get(instId).getMargin() * filledQty;
-        return margin;
-    }
-
-    public double debt(){
-        double margin = margin();
-        if (margin == 0){
-            return 0;
-        }
-        return value()-margin;
-    }
+//    public double margin(){
+//        double margin = InstrumentManager.INSTANCE.get(instId).getMargin() * filledQty;
+//        return margin;
+//    }
+//
+//    public double debt(){
+//        double margin = margin();
+//        if (margin == 0){
+//            return 0;
+//        }
+//        return value()-margin;
+//    }
 
 
     public long getOrderId() {

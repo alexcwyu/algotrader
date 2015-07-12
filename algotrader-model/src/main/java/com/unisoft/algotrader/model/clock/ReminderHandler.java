@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.clock;
+package com.unisoft.algotrader.model.clock;
 
 /**
  * Created by alex on 5/24/15.

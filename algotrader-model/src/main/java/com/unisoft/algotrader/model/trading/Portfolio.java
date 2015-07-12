@@ -4,13 +4,7 @@ import com.datastax.driver.mapping.annotations.*;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.unisoft.algotrader.clock.Clock;
 import com.unisoft.algotrader.model.event.execution.Order;
-import com.unisoft.algotrader.model.refdata.Currency;
-import com.unisoft.algotrader.model.refdata.CurrencyManager;
-import com.unisoft.algotrader.model.refdata.Instrument;
-import com.unisoft.algotrader.model.refdata.InstrumentManager;
-import javafx.geometry.Pos;
 import org.msgpack.annotation.Ignore;
 
 import java.util.List;
@@ -42,10 +36,6 @@ public class Portfolio{
 
 
     public Portfolio(){
-    }
-
-    public Portfolio(String portfolioId){
-        this(portfolioId, AccountManager.DEFAULT_ACCOUNT.getAccountId());
     }
 
     public Portfolio(String portfolioId, String accountName){

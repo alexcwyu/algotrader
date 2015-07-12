@@ -5,6 +5,7 @@ dependencies {
     compile project(':algotrader-persistence:algotrader-persistence-common')
     compile project(':algotrader-provider:algotrader-provider-common')
     compile project(':algotrader-common')
+    compile project(':algotrader-model')
     compile project(':algotrader-config')
 
     //threading

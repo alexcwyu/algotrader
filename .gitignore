@@ -2,3 +2,5 @@ log
 .idea
 *.iml
 build
+algotrader-core/src/main/java/fi
+algotrader-core/src/test/java/fi

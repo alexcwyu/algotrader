@@ -106,10 +106,6 @@ public class SampleEventFactory {
         return new Portfolio(name, accountName);
     }
 
-    public static Portfolio createPortfolio(String name){
-        return new Portfolio(name);
-    }
-
     public static Quote createQuote(int instId, double bid,
                               double ask,
                               int bidSize,

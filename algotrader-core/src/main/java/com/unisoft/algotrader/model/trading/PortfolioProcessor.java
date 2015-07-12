@@ -1,7 +1,7 @@
 package com.unisoft.algotrader.model.trading;
 
 import com.lmax.disruptor.RingBuffer;
-import com.unisoft.algotrader.clock.Clock;
+import com.unisoft.algotrader.model.clock.Clock;
 import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataHandler;
@@ -11,10 +11,7 @@ import com.unisoft.algotrader.model.event.execution.ExecutionHandler;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.event.execution.OrderHandler;
-import com.unisoft.algotrader.model.refdata.Currency;
-import com.unisoft.algotrader.model.refdata.CurrencyManager;
-import com.unisoft.algotrader.model.refdata.Instrument;
-import com.unisoft.algotrader.model.refdata.InstrumentManager;
+import com.unisoft.algotrader.model.refdata.*;
 import com.unisoft.algotrader.threading.MultiEventProcessor;
 import com.unisoft.algotrader.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.apache.logging.log4j.LogManager;
@@ -109,6 +106,20 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
         }
     }
 
+
+    protected double calcOrderMargin(Order order, Instrument instrument){
+        double margin = instrument.getMargin() * order.getFilledQty();
+        return margin;
+    }
+
+    protected double calcOrderDebt(Order order, Instrument instrument){
+        double margin = calcOrderMargin(order, instrument);
+        if (margin == 0){
+            return 0;
+        }
+        return order.value()-margin;
+    }
+
     private double addOrderToPosition(Order order){
         Position position = portfolio.getPosition(order.getInstId());
 
@@ -122,10 +133,11 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
         double openDebt = 0;
         double closeDebt = 0;
 
-        double orderMargin = order.margin();
-        double orderDebt = order.debt();
-
         Instrument instrument = InstrumentManager.INSTANCE.get(order.getInstId());
+
+        double orderMargin = calcOrderMargin(order, instrument);
+        double orderDebt = calcOrderDebt(order, instrument);
+
         if (position == null){
             // open position
             position = new Position(order.getInstId(), portfolio.getPortfolioId(), instrument.getFactor());
@@ -234,7 +246,12 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
 
 
     public double accountValue(){
-        return account.value();
+        double val = 0;
+
+        for(AccountPosition position : account.getAccountPositions().values()) {
+            val += CurrencyConverter.convert(position.getValue(), position.getCcyId(), account.getCcyId());
+        }
+        return val;
     }
 
     public double value(){

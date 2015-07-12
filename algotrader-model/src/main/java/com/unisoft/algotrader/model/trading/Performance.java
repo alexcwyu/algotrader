@@ -2,12 +2,9 @@ package com.unisoft.algotrader.model.trading;
 
 import com.datastax.driver.mapping.annotations.Field;
 import com.datastax.driver.mapping.annotations.Frozen;
-import com.datastax.driver.mapping.annotations.Transient;
 import com.datastax.driver.mapping.annotations.UDT;
 import com.google.common.base.Objects;
-import com.unisoft.algotrader.clock.Clock;
 import com.unisoft.algotrader.model.series.DoubleTimeSeries;
-import org.msgpack.annotation.Ignore;
 
 /**
  * Created by alex on 5/25/15.
