@@ -6,7 +6,7 @@ import com.exxeleron.qjava.QMessage;
 import com.exxeleron.qjava.QTable;
 import com.unisoft.algotrader.model.event.EventBus;
 import com.unisoft.algotrader.model.event.data.Bar;
-import com.unisoft.algotrader.model.event.data.LogMarketDataEventBus;
+import com.unisoft.algotrader.event.LogMarketDataEventBus;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
 import com.unisoft.algotrader.provider.DataStore;

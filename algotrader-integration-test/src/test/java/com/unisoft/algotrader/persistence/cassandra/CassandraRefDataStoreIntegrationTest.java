@@ -3,7 +3,7 @@ package com.unisoft.algotrader.persistence.cassandra;
 import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Exchange;
 import com.unisoft.algotrader.model.refdata.Instrument;
-import com.unisoft.algotrader.model.refdata.InstrumentManager;
+import com.unisoft.algotrader.refdata.InstrumentManager;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

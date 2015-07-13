@@ -2,16 +2,16 @@ package com.unisoft.algotrader.strategy;
 
 import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.model.event.Event;
-import com.unisoft.algotrader.model.event.EventBusManager;
+import com.unisoft.algotrader.event.EventBusManager;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataHandler;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
 import com.unisoft.algotrader.model.event.execution.*;
 import com.unisoft.algotrader.model.trading.Portfolio;
-import com.unisoft.algotrader.model.trading.PortfolioManager;
-import com.unisoft.algotrader.threading.MultiEventProcessor;
-import com.unisoft.algotrader.threading.disruptor.waitstrategy.NoWaitStrategy;
+import com.unisoft.algotrader.trading.PortfolioManager;
+import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
+import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 
 /**
  * Created by alex on 5/17/15.

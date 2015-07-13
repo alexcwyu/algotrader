@@ -1,21 +1,24 @@
 package com.unisoft.algotrader.backtest;
 
 import com.lmax.disruptor.util.DaemonThreadFactory;
-import com.unisoft.algotrader.model.event.EventBusManager;
-import com.unisoft.algotrader.model.event.data.RingBufferMarketDataEventBus;
+import com.unisoft.algotrader.event.EventBusManager;
+import com.unisoft.algotrader.event.RingBufferMarketDataEventBus;
 import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Instrument;
-import com.unisoft.algotrader.model.refdata.InstrumentManager;
+import com.unisoft.algotrader.refdata.InstrumentManager;
 import com.unisoft.algotrader.model.trading.*;
 import com.unisoft.algotrader.provider.BarFactory;
 import com.unisoft.algotrader.provider.InstrumentDataManager;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.SubscriptionKey;
-import com.unisoft.algotrader.provider.execution.SimulationExecutor;
-import com.unisoft.algotrader.provider.execution.Simulator;
+import com.unisoft.algotrader.provider.execution.simulation.SimulationExecutor;
+import com.unisoft.algotrader.provider.execution.simulation.Simulator;
 import com.unisoft.algotrader.provider.historical.HistoricalDataProvider;
 import com.unisoft.algotrader.strategy.Strategy;
 import com.unisoft.algotrader.strategy.StrategyManager;
+import com.unisoft.algotrader.refdata.AccountManager;
+import com.unisoft.algotrader.trading.OrderManager;
+import com.unisoft.algotrader.trading.PortfolioManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -59,7 +62,7 @@ public class BackTester {
         this.strategy.setPortfolio(portfolio);
         StrategyManager.INSTANCE.register(strategy);
 
-        this.simulationExecutor = new SimulationExecutor(OrderManager.INSTANCE, InstrumentDataManager.INSTANCE, EventBusManager.INSTANCE.marketDataRB);
+        this.simulationExecutor = new SimulationExecutor(OrderManager.INSTANCE, new InstrumentDataManager(EventBusManager.INSTANCE.marketDataRB), EventBusManager.INSTANCE.marketDataRB);
         ProviderManager.INSTANCE.registerExecutionProvider(simulationExecutor);
 
         this.barFactory = new BarFactory(EventBusManager.INSTANCE.rawMarketDataRB, EventBusManager.INSTANCE.marketDataRB);
@@ -84,7 +87,7 @@ public class BackTester {
         this.strategy.setPortfolio(portfolio);
         StrategyManager.INSTANCE.register(strategy);
 
-        this.simulationExecutor = new SimulationExecutor(OrderManager.INSTANCE, InstrumentDataManager.INSTANCE, EventBusManager.INSTANCE.marketDataRB);
+        this.simulationExecutor = new SimulationExecutor(OrderManager.INSTANCE, new InstrumentDataManager(EventBusManager.INSTANCE.marketDataRB), EventBusManager.INSTANCE.marketDataRB);
         ProviderManager.INSTANCE.registerExecutionProvider(simulationExecutor);
 
         this.barFactory = new BarFactory(EventBusManager.INSTANCE.rawMarketDataRB, EventBusManager.INSTANCE.marketDataRB);

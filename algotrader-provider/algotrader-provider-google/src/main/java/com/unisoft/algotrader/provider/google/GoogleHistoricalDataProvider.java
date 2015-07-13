@@ -3,7 +3,7 @@ package com.unisoft.algotrader.provider.google;
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.event.EventBus;
 import com.unisoft.algotrader.model.refdata.Instrument;
-import com.unisoft.algotrader.model.refdata.InstrumentManager;
+import com.unisoft.algotrader.refdata.InstrumentManager;
 import com.unisoft.algotrader.provider.SubscriptionKey;
 import com.unisoft.algotrader.provider.historical.HistoricalDataProvider;
 import org.apache.logging.log4j.LogManager;

@@ -1,3 +1,4 @@
 dependencies {
     compile project(':algotrader-provider:algotrader-provider-common')
+    compile project(':algotrader-core')
 }

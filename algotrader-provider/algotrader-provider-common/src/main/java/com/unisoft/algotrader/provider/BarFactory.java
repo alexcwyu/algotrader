@@ -4,8 +4,8 @@ package com.unisoft.algotrader.provider;
 import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.model.event.data.*;
-import com.unisoft.algotrader.threading.MultiEventProcessor;
-import com.unisoft.algotrader.threading.disruptor.waitstrategy.NoWaitStrategy;
+import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
+import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

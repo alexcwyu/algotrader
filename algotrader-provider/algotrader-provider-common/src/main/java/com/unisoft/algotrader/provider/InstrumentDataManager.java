@@ -3,10 +3,9 @@ package com.unisoft.algotrader.provider;
 import com.google.common.collect.Maps;
 import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.model.event.Event;
-import com.unisoft.algotrader.model.event.EventBusManager;
 import com.unisoft.algotrader.model.event.data.*;
-import com.unisoft.algotrader.threading.MultiEventProcessor;
-import com.unisoft.algotrader.threading.disruptor.waitstrategy.NoWaitStrategy;
+import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
+import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 
 import java.util.Map;
 
@@ -66,16 +65,6 @@ public class InstrumentDataManager extends MultiEventProcessor implements Market
 
     public Map<Integer, InstrumentData> map = Maps.newHashMap();
 
-    public static final InstrumentDataManager INSTANCE;
-
-    static {
-        INSTANCE = new InstrumentDataManager();
-    }
-
-
-    public InstrumentDataManager(){
-        this(EventBusManager.INSTANCE.marketDataRB);
-    }
     public InstrumentDataManager(RingBuffer ringBuffer){
         super(new NoWaitStrategy(),  null, ringBuffer);
     }

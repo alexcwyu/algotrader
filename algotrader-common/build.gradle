@@ -1,3 +1,18 @@
 dependencies {
+    compile "com.lmax:disruptor:${disruptorVersion}"
+    compile "com.dyuproject.protostuff:protostuff-runtime:${protostuffVersion}"
+    compile "com.esotericsoftware.kryo:kryo:${kryoVersion}"
+    compile "org.msgpack:msgpack:${msgpackVersion}"
+    compile "uk.co.real-logic:sbe:${sbeVersion}"
 
+    compile "com.google.guava:guava:${guavaVersion}"
+
+    compile "uk.co.real-logic:aeron-client:${aeronVersion}"
+    compile "uk.co.real-logic:aeron-driver:${aeronVersion}"
+    compile "uk.co.real-logic:aeron-samples:${aeronVersion}"
+    compile "uk.co.real-logic:aeron-common:${aeronVersion}"
+    compile "org.zeromq:jeromq:${jeromqVersion}"
+    compile "io.netty:netty-all:4.1.0.Beta4"
+
+    testCompile project(':algotrader-model')
 }

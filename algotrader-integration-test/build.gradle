@@ -3,8 +3,9 @@ dependencies {
     compile project(':algotrader-backtest')
     compile project(':algotrader-model')
     compile project(':algotrader-common')
-    compile project(':algotrader-provider:algotrader-provider-common')
-    compile project(':algotrader-persistence:algotrader-persistence-common')
+    //compile project(':algotrader-provider:algotrader-provider-common')
+    compile project(':algotrader-provider:algotrader-provider-simulator')
+    //compile project(':algotrader-persistence:algotrader-persistence-common')
     compile project(':algotrader-persistence:algotrader-persistence-cassandra')
 
 
