@@ -2,7 +2,6 @@ package org.msgpack.packer;
 
 import org.msgpack.MessagePack;
 import org.msgpack.io.ByteBufferOutput;
-import org.msgpack.packer.MessagePackPacker;
 
 import java.nio.ByteBuffer;
 

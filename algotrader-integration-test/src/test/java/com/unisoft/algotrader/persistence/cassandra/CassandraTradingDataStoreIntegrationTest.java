@@ -1,8 +1,8 @@
 package com.unisoft.algotrader.persistence.cassandra;
 
 import com.google.common.collect.Lists;
-import com.unisoft.algotrader.model.clock.Clock;
 import com.unisoft.algotrader.event.SampleEventFactory;
+import com.unisoft.algotrader.model.clock.Clock;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Currency;

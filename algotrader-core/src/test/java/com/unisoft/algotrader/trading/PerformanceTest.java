@@ -5,7 +5,6 @@ import com.unisoft.algotrader.model.trading.Account;
 import com.unisoft.algotrader.model.trading.Performance;
 import com.unisoft.algotrader.model.trading.Portfolio;
 import com.unisoft.algotrader.refdata.AccountManager;
-import com.unisoft.algotrader.trading.PortfolioProcessor;
 import org.junit.Before;
 import org.junit.Test;
 

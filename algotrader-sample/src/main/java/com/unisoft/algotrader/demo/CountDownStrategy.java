@@ -7,9 +7,9 @@ import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.trading.OrdStatus;
 import com.unisoft.algotrader.model.trading.OrdType;
-import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.model.trading.Side;
 import com.unisoft.algotrader.strategy.Strategy;
+import com.unisoft.algotrader.trading.OrderManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

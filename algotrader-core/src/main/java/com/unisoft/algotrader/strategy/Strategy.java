@@ -1,8 +1,8 @@
 package com.unisoft.algotrader.strategy;
 
 import com.lmax.disruptor.RingBuffer;
-import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.event.EventBusManager;
+import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataHandler;
 import com.unisoft.algotrader.model.event.data.Quote;

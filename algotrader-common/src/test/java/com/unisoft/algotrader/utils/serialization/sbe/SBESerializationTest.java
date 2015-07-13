@@ -8,8 +8,6 @@ import uk.co.real_logic.agrona.concurrent.UnsafeBuffer;
 
 import java.nio.ByteBuffer;
 
-import static org.junit.Assert.assertEquals;
-
 /**
  * Created by alex on 4/27/15.
  */

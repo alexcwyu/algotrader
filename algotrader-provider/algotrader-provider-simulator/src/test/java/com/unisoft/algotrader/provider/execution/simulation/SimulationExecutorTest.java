@@ -9,9 +9,10 @@ import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.trading.OrdStatus;
 import com.unisoft.algotrader.model.trading.OrdType;
-import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.model.trading.Side;
 import com.unisoft.algotrader.provider.InstrumentDataManager;
+import com.unisoft.algotrader.provider.ProviderManager;
+import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,6 +34,7 @@ public class SimulationExecutorTest {
     private InstrumentDataManager instrumentDataManager;
     private RingBuffer rb =RingBuffer.createSingleProducer(MarketDataContainer.FACTORY, 1024, new NoWaitStrategy());
 
+
     @Before
     public void setup(){
         orderManager = spy(new OrderManager());
@@ -43,6 +45,7 @@ public class SimulationExecutorTest {
         simulationExecutor.config.fillOnTrade = true;
         simulationExecutor.config.fillOnBarMode = SimulatorConfig.FillOnBarMode.LastBarClose;
 
+        ProviderManager.INSTANCE.addExecutionProvider(simulationExecutor);
         instrumentDataManager.clear();
     }
 

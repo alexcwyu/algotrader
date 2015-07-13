@@ -1,7 +1,5 @@
 package com.unisoft.algotrader.model.series;
 
-import com.unisoft.algotrader.model.series.DoubleTimeSeries;
-import com.unisoft.algotrader.model.series.TimeSeries;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

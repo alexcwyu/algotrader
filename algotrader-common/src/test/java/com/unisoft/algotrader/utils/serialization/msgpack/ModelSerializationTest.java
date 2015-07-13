@@ -14,8 +14,6 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
 /**
  * Created by alex on 7/1/15.
  */

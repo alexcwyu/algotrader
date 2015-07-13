@@ -6,8 +6,8 @@ import com.unisoft.algotrader.model.event.data.Trade;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Instrument;
-import com.unisoft.algotrader.refdata.InstrumentManager;
 import com.unisoft.algotrader.model.trading.*;
+import com.unisoft.algotrader.refdata.InstrumentManager;
 
 /**
  * Created by alex on 6/6/15.
@@ -22,11 +22,11 @@ public class SampleEventFactory {
     public static Instrument testInstrument2 = InstrumentManager.INSTANCE.createStock("testInst2","testExch2","USD");
 
     public static Order createOrder(int instId, Side side, OrdType type, double qty, double price){
-        return createOrder(instId, side, type, qty, price, 0, "Simulator");
+        return createOrder(instId, side, type, qty, price, 0, "Simulated");
     }
 
     public static Order createOrder(int instId, Side side, OrdType type, double qty, double price, double stopPrice){
-        return createOrder(instId, side, type, qty, price, stopPrice, "Simulator");
+        return createOrder(instId, side, type, qty, price, stopPrice, "Simulated");
     }
 
     public static Order createOrder(int instId, Side side, OrdType type, double qty, double price, double stopPrice, String providerId){
