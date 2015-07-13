@@ -15,5 +15,4 @@ dependencies {
     compile "org.apache.logging.log4j:log4j-core:${log4jVersion}"
     testCompile "org.springframework:spring-test:4.0.7.RELEASE"
 
-    testCompile project(':algotrader-core').sourceSets.test.output
 }
