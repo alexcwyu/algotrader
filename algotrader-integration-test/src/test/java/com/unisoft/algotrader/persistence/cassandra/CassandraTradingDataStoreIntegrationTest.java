@@ -9,7 +9,6 @@ import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.trading.*;
 import com.unisoft.algotrader.persistence.SampleInMemoryRefDataStore;
 import com.unisoft.algotrader.persistence.TradingDataStore;
-import com.unisoft.algotrader.trading.PortfolioManager;
 import com.unisoft.algotrader.trading.PortfolioProcessor;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -87,7 +86,6 @@ public class CassandraTradingDataStoreIntegrationTest {
 
         Portfolio portfolio = SampleEventFactory.createPortfolio("TestPortfolio", account.getAccountId());
         PortfolioProcessor portfolioProcessor = new PortfolioProcessor(portfolio, account, new SampleInMemoryRefDataStore(), Clock.CLOCK);
-        PortfolioManager.INSTANCE.add(portfolio);
 
         Clock.CLOCK.setDateTime(System.currentTimeMillis());
         Order order = SampleEventFactory.createOrder(SampleEventFactory.TEST_USD_INSTRUMENT.getInstId(), Side.Buy, OrdType.Limit, 9000, 98, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");

@@ -9,7 +9,7 @@ import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
 import com.unisoft.algotrader.model.event.execution.*;
 import com.unisoft.algotrader.model.trading.Portfolio;
-import com.unisoft.algotrader.trading.PortfolioManager;
+import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 
@@ -20,27 +20,30 @@ import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrat
 public abstract class Strategy extends MultiEventProcessor implements MarketDataHandler, OrderHandler, ExecutionHandler {
 
     public int orderId = 0;
-    public String strategyId;
-    public Portfolio portfolio;
+    protected final String strategyId;
+    protected Portfolio portfolio;
+    protected final TradingDataStore tradingDataStore;
 
-    public Strategy(String strategyId){
-        this(strategyId,EventBusManager.INSTANCE.executionReportRB, EventBusManager.INSTANCE.orderStatusRB, EventBusManager.INSTANCE.marketDataRB);
+    public Strategy(String strategyId, TradingDataStore tradingDataStore){
+        this(strategyId, tradingDataStore, EventBusManager.INSTANCE.executionReportRB, EventBusManager.INSTANCE.orderStatusRB, EventBusManager.INSTANCE.marketDataRB);
     }
 
-    public Strategy(String strategyId, RingBuffer... providers){
+    public Strategy(String strategyId, TradingDataStore tradingDataStore, RingBuffer... providers){
         super(new NoWaitStrategy(),  null, providers);
         this.strategyId = strategyId;
+        this.tradingDataStore = tradingDataStore;
         StrategyManager.INSTANCE.register(this);
     }
 
-    public Strategy(String strategyId, String portfolioId){
-        this(strategyId, portfolioId, EventBusManager.INSTANCE.executionReportRB, EventBusManager.INSTANCE.orderStatusRB, EventBusManager.INSTANCE.marketDataRB);
+    public Strategy(String strategyId, TradingDataStore tradingDataStore, String portfolioId){
+        this(strategyId, tradingDataStore, portfolioId, EventBusManager.INSTANCE.executionReportRB, EventBusManager.INSTANCE.orderStatusRB, EventBusManager.INSTANCE.marketDataRB);
     }
 
-    public Strategy(String strategyId, String portfolioId, RingBuffer... providers){
+    public Strategy(String strategyId, TradingDataStore tradingDataStore, String portfolioId, RingBuffer... providers){
         super(new NoWaitStrategy(),  null, providers);
         this.strategyId = strategyId;
-        this.portfolio = PortfolioManager.INSTANCE.get(portfolioId);
+        this.tradingDataStore = tradingDataStore;
+        this.portfolio = tradingDataStore.getPortfolio(portfolioId);
         StrategyManager.INSTANCE.register(this);
     }
 

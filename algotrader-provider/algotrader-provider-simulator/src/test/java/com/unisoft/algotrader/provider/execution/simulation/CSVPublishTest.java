@@ -7,11 +7,11 @@ import com.unisoft.algotrader.event.SampleEventFactory;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.Portfolio;
+import com.unisoft.algotrader.persistence.InMemoryTradingDataStore;
 import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.provider.SubscriptionKey;
 import com.unisoft.algotrader.provider.historical.DummyDataProvider;
 import com.unisoft.algotrader.strategy.Strategy;
-import com.unisoft.algotrader.trading.PortfolioManager;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,8 +35,8 @@ public class CSVPublishTest {
         private int exp;
         private int count = 0;
 
-        public CountDownStrategy(String strategyId, String portfolioId, CountDownLatch latch, int exp, RingBuffer... providers){
-            super(strategyId, portfolioId, providers);
+        public CountDownStrategy(String strategyId, TradingDataStore tradingDataStore, String portfolioId, CountDownLatch latch, int exp, RingBuffer... providers){
+            super(strategyId, tradingDataStore, portfolioId, providers);
             this.latch = latch;
             this.exp = exp;
         }
@@ -60,15 +60,17 @@ public class CSVPublishTest {
         DummyDataProvider provider = new DummyDataProvider();
 
         Portfolio portfolio = new Portfolio("PID1", TradingDataStore.DEFAULT_ACCOUNT.getAccountId());
-        PortfolioManager.INSTANCE.add(portfolio);
+        InMemoryTradingDataStore tradingDataStore = new InMemoryTradingDataStore();
+
+        tradingDataStore.savePortfolio(portfolio);
 
 
         CountDownLatch latch = new CountDownLatch(5);
-        CountDownStrategy strategy1 = new CountDownStrategy("strategy1", portfolio.getPortfolioId(), latch, 10, marketDataRB);
-        CountDownStrategy strategy2 = new CountDownStrategy("strategy2", portfolio.getPortfolioId(), latch, 10, marketDataRB);
-        CountDownStrategy strategy3 = new CountDownStrategy("strategy3", portfolio.getPortfolioId(), latch, 10, marketDataRB);
-        CountDownStrategy strategy4 = new CountDownStrategy("strategy4", portfolio.getPortfolioId(), latch, 10, marketDataRB);
-        CountDownStrategy strategy5 = new CountDownStrategy("strategy5", portfolio.getPortfolioId(), latch, 10, marketDataRB);
+        CountDownStrategy strategy1 = new CountDownStrategy("strategy1", tradingDataStore, portfolio.getPortfolioId(), latch, 10, marketDataRB);
+        CountDownStrategy strategy2 = new CountDownStrategy("strategy2", tradingDataStore, portfolio.getPortfolioId(), latch, 10, marketDataRB);
+        CountDownStrategy strategy3 = new CountDownStrategy("strategy3", tradingDataStore, portfolio.getPortfolioId(), latch, 10, marketDataRB);
+        CountDownStrategy strategy4 = new CountDownStrategy("strategy4", tradingDataStore, portfolio.getPortfolioId(), latch, 10, marketDataRB);
+        CountDownStrategy strategy5 = new CountDownStrategy("strategy5", tradingDataStore, portfolio.getPortfolioId(), latch, 10, marketDataRB);
 
         ExecutorService executor = Executors.newFixedThreadPool(8, DaemonThreadFactory.INSTANCE);
         executor.submit(strategy1);

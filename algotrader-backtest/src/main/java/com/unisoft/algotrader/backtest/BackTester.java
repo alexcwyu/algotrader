@@ -9,6 +9,7 @@ import com.unisoft.algotrader.model.trading.Account;
 import com.unisoft.algotrader.model.trading.Performance;
 import com.unisoft.algotrader.model.trading.Portfolio;
 import com.unisoft.algotrader.persistence.InMemoryRefDataStore;
+import com.unisoft.algotrader.persistence.InMemoryTradingDataStore;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.provider.BarFactory;
@@ -21,7 +22,6 @@ import com.unisoft.algotrader.provider.historical.HistoricalDataProvider;
 import com.unisoft.algotrader.strategy.Strategy;
 import com.unisoft.algotrader.strategy.StrategyManager;
 import com.unisoft.algotrader.trading.OrderManager;
-import com.unisoft.algotrader.trading.PortfolioManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -45,7 +45,8 @@ public class BackTester {
     private final SimulationExecutor simulationExecutor;
     private final BarFactory barFactory;
     private final Simulator simulator;
-    private final RefDataStore refDataStore;;
+    private final RefDataStore refDataStore;
+    private final TradingDataStore tradingDataStore;
 
     private final int fromDate;
     private final int toDate;
@@ -57,13 +58,14 @@ public class BackTester {
 
 
         this.refDataStore = new InMemoryRefDataStore();
+        this.tradingDataStore = new InMemoryTradingDataStore();
 
-        refDataStore.saveInstrument(instrument);
+        this.refDataStore.saveInstrument(instrument);
 
         this.account = TradingDataStore.DEFAULT_ACCOUNT;
 
         this.portfolio = new Portfolio("TestPortfolio", account.getAccountId());
-        PortfolioManager.INSTANCE.add(portfolio);
+        this.tradingDataStore.savePortfolio(portfolio);
 
         this.strategy = strategy;
         this.strategy.setPortfolio(portfolio);
@@ -85,13 +87,14 @@ public class BackTester {
         this.instrument = instrument;
 
         this.refDataStore = new InMemoryRefDataStore();
+        this.tradingDataStore = new InMemoryTradingDataStore();
 
         refDataStore.saveInstrument(instrument);
 
 
         this.account = account;
         this.portfolio = portfolio;
-        PortfolioManager.INSTANCE.add(portfolio);
+        this.tradingDataStore.savePortfolio(portfolio);
 
         this.strategy =strategy;
         this.strategy.setPortfolio(portfolio);

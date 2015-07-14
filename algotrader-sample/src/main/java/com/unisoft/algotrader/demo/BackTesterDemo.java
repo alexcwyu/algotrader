@@ -5,6 +5,8 @@ import com.unisoft.algotrader.event.EventBusManager;
 import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.series.TimeSeriesHelper;
 import com.unisoft.algotrader.model.trading.Performance;
+import com.unisoft.algotrader.persistence.InMemoryTradingDataStore;
+import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.provider.historical.DummyDataProvider;
 import com.unisoft.algotrader.strategy.Strategy;
 import org.apache.logging.log4j.LogManager;
@@ -17,17 +19,14 @@ import java.util.concurrent.CountDownLatch;
  */
 public class BackTesterDemo {
 
-
     private static final Logger LOG = LogManager.getLogger(BackTesterDemo.class);
-
-
-
 
     public static void main(String [] args) throws Exception{
         DummyDataProvider provider = new DummyDataProvider();
 
+        TradingDataStore tradingDataStore = new InMemoryTradingDataStore();
         CountDownLatch latch = new CountDownLatch(1);
-        Strategy strategy = new CountDownStrategy("Sid", latch, 20, EventBusManager.INSTANCE.marketDataRB);
+        Strategy strategy = new CountDownStrategy("Sid", tradingDataStore, latch, 20, EventBusManager.INSTANCE.marketDataRB);
 
         BackTester backTester = new BackTester(strategy, provider, Currency.HKD, 100000, Sample.testInstrument, 20110101, 20110111);
 

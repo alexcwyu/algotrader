@@ -7,13 +7,13 @@ import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.Account;
 import com.unisoft.algotrader.model.trading.Portfolio;
+import com.unisoft.algotrader.persistence.InMemoryTradingDataStore;
 import com.unisoft.algotrader.persistence.SampleInMemoryRefDataStore;
 import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.provider.InstrumentDataManager;
 import com.unisoft.algotrader.provider.execution.simulation.SimulationExecutor;
 import com.unisoft.algotrader.strategy.StrategyManager;
 import com.unisoft.algotrader.trading.OrderManager;
-import com.unisoft.algotrader.trading.PortfolioManager;
 import com.unisoft.algotrader.trading.PortfolioProcessor;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.apache.logging.log4j.LogManager;
@@ -57,18 +57,20 @@ public class BackTestIntegrationTest {
 
         portfolio = new Portfolio("Test Portfolio", account.getAccountId());
         portfolioProcessor = new PortfolioProcessor(portfolio, account, new SampleInMemoryRefDataStore(), Clock.CLOCK, marketDataRB);
-        PortfolioManager.INSTANCE.add(portfolio);
+
+        TradingDataStore tradingDataStore = new InMemoryTradingDataStore();
+        tradingDataStore.savePortfolio(portfolio);
+
 
         orderManager = new OrderManager();
 
-        strategy = new BuyAndHoldStrategy(orderManager, portfolio.getPortfolioId(), marketDataRB);
+        strategy = new BuyAndHoldStrategy(orderManager, tradingDataStore, portfolio.getPortfolioId(), marketDataRB);
 
 
         simulationExecutor = new SimulationExecutor(orderManager, instrumentDataManager, marketDataRB);
 
         dataPublisher = new DataPublisher(marketDataRB);
 
-        PortfolioManager.INSTANCE.add(portfolio);
         StrategyManager.INSTANCE.register(strategy);
 
         executor.submit(strategy);

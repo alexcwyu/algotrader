@@ -14,6 +14,8 @@ import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.OrdStatus;
 import com.unisoft.algotrader.model.trading.OrdType;
 import com.unisoft.algotrader.model.trading.Side;
+import com.unisoft.algotrader.persistence.InMemoryTradingDataStore;
+import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.provider.InstrumentDataManager;
 import com.unisoft.algotrader.provider.execution.simulation.SimulationExecutor;
 import com.unisoft.algotrader.strategy.Strategy;
@@ -46,8 +48,8 @@ public class SimulationExecutorIntegrationTest {
         private final List<ExecutionReport> executionReports = Lists.newArrayList();
         private final OrderManager orderManager;
 
-        public MockStrategy(OrderManager orderManager){
-            super(mockStrategyId);
+        public MockStrategy(OrderManager orderManager, TradingDataStore tradingDataStore){
+            super(mockStrategyId, tradingDataStore);
             this.orderManager = orderManager;
         }
 
@@ -73,6 +75,7 @@ public class SimulationExecutorIntegrationTest {
     private SimulationExecutor simulationExecutor;
     private InstrumentDataManager instrumentDataManager;
     private MockStrategy strategy;
+    private TradingDataStore tradingDataStore;
 
     @BeforeClass
     public static void init(){
@@ -81,6 +84,7 @@ public class SimulationExecutorIntegrationTest {
     @Before
     public void setup(){
         orderManager = spy(new OrderManager());
+
 
         rb =RingBuffer.createSingleProducer(MarketDataContainer.FACTORY, 1024, new NoWaitStrategy());
         instrumentDataManager = new InstrumentDataManager(EventBusManager.INSTANCE.marketDataRB);
@@ -92,7 +96,9 @@ public class SimulationExecutorIntegrationTest {
         simulationExecutor.config.fillOnBar = true;
         simulationExecutor.config.fillOnBarMode = FillOnBarMode.LastBarClose;
 
-        strategy = new MockStrategy(orderManager);
+        tradingDataStore = new InMemoryTradingDataStore();
+
+        strategy = new MockStrategy(orderManager, tradingDataStore);
         StrategyManager.INSTANCE.register(strategy);
 
         instrumentDataManager.clear();
