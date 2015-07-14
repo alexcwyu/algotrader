@@ -9,8 +9,8 @@ import com.unisoft.algotrader.model.trading.OrdStatus;
 import com.unisoft.algotrader.model.trading.OrdType;
 import com.unisoft.algotrader.model.trading.Side;
 import com.unisoft.algotrader.persistence.TradingDataStore;
-import com.unisoft.algotrader.strategy.Strategy;
 import com.unisoft.algotrader.trading.OrderManager;
+import com.unisoft.algotrader.trading.Strategy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,6 +27,7 @@ class CountDownStrategy extends Strategy {
     private int exp;
     private int count = 0;
 
+    public long orderId = 0;
     public CountDownStrategy(String strategyId, TradingDataStore tradingDataStore, CountDownLatch latch, int exp, RingBuffer... providers) {
         super(strategyId, tradingDataStore, providers);
         this.latch = latch;

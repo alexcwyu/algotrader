@@ -19,9 +19,9 @@ import com.unisoft.algotrader.provider.SubscriptionKey;
 import com.unisoft.algotrader.provider.execution.simulation.SimulationExecutor;
 import com.unisoft.algotrader.provider.execution.simulation.Simulator;
 import com.unisoft.algotrader.provider.historical.HistoricalDataProvider;
-import com.unisoft.algotrader.strategy.Strategy;
-import com.unisoft.algotrader.strategy.StrategyManager;
 import com.unisoft.algotrader.trading.OrderManager;
+import com.unisoft.algotrader.trading.Strategy;
+import com.unisoft.algotrader.trading.StrategyManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

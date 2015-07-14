@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.strategy;
+package com.unisoft.algotrader.trading;
 
 import com.google.common.collect.Maps;
 

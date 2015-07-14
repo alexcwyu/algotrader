@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.strategy;
+package com.unisoft.algotrader.trading;
 
 import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.event.EventBusManager;
@@ -19,7 +19,6 @@ import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrat
 
 public abstract class Strategy extends MultiEventProcessor implements MarketDataHandler, OrderHandler, ExecutionHandler {
 
-    public int orderId = 0;
     protected final String strategyId;
     protected Portfolio portfolio;
     protected final TradingDataStore tradingDataStore;

@@ -12,8 +12,8 @@ import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.trading.OrdType;
 import com.unisoft.algotrader.model.trading.Side;
 import com.unisoft.algotrader.persistence.TradingDataStore;
-import com.unisoft.algotrader.strategy.Strategy;
 import com.unisoft.algotrader.trading.OrderManager;
+import com.unisoft.algotrader.trading.Strategy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
