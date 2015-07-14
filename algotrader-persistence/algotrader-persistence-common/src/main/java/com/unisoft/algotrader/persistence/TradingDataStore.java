@@ -50,4 +50,6 @@ public interface TradingDataStore {
     List<Order> getOrdersByPortfolioId(String portfolioId);
 
     List<Order> getOrdersByStrategyId(String strategyId);
+
+    long nextId();
 }

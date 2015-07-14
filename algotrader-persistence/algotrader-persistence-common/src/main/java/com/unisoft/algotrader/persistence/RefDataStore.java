@@ -30,4 +30,6 @@ public interface RefDataStore {
     Instrument getInstrument(int instId);
 
     List<Instrument> getAllInstruments();
+
+    long nextId();
 }

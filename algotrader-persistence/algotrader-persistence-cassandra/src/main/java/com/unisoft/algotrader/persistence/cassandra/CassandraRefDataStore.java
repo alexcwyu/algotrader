@@ -27,6 +27,7 @@ public class CassandraRefDataStore implements RefDataStore {
     private CurrencyAccessor currencyAccessor;
     private ExchangeAccessor exchangeAccessor;
     private InstrumentAccessor instrumentAccessor;
+    private CassandraIdSupplier idSupplier;
 
     public CassandraRefDataStore() {
         this(Cluster.builder().withProtocolVersion(ProtocolVersion.V3).addContactPoint("localhost").build(), "refdata");
@@ -35,6 +36,7 @@ public class CassandraRefDataStore implements RefDataStore {
     public CassandraRefDataStore(Cluster cluster, String keySpace) {
         this.cluster = cluster;
         this.keySpace = keySpace;
+
     }
 
     public void connect() {
@@ -43,6 +45,7 @@ public class CassandraRefDataStore implements RefDataStore {
         this.currencyAccessor = mappingManager.createAccessor(CurrencyAccessor.class);
         this.exchangeAccessor = mappingManager.createAccessor(ExchangeAccessor.class);
         this.instrumentAccessor = mappingManager.createAccessor(InstrumentAccessor.class);
+        this.idSupplier = new CassandraIdSupplier(session, keySpace);
     }
 
     @Override
@@ -99,4 +102,9 @@ public class CassandraRefDataStore implements RefDataStore {
     public List<Instrument> getAllInstruments() {
         return instrumentAccessor.getAll().all();
     }
+
+    public long nextId(){
+        return idSupplier.next();
+    }
+
 }

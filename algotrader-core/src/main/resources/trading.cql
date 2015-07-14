@@ -4,6 +4,12 @@ CREATE KEYSPACE IF NOT EXISTS trading WITH replication ={'class':'SimpleStrategy
 
 USE trading;
 
+CREATE TABLE IF NOT EXISTS counters (
+    entity_class text,
+    next_id counter,
+    PRIMARY KEY (entity_class)
+);
+
 
 CREATE TYPE account_transaction (
    order_id bigint,

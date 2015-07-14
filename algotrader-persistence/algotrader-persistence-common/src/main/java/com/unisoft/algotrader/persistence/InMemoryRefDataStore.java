@@ -16,6 +16,7 @@ import java.util.List;
 public class InMemoryRefDataStore implements RefDataStore {
 
     private final RefDataStore delegateDataStore;
+    private final InMemoryIdSupplier idSupplier = new InMemoryIdSupplier();
 
     private LoadingCache<String, Currency> currencyCache = CacheBuilder.newBuilder()
             .build(
@@ -112,5 +113,10 @@ public class InMemoryRefDataStore implements RefDataStore {
     @Override
     public List<Instrument> getAllInstruments() {
         return Lists.newArrayList(instrumentCache.asMap().values());
+    }
+
+    @Override
+    public long nextId() {
+        return idSupplier.next();
     }
 }

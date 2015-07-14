@@ -20,6 +20,8 @@ public class InMemoryTradingDataStore implements TradingDataStore {
 
     private final TradingDataStore delegateDataStore;
 
+    private final InMemoryIdSupplier idSupplier = new InMemoryIdSupplier();
+
     private LoadingCache<String, Account> accountCache = CacheBuilder.newBuilder()
             .build(
                     new CacheLoader<String, Account>() {
@@ -176,5 +178,10 @@ public class InMemoryTradingDataStore implements TradingDataStore {
             return Lists.newArrayList();
         }
         return orderCache.asMap().values().stream().filter(order -> strategyId.equals(order.getStrategyId())).collect(toList());
+    }
+
+    @Override
+    public long nextId() {
+        return idSupplier.next();
     }
 }

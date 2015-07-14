@@ -4,6 +4,13 @@ CREATE KEYSPACE IF NOT EXISTS refdata WITH replication ={'class':'SimpleStrategy
 
 USE refdata;
 
+CREATE TABLE IF NOT EXISTS counters (
+    entity_class text,
+    next_id counter,
+    PRIMARY KEY (entity_class)
+);
+
+
 CREATE TABLE IF NOT EXISTS currencies (
   ccy_id text,
   active boolean,

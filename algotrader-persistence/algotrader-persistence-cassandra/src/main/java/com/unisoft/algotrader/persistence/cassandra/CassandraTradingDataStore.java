@@ -29,6 +29,7 @@ public class CassandraTradingDataStore implements TradingDataStore {
     private PortfolioAccessor portfolioAccessor;
     private ExecutionReportAccessor executionReportAccessor;
     private OrderAccessor orderAccessor;
+    private CassandraIdSupplier idSupplier;
 
     public CassandraTradingDataStore() {
         this(Cluster.builder().withProtocolVersion(ProtocolVersion.V3).addContactPoint("localhost").build(), "trading");
@@ -46,6 +47,7 @@ public class CassandraTradingDataStore implements TradingDataStore {
         this.portfolioAccessor = mappingManager.createAccessor(PortfolioAccessor.class);
         this.executionReportAccessor = mappingManager.createAccessor(ExecutionReportAccessor.class);
         this.orderAccessor = mappingManager.createAccessor(OrderAccessor.class);
+        this.idSupplier = new CassandraIdSupplier(session, keySpace);
     }
 
     @Override
@@ -139,5 +141,10 @@ public class CassandraTradingDataStore implements TradingDataStore {
     @Override
     public List<Order> getOrdersByStrategyId(String strategyId) {
         return orderAccessor.getByStrategyId(strategyId).all();
+    }
+
+    @Override
+    public long nextId() {
+        return idSupplier.next();
     }
 }
