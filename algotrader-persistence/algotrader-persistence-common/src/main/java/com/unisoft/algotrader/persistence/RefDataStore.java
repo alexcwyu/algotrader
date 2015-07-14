@@ -27,9 +27,11 @@ public interface RefDataStore {
 
     void saveInstrument(Instrument instrument);
 
-    Instrument getInstrument(int instId);
+    Instrument getInstrument(long instId);
 
     List<Instrument> getAllInstruments();
+
+    Instrument getInstrumentBySymbolAndExchange(String symbol, String exchId);
 
     long nextId();
 }

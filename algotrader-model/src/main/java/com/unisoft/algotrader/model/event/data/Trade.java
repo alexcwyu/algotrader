@@ -14,7 +14,7 @@ public class Trade extends MarketData<Trade> {
 
     }
 
-    public Trade(int instId,
+    public Trade(long instId,
                  long dateTime,
                  double price,
                  int size){

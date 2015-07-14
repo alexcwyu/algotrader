@@ -3,9 +3,9 @@ package com.unisoft.algotrader.provider.google;
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.event.EventBus;
 import com.unisoft.algotrader.model.refdata.Instrument;
+import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.SubscriptionKey;
 import com.unisoft.algotrader.provider.historical.HistoricalDataProvider;
-import com.unisoft.algotrader.refdata.InstrumentManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,6 +38,11 @@ public class GoogleHistoricalDataProvider implements HistoricalDataProvider {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMM d yyyy");
     private static final SimpleDateFormat DATE_FORMAT_2 = new SimpleDateFormat("d-MMM-yy");
 
+    private final RefDataStore refDataStore;
+
+    public GoogleHistoricalDataProvider(RefDataStore refDataStore){
+        this.refDataStore = refDataStore;
+    }
 
     @Override
     public void subscribe(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate) {
@@ -82,7 +87,7 @@ public class GoogleHistoricalDataProvider implements HistoricalDataProvider {
     protected String getURL(SubscriptionKey key, Date fromDate, Date toDate){
         try {
 
-            Instrument instrument = InstrumentManager.INSTANCE.get(key.instId);
+            Instrument instrument = refDataStore.getInstrument(key.instId);
 
             String fromDateStr = URLEncoder.encode(DATE_FORMAT.format(fromDate), "UTF-8");
             String toDateStr = URLEncoder.encode(DATE_FORMAT.format(toDate), "UTF-8");

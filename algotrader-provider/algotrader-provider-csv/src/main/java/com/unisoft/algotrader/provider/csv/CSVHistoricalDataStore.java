@@ -7,6 +7,8 @@ import com.unisoft.algotrader.model.event.EventBus;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
+import com.unisoft.algotrader.model.refdata.Instrument;
+import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.DataStore;
 import com.unisoft.algotrader.provider.SubscriptionKey;
 import com.unisoft.algotrader.provider.historical.HistoricalDataProvider;
@@ -30,6 +32,7 @@ public class CSVHistoricalDataStore implements DataStore, HistoricalDataProvider
     private AtomicBoolean connected = new AtomicBoolean(false);
     private final String path;
     private final Writer writer;
+    private final RefDataStore refDataStore;
 
     private final LoadingCache<SubscriptionKey, CsvWriter> caches = CacheBuilder.newBuilder()
             .build(
@@ -39,14 +42,18 @@ public class CSVHistoricalDataStore implements DataStore, HistoricalDataProvider
                         }
                     });
 
-    public CSVHistoricalDataStore(String path){
+
+
+    public CSVHistoricalDataStore(String path, RefDataStore refDataStore){
         this.path = path;
         this.writer = null;
+        this.refDataStore = refDataStore;
     }
 
-    protected CSVHistoricalDataStore(Writer writer){
+    protected CSVHistoricalDataStore(Writer writer, RefDataStore refDataStore){
         this.writer = writer;
         this.path = null;
+        this.refDataStore = refDataStore;
     }
 
     /// PROVIDER
@@ -110,7 +117,8 @@ public class CSVHistoricalDataStore implements DataStore, HistoricalDataProvider
 
     protected Writer getWriter(SubscriptionKey key) {
         try {
-            return writer != null? writer : new FileWriter(new File(path + File.separator + getFileName(key)));
+            Instrument instrument = refDataStore.getInstrument(key.instId);
+            return writer != null? writer : new FileWriter(new File(path + File.separator + getFileName(key, instrument.getSymbol())));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -141,7 +149,9 @@ public class CSVHistoricalDataStore implements DataStore, HistoricalDataProvider
             long fromDateTime = fromDate.getTime();
             long toDateTime = toDate.getTime();
             CsvParser parser = new CsvParser(settings);
-            Reader reader = new FileReader(path+CSVConfig.getFileName(subscriptionKey));
+
+            Instrument instrument = refDataStore.getInstrument(subscriptionKey.instId);
+            Reader reader = new FileReader(path+CSVConfig.getFileName(subscriptionKey, instrument.getSymbol()));
 
             switch (subscriptionKey.type) {
                 case Bar:

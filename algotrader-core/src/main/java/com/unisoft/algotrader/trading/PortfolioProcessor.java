@@ -15,7 +15,6 @@ import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.*;
 import com.unisoft.algotrader.persistence.RefDataStore;
-import com.unisoft.algotrader.refdata.InstrumentManager;
 import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.apache.logging.log4j.LogManager;
@@ -84,7 +83,7 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
 
         double newDebt = addOrderToPosition(order);
 
-        Currency currency = refDataStore.getCurrency(InstrumentManager.INSTANCE.get(order.getInstId()).getCcyId());
+        Currency currency = refDataStore.getCurrency(refDataStore.getInstrument(order.getInstId()).getCcyId());
         AccountTransaction accountTransaction = new AccountTransaction(order.getOrderId(), order.getDateTime(),
                 currency, order.cashFlow() + newDebt, order.getText());
         account.add(accountTransaction);
@@ -134,7 +133,7 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
         double openDebt = 0;
         double closeDebt = 0;
 
-        Instrument instrument = InstrumentManager.INSTANCE.get(order.getInstId());
+        Instrument instrument = refDataStore.getInstrument(order.getInstId());
 
         double orderMargin = calcOrderMargin(order, instrument);
         double orderDebt = calcOrderDebt(order, instrument);

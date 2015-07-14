@@ -91,7 +91,7 @@ public class InstrumentRepositoryImpl implements InstrumentRepositoryCustom {
     private BoundStatement bindInsert(Instrument instrument){
         BoundStatement boundStatement =
                 insertPreparedStatement.bind();
-        boundStatement.setInt(INST_ID, instrument.getInstId());
+        boundStatement.setLong(INST_ID, instrument.getInstId());
         boundStatement.setString(TYPE, instrument.getType().name());
         boundStatement.setString(NAME, instrument.getName());
         boundStatement.setString(SYMBOL, instrument.getSymbol());

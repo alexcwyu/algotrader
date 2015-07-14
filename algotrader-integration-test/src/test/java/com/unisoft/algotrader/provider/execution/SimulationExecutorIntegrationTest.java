@@ -3,20 +3,19 @@ package com.unisoft.algotrader.provider.execution;
 import com.google.common.collect.Lists;
 import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.event.EventBusManager;
+import com.unisoft.algotrader.event.SampleEventFactory;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
-import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.OrdStatus;
 import com.unisoft.algotrader.model.trading.OrdType;
 import com.unisoft.algotrader.model.trading.Side;
 import com.unisoft.algotrader.provider.InstrumentDataManager;
 import com.unisoft.algotrader.provider.execution.simulation.SimulationExecutor;
-import com.unisoft.algotrader.refdata.InstrumentManager;
 import com.unisoft.algotrader.strategy.Strategy;
 import com.unisoft.algotrader.strategy.StrategyManager;
 import com.unisoft.algotrader.trading.OrderManager;
@@ -39,7 +38,7 @@ public class SimulationExecutorIntegrationTest {
 
     public static String mockStrategyId = "MockStrategy";
     public static long ordId = 0;
-    public static Instrument testInstrument = InstrumentManager.INSTANCE.createStock("TestInst", "TestExch", Currency.USD.getCcyId());
+    public static Instrument testInstrument = SampleEventFactory.TEST_USD_INSTRUMENT;
 
     class MockStrategy extends Strategy{
 
@@ -77,7 +76,6 @@ public class SimulationExecutorIntegrationTest {
 
     @BeforeClass
     public static void init(){
-        InstrumentManager.INSTANCE.add(testInstrument);
     }
 
     @Before

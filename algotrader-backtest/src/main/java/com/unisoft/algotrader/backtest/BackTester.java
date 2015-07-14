@@ -8,6 +8,8 @@ import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.Account;
 import com.unisoft.algotrader.model.trading.Performance;
 import com.unisoft.algotrader.model.trading.Portfolio;
+import com.unisoft.algotrader.persistence.InMemoryRefDataStore;
+import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.provider.BarFactory;
 import com.unisoft.algotrader.provider.InstrumentDataManager;
@@ -16,7 +18,6 @@ import com.unisoft.algotrader.provider.SubscriptionKey;
 import com.unisoft.algotrader.provider.execution.simulation.SimulationExecutor;
 import com.unisoft.algotrader.provider.execution.simulation.Simulator;
 import com.unisoft.algotrader.provider.historical.HistoricalDataProvider;
-import com.unisoft.algotrader.refdata.InstrumentManager;
 import com.unisoft.algotrader.strategy.Strategy;
 import com.unisoft.algotrader.strategy.StrategyManager;
 import com.unisoft.algotrader.trading.OrderManager;
@@ -44,6 +45,7 @@ public class BackTester {
     private final SimulationExecutor simulationExecutor;
     private final BarFactory barFactory;
     private final Simulator simulator;
+    private final RefDataStore refDataStore;;
 
     private final int fromDate;
     private final int toDate;
@@ -52,7 +54,11 @@ public class BackTester {
 
     public BackTester(Strategy strategy, HistoricalDataProvider provider, Currency currency, double initialValue, Instrument instrument, int fromDate, int toDate){
         this.instrument = instrument;
-        InstrumentManager.INSTANCE.add(instrument);
+
+
+        this.refDataStore = new InMemoryRefDataStore();
+
+        refDataStore.saveInstrument(instrument);
 
         this.account = TradingDataStore.DEFAULT_ACCOUNT;
 
@@ -77,7 +83,10 @@ public class BackTester {
 
     public BackTester(Strategy strategy, HistoricalDataProvider provider, Account account, Portfolio portfolio, Instrument instrument, int fromDate, int toDate){
         this.instrument = instrument;
-        InstrumentManager.INSTANCE.add(instrument);
+
+        this.refDataStore = new InMemoryRefDataStore();
+
+        refDataStore.saveInstrument(instrument);
 
 
         this.account = account;

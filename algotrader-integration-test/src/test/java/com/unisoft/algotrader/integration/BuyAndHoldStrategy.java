@@ -55,7 +55,7 @@ public class BuyAndHoldStrategy extends Strategy {
         createAndSendMarketOrder(trade.instId);
     }
 
-    private void createAndSendMarketOrder(int instId){
+    private void createAndSendMarketOrder(long instId){
         if (longOrder == null){
             longOrder = SampleEventFactory.createOrder(instId, Side.Buy, OrdType.Market, 9000, 0.0);
             sendOrder(longOrder);

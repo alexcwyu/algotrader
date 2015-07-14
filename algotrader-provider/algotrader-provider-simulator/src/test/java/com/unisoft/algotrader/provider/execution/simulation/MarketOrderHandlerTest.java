@@ -40,11 +40,11 @@ public class MarketOrderHandlerTest {
         config = new SimulatorConfig();
         handler = new MarketOrderHandler(config, executor);
 
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.Market, 800, 0);
+        order = SampleEventFactory.createOrder(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), Side.Buy, OrdType.Market, 800, 0);
 
-        quote = SampleEventFactory.createQuote(SampleEventFactory.testInstrument.getInstId(), 95, 98, 550, 600);
-        trade = SampleEventFactory.createTrade(SampleEventFactory.testInstrument.getInstId(), 99, 500);
-        bar = SampleEventFactory.createBar(SampleEventFactory.testInstrument.getInstId(), 87, 92, 60, 88);
+        quote = SampleEventFactory.createQuote(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), 95, 98, 550, 600);
+        trade = SampleEventFactory.createTrade(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), 99, 500);
+        bar = SampleEventFactory.createBar(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), 87, 92, 60, 88);
     }
 
     @Test

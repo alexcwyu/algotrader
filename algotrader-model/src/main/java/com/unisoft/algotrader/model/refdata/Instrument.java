@@ -18,7 +18,7 @@ public class Instrument{
 
     @PartitionKey
     @Column(name ="inst_id")
-    private int instId;
+    private long instId;
 
     private InstType type;
 
@@ -61,11 +61,11 @@ public class Instrument{
     public Instrument(){
     }
 
-    public Instrument(int instId, InstType type, String symbol, String exchId, String ccyId){
+    public Instrument(long instId, InstType type, String symbol, String exchId, String ccyId){
         this(instId, type, symbol, symbol, exchId, ccyId);
     }
 
-    public Instrument(int instId, InstType type, String name, String symbol, String exchId, String ccyId){
+    public Instrument(long instId, InstType type, String name, String symbol, String exchId, String ccyId){
 
         this.instId = instId;
         this.type = type;
@@ -167,11 +167,11 @@ public class Instrument{
         ETF,
     }
 
-    public int getInstId() {
+    public long getInstId() {
         return instId;
     }
 
-    public void setInstId(int instId) {
+    public void setInstId(long instId) {
         this.instId = instId;
     }
 

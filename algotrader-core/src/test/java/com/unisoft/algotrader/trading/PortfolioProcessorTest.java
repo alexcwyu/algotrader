@@ -9,9 +9,9 @@ import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.*;
+import com.unisoft.algotrader.persistence.InMemoryRefDataStore;
 import com.unisoft.algotrader.persistence.SampleInMemoryRefDataStore;
-import com.unisoft.algotrader.persistence.TradingDataStore;
-import com.unisoft.algotrader.refdata.InstrumentManager;
+import com.unisoft.algotrader.refdata.InstrumentFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Before;
@@ -32,9 +32,12 @@ public class PortfolioProcessorTest {
     public static long ordId = 0;
     public static long execId = 100;
     public static String portfolioId = "TestPortfolio";
-    private static Instrument instrument1 = InstrumentManager.INSTANCE.createStock("0005.HK", "HKEX", "HKD");
-    private static Instrument instrument2 = InstrumentManager.INSTANCE.createStock("0959.HK", "HKEX", "HKD");
-    private static Instrument instrument3 = InstrumentManager.INSTANCE.createStock("2628.HK", "HKEX", "HKD");
+
+    public static InMemoryRefDataStore REF_DATA_STORE = new SampleInMemoryRefDataStore();
+    public static InstrumentFactory INSTRUMEN_FACTORY = new InstrumentFactory(REF_DATA_STORE);
+    private static Instrument instrument1 = INSTRUMEN_FACTORY.createStock("0005.HK", "HKEX", "HKD");
+    private static Instrument instrument2 = INSTRUMEN_FACTORY.createStock("0959.HK", "HKEX", "HKD");
+    private static Instrument instrument3 = INSTRUMEN_FACTORY.createStock("2628.HK", "HKEX", "HKD");
 
     private Account account;
     private Portfolio portfolio;
@@ -42,16 +45,16 @@ public class PortfolioProcessorTest {
 
     @BeforeClass
     public static void init() {
-        InstrumentManager.INSTANCE.add(instrument1);
-        InstrumentManager.INSTANCE.add(instrument2);
-        InstrumentManager.INSTANCE.add(instrument3);
+        REF_DATA_STORE.saveInstrument(instrument1);
+        REF_DATA_STORE.saveInstrument(instrument2);
+        REF_DATA_STORE.saveInstrument(instrument3);
     }
 
     @Before
     public void setup() {
         account = new Account("Test", "Testing Account", Currency.HKD, 1000000);
         portfolio = new Portfolio(portfolioId, account.getAccountId());
-        portfolioProcessor = new PortfolioProcessor(portfolio, account, new SampleInMemoryRefDataStore(), Clock.CLOCK);
+        portfolioProcessor = new PortfolioProcessor(portfolio, account, REF_DATA_STORE, Clock.CLOCK);
     }
 
     @Test
@@ -350,7 +353,7 @@ public class PortfolioProcessorTest {
 //    }
 
 
-    private Order limitOrder(int instId, double limitPrice, double qty, Side side){
+    private Order limitOrder(long instId, double limitPrice, double qty, Side side){
 
         Order order = new Order();
         order.orderId = ordId ++ ;

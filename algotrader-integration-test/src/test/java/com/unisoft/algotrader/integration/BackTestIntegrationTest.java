@@ -1,9 +1,9 @@
 package com.unisoft.algotrader.integration;
 
 import com.lmax.disruptor.RingBuffer;
+import com.unisoft.algotrader.event.SampleEventFactory;
 import com.unisoft.algotrader.model.clock.Clock;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
-import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.Account;
 import com.unisoft.algotrader.model.trading.Portfolio;
@@ -11,7 +11,6 @@ import com.unisoft.algotrader.persistence.SampleInMemoryRefDataStore;
 import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.provider.InstrumentDataManager;
 import com.unisoft.algotrader.provider.execution.simulation.SimulationExecutor;
-import com.unisoft.algotrader.refdata.InstrumentManager;
 import com.unisoft.algotrader.strategy.StrategyManager;
 import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.trading.PortfolioManager;
@@ -34,7 +33,7 @@ public class BackTestIntegrationTest {
 
     public static void main(String [] args) throws Exception{
 
-        Instrument testInstrument = InstrumentManager.INSTANCE.createStock("TestInst", "TestExch", Currency.USD.getCcyId());
+        Instrument testInstrument = SampleEventFactory.TEST_HKD_INSTRUMENT;
 
         ExecutorService executor;
         RingBuffer<MarketDataContainer> marketDataRB;

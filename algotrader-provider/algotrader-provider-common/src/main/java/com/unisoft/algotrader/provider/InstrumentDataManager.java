@@ -25,7 +25,7 @@ public class InstrumentDataManager extends MultiEventProcessor implements Market
             onTrade(data.trade);
     }
 
-    public InstrumentData getInstrumentData(int instId){
+    public InstrumentData getInstrumentData(long instId){
         InstrumentData data = map.get(instId);
         if (data == null){
             data = new InstrumentData(instId);
@@ -53,17 +53,17 @@ public class InstrumentDataManager extends MultiEventProcessor implements Market
     }
 
     public static class InstrumentData {
-        public final int instId;
+        public final long instId;
         public Bar bar;
         public Quote quote;
         public Trade trade;
 
-        public InstrumentData(int instId){
+        public InstrumentData(long instId){
             this.instId = instId;
         }
     }
 
-    public Map<Integer, InstrumentData> map = Maps.newHashMap();
+    public Map<Long, InstrumentData> map = Maps.newHashMap();
 
     public InstrumentDataManager(RingBuffer ringBuffer){
         super(new NoWaitStrategy(),  null, ringBuffer);

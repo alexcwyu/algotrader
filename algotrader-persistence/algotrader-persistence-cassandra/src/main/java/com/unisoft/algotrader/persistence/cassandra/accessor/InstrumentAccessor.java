@@ -14,11 +14,15 @@ import com.unisoft.algotrader.model.refdata.Instrument;
 @Accessor
 public interface InstrumentAccessor {
     @Query("SELECT * FROM refdata.instruments WHERE inst_id = :inst_id")
-    Instrument get(@Param("inst_id") int inst_id);
+    Instrument get(@Param("inst_id") long inst_id);
 
     @Query("SELECT * FROM refdata.instruments")
     Result<Instrument> getAll();
 
     @Query("SELECT * FROM refdata.instruments")
     ListenableFuture<Result<Instrument>> getAllAsync();
+
+
+    @Query("SELECT * FROM refdata.instruments WHERE symbol = :symbol AND exch_id = :exch_id ALLOW FILTERING")
+    Result<Instrument> getBySymbolAndExchange(@Param("symbol") String symbol, @Param("exch_id") String exchId );
 }

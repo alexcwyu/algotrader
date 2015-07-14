@@ -22,7 +22,7 @@ public class Quote extends MarketData<Quote> {
     }
 
     public Quote(
-            int instId,
+            long instId,
             long dateTime,
             double bid,
             double ask,

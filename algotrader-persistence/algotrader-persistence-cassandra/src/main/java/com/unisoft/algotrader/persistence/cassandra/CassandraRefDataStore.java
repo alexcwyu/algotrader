@@ -93,7 +93,7 @@ public class CassandraRefDataStore implements RefDataStore {
     }
 
     @Override
-    public Instrument getInstrument(int instId) {
+    public Instrument getInstrument(long instId) {
         //return instrumentAccessor.get(instId);
         Mapper<Instrument> mapper = mappingManager.mapper(Instrument.class);
         return mapper.get(instId);
@@ -101,6 +101,12 @@ public class CassandraRefDataStore implements RefDataStore {
     @Override
     public List<Instrument> getAllInstruments() {
         return instrumentAccessor.getAll().all();
+    }
+
+    @Override
+    public Instrument getInstrumentBySymbolAndExchange(String symbol, String exchId){
+        List<Instrument> result = instrumentAccessor.getBySymbolAndExchange(symbol, exchId).all();
+        return  result!=null && result.size()>0 ? result.get(0) : null;
     }
 
     public long nextId(){

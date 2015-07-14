@@ -26,7 +26,7 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
     public long orderId;
 
     @Column(name="inst_id")
-    public int instId;
+    public long instId;
 
     @Column(name="date_time")
     public long dateTime;
@@ -259,11 +259,11 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
         this.orderId = orderId;
     }
 
-    public int getInstId() {
+    public long getInstId() {
         return instId;
     }
 
-    public void setInstId(int instId) {
+    public void setInstId(long instId) {
         this.instId = instId;
     }
 

@@ -114,7 +114,7 @@ public class CassandraTradingDataStore implements TradingDataStore {
     }
 
     @Override
-    public List<ExecutionReport> getExecutionReportsByInstId(int instId) {
+    public List<ExecutionReport> getExecutionReportsByInstId(long instId) {
         return executionReportAccessor.getByInstId(instId).all();
     }
 
@@ -129,7 +129,7 @@ public class CassandraTradingDataStore implements TradingDataStore {
     }
 
     @Override
-    public List<Order> getOrdersByInstId(int instId) {
+    public List<Order> getOrdersByInstId(long instId) {
         return orderAccessor.getByInstId(instId).all();
     }
 

@@ -1,7 +1,6 @@
 package com.unisoft.algotrader.trading;
 
 import com.unisoft.algotrader.model.clock.Clock;
-import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.trading.Account;
 import com.unisoft.algotrader.model.trading.Performance;
 import com.unisoft.algotrader.model.trading.Portfolio;

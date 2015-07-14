@@ -132,7 +132,7 @@ public class InMemoryTradingDataStore implements TradingDataStore {
     }
 
     @Override
-    public List<ExecutionReport> getExecutionReportsByInstId(int instId) {
+    public List<ExecutionReport> getExecutionReportsByInstId(long instId) {
         return executionReportCache.asMap().values().stream().filter(er -> er.getInstId() == instId).collect(toList());
     }
 
@@ -160,7 +160,7 @@ public class InMemoryTradingDataStore implements TradingDataStore {
     }
 
     @Override
-    public List<Order> getOrdersByInstId(int instId) {
+    public List<Order> getOrdersByInstId(long instId) {
         return orderCache.asMap().values().stream().filter(order -> order.getInstId() == instId).collect(toList());
     }
 

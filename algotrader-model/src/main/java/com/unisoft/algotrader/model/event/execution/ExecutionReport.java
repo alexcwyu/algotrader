@@ -24,7 +24,7 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
     @Column(name="order_id")
     public long orderId;
     @Column(name="inst_id")
-    public int instId;
+    public long instId;
 
     @Column(name="transaction_time")
     public long transactionTime;
@@ -143,7 +143,7 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
         return orderId;
     }
 
-    public int getInstId() {
+    public long getInstId() {
         return instId;
     }
 
@@ -207,7 +207,7 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
         this.orderId = orderId;
     }
 
-    public void setInstId(int instId) {
+    public void setInstId(long instId) {
         this.instId = instId;
     }
 

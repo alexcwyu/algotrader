@@ -1,9 +1,9 @@
 package com.unisoft.algotrader.persistence.cassandra;
 
+import com.unisoft.algotrader.event.SampleEventFactory;
 import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Exchange;
 import com.unisoft.algotrader.model.refdata.Instrument;
-import com.unisoft.algotrader.refdata.InstrumentManager;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -45,7 +45,7 @@ public class CassandraRefDataStoreIntegrationTest {
 
     @Test
     public void testSaveLoadInstrument() throws Exception {
-        Instrument instrument = InstrumentManager.INSTANCE.createStock("2628.HK","SEHK","HKD");
+        Instrument instrument = SampleEventFactory.TEST_HKD_INSTRUMENT;
 
         store.saveInstrument(instrument);
         Instrument instrument1 = store.getInstrument(instrument.getInstId());

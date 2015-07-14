@@ -28,7 +28,7 @@ public class Portfolio{
 
     @Ignore
     @Transient
-    private Map<Integer, Position> positions = Maps.newHashMap();
+    private Map<Long, Position> positions = Maps.newHashMap();
 
     @Ignore
     @Transient
@@ -48,7 +48,7 @@ public class Portfolio{
         return performance;
     }
 
-    public Map<Integer, Position> getPositions(){
+    public Map<Long, Position> getPositions(){
         return positions;
     }
 
@@ -77,7 +77,7 @@ public class Portfolio{
     }
 
 
-    public void setPositions(Map<Integer, Position> positions) {
+    public void setPositions(Map<Long, Position> positions) {
         this.positions = positions;
     }
 
@@ -86,15 +86,15 @@ public class Portfolio{
     }
 
 
-    public Position getPosition(int instId){
+    public Position getPosition(long instId){
         return positions.get(instId);
     }
 
-    public Position addPosition(int instId, Position position){
+    public Position addPosition(long instId, Position position){
         return positions.putIfAbsent(instId, position);
     }
 
-    public Position removePosition(int instId){
+    public Position removePosition(long instId){
         return positions.remove(instId);
     }
 

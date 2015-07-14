@@ -90,19 +90,19 @@ public class CassandraTradingDataStoreIntegrationTest {
         PortfolioManager.INSTANCE.add(portfolio);
 
         Clock.CLOCK.setDateTime(System.currentTimeMillis());
-        Order order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument2.getInstId(), Side.Buy, OrdType.Limit, 9000, 98, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
+        Order order = SampleEventFactory.createOrder(SampleEventFactory.TEST_USD_INSTRUMENT.getInstId(), Side.Buy, OrdType.Limit, 9000, 98, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
         ExecutionReport executionReport = SampleEventFactory.createExecutionReport(order);
         order.add(executionReport);
         portfolioProcessor.add(order);
 
         Clock.CLOCK.setDateTime(System.currentTimeMillis());
-        Order order2 = SampleEventFactory.createOrder(SampleEventFactory.testInstrument2.getInstId(), Side.Sell, OrdType.Limit, 10000, 108, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
+        Order order2 = SampleEventFactory.createOrder(SampleEventFactory.TEST_USD_INSTRUMENT.getInstId(), Side.Sell, OrdType.Limit, 10000, 108, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
         ExecutionReport executionReport2 = SampleEventFactory.createExecutionReport(order2);
         order2.add(executionReport2);
         portfolioProcessor.add(order2);
 
         Clock.CLOCK.setDateTime(System.currentTimeMillis());
-        Order order3 = SampleEventFactory.createOrder(SampleEventFactory.testInstrument2.getInstId(), Side.Buy, OrdType.Limit, 1000, 88, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
+        Order order3 = SampleEventFactory.createOrder(SampleEventFactory.TEST_USD_INSTRUMENT.getInstId(), Side.Buy, OrdType.Limit, 1000, 88, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
         ExecutionReport executionReport3 = SampleEventFactory.createExecutionReport(order3);
         order3.add(executionReport3);
         portfolioProcessor.add(order3);

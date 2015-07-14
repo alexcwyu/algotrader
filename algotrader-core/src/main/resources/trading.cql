@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS portfolios (
 
 CREATE TABLE IF NOT EXISTS orders (
     order_id bigint,
-    inst_id int,
+    inst_id bigint,
     date_time bigint,
     ord_type text,
     ord_status text,
@@ -106,7 +106,7 @@ CREATE INDEX order_strategy_id ON trading.orders (strategy_id);
 CREATE TABLE IF NOT EXISTS execution_reports (
     exec_id bigint,
     order_id bigint,
-    inst_id int,
+    inst_id bigint,
     transaction_time bigint,
     ord_type text,
     ord_status text,

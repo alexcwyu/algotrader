@@ -6,12 +6,12 @@ import com.unisoft.algotrader.model.event.Event;
  * Created by alex on 4/12/15.
  */
 public abstract class MarketData<E extends MarketData<? super E>> implements Event<MarketDataHandler, E> {
-    public int instId = -1;
+    public long instId = -1;
     public long dateTime = -1;
     protected MarketData(){
 
     }
-    public MarketData(int instId, long dateTime){
+    public MarketData(long instId, long dateTime){
         this.instId = instId;
         this.dateTime = dateTime;
     }

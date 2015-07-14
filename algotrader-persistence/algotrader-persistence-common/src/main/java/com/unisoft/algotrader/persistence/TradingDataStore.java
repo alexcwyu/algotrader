@@ -35,7 +35,7 @@ public interface TradingDataStore {
 
     List<ExecutionReport> getAllExecutionReports();
 
-    List<ExecutionReport> getExecutionReportsByInstId(int instId);
+    List<ExecutionReport> getExecutionReportsByInstId(long instId);
 
     List<ExecutionReport> getExecutionReportsByOrderId(long orderId);
 
@@ -45,7 +45,7 @@ public interface TradingDataStore {
 
     List<Order> getAllOrders();
 
-    List<Order> getOrdersByInstId(int instId);
+    List<Order> getOrdersByInstId(long instId);
 
     List<Order> getOrdersByPortfolioId(String portfolioId);
 

@@ -35,7 +35,7 @@ public class MarketDataContainer extends MarketData<MarketDataContainer> {
     }
 
     public MarketDataContainer(
-            int instId,
+            long instId,
             long dateTime,
             int size,
             Bar bar,

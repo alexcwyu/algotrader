@@ -9,7 +9,7 @@ import com.unisoft.algotrader.model.event.data.Trade;
  */
 public interface EventBus {
     interface BarEventBus extends EventBus{
-        void publishBar(int instId,
+        void publishBar(long instId,
                                int size,
                                long dateTime,
                                double open,
@@ -19,7 +19,7 @@ public interface EventBus {
                                long volume,
                                long openInt);
 
-        default void setBar(Bar bar, int instId,
+        default void setBar(Bar bar, long instId,
                             int size,
                             long dateTime,
                             double open,
@@ -42,14 +42,14 @@ public interface EventBus {
     }
 
     interface QuoteEventBus extends EventBus{
-        void publishQuote( int instId,
+        void publishQuote( long instId,
                            long dateTime,
                            double bid,
                            double ask,
                            int bidSize,
                            int askSize);
 
-        default void setQuote(Quote quote, int instId,
+        default void setQuote(Quote quote, long instId,
                          long dateTime,
                          double bid,
                          double ask,
@@ -67,12 +67,12 @@ public interface EventBus {
     }
 
     interface TradeEventBus extends EventBus{
-        void publishTrade(int instId,
+        void publishTrade(long instId,
                           long dateTime,
                           double price,
                           int size);
 
-        default void setTrade(Trade trade, int instId,
+        default void setTrade(Trade trade, long instId,
                               long dateTime,
                               double price,
                               int size){

@@ -28,8 +28,8 @@ public class BarProcessorTest {
 
     @Before
     public void setup(){
-        order = SampleEventFactory.createOrder(SampleEventFactory.testInstrument.getInstId(), Side.Buy, OrdType.Limit, 800, 88);
-        bar = SampleEventFactory.createBar(SampleEventFactory.testInstrument.getInstId(), 87, 95, 60, 88);
+        order = SampleEventFactory.createOrder(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), Side.Buy, OrdType.Limit, 800, 88);
+        bar = SampleEventFactory.createBar(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), 87, 95, 60, 88);
     }
 
     @Test

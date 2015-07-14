@@ -266,7 +266,7 @@ public class KDBHistoricalDataStore implements DataStore, HistoricalDataProvider
 
         KDBHistoricalDataStore store = new KDBHistoricalDataStore(new KDBConfig());
         store.connect();
-        int instId =100;
+        long instId =100;
         for (int i = 0 ; i < 10; i ++) {
             long time = YYYYMMDD_FORMAT.parse((20000101 + i)+"").getTime();
             Bar bar = new Bar(instId, 86400, time,88, 98, 86, 92, 20000);

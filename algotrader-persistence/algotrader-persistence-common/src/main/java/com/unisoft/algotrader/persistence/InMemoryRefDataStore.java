@@ -34,10 +34,10 @@ public class InMemoryRefDataStore implements RefDataStore {
                         }
                     });
 
-    private LoadingCache<Integer, Instrument> instrumentCache = CacheBuilder.newBuilder()
+    private LoadingCache<Long, Instrument> instrumentCache = CacheBuilder.newBuilder()
             .build(
-                    new CacheLoader<Integer, Instrument>() {
-                        public Instrument load(Integer instId) {
+                    new CacheLoader<Long, Instrument>() {
+                        public Instrument load(Long instId) {
                             return delegateDataStore.getInstrument(instId);
                         }
                     });
@@ -106,13 +106,18 @@ public class InMemoryRefDataStore implements RefDataStore {
     }
 
     @Override
-    public Instrument getInstrument(int instId) {
+    public Instrument getInstrument(long instId) {
         return instrumentCache.getUnchecked(instId);
     }
 
     @Override
     public List<Instrument> getAllInstruments() {
         return Lists.newArrayList(instrumentCache.asMap().values());
+    }
+
+    @Override
+    public Instrument getInstrumentBySymbolAndExchange(String symbol, String exchId) {
+        return instrumentCache.asMap().values().stream().filter(i -> symbol != null && symbol.equals(i.getSymbol()) && exchId != null && exchId.equals(i.getExchId())).findAny().orElse(null);
     }
 
     @Override

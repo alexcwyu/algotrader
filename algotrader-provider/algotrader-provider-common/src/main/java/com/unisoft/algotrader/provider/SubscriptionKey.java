@@ -27,15 +27,15 @@ public class SubscriptionKey {
 
     public final Type type;
 
-    public final int instId;
+    public final long instId;
 
     public final int barSize;
 
-    private SubscriptionKey(Type type, int instId){
+    private SubscriptionKey(Type type, long instId){
         this(type, instId, 0);
     }
 
-    private SubscriptionKey(Type type, int instId, int barSize){
+    private SubscriptionKey(Type type, long instId, int barSize){
         this.type = type;
         this.instId = instId;
         this.barSize = barSize;
@@ -65,39 +65,39 @@ public class SubscriptionKey {
                 '}';
     }
 
-    public static SubscriptionKey createBarSubscriptionKey(int instId, int frequency){
+    public static SubscriptionKey createBarSubscriptionKey(long instId, int frequency){
         return new SubscriptionKey(Type.Bar, instId, frequency);
     }
 
-    public static SubscriptionKey create1MBarSubscriptionKey(int instId){
+    public static SubscriptionKey create1MBarSubscriptionKey(long instId){
         return new SubscriptionKey(Type.Bar, instId, M1_SIZE);
     }
 
-    public static SubscriptionKey create15MBarSubscriptionKey(int instId){
+    public static SubscriptionKey create15MBarSubscriptionKey(long instId){
         return new SubscriptionKey(Type.Bar, instId, M15_SIZE);
     }
 
-    public static SubscriptionKey create30MBarSubscriptionKey(int instId){
+    public static SubscriptionKey create30MBarSubscriptionKey(long instId){
         return new SubscriptionKey(Type.Bar, instId, M30_SIZE);
     }
 
-    public static SubscriptionKey create1HBarSubscriptionKey(int instId){
+    public static SubscriptionKey create1HBarSubscriptionKey(long instId){
         return new SubscriptionKey(Type.Bar, instId, H1_SIZE);
     }
 
-    public static SubscriptionKey create4HBarSubscriptionKey(int instId){
+    public static SubscriptionKey create4HBarSubscriptionKey(long instId){
         return new SubscriptionKey(Type.Bar, instId, H4_SIZE);
     }
 
-    public static SubscriptionKey createDailySubscriptionKey(int instId){
+    public static SubscriptionKey createDailySubscriptionKey(long instId){
         return new SubscriptionKey(Type.Bar, instId, DAILY_SIZE);
     }
 
-    public static SubscriptionKey createTradeSubscriptionKey(int instId){
+    public static SubscriptionKey createTradeSubscriptionKey(long instId){
         return new SubscriptionKey(Type.Trade, instId);
     }
 
-    public static SubscriptionKey createQuoteSubscriptionKey(int instId){
+    public static SubscriptionKey createQuoteSubscriptionKey(long instId){
         return new SubscriptionKey(Type.Quote, instId);
     }
 

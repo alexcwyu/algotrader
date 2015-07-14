@@ -23,7 +23,7 @@ public interface OrderAccessor {
     ListenableFuture<Result<Order>> getAllAsync();
 
     @Query("SELECT * FROM trading.orders WHERE inst_id = :inst_id")
-    Result<Order> getByInstId(@Param("inst_id") int inst_id);
+    Result<Order> getByInstId(@Param("inst_id") long inst_id);
 
     @Query("SELECT * FROM trading.orders WHERE portfolio_id = :portfolio_id")
     Result<Order> getByPortfolioId(@Param("portfolio_id") String portfolio_id);

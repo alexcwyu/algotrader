@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.provider.csv;
 
 import com.unisoft.algotrader.model.event.data.Bar;
+import com.unisoft.algotrader.persistence.InMemoryRefDataStore;
 import org.junit.Test;
 
 import java.io.StringWriter;
@@ -19,7 +20,7 @@ public class CSVHistoricalDataStoreTest {
     @Test
     public void testCsvImport(){
         StringWriter sw = new StringWriter();
-        CSVHistoricalDataStore csvImport = new CSVHistoricalDataStore(sw);
+        CSVHistoricalDataStore csvImport = new CSVHistoricalDataStore(sw, new InMemoryRefDataStore());
 
         Bar bar1 = new Bar(1,  60, 19999,
                 500, 9999, 100, 600);

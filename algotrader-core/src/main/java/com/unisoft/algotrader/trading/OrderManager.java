@@ -31,7 +31,7 @@ public class OrderManager extends MultiEventProcessor implements OrderHandler, E
     private AtomicLong ordId = new AtomicLong();
 
 
-    private Map<Integer, Map<Long, Order>> orderMap = Maps.newConcurrentMap();
+    private Map<Long, Map<Long, Order>> orderMap = Maps.newConcurrentMap();
 
     public OrderManager(){
         super(new NoWaitStrategy(),  null, EventBusManager.INSTANCE.executionReportRB, EventBusManager.INSTANCE.orderRB, EventBusManager.INSTANCE.orderStatusRB);
@@ -41,14 +41,14 @@ public class OrderManager extends MultiEventProcessor implements OrderHandler, E
         return ordId.getAndIncrement();
     }
 
-    public Map<Long, Order> getOrders(int instId){
+    public Map<Long, Order> getOrders(long instId){
         if (!orderMap.containsKey(instId))
             orderMap.putIfAbsent(instId, Maps.newHashMap());
         return orderMap.get(instId);
     }
 
 
-    public Order getOrder(int instId, long orderId){
+    public Order getOrder(long instId, long orderId){
         if (orderMap.containsKey(instId))
             return orderMap.get(instId).get(orderId);
         return null;

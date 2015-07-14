@@ -42,8 +42,8 @@ public class SimulationExecutor extends MultiEventProcessor implements Execution
     private StopOrderHandler stopOrderHandler;
     private TrailingStopOrderHandler trailingStopOrderHandler;
 
-    private Map<Integer, Map<Long, Order>> orderMap = Maps.newConcurrentMap();
-    private Map<Integer, Quote> quoteMap = Maps.newHashMap();
+    private Map<Long, Map<Long, Order>> orderMap = Maps.newConcurrentMap();
+    private Map<Long, Quote> quoteMap = Maps.newHashMap();
 
     public SimulatorConfig config = new SimulatorConfig();
     private Clock clock = Clock.CLOCK;

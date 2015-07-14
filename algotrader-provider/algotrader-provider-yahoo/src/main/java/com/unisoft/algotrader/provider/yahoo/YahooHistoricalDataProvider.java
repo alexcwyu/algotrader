@@ -3,9 +3,9 @@ package com.unisoft.algotrader.provider.yahoo;
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.event.EventBus;
 import com.unisoft.algotrader.model.refdata.Instrument;
+import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.SubscriptionKey;
 import com.unisoft.algotrader.provider.historical.HistoricalDataProvider;
-import com.unisoft.algotrader.refdata.InstrumentManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,6 +38,10 @@ public class YahooHistoricalDataProvider implements HistoricalDataProvider {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
+    private final RefDataStore refDataStore;
+    public YahooHistoricalDataProvider(RefDataStore refDataStore){
+        this.refDataStore = refDataStore;
+    }
 
     @Override
     public void subscribe(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate) {
@@ -84,7 +88,7 @@ public class YahooHistoricalDataProvider implements HistoricalDataProvider {
             Calendar toDateCal = Calendar.getInstance();
             toDateCal.setTime(toDate);
 
-            Instrument instrument = InstrumentManager.INSTANCE.get(key.instId);
+            Instrument instrument = refDataStore.getInstrument(key.instId);
             String url = String.format(URL, instrument.getSymbol(),
                     fromDateCal.get(Calendar.MONTH), fromDateCal.get(Calendar.DATE), fromDateCal.get(Calendar.YEAR),
                     toDateCal.get(Calendar.MONTH), toDateCal.get(Calendar.DATE), toDateCal.get(Calendar.YEAR));

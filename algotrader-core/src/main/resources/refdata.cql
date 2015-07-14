@@ -30,13 +30,13 @@ CREATE TABLE IF NOT EXISTS exchanges (
 );
 
 CREATE TABLE IF NOT EXISTS instruments (
-  inst_id int,
+  inst_id bigint,
   type text,
   name text,
   symbol text,
   exch_id text,
   ccy_id text,
-  und_inst_id int,
+  und_inst_id bigint,
   factor double,
   expiry_date timestamp,
   strike double,
@@ -48,5 +48,8 @@ CREATE TABLE IF NOT EXISTS instruments (
   alt_exchids map<text, text>,
   PRIMARY KEY (inst_id)
 );
+
+CREATE INDEX inst_symbol ON refdata.instruments (symbol);
+CREATE INDEX inst_exch_id ON refdata.instruments (exch_id);
 
 

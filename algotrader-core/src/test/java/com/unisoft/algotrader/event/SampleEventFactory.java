@@ -7,7 +7,8 @@ import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.*;
-import com.unisoft.algotrader.refdata.InstrumentManager;
+import com.unisoft.algotrader.persistence.InMemoryRefDataStore;
+import com.unisoft.algotrader.refdata.InstrumentFactory;
 
 /**
  * Created by alex on 6/6/15.
@@ -18,22 +19,24 @@ public class SampleEventFactory {
     public static long execId = 0;
     public static String MOCK_PORTFOLIO_ID = "MockPortfolio";
     public static String MOCK_STRATEGY_ID = "MockStrategy";
-    public static Instrument testInstrument = InstrumentManager.INSTANCE.createStock("testInst1","testExch1","HKD");
-    public static Instrument testInstrument2 = InstrumentManager.INSTANCE.createStock("testInst2","testExch2","USD");
+    public static InMemoryRefDataStore REF_DATA_STORE = new InMemoryRefDataStore();
+    public static InstrumentFactory INSTRUMEN_FACTORY = new InstrumentFactory(REF_DATA_STORE);
+    public static Instrument TEST_HKD_INSTRUMENT = INSTRUMEN_FACTORY.createStock("testInst1","testExch1","HKD");
+    public static Instrument TEST_USD_INSTRUMENT = INSTRUMEN_FACTORY.createStock("testInst2","testExch2","USD");
 
-    public static Order createOrder(int instId, Side side, OrdType type, double qty, double price){
+    public static Order createOrder(long instId, Side side, OrdType type, double qty, double price){
         return createOrder(instId, side, type, qty, price, 0, "Simulated");
     }
 
-    public static Order createOrder(int instId, Side side, OrdType type, double qty, double price, double stopPrice){
+    public static Order createOrder(long instId, Side side, OrdType type, double qty, double price, double stopPrice){
         return createOrder(instId, side, type, qty, price, stopPrice, "Simulated");
     }
 
-    public static Order createOrder(int instId, Side side, OrdType type, double qty, double price, double stopPrice, String providerId){
+    public static Order createOrder(long instId, Side side, OrdType type, double qty, double price, double stopPrice, String providerId){
         return createOrder(instId, side, type, qty, price, stopPrice, TimeInForce.Day, providerId, MOCK_PORTFOLIO_ID, MOCK_STRATEGY_ID);
     }
 
-    public static Order createOrder(int instId, Side side, OrdType type, double qty, double price, double stopPrice, TimeInForce tif, String providerId, String portfolioId, String strategyId){
+    public static Order createOrder(long instId, Side side, OrdType type, double qty, double price, double stopPrice, TimeInForce tif, String providerId, String portfolioId, String strategyId){
         Order order = new Order();
         order.orderId = ++ordId;
         order.instId = instId;
@@ -57,7 +60,7 @@ public class SampleEventFactory {
         return createExecutionReport(order, OrdStatus.Filled, order.ordQty, filledPrice, order.ordQty, filledPrice);
     }
 
-    public static ExecutionReport createExecutionReport(long orderId, int instId, Side side, OrdType type, double qty, double price, double stopPrice, TimeInForce tif, OrdStatus ordStatus, double lastQty, double lastPrice, double filledQty, double avgPrice){
+    public static ExecutionReport createExecutionReport(long orderId, long instId, Side side, OrdType type, double qty, double price, double stopPrice, TimeInForce tif, OrdStatus ordStatus, double lastQty, double lastPrice, double filledQty, double avgPrice){
         ExecutionReport er = new ExecutionReport();
         er.execId = ++execId;
         er.orderId = orderId;
@@ -105,7 +108,7 @@ public class SampleEventFactory {
         return new Portfolio(name, accountName);
     }
 
-    public static Quote createQuote(int instId, double bid,
+    public static Quote createQuote(long instId, double bid,
                               double ask,
                               int bidSize,
                               int askSize){
@@ -113,13 +116,13 @@ public class SampleEventFactory {
                 bid,ask,bidSize,askSize);
     }
 
-    public static Trade createTrade(int instId, double price,
+    public static Trade createTrade(long instId, double price,
                               int size){
         return new Trade(instId, System.currentTimeMillis(), price,size);
     }
 
     public static Bar createBar(
-            int instId,
+            long instId,
             double open,
             double high,
             double low,

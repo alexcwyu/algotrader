@@ -120,7 +120,7 @@ public class CassandraHistoricalDataStore implements DataStore, HistoricalDataPr
                 .and(gte(COL_DATETIME, fromDate)).and(lt(COL_DATETIME, toDate));
         ResultSet results = session.execute(select);
         for (Row row : results) {
-            eventBus.publishBar(row.getInt(0), row.getInt(1), row.getDate(2).getTime(), row.getDouble(3), row.getDouble(4), row.getDouble(5), row.getDouble(6), row.getLong(7), row.getLong(8));
+            eventBus.publishBar(row.getLong(0), row.getInt(1), row.getDate(2).getTime(), row.getDouble(3), row.getDouble(4), row.getDouble(5), row.getDouble(6), row.getLong(7), row.getLong(8));
         }
     }
 
@@ -130,7 +130,7 @@ public class CassandraHistoricalDataStore implements DataStore, HistoricalDataPr
                 .and(gte(COL_DATETIME, fromDate)).and(lt(COL_DATETIME, toDate));
         ResultSet results = session.execute(select);
         for (Row row : results) {
-            eventBus.publishQuote(row.getInt(0), row.getDate(1).getTime(), row.getDouble(2), row.getDouble(3), row.getInt(4), row.getInt(5));
+            eventBus.publishQuote(row.getLong(0), row.getDate(1).getTime(), row.getDouble(2), row.getDouble(3), row.getInt(4), row.getInt(5));
         }
     }
 
@@ -140,7 +140,7 @@ public class CassandraHistoricalDataStore implements DataStore, HistoricalDataPr
                 .and(gte(COL_DATETIME, fromDate)).and(lt(COL_DATETIME, toDate));
         ResultSet results = session.execute(select);
         for (Row row : results) {
-            eventBus.publishTrade(row.getInt(0), row.getDate(1).getTime(), row.getDouble(2), row.getInt(3));
+            eventBus.publishTrade(row.getLong(0), row.getDate(1).getTime(), row.getDouble(2), row.getInt(3));
         }
     }
 }

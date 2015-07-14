@@ -1,0 +1,22 @@
+dependencies {
+    compile project(':algotrader-common')
+
+    compile "com.lmax:disruptor:${disruptorVersion}"
+    compile "uk.co.real-logic:sbe:${sbeVersion}"
+    compile "uk.co.real-logic:Agrona:${agronaVersion}"
+
+    //serialization
+    compile "org.msgpack:msgpack:${msgpackVersion}"
+    //core
+    compile "com.google.guava:guava:${guavaVersion}"
+    compile "net.sf.trove4j:trove4j:${trove4jVersion}"
+    compile 'org.apache.commons:commons-lang3:3.4'
+
+    compile "org.apache.logging.log4j:log4j-core:${log4jVersion}"
+
+//
+    compile "com.datastax.cassandra:cassandra-driver-core:2.1.6"
+    compile "com.datastax.cassandra:cassandra-driver-mapping:2.1.6"
+    compile "org.springframework.data:spring-data-cassandra:1.2.0.RELEASE"
+
+}

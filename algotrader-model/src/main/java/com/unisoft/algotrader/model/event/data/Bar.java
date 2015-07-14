@@ -40,7 +40,7 @@ public class Bar extends MarketData<Bar> {
 
 
     public Bar(
-            int instId,
+            long instId,
             int size,
             long dateTime,
             double open,
@@ -51,7 +51,7 @@ public class Bar extends MarketData<Bar> {
     }
 
     public Bar(
-            int instId,
+            long instId,
             int size,
             long dateTime,
             double open,
@@ -63,7 +63,7 @@ public class Bar extends MarketData<Bar> {
     }
 
     public Bar(
-            int instId,
+            long instId,
             int size,
             long dateTime,
             double open,

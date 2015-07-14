@@ -14,7 +14,7 @@ import java.util.List;
  * Created by alex on 5/25/15.
  */
 public class Position implements MarketDataHandler {
-    private int instId;
+    private long instId;
     private String portfolioId;
 
     private double marketPrice;
@@ -32,11 +32,11 @@ public class Position implements MarketDataHandler {
 
     protected Position(){}
 
-    public Position(int instId, String portfolioId){
+    public Position(long instId, String portfolioId){
         this(instId, portfolioId, 0.0);
     }
 
-    public Position(int instId, String portfolioId, double factor){
+    public Position(long instId, String portfolioId, double factor){
         this.instId = instId;
         this.portfolioId = portfolioId;
         this.factor = factor;
@@ -276,11 +276,11 @@ public class Position implements MarketDataHandler {
         return Objects.hashCode(instId, portfolioId, marketPrice, qtyBought, qtySold, qtySoldShort, margin, debt, orderList, fPnLTransactionIndex, qtyLeft);
     }
 
-    public int getInstId() {
+    public long getInstId() {
         return instId;
     }
 
-    public void setInstId(int instId) {
+    public void setInstId(long instId) {
         this.instId = instId;
     }
 

@@ -21,7 +21,7 @@ public class DataPublisher {
         publishQuote(quote.instId, quote.dateTime, quote.bid, quote.ask, quote.bidSize, quote.askSize);
     }
 
-    public void publishQuote(int instId,
+    public void publishQuote(long instId,
                              long dateTime,
                              double bid,
                              double ask,
@@ -51,7 +51,7 @@ public class DataPublisher {
     }
 
 
-    public void publishTrade(int instId,
+    public void publishTrade(long instId,
                              long dateTime,
                              double price,
                              int size){
@@ -74,7 +74,7 @@ public class DataPublisher {
     public void publishBar(Bar bar){
         publishBar(bar.instId, bar.dateTime, bar.size, bar.high, bar.low, bar.open, bar.close, bar.volume, bar.openInt);
     }
-    public void publishBar(int instId,
+    public void publishBar(long instId,
                            long dateTime,
                            int size,
                            double high,
