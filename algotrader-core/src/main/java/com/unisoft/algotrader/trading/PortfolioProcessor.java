@@ -14,8 +14,7 @@ import com.unisoft.algotrader.model.event.execution.OrderHandler;
 import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.*;
-import com.unisoft.algotrader.refdata.AccountManager;
-import com.unisoft.algotrader.refdata.CurrencyManager;
+import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.refdata.InstrumentManager;
 import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
@@ -28,20 +27,17 @@ import org.apache.logging.log4j.Logger;
 public class PortfolioProcessor extends MultiEventProcessor implements MarketDataHandler, OrderHandler, ExecutionHandler {
 
     private static final Logger LOG = LogManager.getLogger(Portfolio.class);
+
     private final Portfolio portfolio;
-
     private final Account account;
-
+    private final RefDataStore refDataStore;
     private final Clock clock;
 
-    public PortfolioProcessor(Portfolio portfolio, RingBuffer... providers) {
-        this(portfolio, Clock.CLOCK, providers);
-    }
-
-    public PortfolioProcessor(Portfolio portfolio, Clock clock, RingBuffer... providers) {
+    public PortfolioProcessor(Portfolio portfolio, Account account, RefDataStore refDataStore, Clock clock, RingBuffer... providers) {
         super(new NoWaitStrategy(), null, providers);
         this.portfolio = portfolio;
-        this.account = AccountManager.INSTANCE.get(portfolio.getAccountName());
+        this.account = account;
+        this.refDataStore = refDataStore;
         this.clock = clock;
     }
 
@@ -88,7 +84,7 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
 
         double newDebt = addOrderToPosition(order);
 
-        Currency currency = CurrencyManager.INSTANCE.get(InstrumentManager.INSTANCE.get(order.getInstId()).getCcyId());
+        Currency currency = refDataStore.getCurrency(InstrumentManager.INSTANCE.get(order.getInstId()).getCcyId());
         AccountTransaction accountTransaction = new AccountTransaction(order.getOrderId(), order.getDateTime(),
                 currency, order.cashFlow() + newDebt, order.getText());
         account.add(accountTransaction);
@@ -254,7 +250,7 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
         double val = 0;
 
         for(AccountPosition position : account.getAccountPositions().values()) {
-            val += CurrencyConverter.convert(position.getValue(), position.getCcyId(), account.getCcyId());
+            val += CurrencyConverter.convert(position.getValue(), refDataStore.getCurrency(position.getCcyId()), refDataStore.getCurrency(account.getCcyId()));
         }
         return val;
     }

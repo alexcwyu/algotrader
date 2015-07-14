@@ -1,5 +1,6 @@
 package com.unisoft.algotrader.trading;
 
+import com.unisoft.algotrader.model.clock.Clock;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
@@ -8,7 +9,8 @@ import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.*;
-import com.unisoft.algotrader.refdata.AccountManager;
+import com.unisoft.algotrader.persistence.SampleInMemoryRefDataStore;
+import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.refdata.InstrumentManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,10 +49,9 @@ public class PortfolioProcessorTest {
 
     @Before
     public void setup() {
-        account = new Account("Test Account", "Test",  Currency.HKD, 1_000_000);
-        AccountManager.INSTANCE.add(account);
+        account = new Account("Test", "Testing Account", Currency.HKD, 1000000);
         portfolio = new Portfolio(portfolioId, account.getAccountId());
-        portfolioProcessor = new PortfolioProcessor(portfolio);
+        portfolioProcessor = new PortfolioProcessor(portfolio, account, new SampleInMemoryRefDataStore(), Clock.CLOCK);
     }
 
     @Test

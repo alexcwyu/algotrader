@@ -1,10 +1,12 @@
 package com.unisoft.algotrader.trading;
 
+import com.unisoft.algotrader.model.clock.Clock;
 import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.trading.Account;
 import com.unisoft.algotrader.model.trading.Performance;
 import com.unisoft.algotrader.model.trading.Portfolio;
-import com.unisoft.algotrader.refdata.AccountManager;
+import com.unisoft.algotrader.persistence.SampleInMemoryRefDataStore;
+import com.unisoft.algotrader.persistence.TradingDataStore;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,10 +25,9 @@ public class PerformanceTest {
 
     @Before
     public void setup() {
-        Account account = new Account("TestAccount", "", Currency.USD, 100000);
-        AccountManager.INSTANCE.add(account);
-        Portfolio portfolio = new Portfolio("Test", "TestAccount");
-        processor = spy(new PortfolioProcessor(portfolio));
+        Account account = TradingDataStore.DEFAULT_ACCOUNT;
+        Portfolio portfolio = new Portfolio("Test", account.getAccountId());
+        processor = spy(new PortfolioProcessor(portfolio, account, new SampleInMemoryRefDataStore(), Clock.CLOCK));
         performance = portfolio.getPerformance();
 
     }

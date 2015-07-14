@@ -2,6 +2,7 @@ package com.unisoft.algotrader.persistence;
 
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
+import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.trading.Account;
 import com.unisoft.algotrader.model.trading.Portfolio;
 
@@ -11,6 +12,8 @@ import java.util.List;
  * Created by alex on 7/7/15.
  */
 public interface TradingDataStore {
+
+    public static final Account DEFAULT_ACCOUNT = new Account("Test", "Testing Account", Currency.USD, 1000000);
 
     void connect();
 

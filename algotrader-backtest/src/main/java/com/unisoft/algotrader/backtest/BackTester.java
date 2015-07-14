@@ -8,6 +8,7 @@ import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.Account;
 import com.unisoft.algotrader.model.trading.Performance;
 import com.unisoft.algotrader.model.trading.Portfolio;
+import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.provider.BarFactory;
 import com.unisoft.algotrader.provider.InstrumentDataManager;
 import com.unisoft.algotrader.provider.ProviderManager;
@@ -15,7 +16,6 @@ import com.unisoft.algotrader.provider.SubscriptionKey;
 import com.unisoft.algotrader.provider.execution.simulation.SimulationExecutor;
 import com.unisoft.algotrader.provider.execution.simulation.Simulator;
 import com.unisoft.algotrader.provider.historical.HistoricalDataProvider;
-import com.unisoft.algotrader.refdata.AccountManager;
 import com.unisoft.algotrader.refdata.InstrumentManager;
 import com.unisoft.algotrader.strategy.Strategy;
 import com.unisoft.algotrader.strategy.StrategyManager;
@@ -54,9 +54,8 @@ public class BackTester {
         this.instrument = instrument;
         InstrumentManager.INSTANCE.add(instrument);
 
-        this.account = new Account("TestAccount", "TestAccount", currency, initialValue);
+        this.account = TradingDataStore.DEFAULT_ACCOUNT;
 
-        AccountManager.INSTANCE.add(account);
         this.portfolio = new Portfolio("TestPortfolio", account.getAccountId());
         PortfolioManager.INSTANCE.add(portfolio);
 

@@ -7,7 +7,8 @@ import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.trading.*;
-import com.unisoft.algotrader.refdata.AccountManager;
+import com.unisoft.algotrader.persistence.SampleInMemoryRefDataStore;
+import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.trading.PortfolioManager;
 import com.unisoft.algotrader.trading.PortfolioProcessor;
 import org.junit.BeforeClass;
@@ -82,10 +83,10 @@ public class CassandraTradingDataStoreIntegrationTest {
 
     @Test
     public void testSaveLoad() throws Exception {
-        Account account = AccountManager.DEFAULT_ACCOUNT;
+        Account account = TradingDataStore.DEFAULT_ACCOUNT;
 
         Portfolio portfolio = SampleEventFactory.createPortfolio("TestPortfolio", account.getAccountId());
-        PortfolioProcessor portfolioProcessor = new PortfolioProcessor(portfolio);
+        PortfolioProcessor portfolioProcessor = new PortfolioProcessor(portfolio, account, new SampleInMemoryRefDataStore(), Clock.CLOCK);
         PortfolioManager.INSTANCE.add(portfolio);
 
         Clock.CLOCK.setDateTime(System.currentTimeMillis());

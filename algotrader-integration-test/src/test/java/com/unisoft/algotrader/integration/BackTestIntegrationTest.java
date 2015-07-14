@@ -1,14 +1,16 @@
 package com.unisoft.algotrader.integration;
 
 import com.lmax.disruptor.RingBuffer;
+import com.unisoft.algotrader.model.clock.Clock;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.Account;
 import com.unisoft.algotrader.model.trading.Portfolio;
+import com.unisoft.algotrader.persistence.SampleInMemoryRefDataStore;
+import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.provider.InstrumentDataManager;
 import com.unisoft.algotrader.provider.execution.simulation.SimulationExecutor;
-import com.unisoft.algotrader.refdata.AccountManager;
 import com.unisoft.algotrader.refdata.InstrumentManager;
 import com.unisoft.algotrader.strategy.StrategyManager;
 import com.unisoft.algotrader.trading.OrderManager;
@@ -52,11 +54,10 @@ public class BackTestIntegrationTest {
 
         instrumentDataManager = new InstrumentDataManager(marketDataRB);
 
-        account = new Account("Test Account", "Test Account", Currency.USD, 1000000);
+        account = TradingDataStore.DEFAULT_ACCOUNT;
 
-        AccountManager.INSTANCE.add(account);
         portfolio = new Portfolio("Test Portfolio", account.getAccountId());
-        portfolioProcessor = new PortfolioProcessor(portfolio, marketDataRB);
+        portfolioProcessor = new PortfolioProcessor(portfolio, account, new SampleInMemoryRefDataStore(), Clock.CLOCK, marketDataRB);
         PortfolioManager.INSTANCE.add(portfolio);
 
         orderManager = new OrderManager();
