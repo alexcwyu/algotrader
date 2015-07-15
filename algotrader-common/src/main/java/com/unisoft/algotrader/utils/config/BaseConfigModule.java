@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.config;
+package com.unisoft.algotrader.utils.config;
 
 /**
  * Created by alex on 6/16/15.
