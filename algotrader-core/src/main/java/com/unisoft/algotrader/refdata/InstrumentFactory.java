@@ -3,18 +3,22 @@ package com.unisoft.algotrader.refdata;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by alex on 7/14/15.
  */
+@Singleton
 public class InstrumentFactory {
 
     private final RefDataStore refDataStore;
 
     private final Lock lock = new ReentrantLock();
 
+    @Inject
     public InstrumentFactory(RefDataStore refDataStore){
         this.refDataStore = refDataStore;
     }

@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.trading;
 
 import com.lmax.disruptor.RingBuffer;
+import com.unisoft.algotrader.config.AppConfig;
 import com.unisoft.algotrader.model.clock.Clock;
 import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.model.event.data.Bar;
@@ -31,6 +32,10 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
     private final Account account;
     private final RefDataStore refDataStore;
     private final Clock clock;
+
+    public PortfolioProcessor(AppConfig appConfig, Portfolio portfolio, Account account, RingBuffer... providers){
+        this(portfolio, account, appConfig.getRefDataStore(), appConfig.getClock(), providers == null || providers.length ==0 ? new RingBuffer[]{appConfig.getEventBusManager().marketDataRB} : providers);
+    }
 
     public PortfolioProcessor(Portfolio portfolio, Account account, RefDataStore refDataStore, Clock clock, RingBuffer... providers) {
         super(new NoWaitStrategy(), null, providers);

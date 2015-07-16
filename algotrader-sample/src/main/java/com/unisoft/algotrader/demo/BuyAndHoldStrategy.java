@@ -2,6 +2,7 @@ package com.unisoft.algotrader.demo;
 
 import com.google.common.collect.Lists;
 import com.lmax.disruptor.RingBuffer;
+import com.unisoft.algotrader.config.AppConfig;
 import com.unisoft.algotrader.event.SampleEventFactory;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
@@ -10,6 +11,7 @@ import com.unisoft.algotrader.model.event.data.Trade;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.trading.OrdType;
+import com.unisoft.algotrader.model.trading.Portfolio;
 import com.unisoft.algotrader.model.trading.Side;
 import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.trading.OrderManager;
@@ -31,6 +33,10 @@ public class BuyAndHoldStrategy extends Strategy {
     private final OrderManager orderManager;
 
     public Order longOrder;
+
+    public BuyAndHoldStrategy(AppConfig config, Portfolio portfolio){
+        this(config.getOrderManager(), config.getTradingDataStore(), portfolio.getPortfolioId(), config.getEventBusManager().marketDataRB);
+    }
 
     public BuyAndHoldStrategy(OrderManager orderManager, TradingDataStore tradingDataStore, String portfolioId, RingBuffer<MarketDataContainer> rb){
         super("BuyAndHoldStrategy", tradingDataStore, portfolioId, rb);

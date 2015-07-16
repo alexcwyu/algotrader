@@ -5,6 +5,7 @@ import com.unisoft.algotrader.model.clock.Clock;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.provider.ProviderManager;
+import com.unisoft.algotrader.trading.InstrumentDataManager;
 import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.trading.StrategyManager;
 
@@ -22,6 +23,7 @@ public class AppConfig {
     @Inject ProviderManager providerManager;
     @Inject StrategyManager strategyManager;
     @Inject EventBusManager eventBusManager;
+    @Inject InstrumentDataManager instrumentDataManager;
 
     public Clock getClock() {
         return clock;
@@ -49,5 +51,9 @@ public class AppConfig {
 
     public EventBusManager getEventBusManager() {
         return eventBusManager;
+    }
+
+    public InstrumentDataManager getInstrumentDataManager() {
+        return instrumentDataManager;
     }
 }

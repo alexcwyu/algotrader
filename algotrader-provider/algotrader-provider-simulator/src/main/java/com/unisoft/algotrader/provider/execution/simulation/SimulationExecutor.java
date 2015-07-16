@@ -2,14 +2,15 @@ package com.unisoft.algotrader.provider.execution.simulation;
 
 import com.google.common.collect.Maps;
 import com.lmax.disruptor.RingBuffer;
+import com.unisoft.algotrader.config.AppConfig;
 import com.unisoft.algotrader.model.clock.Clock;
 import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.model.event.data.*;
 import com.unisoft.algotrader.model.event.execution.*;
 import com.unisoft.algotrader.model.trading.OrdStatus;
 import com.unisoft.algotrader.model.trading.OrdType;
-import com.unisoft.algotrader.provider.InstrumentDataManager;
 import com.unisoft.algotrader.provider.execution.ExecutionProvider;
+import com.unisoft.algotrader.trading.InstrumentDataManager;
 import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
@@ -49,6 +50,10 @@ public class SimulationExecutor extends MultiEventProcessor implements Execution
 
     public SimulatorConfig config = new SimulatorConfig();
     private Clock clock;
+
+    public SimulationExecutor(AppConfig config, RingBuffer ... rbs){
+        this(config.getOrderManager(), config.getInstrumentDataManager(), config.getClock(), (rbs == null || rbs.length ==0) ? new RingBuffer[]{config.getEventBusManager().marketDataRB} : rbs);
+    }
 
     @Inject
     public SimulationExecutor(OrderManager orderManager, InstrumentDataManager instrumentDataManager, Clock clock, RingBuffer... rbs) {
