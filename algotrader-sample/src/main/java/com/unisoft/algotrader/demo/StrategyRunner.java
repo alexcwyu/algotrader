@@ -1,8 +1,9 @@
 package com.unisoft.algotrader.demo;
 
 import com.lmax.disruptor.RingBuffer;
+import com.unisoft.algotrader.event.EventBusManager;
 import com.unisoft.algotrader.event.SampleEventFactory;
-import com.unisoft.algotrader.model.clock.Clock;
+import com.unisoft.algotrader.model.clock.SimulationClock;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.Account;
@@ -11,6 +12,7 @@ import com.unisoft.algotrader.persistence.InMemoryTradingDataStore;
 import com.unisoft.algotrader.persistence.SampleInMemoryRefDataStore;
 import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.provider.InstrumentDataManager;
+import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.execution.simulation.SimulationExecutor;
 import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.trading.PortfolioProcessor;
@@ -55,22 +57,25 @@ public class StrategyRunner {
         account = TradingDataStore.DEFAULT_ACCOUNT;
 
         portfolio = new Portfolio("Test Portfolio", account.getAccountId());
-        portfolioProcessor = new PortfolioProcessor(portfolio, account, new SampleInMemoryRefDataStore(), Clock.CLOCK, marketDataRB);
+        portfolioProcessor = new PortfolioProcessor(portfolio, account, new SampleInMemoryRefDataStore(), new SimulationClock(), marketDataRB);
 
         TradingDataStore tradingDataStore = new InMemoryTradingDataStore();
         tradingDataStore.savePortfolio(portfolio);
 
 
-        orderManager = new OrderManager();
+        ProviderManager providerManager = new ProviderManager();
+        StrategyManager strategyManager = new StrategyManager();
+        EventBusManager eventBusManager = new EventBusManager();
+        orderManager = new OrderManager(providerManager, strategyManager, eventBusManager);
 
         strategy = new BuyAndHoldStrategy(orderManager, tradingDataStore, portfolio.getPortfolioId(), marketDataRB);
 
 
-        simulationExecutor = new SimulationExecutor(orderManager, instrumentDataManager, marketDataRB);
+        simulationExecutor = new SimulationExecutor(orderManager, instrumentDataManager, new SimulationClock(), marketDataRB);
 
         dataPublisher = new DataPublisher(marketDataRB);
 
-        StrategyManager.INSTANCE.register(strategy);
+        strategyManager.register(strategy);
 
         executor.submit(strategy);
         executor.submit(portfolioProcessor);

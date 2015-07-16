@@ -33,7 +33,6 @@ public class Simulator extends MultiEventProcessor implements MarketDataHandler 
 
     @Override
     public void onBar(Bar bar) {
-       // InstrumentDataManager.INSTANCE.onBar(bar);
         simulationExecutor.onEvent(bar);
         for (int i = 0; i < strategies.length; i++) {
             strategies[i].onEvent(bar);
@@ -42,7 +41,6 @@ public class Simulator extends MultiEventProcessor implements MarketDataHandler 
 
     @Override
     public void onQuote(Quote quote) {
-       // InstrumentDataManager.INSTANCE.onQuote(quote);
         simulationExecutor.onEvent(quote);
         for (int i = 0; i < strategies.length; i++) {
             strategies[i].onEvent(quote);
@@ -51,7 +49,6 @@ public class Simulator extends MultiEventProcessor implements MarketDataHandler 
 
     @Override
     public void onTrade(Trade trade) {
-        //InstrumentDataManager.INSTANCE.onTrade(trade);
         simulationExecutor.onEvent(trade);
         for (int i = 0; i < strategies.length; i++) {
             strategies[i].onEvent(trade);

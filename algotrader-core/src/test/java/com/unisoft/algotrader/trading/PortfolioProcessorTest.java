@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.trading;
 
-import com.unisoft.algotrader.model.clock.Clock;
+import com.unisoft.algotrader.model.clock.SimulationClock;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
@@ -54,7 +54,7 @@ public class PortfolioProcessorTest {
     public void setup() {
         account = new Account("Test", "Testing Account", Currency.HKD, 1000000);
         portfolio = new Portfolio(portfolioId, account.getAccountId());
-        portfolioProcessor = new PortfolioProcessor(portfolio, account, REF_DATA_STORE, Clock.CLOCK);
+        portfolioProcessor = new PortfolioProcessor(portfolio, account, REF_DATA_STORE, new SimulationClock());
     }
 
     @Test

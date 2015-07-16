@@ -16,15 +16,8 @@ import java.util.Map;
 @Singleton
 public class ProviderManager {
 
-
-    public static final ProviderManager INSTANCE;
-
-    static {
-        INSTANCE = new ProviderManager();
-    }
-
     @Inject
-    ProviderManager(){
+    public ProviderManager(){
 
     }
 

@@ -23,19 +23,18 @@ public abstract class Strategy extends MultiEventProcessor implements MarketData
     protected Portfolio portfolio;
     protected final TradingDataStore tradingDataStore;
 
-    public Strategy(String strategyId, TradingDataStore tradingDataStore){
-        this(strategyId, tradingDataStore, EventBusManager.INSTANCE.executionReportRB, EventBusManager.INSTANCE.orderStatusRB, EventBusManager.INSTANCE.marketDataRB);
+    public Strategy(String strategyId, TradingDataStore tradingDataStore, EventBusManager eventBusManager){
+        this(strategyId, tradingDataStore, eventBusManager.executionReportRB, eventBusManager.orderStatusRB, eventBusManager.marketDataRB);
     }
 
     public Strategy(String strategyId, TradingDataStore tradingDataStore, RingBuffer... providers){
         super(new NoWaitStrategy(),  null, providers);
         this.strategyId = strategyId;
         this.tradingDataStore = tradingDataStore;
-        StrategyManager.INSTANCE.register(this);
     }
 
-    public Strategy(String strategyId, TradingDataStore tradingDataStore, String portfolioId){
-        this(strategyId, tradingDataStore, portfolioId, EventBusManager.INSTANCE.executionReportRB, EventBusManager.INSTANCE.orderStatusRB, EventBusManager.INSTANCE.marketDataRB);
+    public Strategy(String strategyId, TradingDataStore tradingDataStore, String portfolioId, EventBusManager eventBusManager){
+        this(strategyId, tradingDataStore, portfolioId, eventBusManager.executionReportRB, eventBusManager.orderStatusRB, eventBusManager.marketDataRB);
     }
 
     public Strategy(String strategyId, TradingDataStore tradingDataStore, String portfolioId, RingBuffer... providers){
@@ -43,7 +42,6 @@ public abstract class Strategy extends MultiEventProcessor implements MarketData
         this.strategyId = strategyId;
         this.tradingDataStore = tradingDataStore;
         this.portfolio = tradingDataStore.getPortfolio(portfolioId);
-        StrategyManager.INSTANCE.register(this);
     }
 
     @Override

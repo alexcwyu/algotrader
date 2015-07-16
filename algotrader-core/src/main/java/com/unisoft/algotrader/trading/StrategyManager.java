@@ -12,18 +12,12 @@ import java.util.Map;
 @Singleton
 public class StrategyManager {
 
-    public static final StrategyManager INSTANCE;
-
-    static {
-        INSTANCE = new StrategyManager();
-    }
+    private Map<String, Strategy> map = Maps.newConcurrentMap();
 
     @Inject
-    StrategyManager(){
+    public StrategyManager(){
 
     }
-
-    private Map<String, Strategy> map = Maps.newConcurrentMap();
 
     public void register(Strategy strategy){
         map.put(strategy.strategyId, strategy);

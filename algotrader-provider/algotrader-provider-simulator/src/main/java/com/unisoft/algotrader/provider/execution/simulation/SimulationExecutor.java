@@ -9,7 +9,6 @@ import com.unisoft.algotrader.model.event.execution.*;
 import com.unisoft.algotrader.model.trading.OrdStatus;
 import com.unisoft.algotrader.model.trading.OrdType;
 import com.unisoft.algotrader.provider.InstrumentDataManager;
-import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.execution.ExecutionProvider;
 import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
@@ -17,12 +16,15 @@ import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrat
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by alex on 5/18/15.
  */
+@Singleton
 public class SimulationExecutor extends MultiEventProcessor implements ExecutionProvider, MarketDataHandler {
 
     private static final Logger LOG = LogManager.getLogger(SimulationExecutor.class);
@@ -46,13 +48,14 @@ public class SimulationExecutor extends MultiEventProcessor implements Execution
     private Map<Long, Quote> quoteMap = Maps.newHashMap();
 
     public SimulatorConfig config = new SimulatorConfig();
-    private Clock clock = Clock.CLOCK;
+    private Clock clock;
 
-    public SimulationExecutor(OrderManager orderManager, InstrumentDataManager instrumentDataManager, RingBuffer... rbs) {
+    @Inject
+    public SimulationExecutor(OrderManager orderManager, InstrumentDataManager instrumentDataManager, Clock clock, RingBuffer... rbs) {
         super(new NoWaitStrategy(),  null, rbs);
         this.orderManager = orderManager;
         this.instrumentDataManager = instrumentDataManager;
-        ProviderManager.INSTANCE.registerExecutionProvider(this);
+        this.clock = clock;
 
         this.execId = new AtomicLong();
 

@@ -41,8 +41,6 @@ public class Currency{
         super();
         this.ccyId = ccyId;
         this.name = name;
-
-        //CurrencyManager.INSTANCE.add(this);
     }
 
     @Override

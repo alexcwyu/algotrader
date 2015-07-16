@@ -7,7 +7,7 @@ import java.util.Date;
  */
 public interface Clock {
 
-    public static enum ClockMode{
+    enum ClockMode{
         Realtime,
         Simulation
     }
@@ -31,8 +31,6 @@ public interface Clock {
     void removeReminder(Date date,ReminderHandler handler);
 
     void removeReminder(long date,ReminderHandler handler);
-
-    public static Clock CLOCK = new SimulationClock();
 }
 
 

@@ -11,6 +11,7 @@ import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrat
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
@@ -22,19 +23,20 @@ import java.util.concurrent.atomic.AtomicLong;
 public class OrderManager extends MultiEventProcessor implements OrderHandler, ExecutionHandler {
 
     private static final Logger LOG = LogManager.getLogger(OrderManager.class);
-    public static final OrderManager INSTANCE;
 
-    static {
-        INSTANCE = new OrderManager();
-    }
+    private final ProviderManager providerManager;
+    private final StrategyManager strategyManager;
+    private final EventBusManager eventBusManager;
 
     private AtomicLong ordId = new AtomicLong();
-
-
     private Map<Long, Map<Long, Order>> orderMap = Maps.newConcurrentMap();
 
-    public OrderManager(){
-        super(new NoWaitStrategy(),  null, EventBusManager.INSTANCE.executionReportRB, EventBusManager.INSTANCE.orderRB, EventBusManager.INSTANCE.orderStatusRB);
+    @Inject
+    public OrderManager(ProviderManager providerManager, StrategyManager strategyManager, EventBusManager eventBusManager){
+        super(new NoWaitStrategy(),  null, eventBusManager.executionReportRB, eventBusManager.orderRB, eventBusManager.orderStatusRB);
+        this.providerManager = providerManager;
+        this.strategyManager = strategyManager;
+        this.eventBusManager = eventBusManager;
     }
 
     public long nextOrdId(){
@@ -65,7 +67,7 @@ public class OrderManager extends MultiEventProcessor implements OrderHandler, E
         LOG.info("onOrder {}" , order);
 
         addOrder(order);
-        ProviderManager.INSTANCE.getExecutionProvider(order.execProviderId).onOrder(order);
+        providerManager.getExecutionProvider(order.execProviderId).onOrder(order);
     }
 
     // TODO new order
@@ -78,7 +80,7 @@ public class OrderManager extends MultiEventProcessor implements OrderHandler, E
 
         Order order = getOrder(executionReport.instId, executionReport.orderId);
         if (order != null){
-            Strategy strategy = StrategyManager.INSTANCE.get(order.strategyId);
+            Strategy strategy = strategyManager.get(order.strategyId);
             if (strategy != null)
                 strategy.onEvent(executionReport);
 

@@ -3,6 +3,7 @@ package com.unisoft.algotrader.persistence.cassandra;
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.event.SampleEventFactory;
 import com.unisoft.algotrader.model.clock.Clock;
+import com.unisoft.algotrader.model.clock.SimulationClock;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Currency;
@@ -85,21 +86,22 @@ public class CassandraTradingDataStoreIntegrationTest {
         Account account = TradingDataStore.DEFAULT_ACCOUNT;
 
         Portfolio portfolio = SampleEventFactory.createPortfolio("TestPortfolio", account.getAccountId());
-        PortfolioProcessor portfolioProcessor = new PortfolioProcessor(portfolio, account, new SampleInMemoryRefDataStore(), Clock.CLOCK);
+        Clock clock = new SimulationClock();
+        PortfolioProcessor portfolioProcessor = new PortfolioProcessor(portfolio, account, new SampleInMemoryRefDataStore(), clock);
 
-        Clock.CLOCK.setDateTime(System.currentTimeMillis());
+        clock.setDateTime(System.currentTimeMillis());
         Order order = SampleEventFactory.createOrder(SampleEventFactory.TEST_USD_INSTRUMENT.getInstId(), Side.Buy, OrdType.Limit, 9000, 98, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
         ExecutionReport executionReport = SampleEventFactory.createExecutionReport(order);
         order.add(executionReport);
         portfolioProcessor.add(order);
 
-        Clock.CLOCK.setDateTime(System.currentTimeMillis());
+        clock.setDateTime(System.currentTimeMillis());
         Order order2 = SampleEventFactory.createOrder(SampleEventFactory.TEST_USD_INSTRUMENT.getInstId(), Side.Sell, OrdType.Limit, 10000, 108, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
         ExecutionReport executionReport2 = SampleEventFactory.createExecutionReport(order2);
         order2.add(executionReport2);
         portfolioProcessor.add(order2);
 
-        Clock.CLOCK.setDateTime(System.currentTimeMillis());
+        clock.setDateTime(System.currentTimeMillis());
         Order order3 = SampleEventFactory.createOrder(SampleEventFactory.TEST_USD_INSTRUMENT.getInstId(), Side.Buy, OrdType.Limit, 1000, 88, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
         ExecutionReport executionReport3 = SampleEventFactory.createExecutionReport(order3);
         order3.add(executionReport3);

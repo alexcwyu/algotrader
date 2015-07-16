@@ -6,8 +6,11 @@ import com.unisoft.algotrader.model.series.TimeSeriesHelper;
 import com.unisoft.algotrader.model.trading.Performance;
 import com.unisoft.algotrader.persistence.InMemoryTradingDataStore;
 import com.unisoft.algotrader.persistence.TradingDataStore;
+import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.historical.DummyDataProvider;
+import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.trading.Strategy;
+import com.unisoft.algotrader.trading.StrategyManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,11 +26,16 @@ public class BackTesterDemo {
     public static void main(String [] args) throws Exception{
         DummyDataProvider provider = new DummyDataProvider();
 
+        ProviderManager providerManager = new ProviderManager();
+        StrategyManager strategyManager = new StrategyManager();
+        EventBusManager eventBusManager = new EventBusManager();
+        OrderManager orderManager = new OrderManager(providerManager, strategyManager, eventBusManager);
+
         TradingDataStore tradingDataStore = new InMemoryTradingDataStore();
         CountDownLatch latch = new CountDownLatch(1);
-        Strategy strategy = new CountDownStrategy("Sid", tradingDataStore, latch, 20, EventBusManager.INSTANCE.marketDataRB);
+        Strategy strategy = new CountDownStrategy(orderManager, "Sid", tradingDataStore, latch, 20, eventBusManager.marketDataRB);
 
-        BackTester backTester = new BackTester(strategy, provider, Currency.HKD, 100000, Sample.testInstrument, 20110101, 20110111);
+        BackTester backTester = new BackTester(providerManager, orderManager, strategyManager, eventBusManager, strategy, provider, Currency.HKD, 100000, Sample.testInstrument, 20110101, 20110111);
 
         backTester.run();
 

@@ -7,16 +7,17 @@ import com.unisoft.algotrader.model.event.data.*;
 import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 
+import javax.inject.Singleton;
 import java.util.Map;
 
 /**
  * Created by alex on 5/21/15.
  */
+@Singleton
 public class InstrumentDataManager extends MultiEventProcessor implements MarketDataHandler {
 
     @Override
     public void onMarketDataContainer(MarketDataContainer data) {
-        System.out.println("InstrumentDataManager, onMarketDataContainer=" + data);
         if (data.bitset.get(MarketDataContainer.BAR_BIT))
             onBar(data.bar);
         if (data.bitset.get(MarketDataContainer.QUOTE_BIT))

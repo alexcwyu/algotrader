@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.event.EventBusManager;
 import com.unisoft.algotrader.event.SampleEventFactory;
+import com.unisoft.algotrader.model.clock.SimulationClock;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
@@ -17,6 +18,7 @@ import com.unisoft.algotrader.model.trading.Side;
 import com.unisoft.algotrader.persistence.InMemoryTradingDataStore;
 import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.provider.InstrumentDataManager;
+import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.trading.Strategy;
 import com.unisoft.algotrader.trading.StrategyManager;
@@ -47,8 +49,8 @@ public class SimulationExecutorIntegrationTest {
         private final List<ExecutionReport> executionReports = Lists.newArrayList();
         private final OrderManager orderManager;
 
-        public MockStrategy(OrderManager orderManager, TradingDataStore tradingDataStore){
-            super(mockStrategyId, tradingDataStore);
+        public MockStrategy(OrderManager orderManager, TradingDataStore tradingDataStore, EventBusManager eventBusManager){
+            super(mockStrategyId, tradingDataStore, eventBusManager);
             this.orderManager = orderManager;
         }
 
@@ -69,7 +71,10 @@ public class SimulationExecutorIntegrationTest {
 
     }
 
+    private ProviderManager providerManager;
+    private StrategyManager strategyManager;
     private OrderManager orderManager;
+    private EventBusManager eventBusManager;
     private RingBuffer rb;
     private SimulationExecutor simulationExecutor;
     private InstrumentDataManager instrumentDataManager;
@@ -82,23 +87,28 @@ public class SimulationExecutorIntegrationTest {
 
     @Before
     public void setup(){
-        orderManager = spy(new OrderManager());
+
+        providerManager = new ProviderManager();
+        strategyManager = new StrategyManager();
+        eventBusManager = new EventBusManager();
+        orderManager = spy(new OrderManager(providerManager, strategyManager, eventBusManager));
 
 
         rb =RingBuffer.createSingleProducer(MarketDataContainer.FACTORY, 1024, new NoWaitStrategy());
-        instrumentDataManager = new InstrumentDataManager(EventBusManager.INSTANCE.marketDataRB);
-        simulationExecutor = new SimulationExecutor(orderManager, instrumentDataManager , rb);
+        instrumentDataManager = new InstrumentDataManager(eventBusManager.marketDataRB);
+        simulationExecutor = new SimulationExecutor(orderManager, instrumentDataManager, new SimulationClock(), rb);
         simulationExecutor.config.fillOnQuote = true;
         simulationExecutor.config.fillOnQuoteMode = FillOnQuoteMode.LastQuote;
         simulationExecutor.config.fillOnTrade = true;
         simulationExecutor.config.fillOnTradeMode = FillOnTradeMode.LastTrade;
         simulationExecutor.config.fillOnBar = true;
         simulationExecutor.config.fillOnBarMode = FillOnBarMode.LastBarClose;
+        providerManager.registerExecutionProvider(simulationExecutor);
 
         tradingDataStore = new InMemoryTradingDataStore();
 
-        strategy = new MockStrategy(orderManager, tradingDataStore);
-        StrategyManager.INSTANCE.register(strategy);
+        strategy = new MockStrategy(orderManager, tradingDataStore, eventBusManager);
+        strategyManager.register(strategy);
 
         instrumentDataManager.clear();
 

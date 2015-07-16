@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.trading;
 
-import com.unisoft.algotrader.model.clock.Clock;
+import com.unisoft.algotrader.model.clock.SimulationClock;
 import com.unisoft.algotrader.model.trading.Account;
 import com.unisoft.algotrader.model.trading.Performance;
 import com.unisoft.algotrader.model.trading.Portfolio;
@@ -26,7 +26,7 @@ public class PerformanceTest {
     public void setup() {
         Account account = TradingDataStore.DEFAULT_ACCOUNT;
         Portfolio portfolio = new Portfolio("Test", account.getAccountId());
-        processor = spy(new PortfolioProcessor(portfolio, account, new SampleInMemoryRefDataStore(), Clock.CLOCK));
+        processor = spy(new PortfolioProcessor(portfolio, account, new SampleInMemoryRefDataStore(), new SimulationClock()));
         performance = portfolio.getPerformance();
 
     }

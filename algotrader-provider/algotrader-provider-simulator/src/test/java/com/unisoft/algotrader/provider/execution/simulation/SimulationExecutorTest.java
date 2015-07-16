@@ -3,6 +3,7 @@ package com.unisoft.algotrader.provider.execution.simulation;
 import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.event.EventBusManager;
 import com.unisoft.algotrader.event.SampleEventFactory;
+import com.unisoft.algotrader.model.clock.SimulationClock;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
@@ -13,6 +14,7 @@ import com.unisoft.algotrader.model.trading.Side;
 import com.unisoft.algotrader.provider.InstrumentDataManager;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.trading.OrderManager;
+import com.unisoft.algotrader.trading.StrategyManager;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +31,10 @@ import static org.mockito.Mockito.*;
  */
 public class SimulationExecutorTest {
 
+    private ProviderManager providerManager;
+    private StrategyManager strategyManager;
     private SimulationExecutor simulationExecutor;
+    private EventBusManager eventBusManager;
     private OrderManager orderManager;
     private InstrumentDataManager instrumentDataManager;
     private RingBuffer rb =RingBuffer.createSingleProducer(MarketDataContainer.FACTORY, 1024, new NoWaitStrategy());
@@ -37,15 +42,19 @@ public class SimulationExecutorTest {
 
     @Before
     public void setup(){
-        orderManager = spy(new OrderManager());
-        instrumentDataManager = new InstrumentDataManager(EventBusManager.INSTANCE.marketDataRB);
-        simulationExecutor = new SimulationExecutor(orderManager, instrumentDataManager, rb);
+
+        providerManager = new ProviderManager();
+        strategyManager = new StrategyManager();
+        eventBusManager = new EventBusManager();
+        orderManager = spy(new OrderManager(providerManager, strategyManager, eventBusManager));
+        instrumentDataManager = new InstrumentDataManager(eventBusManager.marketDataRB);
+        simulationExecutor = new SimulationExecutor(orderManager, instrumentDataManager, new SimulationClock(), rb);
         simulationExecutor.config.fillOnBar = true;
         simulationExecutor.config.fillOnQuote = true;
         simulationExecutor.config.fillOnTrade = true;
         simulationExecutor.config.fillOnBarMode = SimulatorConfig.FillOnBarMode.LastBarClose;
 
-        ProviderManager.INSTANCE.addExecutionProvider(simulationExecutor);
+        providerManager.addExecutionProvider(simulationExecutor);
         instrumentDataManager.clear();
     }
 

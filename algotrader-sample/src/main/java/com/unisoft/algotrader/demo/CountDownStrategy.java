@@ -26,10 +26,11 @@ class CountDownStrategy extends Strategy {
     private CountDownLatch latch;
     private int exp;
     private int count = 0;
-
+    private final OrderManager orderManager;
     public long orderId = 0;
-    public CountDownStrategy(String strategyId, TradingDataStore tradingDataStore, CountDownLatch latch, int exp, RingBuffer... providers) {
+    public CountDownStrategy(OrderManager orderManager, String strategyId, TradingDataStore tradingDataStore, CountDownLatch latch, int exp, RingBuffer... providers) {
         super(strategyId, tradingDataStore, providers);
+        this.orderManager = orderManager;
         this.latch = latch;
         this.exp = exp;
     }
@@ -53,7 +54,7 @@ class CountDownStrategy extends Strategy {
             order.ordType = OrdType.Market;
             order.side = Side.Buy;
             order.ordQty = 500;
-            OrderManager.INSTANCE.onOrder(order);
+            orderManager.onOrder(order);
             LOG.info("CountDownStrategy send order");
         }
     }
@@ -72,7 +73,7 @@ class CountDownStrategy extends Strategy {
             order.portfolioId = portfolio.getPortfolioId();
             order.side = Side.Buy;
             order.ordQty = 500;
-            OrderManager.INSTANCE.onOrder(order);
+            orderManager.onOrder(order);
             ordered = true;
         }
     }

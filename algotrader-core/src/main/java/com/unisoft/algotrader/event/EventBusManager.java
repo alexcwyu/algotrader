@@ -32,15 +32,8 @@ public class EventBusManager {
     public final RingBuffer<ExecutionReport> executionReportRB
             = RingBuffer.createSingleProducer(ExecutionReport.FACTORY, DEFAULT_BUFFER_SIZE, new NoWaitStrategy());
 
-
-    public static final EventBusManager INSTANCE;
-
-    static {
-        INSTANCE = new EventBusManager();
-    }
-
     @Inject
-    EventBusManager(){
+    public EventBusManager(){
 
     }
 }
