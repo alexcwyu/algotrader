@@ -5,12 +5,15 @@ import com.unisoft.algotrader.provider.execution.ExecutionProvider;
 import com.unisoft.algotrader.provider.historical.HistoricalDataProvider;
 import com.unisoft.algotrader.provider.realtime.RealTimeDataProvider;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Map;
 
 
 /**
  * Created by alex on 5/19/15.
  */
+@Singleton
 public class ProviderManager {
 
 
@@ -20,7 +23,8 @@ public class ProviderManager {
         INSTANCE = new ProviderManager();
     }
 
-    private ProviderManager(){
+    @Inject
+    ProviderManager(){
 
     }
 

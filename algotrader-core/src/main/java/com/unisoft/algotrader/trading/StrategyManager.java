@@ -2,11 +2,14 @@ package com.unisoft.algotrader.trading;
 
 import com.google.common.collect.Maps;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Map;
 
 /**
  * Created by alex on 5/19/15.
  */
+@Singleton
 public class StrategyManager {
 
     public static final StrategyManager INSTANCE;
@@ -15,8 +18,8 @@ public class StrategyManager {
         INSTANCE = new StrategyManager();
     }
 
-
-    private StrategyManager(){
+    @Inject
+    StrategyManager(){
 
     }
 

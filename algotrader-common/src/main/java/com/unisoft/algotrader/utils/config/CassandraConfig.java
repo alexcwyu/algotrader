@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.provider.cassandra;
+package com.unisoft.algotrader.utils.config;
 
 /**
  * Created by alex on 6/18/15.

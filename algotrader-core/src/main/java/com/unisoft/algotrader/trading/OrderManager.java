@@ -11,12 +11,14 @@ import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrat
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.inject.Singleton;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by alex on 5/18/15.
  */
+@Singleton
 public class OrderManager extends MultiEventProcessor implements OrderHandler, ExecutionHandler {
 
     private static final Logger LOG = LogManager.getLogger(OrderManager.class);

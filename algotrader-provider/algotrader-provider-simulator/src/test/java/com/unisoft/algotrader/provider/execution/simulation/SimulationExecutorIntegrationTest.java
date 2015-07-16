@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.provider.execution;
+package com.unisoft.algotrader.provider.execution.simulation;
 
 import com.google.common.collect.Lists;
 import com.lmax.disruptor.RingBuffer;
@@ -17,7 +17,6 @@ import com.unisoft.algotrader.model.trading.Side;
 import com.unisoft.algotrader.persistence.InMemoryTradingDataStore;
 import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.provider.InstrumentDataManager;
-import com.unisoft.algotrader.provider.execution.simulation.SimulationExecutor;
 import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.trading.Strategy;
 import com.unisoft.algotrader.trading.StrategyManager;

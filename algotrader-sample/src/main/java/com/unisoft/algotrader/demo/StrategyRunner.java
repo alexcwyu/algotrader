@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.integration;
+package com.unisoft.algotrader.demo;
 
 import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.event.SampleEventFactory;
@@ -22,14 +22,13 @@ import org.apache.logging.log4j.Logger;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static org.junit.Assert.assertEquals;
 
 /**
  * Created by alex on 6/7/15.
  */
-public class BackTestIntegrationTest {
+public class StrategyRunner {
 
-    private static final Logger LOG = LogManager.getLogger(BackTestIntegrationTest.class);
+    private static final Logger LOG = LogManager.getLogger(StrategyRunner.class);
 
     public static void main(String [] args) throws Exception{
 
@@ -78,7 +77,7 @@ public class BackTestIntegrationTest {
         executor.submit(simulationExecutor);
         executor.submit(instrumentDataManager);
 
-        assertEquals(0.0, portfolioProcessor.positionValue(), 0.0);
+
 
         executor.submit(()->{
 

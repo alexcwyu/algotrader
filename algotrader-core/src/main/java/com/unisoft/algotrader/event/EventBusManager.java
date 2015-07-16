@@ -6,9 +6,13 @@ import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 /**
  * Created by alex on 5/17/15.
  */
+@Singleton
 public class EventBusManager {
 
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 64;
@@ -35,7 +39,8 @@ public class EventBusManager {
         INSTANCE = new EventBusManager();
     }
 
-    private EventBusManager(){
+    @Inject
+    EventBusManager(){
 
     }
 }

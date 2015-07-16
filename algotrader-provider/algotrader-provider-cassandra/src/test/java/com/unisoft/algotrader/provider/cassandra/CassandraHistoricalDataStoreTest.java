@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.provider.cassandra;
 
 import com.unisoft.algotrader.model.event.data.Bar;
+import com.unisoft.algotrader.utils.config.CassandraConfig;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

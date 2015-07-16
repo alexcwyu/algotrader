@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.integration;
+package com.unisoft.algotrader.demo;
 
 import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.model.event.data.Bar;
