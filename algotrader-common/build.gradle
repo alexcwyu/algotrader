@@ -12,7 +12,7 @@ dependencies {
     compile "uk.co.real-logic:aeron-client:${aeronVersion}"
     compile "uk.co.real-logic:aeron-driver:${aeronVersion}"
     compile "uk.co.real-logic:aeron-samples:${aeronVersion}"
-    compile "uk.co.real-logic:aeron-common:${aeronVersion}"
+    compile "uk.co.real-logic:aeron-tools:${aeronVersion}"
     compile "org.zeromq:jeromq:${jeromqVersion}"
     compile "io.netty:netty-all:4.1.0.Beta4"
 

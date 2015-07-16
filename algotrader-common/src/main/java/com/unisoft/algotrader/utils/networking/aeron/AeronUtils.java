@@ -1,7 +1,7 @@
 package com.unisoft.algotrader.utils.networking.aeron;
 
 import com.unisoft.algotrader.utils.networking.DataHandler;
-import uk.co.real_logic.aeron.common.RateReporter;
+import uk.co.real_logic.aeron.driver.RateReporter;
 import uk.co.real_logic.aeron.samples.SamplesUtil;
 
 import java.util.concurrent.TimeUnit;

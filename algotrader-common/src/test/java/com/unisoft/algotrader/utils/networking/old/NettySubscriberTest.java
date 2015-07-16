@@ -2,7 +2,7 @@ package com.unisoft.algotrader.utils.networking.old;
 
 import com.unisoft.algotrader.utils.networking.aeron.AeronUtils;
 import com.unisoft.algotrader.utils.networking.netty.NettySubscriber;
-import uk.co.real_logic.aeron.common.RateReporter;
+import uk.co.real_logic.aeron.driver.RateReporter;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

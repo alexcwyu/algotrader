@@ -51,7 +51,7 @@ public class AeronPublisher implements Publisher {
         driver = embeddedMediaDriver ? MediaDriver.launchEmbedded(mediaDriverContext) : null;
         executor = Executors.newFixedThreadPool(2);
         Aeron.Context context = new Aeron.Context();
-        aeron = Aeron.connect(context, executor);
+        aeron = Aeron.connect(context);
         publication = aeron.addPublication(channel, streamId);
         connected.set(true);
     }

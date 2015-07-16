@@ -9,7 +9,7 @@ import com.unisoft.algotrader.utils.serialization.Serializer;
 import com.unisoft.algotrader.utils.serialization.kryo.KryoSerializer;
 import com.unisoft.algotrader.utils.serialization.msgpack.MsgpackSerializer;
 import org.junit.Test;
-import uk.co.real_logic.aeron.common.RateReporter;
+import uk.co.real_logic.aeron.driver.RateReporter;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.CountDownLatch;
