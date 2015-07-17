@@ -1,5 +1,6 @@
 log
 .idea
+.gradle
 *.iml
 build
 algotrader-core/src/main/java/fi
