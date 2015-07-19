@@ -9,7 +9,7 @@ import com.unisoft.algotrader.model.trading.Account;
 import com.unisoft.algotrader.model.trading.Performance;
 import com.unisoft.algotrader.model.trading.Portfolio;
 import com.unisoft.algotrader.persistence.TradingDataStore;
-import com.unisoft.algotrader.provider.historical.DummyDataProvider;
+import com.unisoft.algotrader.provider.data.DummyDataProvider;
 import com.unisoft.algotrader.trading.Strategy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

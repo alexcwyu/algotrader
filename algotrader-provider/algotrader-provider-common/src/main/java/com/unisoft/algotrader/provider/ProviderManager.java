@@ -1,9 +1,10 @@
 package com.unisoft.algotrader.provider;
 
 import com.google.common.collect.Maps;
+import com.unisoft.algotrader.provider.data.DataStoreProvider;
+import com.unisoft.algotrader.provider.data.HistoricalDataProvider;
+import com.unisoft.algotrader.provider.data.RealTimeDataProvider;
 import com.unisoft.algotrader.provider.execution.ExecutionProvider;
-import com.unisoft.algotrader.provider.historical.HistoricalDataProvider;
-import com.unisoft.algotrader.provider.realtime.RealTimeDataProvider;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -21,14 +22,10 @@ public class ProviderManager {
 
     }
 
-    private Map<String, DataStore> dataImporterMap = Maps.newConcurrentMap();
+    private Map<String, DataStoreProvider> dataStoreProviderMap = Maps.newConcurrentMap();
     private Map<String, ExecutionProvider> executionProviderMap = Maps.newConcurrentMap();
     private Map<String, HistoricalDataProvider> histDataProviderMap = Maps.newConcurrentMap();
     private Map<String, RealTimeDataProvider> rtDataProviderMap = Maps.newConcurrentMap();
-
-    public void registerExecutionProvider(ExecutionProvider provider){
-        executionProviderMap.put(provider.providerId(), provider);
-    }
 
     public void addHistoricalDataProvider(HistoricalDataProvider provider){
         histDataProviderMap.put(provider.providerId(), provider);
@@ -42,8 +39,8 @@ public class ProviderManager {
         executionProviderMap.put(provider.providerId(), provider);
     }
 
-    public void addDataImporter(DataStore provider){
-        dataImporterMap.put(provider.providerId(), provider);
+    public void addDataStoreProvider(DataStoreProvider provider){
+        dataStoreProviderMap.put(provider.providerId(), provider);
     }
 
     public RealTimeDataProvider getRealTimeDataProvider(String providerId){
@@ -58,7 +55,7 @@ public class ProviderManager {
         return executionProviderMap.get(providerId);
     }
 
-    public DataStore getDataImporter(String providerId){
-        return dataImporterMap.get(providerId);
+    public DataStoreProvider getDataStoreProvider(String providerId){
+        return dataStoreProviderMap.get(providerId);
     }
 }

@@ -61,8 +61,6 @@ public class MarketDataContainer extends MarketData<MarketDataContainer> {
         return bitset.get(TRADE_BIT);
     }
 
-
-
     public void setBar(Bar bar){
 
         this.bar.reset();
@@ -75,6 +73,31 @@ public class MarketDataContainer extends MarketData<MarketDataContainer> {
 
     }
 
+    public void setBar(long instId,
+                       int size,
+                       long dateTime,
+                       double open,
+                       double high,
+                       double low,
+                       double close,
+                       long volume,
+                       long openInt) {
+
+        this.bar.reset();
+        this.instId = bar.instId;
+        this.dateTime = bar.dateTime;
+        this.bar.instId = instId;
+        this.bar.size = size;
+        this.bar.dateTime = dateTime;
+        this.bar.open = open;
+        this.bar.high = high;
+        this.bar.low = low;
+        this.bar.close = close;
+        this.bar.volume = volume;
+        this.bar.openInt = openInt;
+        bitset.set(BAR_BIT);
+    }
+
     public void setTrade(Trade trade){
         this.trade.reset();
         if (trade != null) {
@@ -83,6 +106,21 @@ public class MarketDataContainer extends MarketData<MarketDataContainer> {
             this.trade.copy(trade);
             bitset.set(TRADE_BIT);
         }
+    }
+
+    public void setTrade(long instId,
+                       long dateTime,
+                       double price,
+                       int size) {
+
+        this.bar.reset();
+        this.instId = bar.instId;
+        this.dateTime = bar.dateTime;
+        this.trade.instId = instId;
+        this.trade.dateTime = dateTime;
+        this.trade.price = price;
+        this.trade.size = size;
+        bitset.set(TRADE_BIT);
     }
 
     public void setQuote(Quote quote){
@@ -96,7 +134,24 @@ public class MarketDataContainer extends MarketData<MarketDataContainer> {
 
     }
 
+    public void setQuote(long instId,
+                         long dateTime,
+                         double bid,
+                         double ask,
+                         int bidSize,
+                         int askSize) {
 
+        this.bar.reset();
+        this.instId = bar.instId;
+        this.dateTime = bar.dateTime;
+        this.quote.instId = instId;
+        this.quote.dateTime = dateTime;
+        this.quote.bid = bid;
+        this.quote.ask = ask;
+        this.quote.bidSize = bidSize;
+        this.quote.askSize = askSize;
+        bitset.set(QUOTE_BIT);
+    }
 
     @Override
     public String toString() {

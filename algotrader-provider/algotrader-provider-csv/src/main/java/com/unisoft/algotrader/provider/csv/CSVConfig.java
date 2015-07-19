@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.csv;
 
-import com.unisoft.algotrader.provider.SubscriptionKey;
+import com.unisoft.algotrader.provider.data.SubscriptionKey;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

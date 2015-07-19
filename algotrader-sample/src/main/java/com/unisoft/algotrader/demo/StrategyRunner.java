@@ -43,7 +43,7 @@ public class StrategyRunner {
     public void run(){
 
         SimulationExecutor simulationExecutor = new SimulationExecutor(appConfig);
-        appConfig.getProviderManager().registerExecutionProvider(simulationExecutor);
+        appConfig.getProviderManager().addExecutionProvider(simulationExecutor);
         DataPublisher dataPublisher = new DataPublisher(appConfig.getEventBusManager().marketDataRB);
 
         executor.submit(strategy);

@@ -103,7 +103,7 @@ public class SimulationExecutorIntegrationTest {
         simulationExecutor.config.fillOnTradeMode = FillOnTradeMode.LastTrade;
         simulationExecutor.config.fillOnBar = true;
         simulationExecutor.config.fillOnBarMode = FillOnBarMode.LastBarClose;
-        providerManager.registerExecutionProvider(simulationExecutor);
+        providerManager.addExecutionProvider(simulationExecutor);
 
         tradingDataStore = new InMemoryTradingDataStore();
 

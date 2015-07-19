@@ -1,6 +1,7 @@
-package com.unisoft.algotrader.provider;
+package com.unisoft.algotrader.provider.data;
 
 import com.unisoft.algotrader.model.event.data.Bar;
+import com.unisoft.algotrader.model.event.data.DataType;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
 
@@ -10,11 +11,6 @@ import java.util.Objects;
  * Created by alex on 6/16/15.
  */
 public class SubscriptionKey {
-    public static enum Type{
-        Bar,
-        Quote,
-        Trade
-    }
 
     public final static int M1_SIZE = 60;
     public final static int M15_SIZE = 60*15;
@@ -27,18 +23,18 @@ public class SubscriptionKey {
 
     public final String providerId;
     
-    public final Type type;
+    public final DataType type;
 
     public final long instId;
 
     public final int barSize;
     
 
-    protected SubscriptionKey(String providerId, Type type, long instId){
+    protected SubscriptionKey(String providerId, DataType type, long instId){
         this(providerId, type, instId, 0);
     }
 
-    protected SubscriptionKey(String providerId, Type type, long instId, int barSize){
+    protected SubscriptionKey(String providerId, DataType type, long instId, int barSize){
         this.providerId = providerId;
         this.type = type;
         this.instId = instId;
@@ -66,55 +62,55 @@ public class SubscriptionKey {
         return "SubscriptionKey{" +
                 "barSize=" + barSize +
                 ", providerId='" + providerId + '\'' +
-                ", type=" + type +
+                ", DataType=" + type +
                 ", instId=" + instId +
                 '}';
     }
 
     public static SubscriptionKey createBarSubscriptionKey(String providerId, long instId, int frequency){
-        return new SubscriptionKey(providerId, Type.Bar, instId, frequency);
+        return new SubscriptionKey(providerId, DataType.Bar, instId, frequency);
     }
 
     public static SubscriptionKey create1MBarSubscriptionKey(String providerId, long instId){
-        return new SubscriptionKey(providerId, Type.Bar, instId, M1_SIZE);
+        return new SubscriptionKey(providerId, DataType.Bar, instId, M1_SIZE);
     }
 
     public static SubscriptionKey create15MBarSubscriptionKey(String providerId, long instId){
-        return new SubscriptionKey(providerId, Type.Bar, instId, M15_SIZE);
+        return new SubscriptionKey(providerId, DataType.Bar, instId, M15_SIZE);
     }
 
     public static SubscriptionKey create30MBarSubscriptionKey(String providerId, long instId){
-        return new SubscriptionKey(providerId, Type.Bar, instId, M30_SIZE);
+        return new SubscriptionKey(providerId, DataType.Bar, instId, M30_SIZE);
     }
 
     public static SubscriptionKey create1HBarSubscriptionKey(String providerId, long instId){
-        return new SubscriptionKey(providerId, Type.Bar, instId, H1_SIZE);
+        return new SubscriptionKey(providerId, DataType.Bar, instId, H1_SIZE);
     }
 
     public static SubscriptionKey create4HBarSubscriptionKey(String providerId, long instId){
-        return new SubscriptionKey(providerId, Type.Bar, instId, H4_SIZE);
+        return new SubscriptionKey(providerId, DataType.Bar, instId, H4_SIZE);
     }
 
     public static SubscriptionKey createDailySubscriptionKey(String providerId, long instId){
-        return new SubscriptionKey(providerId, Type.Bar, instId, DAILY_SIZE);
+        return new SubscriptionKey(providerId, DataType.Bar, instId, DAILY_SIZE);
     }
 
     public static SubscriptionKey createTradeSubscriptionKey(String providerId, long instId){
-        return new SubscriptionKey(providerId, Type.Trade, instId);
+        return new SubscriptionKey(providerId, DataType.Trade, instId);
     }
 
     public static SubscriptionKey createQuoteSubscriptionKey(String providerId, long instId){
-        return new SubscriptionKey(providerId, Type.Quote, instId);
+        return new SubscriptionKey(providerId, DataType.Quote, instId);
     }
 
     public static SubscriptionKey createSubscriptionKey(String providerId, Bar bar){
-        return new SubscriptionKey(providerId, Type.Bar, bar.instId, bar.size);
+        return new SubscriptionKey(providerId, DataType.Bar, bar.instId, bar.size);
     }
 
     public static SubscriptionKey createSubscriptionKey(String providerId, Quote quote){
-        return new SubscriptionKey(providerId, Type.Bar, quote.instId);
+        return new SubscriptionKey(providerId, DataType.Bar, quote.instId);
     }
     public static SubscriptionKey createSubscriptionKey(String providerId, Trade trade){
-        return new SubscriptionKey(providerId, Type.Bar, trade.instId);
+        return new SubscriptionKey(providerId, DataType.Bar, trade.instId);
     }
 }

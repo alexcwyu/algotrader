@@ -1,14 +1,11 @@
 package com.unisoft.algotrader.provider.ib;
 
-import com.unisoft.algotrader.model.event.EventBus;
+import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.execution.Order;
-import com.unisoft.algotrader.provider.Subscriber;
-import com.unisoft.algotrader.provider.SubscriptionKey;
+import com.unisoft.algotrader.provider.data.*;
 import com.unisoft.algotrader.provider.execution.ExecutionProvider;
-import com.unisoft.algotrader.provider.historical.HistoricalDataProvider;
-import com.unisoft.algotrader.provider.realtime.RealTimeDataProvider;
 
-import java.util.Date;
+import java.util.List;
 
 /**
  * Created by alex on 6/20/15.
@@ -16,13 +13,24 @@ import java.util.Date;
 public class IBProvider implements RealTimeDataProvider, HistoricalDataProvider, ExecutionProvider{
 
     @Override
-    public void subscribe(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, int from_yyyyMMdd, int to_yyyyMMdd) {
-
+    public boolean subscribeRealTimeData(SubscriptionKey subscriptionKey, Subscriber subscriber){
+        return false;
     }
 
     @Override
-    public void subscribe(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate) {
+    public boolean unSubscribeRealTimeData(SubscriptionKey subscriptionKey, Subscriber subscriber){
 
+        return false;
+    }
+
+    @Override
+    public List<MarketDataContainer> loadHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
+        return null;
+    }
+
+    @Override
+    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
+        return false;
     }
 
     @Override
@@ -30,10 +38,6 @@ public class IBProvider implements RealTimeDataProvider, HistoricalDataProvider,
 
     }
 
-    @Override
-    public void subscribe(SubscriptionKey subscriptionKey, Subscriber subscriber) {
-
-    }
 
     @Override
     public void connect() {

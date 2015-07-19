@@ -1,8 +1,8 @@
-package com.unisoft.algotrader.provider;
+package com.unisoft.algotrader.provider.data;
 
 import com.google.common.collect.Maps;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
-import com.unisoft.algotrader.provider.realtime.RealTimeDataProvider;
+import com.unisoft.algotrader.provider.ProviderManager;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -32,7 +32,22 @@ public class DefaultDataService implements DataService {
 
     @Override
     public List<MarketDataContainer> loadHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
+        HistoricalDataProvider historicalDataProvider = providerManager.getHistoricalDataProvider(subscriptionKey.providerId);
+        if (historicalDataProvider != null){
+            // TODO
+        }
+
         return null;
+    }
+
+    @Override
+    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
+        HistoricalDataProvider historicalDataProvider = providerManager.getHistoricalDataProvider(subscriptionKey.providerId);
+        if (historicalDataProvider != null){
+            historicalDataProvider.subscribeHistoricalData(subscriptionKey, subscriber);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -47,7 +62,7 @@ public class DefaultDataService implements DataService {
             if(subscribers.add(subscriber)){
                 RealTimeDataProvider provider = providerManager.getRealTimeDataProvider(subscriptionKey.providerId);
                 if (provider != null){
-                    provider.subscribe(subscriptionKey, subscriber);
+                    provider.subscribeRealTimeData(subscriptionKey, subscriber);
                     return true;
                 }
             }
@@ -64,8 +79,13 @@ public class DefaultDataService implements DataService {
         try{
             Set<Subscriber> subscribers = subscriptions.get(subscriptionKey);
             if (subscribers != null){
-                subscribers = new HashSet<>();
-                return subscribers.remove(subscriber);
+                if (subscribers.remove(subscriber)){
+                    RealTimeDataProvider provider = providerManager.getRealTimeDataProvider(subscriptionKey.providerId);
+                    if (provider != null){
+                        provider.unSubscribeRealTimeData(subscriptionKey, subscriber);
+                        return true;
+                    }
+                }
             }
         }finally {
             lock.unlock();

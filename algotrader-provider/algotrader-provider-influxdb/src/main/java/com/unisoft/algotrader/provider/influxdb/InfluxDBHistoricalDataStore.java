@@ -1,22 +1,23 @@
 package com.unisoft.algotrader.provider.influxdb;
 
-import com.unisoft.algotrader.model.event.EventBus;
 import com.unisoft.algotrader.model.event.data.Bar;
+import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
-import com.unisoft.algotrader.provider.DataStore;
-import com.unisoft.algotrader.provider.SubscriptionKey;
-import com.unisoft.algotrader.provider.historical.HistoricalDataProvider;
+import com.unisoft.algotrader.provider.data.DataStoreProvider;
+import com.unisoft.algotrader.provider.data.HistoricalDataProvider;
+import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
+import com.unisoft.algotrader.provider.data.Subscriber;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Date;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by alex on 6/19/15.
  */
-public class InfluxDBHistoricalDataStore implements DataStore, HistoricalDataProvider {
+public class InfluxDBHistoricalDataStore implements DataStoreProvider, HistoricalDataProvider {
 
     private static final Logger LOG = LogManager.getLogger(InfluxDBHistoricalDataStore.class);
 
@@ -61,8 +62,14 @@ public class InfluxDBHistoricalDataStore implements DataStore, HistoricalDataPro
     }
 
     /// PROVIDER
-    @Override
-    public void subscribe(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate) {
 
+    @Override
+    public List<MarketDataContainer> loadHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
+        return null;
+    }
+
+    @Override
+    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
+        return false;
     }
 }

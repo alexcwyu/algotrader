@@ -4,26 +4,27 @@ import com.exxeleron.qjava.QBasicConnection;
 import com.exxeleron.qjava.QConnection;
 import com.exxeleron.qjava.QMessage;
 import com.exxeleron.qjava.QTable;
+import com.google.common.collect.Lists;
 import com.unisoft.algotrader.event.LogMarketDataEventBus;
-import com.unisoft.algotrader.model.event.EventBus;
 import com.unisoft.algotrader.model.event.data.Bar;
+import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
-import com.unisoft.algotrader.provider.DataStore;
-import com.unisoft.algotrader.provider.SubscriptionKey;
-import com.unisoft.algotrader.provider.historical.HistoricalDataProvider;
+import com.unisoft.algotrader.provider.data.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Date;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by alex on 6/19/15.
  */
-public class KDBHistoricalDataStore implements DataStore, HistoricalDataProvider {
+public class KDBHistoricalDataStore implements DataStoreProvider, HistoricalDataProvider {
 
     private static final Logger LOG = LogManager.getLogger(KDBHistoricalDataStore.class);
+
+    public static final String PROVIDER_ID = "KDB";
 
     private static final String BAR_INSERT_PREFIX = "`bar insert (`";
     private static final String QUOTE_INSERT_PREFIX = "`quote insert (`";
@@ -53,7 +54,7 @@ public class KDBHistoricalDataStore implements DataStore, HistoricalDataProvider
     /// PROVIDER
     @Override
     public String providerId() {
-        return "KDB";
+        return PROVIDER_ID;
     }
 
     @Override
@@ -124,37 +125,137 @@ public class KDBHistoricalDataStore implements DataStore, HistoricalDataProvider
 
     /// PROVIDER
     @Override
-    public void subscribe(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate) {
+    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
         switch (subscriptionKey.type) {
             case Bar:
-                queryBar(eventBus, subscriptionKey, fromDate, toDate);
+                publishBar(subscriptionKey, subscriber);
                 break;
 
             case Trade:
-                queryTrade(eventBus, subscriptionKey, fromDate, toDate);
+                publishTrade(subscriptionKey, subscriber);
                 break;
 
             case Quote:
-                queryQuote(eventBus, subscriptionKey, fromDate, toDate);
+                publishQuote(subscriptionKey, subscriber);
                 break;
+        }
+
+        return true;
+    }
+
+    @Override
+    public List<MarketDataContainer> loadHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
+        List<MarketDataContainer> result = Lists.newArrayList();
+        switch (subscriptionKey.type) {
+            case Bar:
+                result = loadBar(subscriptionKey);
+                break;
+
+            case Trade:
+                result = loadTrade(subscriptionKey);
+                break;
+
+            case Quote:
+                result = loadQuote(subscriptionKey);
+                break;
+        }
+        return result;
+    }
+
+    private List<MarketDataContainer>  loadBar(HistoricalSubscriptionKey subscriptionKey){
+        List<MarketDataContainer> list = Lists.newArrayList();
+
+        QTable table = queryBar(subscriptionKey);
+        if (table != null) {
+            for (int i = 0; i < table.getRowsCount(); i++) {
+                QTable.Row row = table.get(i);
+                MarketDataContainer container = new MarketDataContainer();
+                container.setBar((int) row.get(0),
+                        (int) row.get(1), (long) row.get(2), (double) row.get(3), (double) row.get(4),
+                        (double) row.get(5), (double) row.get(6), (int) row.get(7), (int) row.get(8));
+                list.add(container);
+            }
+        }
+        return list;
+    }
+    private List<MarketDataContainer>  loadTrade(HistoricalSubscriptionKey subscriptionKey){
+        List<MarketDataContainer> list = Lists.newArrayList();
+
+        QTable table = queryTrade(subscriptionKey);
+        if (table != null) {
+            for (int i = 0; i < table.getRowsCount(); i++) {
+                QTable.Row row = table.get(i);
+                MarketDataContainer container = new MarketDataContainer();
+                container.setTrade((int) row.get(0),
+                        (long) row.get(1), (double) row.get(2), (int) row.get(3));
+                list.add(container);
+            }
+        }
+        return list;
+    }
+
+    private List<MarketDataContainer>  loadQuote(HistoricalSubscriptionKey subscriptionKey){
+        List<MarketDataContainer> list = Lists.newArrayList();
+
+        QTable table = queryQuote(subscriptionKey);
+        if (table != null) {
+            for (int i = 0; i < table.getRowsCount(); i++) {
+                QTable.Row row = table.get(i);
+                MarketDataContainer container = new MarketDataContainer();
+                container.setQuote((int) row.get(0),
+                        (long) row.get(1), (double) row.get(2), (double) row.get(3),
+                        (int) row.get(4), (int) row.get(5));
+                list.add(container);
+            }
+        }
+        return list;
+    }
+
+    private void publishBar(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
+        QTable table = queryBar(subscriptionKey);
+        if (table != null) {
+            for (int i = 0; i < table.getRowsCount(); i++) {
+                QTable.Row row = table.get(i);
+                subscriber.marketDataEventBus.publishBar((int) row.get(0),
+                        (int) row.get(1), (long) row.get(2), (double) row.get(3), (double) row.get(4),
+                        (double) row.get(5), (double) row.get(6), (int) row.get(7), (int) row.get(8));
+            }
         }
     }
 
-    private void queryBar(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate){
+    private void publishQuote(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
+        QTable table = queryQuote(subscriptionKey);
+
+        if (table != null) {
+            for (int i = 0; i < table.getRowsCount(); i++) {
+                QTable.Row row = table.get(i);
+                subscriber.marketDataEventBus.publishQuote((int) row.get(0),
+                        (long) row.get(1), (double) row.get(2), (double) row.get(3),
+                        (int) row.get(4), (int) row.get(5));
+            }
+        }
+    }
+
+    private void publishTrade(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
+        QTable table = queryTrade(subscriptionKey);
+        if (table != null) {
+            for (int i = 0; i < table.getRowsCount(); i++) {
+                QTable.Row row = table.get(i);
+
+                subscriber.marketDataEventBus.publishTrade((int) row.get(0),
+                        (long) row.get(1), (double) row.get(2), (int) row.get(3));
+            }
+        }
+    }
+
+    private QTable queryBar(HistoricalSubscriptionKey subscriptionKey){
         try {
-            String query = buildBarSelectQuery(subscriptionKey, fromDate, toDate);
+            String query = buildBarSelectQuery(subscriptionKey, subscriptionKey.fromDate, subscriptionKey.toDate);
             q.query(QConnection.MessageType.SYNC, query);
             final QMessage message = (QMessage) q.receive(false, false);
 
             if (message.getData() !=null && message.getData() instanceof  QTable) {
-                QTable table = (QTable) message.getData();
-                for (int i = 0; i < table.getRowsCount(); i++) {
-                    QTable.Row row = table.get(i);
-
-                    eventBus.publishBar((int)row.get(0),
-                            (int) row.get(1), (long) row.get(2), (double) row.get(3), (double) row.get(4),
-                            (double) row.get(5), (double) row.get(6), (int) row.get(7), (int) row.get(8));
-                }
+                return (QTable) message.getData();
             }
             else{
                 LOG.warn("fail to query bar");
@@ -163,23 +264,18 @@ public class KDBHistoricalDataStore implements DataStore, HistoricalDataProvider
         catch (Exception e){
             LOG.error("Fail to query bar", e);
         }
+        return null;
     }
 
-    private void queryQuote(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate){
+    private QTable queryQuote(HistoricalSubscriptionKey subscriptionKey){
         try {
-            String query = buildQuoteSelectQuery(subscriptionKey, fromDate, toDate);
+            String query = buildQuoteSelectQuery(subscriptionKey, subscriptionKey.fromDate, subscriptionKey.toDate);
             q.query(QConnection.MessageType.SYNC, query);
             final QMessage message = (QMessage) q.receive(false, false);
 
             if (message.getData() !=null && message.getData() instanceof  QTable) {
-                QTable table = (QTable) message.getData();
-                for (int i = 0; i < table.getRowsCount(); i++) {
-                    QTable.Row row = table.get(i);
 
-                    eventBus.publishQuote((int)row.get(0),
-                            (long) row.get(1), (double) row.get(2), (double) row.get(3),
-                            (int) row.get(4), (int) row.get(5));
-                }
+                return (QTable) message.getData();
             }
             else{
                 LOG.warn("fail to query quote");
@@ -188,22 +284,17 @@ public class KDBHistoricalDataStore implements DataStore, HistoricalDataProvider
         catch (Exception e){
             LOG.error("Fail to query quote", e);
         }
+        return null;
     }
 
-    private void queryTrade(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate){
+    private QTable queryTrade(HistoricalSubscriptionKey subscriptionKey){
         try {
-            String query = buildTradeSelectQuery(subscriptionKey, fromDate, toDate);
+            String query = buildTradeSelectQuery(subscriptionKey, subscriptionKey.fromDate, subscriptionKey.toDate);
             q.query(QConnection.MessageType.SYNC, query);
             final QMessage message = (QMessage) q.receive(false, false);
 
             if (message.getData() !=null && message.getData() instanceof  QTable) {
-                QTable table = (QTable) message.getData();
-                for (int i = 0; i < table.getRowsCount(); i++) {
-                    QTable.Row row = table.get(i);
-
-                    eventBus.publishTrade((int)row.get(0),
-                            (long) row.get(1), (double) row.get(2), (int) row.get(3));
-                }
+                return (QTable) message.getData();
             }
             else {
                 LOG.warn("fail to query trade");
@@ -212,6 +303,7 @@ public class KDBHistoricalDataStore implements DataStore, HistoricalDataProvider
         catch (Exception e){
             LOG.error("Fail to query trade", e);
         }
+        return null;
     }
 
     public static String buildBarInsertQuery(Bar bar){
@@ -243,23 +335,23 @@ public class KDBHistoricalDataStore implements DataStore, HistoricalDataProvider
                 .append(quote.askSize).append(INSERT_SUFFIX).toString();
     }
 
-    public static String buildBarSelectQuery(SubscriptionKey subscriptionKey, Date fromDate, Date toDate){
+    public static String buildBarSelectQuery(SubscriptionKey subscriptionKey, long fromDate, long toDate){
         return new StringBuilder(BAR_SELECT_PREFIX).append(subscriptionKey.instId)
                 .append(SIZE_EQ).append(subscriptionKey.barSize)
-                .append(DT_GE).append(fromDate.getTime())
-                .append(DT_LT).append(toDate.getTime()).toString();
+                .append(DT_GE).append(fromDate)
+                .append(DT_LT).append(toDate).toString();
     }
 
-    public static String buildTradeSelectQuery(SubscriptionKey subscriptionKey, Date fromDate, Date toDate){
+    public static String buildTradeSelectQuery(SubscriptionKey subscriptionKey, long fromDate, long toDate){
         return new StringBuilder(TRADE_SELECT_PREFIX).append(subscriptionKey.instId)
-                .append(DT_GE).append(fromDate.getTime())
-                .append(DT_LT).append(toDate.getTime()).toString();
+                .append(DT_GE).append(fromDate)
+                .append(DT_LT).append(toDate).toString();
     }
 
-    public static String buildQuoteSelectQuery(SubscriptionKey subscriptionKey, Date fromDate, Date toDate){
+    public static String buildQuoteSelectQuery(SubscriptionKey subscriptionKey, long fromDate, long toDate){
         return new StringBuilder(QUOTE_SELECT_PREFIX).append(subscriptionKey.instId)
-                .append(DT_GE).append(fromDate.getTime())
-                .append(DT_LT).append(toDate.getTime()).toString();
+                .append(DT_GE).append(fromDate)
+                .append(DT_LT).append(toDate).toString();
     }
 
     public static void main(String [] args) throws Exception{
@@ -279,9 +371,10 @@ public class KDBHistoricalDataStore implements DataStore, HistoricalDataProvider
         }
 
         LogMarketDataEventBus logger = new LogMarketDataEventBus();
-        store.subscribe(logger, SubscriptionKey.createDailySubscriptionKey(instId), 20000101, 20000112);
-        store.subscribe(logger, SubscriptionKey.createQuoteSubscriptionKey(instId), 20000101, 20000112);
-        store.subscribe(logger, SubscriptionKey.createTradeSubscriptionKey(instId), 20000101, 20000112);
+        Subscriber subscriber = new Subscriber(logger);
+        store.subscribeHistoricalData(HistoricalSubscriptionKey.createDailySubscriptionKey(PROVIDER_ID, instId, 20000101, 20000112), subscriber);
+        store.subscribeHistoricalData(HistoricalSubscriptionKey.createQuoteSubscriptionKey(PROVIDER_ID, instId, 20000101, 20000112), subscriber);
+        store.subscribeHistoricalData(HistoricalSubscriptionKey.createTradeSubscriptionKey(PROVIDER_ID, instId, 20000101, 20000112), subscriber);
 
     }
 }

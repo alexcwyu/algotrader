@@ -12,10 +12,11 @@ import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.provider.BarFactory;
 import com.unisoft.algotrader.provider.ProviderManager;
-import com.unisoft.algotrader.provider.SubscriptionKey;
+import com.unisoft.algotrader.provider.data.HistoricalDataProvider;
+import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
+import com.unisoft.algotrader.provider.data.Subscriber;
 import com.unisoft.algotrader.provider.execution.simulation.SimulationExecutor;
 import com.unisoft.algotrader.provider.execution.simulation.Simulator;
-import com.unisoft.algotrader.provider.historical.HistoricalDataProvider;
 import com.unisoft.algotrader.trading.InstrumentDataManager;
 import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.trading.Strategy;
@@ -83,7 +84,7 @@ public class BackTester {
         strategyManager.register(strategy);
 
         this.simulationExecutor = new SimulationExecutor(orderManager, new InstrumentDataManager(eventBusManager.marketDataRB), new SimulationClock(), eventBusManager.marketDataRB);
-        providerManager.registerExecutionProvider(simulationExecutor);
+        providerManager.addExecutionProvider(simulationExecutor);
 
         this.barFactory = new BarFactory(eventBusManager.rawMarketDataRB, eventBusManager.marketDataRB);
         this.simulator = new Simulator(simulationExecutor, eventBusManager.marketDataRB, strategy);
@@ -98,7 +99,7 @@ public class BackTester {
     public void run(){
         executor.submit(barFactory);
         executor.submit(simulator);
-        dataProvider.subscribe(new RingBufferMarketDataEventBus(eventBusManager.rawMarketDataRB), SubscriptionKey.createDailySubscriptionKey(instrument.getInstId()), fromDate, toDate);
+        dataProvider.subscribeHistoricalData(HistoricalSubscriptionKey.createDailySubscriptionKey(dataProvider.providerId(), instrument.getInstId(), fromDate, toDate), new Subscriber(new RingBufferMarketDataEventBus(eventBusManager.rawMarketDataRB)));
     }
 
     public Performance getPerformance(){

@@ -3,36 +3,38 @@ package com.unisoft.algotrader.provider.csv;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.event.EventBus;
 import com.unisoft.algotrader.model.event.data.Bar;
+import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
-import com.unisoft.algotrader.provider.DataStore;
-import com.unisoft.algotrader.provider.SubscriptionKey;
-import com.unisoft.algotrader.provider.historical.HistoricalDataProvider;
+import com.unisoft.algotrader.provider.data.*;
 import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
 import com.univocity.parsers.csv.CsvWriter;
 import com.univocity.parsers.csv.CsvWriterSettings;
 
 import java.io.*;
-import java.util.Date;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.unisoft.algotrader.provider.SubscriptionKey.createSubscriptionKey;
 import static com.unisoft.algotrader.provider.csv.CSVConfig.*;
+import static com.unisoft.algotrader.provider.data.SubscriptionKey.createSubscriptionKey;
 
 /**
  * Created by alex on 6/16/15.
  */
-public class CSVHistoricalDataStore implements DataStore, HistoricalDataProvider{
+public class CSVHistoricalDataStore implements DataStoreProvider, HistoricalDataProvider{
 
     private AtomicBoolean connected = new AtomicBoolean(false);
     private final String path;
     private final Writer writer;
     private final RefDataStore refDataStore;
+    public static final String PROVIDER_ID = "CSV";
+    private CsvParserSettings settings = new CsvParserSettings();
 
     private final LoadingCache<SubscriptionKey, CsvWriter> caches = CacheBuilder.newBuilder()
             .build(
@@ -42,24 +44,34 @@ public class CSVHistoricalDataStore implements DataStore, HistoricalDataProvider
                         }
                     });
 
-
-
     public CSVHistoricalDataStore(String path, RefDataStore refDataStore){
         this.path = path;
         this.writer = null;
         this.refDataStore = refDataStore;
+
+        init();
+
     }
 
     protected CSVHistoricalDataStore(Writer writer, RefDataStore refDataStore){
         this.writer = writer;
         this.path = null;
         this.refDataStore = refDataStore;
+        init();
+    }
+
+    private void init(){
+
+
+        settings.getFormat().setLineSeparator("\n");
+        settings.getFormat().setDelimiter(',');
+        settings.setHeaderExtractionEnabled(true);
     }
 
     /// PROVIDER
     @Override
     public String providerId() {
-        return "CSV";
+        return PROVIDER_ID;
     }
 
     @Override
@@ -79,21 +91,21 @@ public class CSVHistoricalDataStore implements DataStore, HistoricalDataProvider
     /// DATASTORE
     @Override
     public void onBar(Bar bar) {
-        SubscriptionKey key = createSubscriptionKey(bar);
+        SubscriptionKey key = createSubscriptionKey(PROVIDER_ID, bar);
         CsvWriter writer = getOrCreateCsvWriter(key);
         writer.writeRow(bar.dateTime, bar.open, bar.high, bar.low, bar.close, bar.volume, bar.openInt);
     }
 
     @Override
     public void onQuote(Quote quote) {
-        SubscriptionKey key = createSubscriptionKey(quote);
+        SubscriptionKey key = createSubscriptionKey(PROVIDER_ID, quote);
         CsvWriter writer = getOrCreateCsvWriter(key);
         writer.writeRow(quote.dateTime, quote.bid, quote.ask, quote.bidSize, quote.askSize);
     }
 
     @Override
     public void onTrade(Trade trade) {
-        SubscriptionKey key = createSubscriptionKey(trade);
+        SubscriptionKey key = createSubscriptionKey(PROVIDER_ID, trade);
         CsvWriter writer = getOrCreateCsvWriter(key);
         writer.writeRow(trade.dateTime, trade.price, trade.size);
     }
@@ -137,40 +149,144 @@ public class CSVHistoricalDataStore implements DataStore, HistoricalDataProvider
         }
     }
 
-    @Override
-    public void subscribe(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate) {
-        CsvParserSettings settings = new CsvParserSettings();
-
-        settings.getFormat().setLineSeparator("\n");
-        settings.getFormat().setDelimiter(',');
-        settings.setHeaderExtractionEnabled(true);
-
+    private Reader getReader(HistoricalSubscriptionKey subscriptionKey) {
         try {
-            long fromDateTime = fromDate.getTime();
-            long toDateTime = toDate.getTime();
-            CsvParser parser = new CsvParser(settings);
 
             Instrument instrument = refDataStore.getInstrument(subscriptionKey.instId);
-            Reader reader = new FileReader(path+CSVConfig.getFileName(subscriptionKey, instrument.getSymbol()));
+            return new FileReader(path + CSVConfig.getFileName(subscriptionKey, instrument.getSymbol()));
 
-            switch (subscriptionKey.type) {
-                case Bar:
-                    publishBar(eventBus, subscriptionKey, parser, reader, fromDateTime, toDateTime);
-                    break;
-
-                case Trade:
-                    publishTrade(eventBus, subscriptionKey, parser, reader, fromDateTime, toDateTime);
-                    break;
-
-                case Quote:
-                    publishQuote(eventBus, subscriptionKey, parser, reader, fromDateTime, toDateTime);
-                    break;
-            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        catch(Exception e){
-            e.printStackTrace();
+
+    }
+
+    @Override
+    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
+
+        long fromDateTime = subscriptionKey.fromDate;
+        long toDateTime = subscriptionKey.toDate;
+        CsvParser parser = new CsvParser(settings);
+
+        Reader reader = getReader(subscriptionKey);
+
+        switch (subscriptionKey.type) {
+            case Bar:
+                publishBar(subscriber.marketDataEventBus, subscriptionKey, parser, reader, fromDateTime, toDateTime);
+                break;
+
+            case Trade:
+                publishTrade(subscriber.marketDataEventBus, subscriptionKey, parser, reader, fromDateTime, toDateTime);
+                break;
+
+            case Quote:
+                publishQuote(subscriber.marketDataEventBus, subscriptionKey, parser, reader, fromDateTime, toDateTime);
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public List<MarketDataContainer> loadHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
+        long fromDateTime = subscriptionKey.fromDate;
+        long toDateTime = subscriptionKey.toDate;
+        CsvParser parser = new CsvParser(settings);
+
+        Reader reader = getReader(subscriptionKey);
+
+        List<MarketDataContainer> result = Lists.newArrayList();
+        switch (subscriptionKey.type) {
+            case Bar:
+                result = loadBar(subscriptionKey, parser, reader, fromDateTime, toDateTime);
+                break;
+
+            case Trade:
+                result = loadTrade(subscriptionKey, parser, reader, fromDateTime, toDateTime);
+                break;
+
+            case Quote:
+                result = loadQuote(subscriptionKey, parser, reader, fromDateTime, toDateTime);
+                break;
+        }
+        return result;
+    }
+
+    private List<MarketDataContainer> loadBar(HistoricalSubscriptionKey subscriptionKey, CsvParser parser, Reader reader, long fromDateTime, long toDateTime){
+
+        try {
+            List<MarketDataContainer> list = Lists.newArrayList();
+            List<String[]> allRows = parser.parseAll(reader);
+            for (String[] row : allRows) {
+                long time = FORMAT.parse(row[0]).getTime();
+                if (time < fromDateTime)
+                    continue;
+                if (time > toDateTime)
+                    break;
+
+                MarketDataContainer container = new MarketDataContainer();
+                container.setBar(subscriptionKey.instId, subscriptionKey.barSize, time,
+                        Double.parseDouble(row[1]), Double.parseDouble(row[2]), Double.parseDouble(row[3]), Double.parseDouble(row[4]), Long.parseLong(row[5]), 0);
+
+                list.add(container);
+            }
+            return list;
+        }
+        catch (Exception e){
+            throw new RuntimeException(e);
         }
     }
+
+    private List<MarketDataContainer> loadQuote(HistoricalSubscriptionKey subscriptionKey, CsvParser parser, Reader reader, long fromDateTime, long toDateTime){
+
+        try {
+            List<MarketDataContainer> list = Lists.newArrayList();
+            List<String[]> allRows = parser.parseAll(reader);
+            for (String[] row : allRows) {
+                long time = FORMAT.parse(row[0]).getTime();
+                if (time < fromDateTime)
+                    continue;
+                if (time > toDateTime)
+                    break;
+
+                MarketDataContainer container = new MarketDataContainer();
+                container.setQuote(subscriptionKey.instId, time,
+                        Double.parseDouble(row[1]), Double.parseDouble(row[2]), Integer.parseInt(row[3]), Integer.parseInt(row[4]));
+
+                list.add(container);
+            }
+            return list;
+        }
+        catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    private List<MarketDataContainer> loadTrade(HistoricalSubscriptionKey subscriptionKey, CsvParser parser, Reader reader, long fromDateTime, long toDateTime){
+
+        try {
+            List<MarketDataContainer> list = Lists.newArrayList();
+            List<String[]> allRows = parser.parseAll(reader);
+            for (String[] row : allRows) {
+                long time = FORMAT.parse(row[0]).getTime();
+                if (time < fromDateTime)
+                    continue;
+                if (time > toDateTime)
+                    break;
+
+                MarketDataContainer container = new MarketDataContainer();
+                container.setTrade(subscriptionKey.instId, time,
+                        Double.parseDouble(row[1]), Integer.parseInt(row[2]));
+
+                list.add(container);
+            }
+            return list;
+        }
+        catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
 
     protected void publishBar(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, CsvParser parser, Reader reader, long fromDateTime, long toDateTime) {
         try {

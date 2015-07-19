@@ -1,11 +1,13 @@
 package com.unisoft.algotrader.provider.yahoo;
 
 import com.google.common.collect.Lists;
-import com.unisoft.algotrader.model.event.EventBus;
+import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
-import com.unisoft.algotrader.provider.SubscriptionKey;
-import com.unisoft.algotrader.provider.historical.HistoricalDataProvider;
+import com.unisoft.algotrader.provider.data.HistoricalDataProvider;
+import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
+import com.unisoft.algotrader.provider.data.Subscriber;
+import com.unisoft.algotrader.provider.data.SubscriptionKey;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,7 +30,7 @@ import java.util.List;
 
 public class YahooHistoricalDataProvider implements HistoricalDataProvider {
 
-
+    public static final String PROVIDER_ID = "Yahoo";
 
     private static final Logger LOG = LogManager.getLogger(YahooHistoricalDataProvider.class);
 
@@ -39,40 +41,79 @@ public class YahooHistoricalDataProvider implements HistoricalDataProvider {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     private final RefDataStore refDataStore;
+
     public YahooHistoricalDataProvider(RefDataStore refDataStore){
         this.refDataStore = refDataStore;
     }
 
-    @Override
-    public void subscribe(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate) {
-        String url = getURL(subscriptionKey, fromDate, toDate);
+    private List<String> loadData(HistoricalSubscriptionKey subscriptionKey){
+        List<String> data = Lists.newArrayList();
+        String url = getURL(subscriptionKey, subscriptionKey.fromDate, subscriptionKey.toDate);
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new URL(url).openConnection().getInputStream()))) {
             String line;
             String header = bufferedReader.readLine();
             assert YAHOO_CSV_HEADER.equals(header);
 
-            List<String> csvData = Lists.newArrayList();
 
             while ((line = bufferedReader.readLine()) != null) {
-                csvData.add(line);
+                data.add(line);
             }
+        }
+        catch (Exception e){
+            throw new RuntimeException(e);
+        }
+        return data;
+    }
 
+    @Override
+    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
+        List<String> data = loadData(subscriptionKey);
+
+        String line;
+        try {
             //reverse the data, as the yahoo'csv store latest on the top
-            for (int i = csvData.size() -1; i>=0; i--){
-                line = csvData.get(i);
-                String [] tokens = line.split(",");
+            for (int i = data.size() - 1; i >= 0; i--) {
+                line = data.get(i);
+                String[] tokens = line.split(",");
 
-                eventBus.publishBar(subscriptionKey.instId, SubscriptionKey.DAILY_SIZE, DATE_FORMAT.parse(tokens[0]).getTime(),
+                subscriber.marketDataEventBus.publishBar(subscriptionKey.instId, SubscriptionKey.DAILY_SIZE, DATE_FORMAT.parse(tokens[0]).getTime(),
                         Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]), Double.parseDouble(tokens[3]), Double.parseDouble(tokens[4]), Long.parseLong(tokens[5]), 0);
+            }
+        }
+        catch (Exception e){
+            throw new RuntimeException(e);
+        }
+        return true;
+    }
+
+
+    @Override
+    public List<MarketDataContainer> loadHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
+
+        List<String> data = loadData(subscriptionKey);
+        List<MarketDataContainer> list = Lists.newArrayList();
+
+        String line;
+        try {
+            for (int i = data.size() - 1; i >= 0; i--) {
+                line = data.get(i);
+                String[] tokens = line.split(",");
+
+                MarketDataContainer container = new MarketDataContainer();
+                container.setBar(subscriptionKey.instId, SubscriptionKey.DAILY_SIZE, DATE_FORMAT.parse(tokens[0]).getTime(),
+                        Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]), Double.parseDouble(tokens[3]), Double.parseDouble(tokens[4]), Long.parseLong(tokens[5]), 0);
+                list.add(container);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        return list;
     }
+
 
     @Override
     public String providerId() {
-        return "Yahoo";
+        return PROVIDER_ID;
     }
 
     @Override
@@ -81,12 +122,12 @@ public class YahooHistoricalDataProvider implements HistoricalDataProvider {
     }
 
 
-    protected String getURL(SubscriptionKey key, Date fromDate, Date toDate){
+    protected String getURL(SubscriptionKey key, long fromDate, long toDate){
             Calendar fromDateCal = Calendar.getInstance();
-            fromDateCal.setTime(fromDate);
+            fromDateCal.setTime(new Date(fromDate));
 
             Calendar toDateCal = Calendar.getInstance();
-            toDateCal.setTime(toDate);
+            toDateCal.setTime(new Date(toDate));
 
             Instrument instrument = refDataStore.getInstrument(key.instId);
             String url = String.format(URL, instrument.getSymbol(),

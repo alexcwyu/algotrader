@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.provider;
+package com.unisoft.algotrader.provider.data;
 
 import com.unisoft.algotrader.model.event.EventBus;
 /**

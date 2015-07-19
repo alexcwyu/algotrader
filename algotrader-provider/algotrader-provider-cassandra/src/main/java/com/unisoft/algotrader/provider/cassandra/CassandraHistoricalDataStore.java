@@ -2,18 +2,22 @@ package com.unisoft.algotrader.provider.cassandra;
 
 import com.datastax.driver.core.*;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
+import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.event.EventBus;
 import com.unisoft.algotrader.model.event.data.Bar;
+import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
-import com.unisoft.algotrader.provider.DataStore;
-import com.unisoft.algotrader.provider.SubscriptionKey;
-import com.unisoft.algotrader.provider.historical.HistoricalDataProvider;
+import com.unisoft.algotrader.provider.data.DataStoreProvider;
+import com.unisoft.algotrader.provider.data.HistoricalDataProvider;
+import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
+import com.unisoft.algotrader.provider.data.Subscriber;
 import com.unisoft.algotrader.utils.config.CassandraConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.datastax.driver.core.querybuilder.QueryBuilder.*;
@@ -22,7 +26,7 @@ import static com.datastax.driver.core.querybuilder.QueryBuilder.*;
  * Created by alex on 6/18/15.
  */
 //TODO batch insert
-public class CassandraHistoricalDataStore implements DataStore, HistoricalDataProvider {
+public class CassandraHistoricalDataStore implements DataStoreProvider, HistoricalDataProvider {
 
     private static final Logger LOG = LogManager.getLogger(CassandraHistoricalDataStore.class);
 
@@ -38,6 +42,8 @@ public class CassandraHistoricalDataStore implements DataStore, HistoricalDataPr
     private static final String TABLE_TRADE = "trade";
     private static final String TABLE_QUOTE = "quote";
 
+    public static final String PROVIDER_ID = "Cassandra";
+
     private final AtomicBoolean connected = new AtomicBoolean(false);
 
     private final CassandraConfig config;
@@ -52,7 +58,7 @@ public class CassandraHistoricalDataStore implements DataStore, HistoricalDataPr
     /// PROVIDER
     @Override
     public String providerId() {
-        return "Cassandra";
+        return PROVIDER_ID;
     }
 
     @Override
@@ -98,50 +104,118 @@ public class CassandraHistoricalDataStore implements DataStore, HistoricalDataPr
 
     /// PROVIDER
     @Override
-    public void subscribe(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate) {
+    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
         switch (subscriptionKey.type) {
             case Bar:
-                queryBar(eventBus, subscriptionKey, fromDate, toDate);
+                publishBar(subscriptionKey, subscriber.marketDataEventBus);
                 break;
 
             case Trade:
-                queryTrade(eventBus, subscriptionKey, fromDate, toDate);
+                publishTrade(subscriptionKey, subscriber.marketDataEventBus);
                 break;
 
             case Quote:
-                queryQuote(eventBus, subscriptionKey, fromDate, toDate);
+                publishQuote(subscriptionKey, subscriber.marketDataEventBus);
                 break;
         }
+        return true;
     }
 
-    private void queryBar(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate){
-        Statement select = QueryBuilder.select().all().from(config.keyspace, TABLE_BAR)
-                .where(eq(COL_INSTID, subscriptionKey.instId))
-                .and(eq(COL_BARSIZE, subscriptionKey.barSize))
-                .and(gte(COL_DATETIME, fromDate)).and(lt(COL_DATETIME, toDate));
-        ResultSet results = session.execute(select);
+    @Override
+    public List<MarketDataContainer> loadHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
+        List<MarketDataContainer> result = Lists.newArrayList();
+        switch (subscriptionKey.type) {
+            case Bar:
+                result = loadBar(subscriptionKey);
+                break;
+
+            case Trade:
+                result = loadTrade(subscriptionKey);
+                break;
+
+            case Quote:
+                result = loadQuote(subscriptionKey);
+                break;
+        }
+        return result;
+    }
+
+
+    private void publishBar(HistoricalSubscriptionKey subscriptionKey, EventBus.MarketDataEventBus eventBus){
+        ResultSet results = queryBar(subscriptionKey);
         for (Row row : results) {
             eventBus.publishBar(row.getLong(0), row.getInt(1), row.getDate(2).getTime(), row.getDouble(3), row.getDouble(4), row.getDouble(5), row.getDouble(6), row.getLong(7), row.getLong(8));
         }
     }
 
-    private void queryQuote(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate){
-        Statement select = QueryBuilder.select().all().from(config.keyspace, TABLE_QUOTE)
-                .where(eq(COL_INSTID, subscriptionKey.instId))
-                .and(gte(COL_DATETIME, fromDate)).and(lt(COL_DATETIME, toDate));
-        ResultSet results = session.execute(select);
+    private void publishQuote(HistoricalSubscriptionKey subscriptionKey, EventBus.MarketDataEventBus eventBus){
+        ResultSet results = queryQuote(subscriptionKey);
         for (Row row : results) {
             eventBus.publishQuote(row.getLong(0), row.getDate(1).getTime(), row.getDouble(2), row.getDouble(3), row.getInt(4), row.getInt(5));
         }
     }
 
-    private void queryTrade(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, Date fromDate, Date toDate){
-        Statement select = QueryBuilder.select().all().from(config.keyspace, TABLE_TRADE)
-                .where(eq(COL_INSTID, subscriptionKey.instId))
-                .and(gte(COL_DATETIME, fromDate)).and(lt(COL_DATETIME, toDate));
-        ResultSet results = session.execute(select);
+    private void publishTrade(HistoricalSubscriptionKey subscriptionKey, EventBus.MarketDataEventBus eventBus){
+        ResultSet results = queryTrade(subscriptionKey);
         for (Row row : results) {
             eventBus.publishTrade(row.getLong(0), row.getDate(1).getTime(), row.getDouble(2), row.getInt(3));
         }
     }
+
+    private List<MarketDataContainer>  loadBar(HistoricalSubscriptionKey subscriptionKey){
+        ResultSet results = queryBar(subscriptionKey);
+        List<MarketDataContainer> list = Lists.newArrayList();
+        for (Row row : results) {
+            MarketDataContainer container = new MarketDataContainer();
+            container.setBar(row.getLong(0), row.getInt(1), row.getDate(2).getTime(), row.getDouble(3), row.getDouble(4), row.getDouble(5), row.getDouble(6), row.getLong(7), row.getLong(8));
+            list.add(container);
+        }
+        return list;
+    }
+
+    private List<MarketDataContainer>  loadQuote(HistoricalSubscriptionKey subscriptionKey){
+        ResultSet results = queryQuote(subscriptionKey);
+        List<MarketDataContainer> list = Lists.newArrayList();
+        for (Row row : results) {
+            MarketDataContainer container = new MarketDataContainer();
+            container.setQuote(row.getLong(0), row.getDate(1).getTime(), row.getDouble(2), row.getDouble(3), row.getInt(4), row.getInt(5));
+            list.add(container);
+        }
+        return list;
+    }
+
+    private List<MarketDataContainer>  loadTrade(HistoricalSubscriptionKey subscriptionKey){
+        ResultSet results = queryTrade(subscriptionKey);
+        List<MarketDataContainer> list = Lists.newArrayList();
+        for (Row row : results) {
+            MarketDataContainer container = new MarketDataContainer();
+            container.setTrade(row.getLong(0), row.getDate(1).getTime(), row.getDouble(2), row.getInt(3));
+            list.add(container);
+        }
+        return list;
+    }
+
+
+    private ResultSet queryBar(HistoricalSubscriptionKey subscriptionKey){
+        Statement select = QueryBuilder.select().all().from(config.keyspace, TABLE_BAR)
+                .where(eq(COL_INSTID, subscriptionKey.instId))
+                .and(eq(COL_BARSIZE, subscriptionKey.barSize))
+                .and(gte(COL_DATETIME, subscriptionKey.fromDate)).and(lt(COL_DATETIME, subscriptionKey.toDate));
+        return session.execute(select);
+    }
+
+    private ResultSet queryQuote(HistoricalSubscriptionKey subscriptionKey){
+        Statement select = QueryBuilder.select().all().from(config.keyspace, TABLE_QUOTE)
+                .where(eq(COL_INSTID, subscriptionKey.instId))
+                .and(gte(COL_DATETIME, subscriptionKey.fromDate)).and(lt(COL_DATETIME, subscriptionKey.toDate));
+        return session.execute(select);
+    }
+
+    private ResultSet queryTrade(HistoricalSubscriptionKey subscriptionKey){
+        Statement select = QueryBuilder.select().all().from(config.keyspace, TABLE_TRADE)
+                .where(eq(COL_INSTID, subscriptionKey.instId))
+                .and(gte(COL_DATETIME, subscriptionKey.fromDate)).and(lt(COL_DATETIME, subscriptionKey.toDate));
+        return session.execute(select);
+    }
+
 }
