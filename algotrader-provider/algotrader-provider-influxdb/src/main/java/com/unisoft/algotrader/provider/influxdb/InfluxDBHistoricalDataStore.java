@@ -11,22 +11,33 @@ import com.unisoft.algotrader.provider.data.Subscriber;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by alex on 6/19/15.
  */
+@Singleton
 public class InfluxDBHistoricalDataStore implements DataStoreProvider, HistoricalDataProvider {
 
     private static final Logger LOG = LogManager.getLogger(InfluxDBHistoricalDataStore.class);
 
     private AtomicBoolean connected = new AtomicBoolean(false);
 
+    private final InfluxDBConfig config;
+
+    public static final String PROVIDER_ID = "InfluxDB";
+    @Inject
+    public InfluxDBHistoricalDataStore(InfluxDBConfig config){
+        this.config = config;
+    }
+
     /// PROVIDER
     @Override
     public String providerId() {
-        return "InfluxDB";
+        return PROVIDER_ID;
     }
 
     @Override

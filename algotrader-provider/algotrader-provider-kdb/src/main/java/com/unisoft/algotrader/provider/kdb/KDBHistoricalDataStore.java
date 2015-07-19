@@ -14,12 +14,15 @@ import com.unisoft.algotrader.provider.data.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by alex on 6/19/15.
  */
+@Singleton
 public class KDBHistoricalDataStore implements DataStoreProvider, HistoricalDataProvider {
 
     private static final Logger LOG = LogManager.getLogger(KDBHistoricalDataStore.class);
@@ -46,9 +49,10 @@ public class KDBHistoricalDataStore implements DataStoreProvider, HistoricalData
     private final KDBConfig kdbConfig;
     private final QConnection q;
 
+    @Inject
     public KDBHistoricalDataStore(KDBConfig kdbConfig){
         this.kdbConfig = kdbConfig;
-        this.q = new QBasicConnection(kdbConfig.host, kdbConfig.port, kdbConfig.username, kdbConfig.password);
+        this.q = new QBasicConnection(kdbConfig.host, kdbConfig.port, kdbConfig.user, kdbConfig.password);
     }
 
     /// PROVIDER
@@ -356,7 +360,7 @@ public class KDBHistoricalDataStore implements DataStoreProvider, HistoricalData
 
     public static void main(String [] args) throws Exception{
 
-        KDBHistoricalDataStore store = new KDBHistoricalDataStore(new KDBConfig());
+        KDBHistoricalDataStore store = new KDBHistoricalDataStore(new KDBConfig("127.0.0.1", 5000, null, null));
         store.connect();
         long instId =100;
         for (int i = 0 ; i < 10; i ++) {

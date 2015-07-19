@@ -17,20 +17,23 @@ import com.univocity.parsers.csv.CsvParserSettings;
 import com.univocity.parsers.csv.CsvWriter;
 import com.univocity.parsers.csv.CsvWriterSettings;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.unisoft.algotrader.provider.csv.CSVConfig.*;
+import static com.unisoft.algotrader.provider.csv.CSVUtils.*;
 import static com.unisoft.algotrader.provider.data.SubscriptionKey.createSubscriptionKey;
 
 /**
  * Created by alex on 6/16/15.
  */
+@Singleton
 public class CSVHistoricalDataStore implements DataStoreProvider, HistoricalDataProvider{
 
     private AtomicBoolean connected = new AtomicBoolean(false);
-    private final String path;
+    private final CSVConfig config;
     private final Writer writer;
     private final RefDataStore refDataStore;
     public static final String PROVIDER_ID = "CSV";
@@ -44,8 +47,9 @@ public class CSVHistoricalDataStore implements DataStoreProvider, HistoricalData
                         }
                     });
 
-    public CSVHistoricalDataStore(String path, RefDataStore refDataStore){
-        this.path = path;
+    @Inject
+    public CSVHistoricalDataStore(CSVConfig csvConfig, RefDataStore refDataStore){
+        this.config = csvConfig;
         this.writer = null;
         this.refDataStore = refDataStore;
 
@@ -55,7 +59,7 @@ public class CSVHistoricalDataStore implements DataStoreProvider, HistoricalData
 
     protected CSVHistoricalDataStore(Writer writer, RefDataStore refDataStore){
         this.writer = writer;
-        this.path = null;
+        this.config = null;
         this.refDataStore = refDataStore;
         init();
     }
@@ -130,7 +134,7 @@ public class CSVHistoricalDataStore implements DataStoreProvider, HistoricalData
     protected Writer getWriter(SubscriptionKey key) {
         try {
             Instrument instrument = refDataStore.getInstrument(key.instId);
-            return writer != null? writer : new FileWriter(new File(path + File.separator + getFileName(key, instrument.getSymbol())));
+            return writer != null? writer : new FileWriter(new File(config.path + File.separator + getFileName(key, instrument.getSymbol())));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -153,7 +157,7 @@ public class CSVHistoricalDataStore implements DataStoreProvider, HistoricalData
         try {
 
             Instrument instrument = refDataStore.getInstrument(subscriptionKey.instId);
-            return new FileReader(path + CSVConfig.getFileName(subscriptionKey, instrument.getSymbol()));
+            return new FileReader(config.path + CSVUtils.getFileName(subscriptionKey, instrument.getSymbol()));
 
         } catch (Exception e) {
             throw new RuntimeException(e);

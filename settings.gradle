@@ -16,4 +16,5 @@ include 'algotrader-provider:algotrader-provider-simulator'
 include 'algotrader-persistence:algotrader-persistence-cassandra'
 include 'algotrader-persistence:algotrader-persistence-common'
 include 'algotrader-sample'
+include 'algotrader-service'
 

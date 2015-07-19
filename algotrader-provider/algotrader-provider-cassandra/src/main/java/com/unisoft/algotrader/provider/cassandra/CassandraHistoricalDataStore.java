@@ -12,10 +12,11 @@ import com.unisoft.algotrader.provider.data.DataStoreProvider;
 import com.unisoft.algotrader.provider.data.HistoricalDataProvider;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
 import com.unisoft.algotrader.provider.data.Subscriber;
-import com.unisoft.algotrader.utils.config.CassandraConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -26,6 +27,7 @@ import static com.datastax.driver.core.querybuilder.QueryBuilder.*;
  * Created by alex on 6/18/15.
  */
 //TODO batch insert
+@Singleton
 public class CassandraHistoricalDataStore implements DataStoreProvider, HistoricalDataProvider {
 
     private static final Logger LOG = LogManager.getLogger(CassandraHistoricalDataStore.class);
@@ -46,11 +48,12 @@ public class CassandraHistoricalDataStore implements DataStoreProvider, Historic
 
     private final AtomicBoolean connected = new AtomicBoolean(false);
 
-    private final CassandraConfig config;
+    private final CassandraHistoricalDataStoreConfig config;
     private Cluster cluster;
     private Session session;
 
-    public CassandraHistoricalDataStore(CassandraConfig config){
+    @Inject
+    public CassandraHistoricalDataStore(CassandraHistoricalDataStoreConfig config){
         this.config = config;
         this.cluster = Cluster.builder().addContactPoint(config.host).build();
     }

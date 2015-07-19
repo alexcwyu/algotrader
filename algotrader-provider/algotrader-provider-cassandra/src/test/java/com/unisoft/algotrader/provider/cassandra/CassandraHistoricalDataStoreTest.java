@@ -1,7 +1,6 @@
 package com.unisoft.algotrader.provider.cassandra;
 
 import com.unisoft.algotrader.model.event.data.Bar;
-import com.unisoft.algotrader.utils.config.CassandraConfig;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,7 +17,7 @@ public class CassandraHistoricalDataStoreTest {
 
     @BeforeClass
     public static void init(){
-        cassandraHistoricalDataStore = new CassandraHistoricalDataStore(new CassandraConfig());
+        cassandraHistoricalDataStore = new CassandraHistoricalDataStore(new CassandraHistoricalDataStoreConfig("127.0.0.1", 0, "marketdata", null, null));
         cassandraHistoricalDataStore.connect();
     }
 

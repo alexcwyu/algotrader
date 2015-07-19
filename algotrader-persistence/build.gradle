@@ -3,5 +3,6 @@ subprojects {
     dependencies {
         compile project(':algotrader-common')
         compile project(':algotrader-model')
+        compile 'com.google.code.findbugs:jsr305:3.0.0'
     }
 }

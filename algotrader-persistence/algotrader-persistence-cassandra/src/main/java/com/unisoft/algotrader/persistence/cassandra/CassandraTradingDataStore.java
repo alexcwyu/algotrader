@@ -15,11 +15,14 @@ import com.unisoft.algotrader.persistence.cassandra.accessor.ExecutionReportAcce
 import com.unisoft.algotrader.persistence.cassandra.accessor.OrderAccessor;
 import com.unisoft.algotrader.persistence.cassandra.accessor.PortfolioAccessor;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 
 /**
  * Created by alex on 7/7/15.
  */
+@Singleton
 public class CassandraTradingDataStore implements TradingDataStore {
     private Cluster cluster;
     private Session session;
@@ -30,6 +33,11 @@ public class CassandraTradingDataStore implements TradingDataStore {
     private ExecutionReportAccessor executionReportAccessor;
     private OrderAccessor orderAccessor;
     private CassandraIdSupplier idSupplier;
+
+    @Inject
+    public CassandraTradingDataStore(CassandraTradingDataStoreConfig config) {
+        this(Cluster.builder().withProtocolVersion(ProtocolVersion.V3).addContactPoint(config.host).build(), config.keyspace);
+    }
 
     public CassandraTradingDataStore() {
         this(Cluster.builder().withProtocolVersion(ProtocolVersion.V3).addContactPoint("localhost").build(), "trading");

@@ -11,6 +11,8 @@ import com.unisoft.algotrader.provider.data.SubscriptionKey;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -27,7 +29,7 @@ import java.util.List;
  * https://www.bigmiketrading.com/brokers-data-feeds/31382-yahoo-finance-historical-daily-data-retrieved-programmatically.html#post403430
  * https://www.quantconnect.com/blog/downloading-yahoo-finance-data-with-c/
  */
-
+@Singleton
 public class YahooHistoricalDataProvider implements HistoricalDataProvider {
 
     public static final String PROVIDER_ID = "Yahoo";
@@ -42,6 +44,7 @@ public class YahooHistoricalDataProvider implements HistoricalDataProvider {
 
     private final RefDataStore refDataStore;
 
+    @Inject
     public YahooHistoricalDataProvider(RefDataStore refDataStore){
         this.refDataStore = refDataStore;
     }

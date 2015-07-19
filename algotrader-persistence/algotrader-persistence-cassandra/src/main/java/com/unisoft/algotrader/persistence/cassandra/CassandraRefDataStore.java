@@ -13,11 +13,14 @@ import com.unisoft.algotrader.persistence.cassandra.accessor.CurrencyAccessor;
 import com.unisoft.algotrader.persistence.cassandra.accessor.ExchangeAccessor;
 import com.unisoft.algotrader.persistence.cassandra.accessor.InstrumentAccessor;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 
 /**
  * Created by alex on 7/7/15.
  */
+@Singleton
 public class CassandraRefDataStore implements RefDataStore {
 
     private Cluster cluster;
@@ -28,6 +31,11 @@ public class CassandraRefDataStore implements RefDataStore {
     private ExchangeAccessor exchangeAccessor;
     private InstrumentAccessor instrumentAccessor;
     private CassandraIdSupplier idSupplier;
+
+    @Inject
+    public CassandraRefDataStore(CassandraRefDataStoreConfig config) {
+        this(Cluster.builder().withProtocolVersion(ProtocolVersion.V3).addContactPoint(config.host).build(), config.keyspace);
+    }
 
     public CassandraRefDataStore() {
         this(Cluster.builder().withProtocolVersion(ProtocolVersion.V3).addContactPoint("localhost").build(), "refdata");

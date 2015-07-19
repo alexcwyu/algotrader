@@ -11,6 +11,8 @@ import com.unisoft.algotrader.provider.data.SubscriptionKey;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -31,6 +33,7 @@ import java.util.List;
  * http://www.networkerror.org/component/content/article/1-technical-wootness/44-googles-undocumented-finance-api.html
  * http://www.marketcalls.in/database/google-realtime-intraday-backfill-data.html
  */
+@Singleton
 public class GoogleHistoricalDataProvider implements HistoricalDataProvider {
 
     public static final String PROVIDER_ID = "Google";
@@ -44,6 +47,7 @@ public class GoogleHistoricalDataProvider implements HistoricalDataProvider {
 
     private final RefDataStore refDataStore;
 
+    @Inject
     public GoogleHistoricalDataProvider(RefDataStore refDataStore){
         this.refDataStore = refDataStore;
     }

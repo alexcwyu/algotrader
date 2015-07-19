@@ -17,6 +17,7 @@ import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrat
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Map;
@@ -51,12 +52,12 @@ public class SimulationExecutor extends MultiEventProcessor implements Execution
     public SimulatorConfig config = new SimulatorConfig();
     private Clock clock;
 
-    public SimulationExecutor(AppConfig config, RingBuffer ... rbs){
+    @Inject
+    public SimulationExecutor(AppConfig config, @Nullable RingBuffer ... rbs){
         this(config.getOrderManager(), config.getInstrumentDataManager(), config.getClock(), (rbs == null || rbs.length ==0) ? new RingBuffer[]{config.getEventBusManager().marketDataRB} : rbs);
     }
 
-    @Inject
-    public SimulationExecutor(OrderManager orderManager, InstrumentDataManager instrumentDataManager, Clock clock, RingBuffer... rbs) {
+    public SimulationExecutor(OrderManager orderManager, InstrumentDataManager instrumentDataManager, Clock clock, @Nullable RingBuffer... rbs) {
         super(new NoWaitStrategy(),  null, rbs);
         this.orderManager = orderManager;
         this.instrumentDataManager = instrumentDataManager;

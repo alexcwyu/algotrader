@@ -5,12 +5,23 @@ import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.provider.data.*;
 import com.unisoft.algotrader.provider.execution.ExecutionProvider;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 
 /**
  * Created by alex on 6/20/15.
  */
+@Singleton
 public class IBProvider implements RealTimeDataProvider, HistoricalDataProvider, ExecutionProvider{
+
+    private final IBConfig config;
+
+    public static final String PROVIDER_ID = "IB";
+    @Inject
+    public IBProvider(IBConfig config){
+        this.config = config;
+    }
 
     @Override
     public boolean subscribeRealTimeData(SubscriptionKey subscriptionKey, Subscriber subscriber){
@@ -56,6 +67,6 @@ public class IBProvider implements RealTimeDataProvider, HistoricalDataProvider,
 
     @Override
     public String providerId() {
-        return null;
+        return PROVIDER_ID;
     }
 }
