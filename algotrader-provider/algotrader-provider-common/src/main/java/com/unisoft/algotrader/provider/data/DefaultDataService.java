@@ -34,9 +34,8 @@ public class DefaultDataService implements DataService {
     public List<MarketDataContainer> loadHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
         HistoricalDataProvider historicalDataProvider = providerManager.getHistoricalDataProvider(subscriptionKey.providerId);
         if (historicalDataProvider != null){
-            // TODO
+            return historicalDataProvider.loadHistoricalData(subscriptionKey);
         }
-
         return null;
     }
 
