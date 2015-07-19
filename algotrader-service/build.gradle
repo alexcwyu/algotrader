@@ -1,0 +1,14 @@
+dependencies {
+    compile project(':algotrader-core')
+    compile project(':algotrader-provider:algotrader-provider-common')
+    compile project(':algotrader-provider:algotrader-provider-cassandra')
+    compile project(':algotrader-provider:algotrader-provider-google')
+    compile project(':algotrader-provider:algotrader-provider-yahoo')
+    compile project(':algotrader-provider:algotrader-provider-csv')
+    compile project(':algotrader-provider:algotrader-provider-ib')
+    compile project(':algotrader-provider:algotrader-provider-kdb')
+    compile project(':algotrader-provider:algotrader-provider-influxdb')
+    compile project(':algotrader-provider:algotrader-provider-simulator')
+    compile project(':algotrader-persistence:algotrader-persistence-common')
+    compile project(':algotrader-persistence:algotrader-persistence-cassandra')
+}
