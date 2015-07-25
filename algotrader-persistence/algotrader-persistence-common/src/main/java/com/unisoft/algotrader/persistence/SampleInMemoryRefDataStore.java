@@ -2,27 +2,79 @@ package com.unisoft.algotrader.persistence;
 
 import com.unisoft.algotrader.model.refdata.Currency;
 
+import javax.inject.Singleton;
+
+import static com.unisoft.algotrader.model.refdata.Currency.*;
+import static com.unisoft.algotrader.model.refdata.Exchange.*;
+
 /**
  * Created by alex on 7/14/15.
  */
+@Singleton
 public class SampleInMemoryRefDataStore extends InMemoryRefDataStore {
     public SampleInMemoryRefDataStore(){
         super();
-        this.saveCurrency(Currency.USD);
-        this.saveCurrency(Currency.HKD);
+        this.saveCurrency(USD);
+        this.saveCurrency(HKD);
 
-        this.saveCurrency(Currency.CNY);
-        this.saveCurrency(Currency.RUR);
-        this.saveCurrency(Currency.AUD);
-        this.saveCurrency(Currency.NZD);
-        this.saveCurrency(Currency.CAD);
+        this.saveCurrency(CNY);
+        this.saveCurrency(RUR);
+        this.saveCurrency(AUD);
+        this.saveCurrency(NZD);
+        this.saveCurrency(CAD);
 
-        this.saveCurrency(Currency.GBP);
-        this.saveCurrency(Currency.EUR);
-        this.saveCurrency(Currency.JPY);
-        this.saveCurrency(Currency.CHF);
-        this.saveCurrency(Currency.SGD);
-        this.saveCurrency(Currency.KRW);
-        this.saveCurrency(Currency.INR);
+        this.saveCurrency(GBP);
+        this.saveCurrency(EUR);
+        this.saveCurrency(JPY);
+        this.saveCurrency(CHF);
+        this.saveCurrency(SGD);
+        this.saveCurrency(KRW);
+        this.saveCurrency(INR);
+
+        this.saveExchange(HKEX);
+        this.saveExchange(HKFE);
+        this.saveExchange(SEHKNTL);
+        this.saveExchange(NSE);
+        this.saveExchange(CHIXJ);
+        this.saveExchange(OSE);
+        this.saveExchange(TSEJ);
+        this.saveExchange(SGX);
+        this.saveExchange(KSE);
+        this.saveExchange(ASX);
+        this.saveExchange(IDEAL);
+        this.saveExchange(IDEALPRO);
+        this.saveExchange(LSE);
+        this.saveExchange(SWX);
+        this.saveExchange(FWB);
+        this.saveExchange(CFE);
+        this.saveExchange(ECBOT);
+        this.saveExchange(CBOE);
+        this.saveExchange(CHX);
+        this.saveExchange(GLOBEX);
+        this.saveExchange(NYBOT);
+        this.saveExchange(ICEUS);
+        this.saveExchange(ISE);
+        this.saveExchange(NASDAQ);
+        this.saveExchange(AMEX);
+        this.saveExchange(ARCA);
+        this.saveExchange(PSE);
+        this.saveExchange(NYMEX);
+        this.saveExchange(NYSE);
+        this.saveExchange(TSE);
+
+        InstrumentFactory instrumentFactory = new InstrumentFactory(this);
+        instrumentFactory.createIndex("HSI", "HSI Index", HKEX.getExchId(), Currency.HKD.getCcyId());
+        instrumentFactory.createFuture("HSIF", "HSI Future", HKFE.getExchId(), Currency.HKD.getCcyId());
+
+        instrumentFactory.createStock("0005.HK", "HSBC HOLDINGS", HKEX.getExchId(), Currency.HKD.getCcyId());
+        instrumentFactory.createStock("0959.HK", "AMAX INT HOLD", HKEX.getExchId(), Currency.HKD.getCcyId());
+        instrumentFactory.createStock("2628.HK", "China Life", HKEX.getExchId(), Currency.HKD.getCcyId());
+
+        instrumentFactory.createStock("AAPL", "Apple Inc.", NASDAQ.getExchId(), Currency.USD.getCcyId());
+        instrumentFactory.createStock("GOOG", "Google Inc.", NASDAQ.getExchId(), Currency.USD.getCcyId());
+        instrumentFactory.createStock("FB", "Facebook, Inc.", NASDAQ.getExchId(), Currency.USD.getCcyId());
+        instrumentFactory.createStock("TSLA", "Tesla Motors, Inc.", NASDAQ.getExchId(), Currency.USD.getCcyId());
+
+        instrumentFactory.createStock("IBM", "International Business Machines Corporation", NYSE.getExchId(), Currency.USD.getCcyId());
     }
 }

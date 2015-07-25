@@ -10,7 +10,7 @@ import java.util.Date;
  */
 public interface CSVUtils {
 
-    public final static SimpleDateFormat FORMAT= new SimpleDateFormat("yyyy-MM-dd");
+    //public final static SimpleDateFormat FORMAT= new SimpleDateFormat("yyyy-MM-dd");
     public final static SimpleDateFormat DATETIME_FORMAT= new SimpleDateFormat("yyyyMMddHHmmssZ");
 
     public final static String BAR_FILENAME_FORMAT = "BAR.%1$s.%2$d.csv";

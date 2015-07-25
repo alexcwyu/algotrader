@@ -4,6 +4,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
+import javax.inject.Singleton;
 import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Exchange;
 import com.unisoft.algotrader.model.refdata.Instrument;
@@ -13,6 +14,7 @@ import java.util.List;
 /**
  * Created by alex on 7/9/15.
  */
+@Singleton
 public class InMemoryRefDataStore implements RefDataStore {
 
     private final RefDataStore delegateDataStore;

@@ -12,6 +12,7 @@ import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.*;
+import com.unisoft.algotrader.utils.DateHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -367,7 +368,7 @@ public class KDBHistoricalDataStore extends AbstractDataStoreProvider{
         store.connect();
         long instId =100;
         for (int i = 0 ; i < 10; i ++) {
-            long time = YYYYMMDD_FORMAT.parse((20000101 + i)+"").getTime();
+            long time = DateHelper.fromYYYYMMDD(20000101 + i).getTime();
             Bar bar = new Bar(instId, 86400, time,88, 98, 86, 92, 20000);
             Quote quote = new Quote(instId, time, 98, 100, 9800, 8800);
             Trade trade = new Trade(instId, time, 99, 8800);

@@ -6,6 +6,7 @@ import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.*;
+import com.unisoft.algotrader.utils.DateHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -147,8 +148,8 @@ public class YahooHistoricalDataProvider extends AbstractHistoricalDataProvider 
         String QUERY = "select * from yahoo.finance.historicaldata where symbol = \"%1$s\" and startDate = \"%2$s\" and endDate = \"%3$s\"";
         String SUFFIX = "&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
 
-        Date startDate = YYYYMMDD_FORMAT.parse("20140401");
-        Date endDate = YYYYMMDD_FORMAT.parse("20140415");
+        Date startDate = DateHelper.fromYYYYMMDD("20140401");
+        Date endDate = DateHelper.fromYYYYMMDD("20140415");
 
         String fromDateStr = URLEncoder.encode(DATE_FORMAT.format(startDate), "UTF-8");
         String toDateStr = URLEncoder.encode(DATE_FORMAT.format(endDate), "UTF-8");

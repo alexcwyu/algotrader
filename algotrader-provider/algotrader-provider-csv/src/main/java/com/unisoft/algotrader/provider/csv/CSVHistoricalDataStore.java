@@ -160,7 +160,7 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
         try {
 
             Instrument instrument = refDataStore.getInstrument(subscriptionKey.instId);
-            return new FileReader(config.path + CSVUtils.getFileName(subscriptionKey, instrument.getSymbol()));
+            return new FileReader(config.path +File.separator+ CSVUtils.getFileName(subscriptionKey, instrument.getSymbol()));
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -224,7 +224,8 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
             List<MarketDataContainer> list = Lists.newArrayList();
             List<String[]> allRows = parser.parseAll(reader);
             for (String[] row : allRows) {
-                long time = FORMAT.parse(row[0]).getTime();
+                //long time = FORMAT.parse(row[0]).getTime();
+                long time = Long.parseLong(row[0]);
                 if (time < fromDateTime)
                     continue;
                 if (time > toDateTime)
@@ -249,7 +250,8 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
             List<MarketDataContainer> list = Lists.newArrayList();
             List<String[]> allRows = parser.parseAll(reader);
             for (String[] row : allRows) {
-                long time = FORMAT.parse(row[0]).getTime();
+                //long time = FORMAT.parse(row[0]).getTime();
+                long time = Long.parseLong(row[0]);
                 if (time < fromDateTime)
                     continue;
                 if (time > toDateTime)
@@ -275,7 +277,8 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
             List<MarketDataContainer> list = Lists.newArrayList();
             List<String[]> allRows = parser.parseAll(reader);
             for (String[] row : allRows) {
-                long time = FORMAT.parse(row[0]).getTime();
+                //long time = FORMAT.parse(row[0]).getTime();
+                long time = Long.parseLong(row[0]);
                 if (time < fromDateTime)
                     continue;
                 if (time > toDateTime)
@@ -300,7 +303,8 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
             parser.beginParsing(reader);
             String[] row;
             while ((row = parser.parseNext()) != null) {
-                long time = FORMAT.parse(row[0]).getTime();
+                //long time = FORMAT.parse(row[0]).getTime();
+                long time = Long.parseLong(row[0]);
                 if (lt(time, fromDateTime)) continue;
                 if (gt(time, toDateTime)) break;
                 eventBus.publishBar(subscriptionKey.instId, subscriptionKey.barSize, time,
@@ -330,7 +334,9 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
             parser.beginParsing(reader);
             String[] row;
             while ((row = parser.parseNext()) != null) {
-                long time = FORMAT.parse(row[0]).getTime();
+                //long time = FORMAT.parse(row[0]).getTime();
+                long time = Long.parseLong(row[0]);
+
                 if (lt(time, fromDateTime)) continue;
                 if (gt(time, toDateTime)) break;
                 eventBus.publishQuote(subscriptionKey.instId, time,
@@ -348,7 +354,9 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
             parser.beginParsing(reader);
             String[] row;
             while ((row = parser.parseNext()) != null) {
-                long time = FORMAT.parse(row[0]).getTime();
+                //long time = FORMAT.parse(row[0]).getTime();
+                long time = Long.parseLong(row[0]);
+
                 if (lt(time, fromDateTime)) continue;
                 if (gt(time, toDateTime)) break;
                 eventBus.publishTrade(subscriptionKey.instId, time,

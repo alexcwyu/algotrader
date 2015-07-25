@@ -43,7 +43,7 @@ public class MultiBufferBatchEventProcessorTest {
             tradeRB,
             ITERATIONS);
 
-    static class MarketMarketDataEventProcessor extends MultiEventProcessor implements MarketDataHandler {
+    static class MarketDataEventProcessor extends MultiEventProcessor implements MarketDataHandler {
 
         private final String name;
         private final long expected;
@@ -55,8 +55,8 @@ public class MultiBufferBatchEventProcessorTest {
         private long tradeCount = 0;
 
 
-        MarketMarketDataEventProcessor(String name, long expected, RingBuffer[] providers,
-                                       SequenceBarrier[] barriers, MultiBufferWaitStrategy waitStrategy){
+        MarketDataEventProcessor(String name, long expected, RingBuffer[] providers,
+                                 SequenceBarrier[] barriers, MultiBufferWaitStrategy waitStrategy){
             super(providers, barriers, null, waitStrategy);
             this.name = name;
             this.expected = expected;
@@ -102,11 +102,11 @@ public class MultiBufferBatchEventProcessorTest {
         }
     }
 
-    MarketMarketDataEventProcessor barQuoteProcessor = new MarketMarketDataEventProcessor("barQuoteProcessor", ITERATIONS *2, new RingBuffer[]{barRB, quoteRB}
+    MarketDataEventProcessor barQuoteProcessor = new MarketDataEventProcessor("barQuoteProcessor", ITERATIONS *2, new RingBuffer[]{barRB, quoteRB}
             , new SequenceBarrier[]{barBarrier, quoteBarrier}, new YieldMultiBufferWaitStrategy());
-    MarketMarketDataEventProcessor barTradeProcessor = new MarketMarketDataEventProcessor("barTradeProcessor", ITERATIONS *2, new RingBuffer[]{barRB, tradeRB}
+    MarketDataEventProcessor barTradeProcessor = new MarketDataEventProcessor("barTradeProcessor", ITERATIONS *2, new RingBuffer[]{barRB, tradeRB}
             , new SequenceBarrier[]{barBarrier, tradeBarrier}, new YieldMultiBufferWaitStrategy());
-    MarketMarketDataEventProcessor quoteTradeProcessor = new MarketMarketDataEventProcessor("quoteTradeProcessor", ITERATIONS *2, new RingBuffer[]{quoteRB, tradeRB}
+    MarketDataEventProcessor quoteTradeProcessor = new MarketDataEventProcessor("quoteTradeProcessor", ITERATIONS *2, new RingBuffer[]{quoteRB, tradeRB}
             , new SequenceBarrier[]{quoteBarrier, tradeBarrier}, new YieldMultiBufferWaitStrategy());
 
     {

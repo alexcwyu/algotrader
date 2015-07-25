@@ -11,7 +11,7 @@ import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.*;
 import com.unisoft.algotrader.persistence.InMemoryRefDataStore;
 import com.unisoft.algotrader.persistence.SampleInMemoryRefDataStore;
-import com.unisoft.algotrader.refdata.InstrumentFactory;
+import com.unisoft.algotrader.persistence.InstrumentFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Before;
@@ -35,9 +35,9 @@ public class PortfolioProcessorTest {
 
     public static InMemoryRefDataStore REF_DATA_STORE = new SampleInMemoryRefDataStore();
     public static InstrumentFactory INSTRUMEN_FACTORY = new InstrumentFactory(REF_DATA_STORE);
-    private static Instrument instrument1 = INSTRUMEN_FACTORY.createStock("0005.HK", "HKEX", "HKD");
-    private static Instrument instrument2 = INSTRUMEN_FACTORY.createStock("0959.HK", "HKEX", "HKD");
-    private static Instrument instrument3 = INSTRUMEN_FACTORY.createStock("2628.HK", "HKEX", "HKD");
+    private static Instrument instrument1 = INSTRUMEN_FACTORY.createStock("0005.HK", "HSBC", "HKEX", "HKD");
+    private static Instrument instrument2 = INSTRUMEN_FACTORY.createStock("0959.HK", "AMAX", "HKEX", "HKD");
+    private static Instrument instrument3 = INSTRUMEN_FACTORY.createStock("2628.HK", "China Life", "HKEX", "HKD");
 
     private Account account;
     private Portfolio portfolio;

@@ -180,8 +180,8 @@ public class InstrumentRepositoryImpl implements InstrumentRepositoryCustom {
             Instrument instrument = new Instrument(
                     row.getInt(INST_ID),
                     Instrument.InstType.valueOf(row.getString(TYPE)),
-                    row.getString(NAME),
                     row.getString(SYMBOL),
+                    row.getString(NAME),
                     row.getString(EXCH_ID),
                     row.getString(CCY_ID)
             );

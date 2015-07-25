@@ -26,11 +26,11 @@ public class InstrumentRepositoryIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void repositoryStoresAndRetrievesEvents() {
-        Instrument inst1 = new Instrument(1, Instrument.InstType.Stock, "0005.HK", "HKEX", "HKD");
+        Instrument inst1 = new Instrument(1, Instrument.InstType.Stock, "0005.HK", "HSBC", "HKEX", "HKD");
         inst1.addAltSymbol("IB", "1");
         inst1.addAltExchId("IB", "SEHK");
         inst1.addAltExchId("Esignal", "SEHK");
-        Instrument inst2 = new Instrument(2, Instrument.InstType.Stock, "0959.HK", "HKEX", "HKD");
+        Instrument inst2 = new Instrument(2, Instrument.InstType.Stock, "0959.HK", "AMAX", "HKEX", "HKD");
         instrumentRepository.save(ImmutableSet.of(inst1, inst2));
 
         Iterable<Instrument> instruments = instrumentRepository.findAll();
@@ -41,8 +41,8 @@ public class InstrumentRepositoryIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void repositoryDeletesStoredEvents() {
-        Instrument inst1 = new Instrument(1, Instrument.InstType.Stock, "0005.HK", "HKEX", "HKD");
-        Instrument inst2 = new Instrument(2, Instrument.InstType.Stock, "0959.HK", "HKEX", "HKD");
+        Instrument inst1 = new Instrument(1, Instrument.InstType.Stock, "0005.HK", "HSBC", "HKEX", "HKD");
+        Instrument inst2 = new Instrument(2, Instrument.InstType.Stock, "0959.HK", "AMAX", "HKEX", "HKD");
         instrumentRepository.save(ImmutableSet.of(inst1, inst2));
 
         instrumentRepository.delete(inst1);
@@ -66,7 +66,7 @@ public class InstrumentRepositoryIntegrationTest extends BaseIntegrationTest {
 //        UserType instIDUDT = session.getCluster().getMetadata().getKeyspace("refdata").getUserType("inst_id");
 //        UserType instClassificationUDT = session.getCluster().getMetadata().getKeyspace("refdata").getUserType("inst_classification");
 
-        Instrument inst1 = new Instrument(1, Instrument.InstType.Stock, "0005.HK", "HKEX", "HKD");
+        Instrument inst1 = new Instrument(1, Instrument.InstType.Stock, "0005.HK", "HSBC", "HKEX", "HKD");
         inst1.addAltSymbol("IB", "1");
         inst1.addAltExchId("IB", "SEHK");
         inst1.addAltExchId("Esignal", "SEHK");

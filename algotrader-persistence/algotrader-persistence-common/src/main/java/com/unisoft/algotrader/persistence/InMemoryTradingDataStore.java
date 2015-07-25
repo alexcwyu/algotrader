@@ -4,6 +4,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
+import javax.inject.Singleton;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.trading.Account;
@@ -16,6 +17,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * Created by alex on 7/9/15.
  */
+@Singleton
 public class InMemoryTradingDataStore implements TradingDataStore {
 
     private final TradingDataStore delegateDataStore;

@@ -8,7 +8,7 @@ import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.*;
 import com.unisoft.algotrader.persistence.InMemoryRefDataStore;
-import com.unisoft.algotrader.refdata.InstrumentFactory;
+import com.unisoft.algotrader.persistence.InstrumentFactory;
 
 /**
  * Created by alex on 6/6/15.
@@ -21,8 +21,8 @@ public class SampleEventFactory {
     public static String MOCK_STRATEGY_ID = "MockStrategy";
     public static InMemoryRefDataStore REF_DATA_STORE = new InMemoryRefDataStore();
     public static InstrumentFactory INSTRUMEN_FACTORY = new InstrumentFactory(REF_DATA_STORE);
-    public static Instrument TEST_HKD_INSTRUMENT = INSTRUMEN_FACTORY.createStock("testInst1","testExch1","HKD");
-    public static Instrument TEST_USD_INSTRUMENT = INSTRUMEN_FACTORY.createStock("testInst2","testExch2","USD");
+    public static Instrument TEST_HKD_INSTRUMENT = INSTRUMEN_FACTORY.createStock("testInst1", "testInst1", "testExch1","HKD");
+    public static Instrument TEST_USD_INSTRUMENT = INSTRUMEN_FACTORY.createStock("testInst2", "testInst2", "testExch2","USD");
 
     public static Order createOrder(long instId, Side side, OrdType type, double qty, double price){
         return createOrder(instId, side, type, qty, price, 0, "Simulated");

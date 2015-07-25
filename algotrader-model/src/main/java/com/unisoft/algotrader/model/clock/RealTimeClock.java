@@ -1,10 +1,13 @@
 package com.unisoft.algotrader.model.clock;
 
+
+import javax.inject.Singleton;
 import java.util.Date;
 
 /**
  * Created by alex on 5/24/15.
  */
+@Singleton
 public class RealTimeClock implements Clock {
     @Override
     public ClockMode getClockMode() {

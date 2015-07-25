@@ -61,16 +61,16 @@ public class Instrument{
     public Instrument(){
     }
 
-    public Instrument(long instId, InstType type, String symbol, String exchId, String ccyId){
-        this(instId, type, symbol, symbol, exchId, ccyId);
-    }
+//    public Instrument(long instId, InstType type, String symbol, String exchId, String ccyId){
+//        this(instId, type, symbol, null, exchId, ccyId);
+//    }
 
-    public Instrument(long instId, InstType type, String name, String symbol, String exchId, String ccyId){
+    public Instrument(long instId, InstType type, String symbol, String name, String exchId, String ccyId){
 
         this.instId = instId;
         this.type = type;
-        this.name = name;
         this.symbol = symbol;
+        this.name = name;
         this.exchId = exchId;
         this.ccyId = ccyId;
     }

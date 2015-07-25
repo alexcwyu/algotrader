@@ -15,6 +15,44 @@ public class Exchange{
     private String exchId;
     private String name;
 
+    public static Exchange HKEX = new Exchange("SEHK", "Hong Kong Stock Exchange");
+    public static Exchange HKFE = new Exchange("HKFE", "Hong Kong Futures Exchange");
+    public static Exchange SEHKNTL = new Exchange("SEHKNTL", "Shanghai-Hong Kong Stock Connect");
+    public static Exchange NSE = new Exchange("NSE", "National Stock Exchange of India");
+
+    public static Exchange CHIXJ = new Exchange("CHIXJ", "CHI-X Japan");
+    public static Exchange OSE = new Exchange("OSE", "Osaka Securities Exchange");
+    public static Exchange TSEJ = new Exchange("TSEJ", "Tokyo Stock Exchange");
+
+    public static Exchange SGX = new Exchange("SGX", "Singapore Exchange");
+    public static Exchange KSE = new Exchange("KSE", "Korea Stock Exchange");
+
+    public static Exchange ASX = new Exchange("ASX", "Australian Stock Exchange");
+
+    public static Exchange IDEAL = new Exchange("IDEAL", "IDEAL FX");
+    public static Exchange IDEALPRO = new Exchange("IDEALPRO", "IDEALPRO Metals");
+
+    public static Exchange LSE = new Exchange("LSE", "London Stock Exchange");
+    public static Exchange SWX = new Exchange("SWX", "Swiss Exchange");
+    public static Exchange FWB = new Exchange("FWB", "Frankfurt Stock Exchange");
+
+    public static Exchange CFE = new Exchange("CFE", "CBOE Futures Exchange");
+    public static Exchange ECBOT = new Exchange("ECBOT", "CBOT");
+    public static Exchange CBOE = new Exchange("CBOE", "Chicago Board Options Exchange");
+    public static Exchange CHX = new Exchange("CHX", "Chicago Stock Exchange");
+    public static Exchange GLOBEX = new Exchange("GLOBEX", "CME");
+    public static Exchange NYBOT = new Exchange("NYBOT", "ICE Futures U.S.");
+    public static Exchange ICEUS = new Exchange("ICEUS", "ICE Futures US");
+    public static Exchange ISE = new Exchange("ISE", "ISE Options Exchange");
+    public static Exchange NASDAQ = new Exchange("NASDAQ", "NASDAQ");
+    public static Exchange AMEX = new Exchange("AMEX", "NYSE Amex");
+    public static Exchange ARCA = new Exchange("ARCA", "NYSE Arca");
+    public static Exchange PSE = new Exchange("PSE", "NYSE Arca");
+    public static Exchange NYMEX = new Exchange("NYMEX", "New York Mercantile Exchange");
+    public static Exchange NYSE = new Exchange("NYSE", "New York Stock Exchange");
+
+    public static Exchange TSE = new Exchange("TSE", "Toronto Stock Exchange");
+
     public Exchange(){
     }
 

@@ -90,7 +90,7 @@ public class ModelSerializationTest {
 
     @Test
     public void testSerializeInstrument()throws Exception{
-        Instrument inst1 = new Instrument(1, Instrument.InstType.Stock, "0005.HK", "HKEX", "HKD");
+        Instrument inst1 = new Instrument(1, Instrument.InstType.Stock, "0005.HK", "HSBC", "HKEX", "HKD");
         inst1.addAltSymbol("IB", "1");
         inst1.addAltExchId("IB", "SEHK");
         inst1.addAltExchId("Esignal", "SEHK");
