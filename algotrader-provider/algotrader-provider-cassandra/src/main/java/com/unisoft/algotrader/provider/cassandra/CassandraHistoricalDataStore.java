@@ -8,10 +8,8 @@ import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
-import com.unisoft.algotrader.provider.data.DataStoreProvider;
-import com.unisoft.algotrader.provider.data.HistoricalDataProvider;
-import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
-import com.unisoft.algotrader.provider.data.Subscriber;
+import com.unisoft.algotrader.provider.ProviderManager;
+import com.unisoft.algotrader.provider.data.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,7 +26,7 @@ import static com.datastax.driver.core.querybuilder.QueryBuilder.*;
  */
 //TODO batch insert
 @Singleton
-public class CassandraHistoricalDataStore implements DataStoreProvider, HistoricalDataProvider {
+public class CassandraHistoricalDataStore extends AbstractDataStoreProvider {
 
     private static final Logger LOG = LogManager.getLogger(CassandraHistoricalDataStore.class);
 
@@ -53,7 +51,8 @@ public class CassandraHistoricalDataStore implements DataStoreProvider, Historic
     private Session session;
 
     @Inject
-    public CassandraHistoricalDataStore(CassandraHistoricalDataStoreConfig config){
+    public CassandraHistoricalDataStore(ProviderManager providerManager, CassandraHistoricalDataStoreConfig config){
+        super(providerManager);
         this.config = config;
         this.cluster = Cluster.builder().addContactPoint(config.host).build();
     }

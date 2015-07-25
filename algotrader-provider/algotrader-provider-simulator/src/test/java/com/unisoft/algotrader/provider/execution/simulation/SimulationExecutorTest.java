@@ -48,13 +48,12 @@ public class SimulationExecutorTest {
         eventBusManager = new EventBusManager();
         orderManager = spy(new OrderManager(providerManager, strategyManager, eventBusManager));
         instrumentDataManager = new InstrumentDataManager(eventBusManager.marketDataRB);
-        simulationExecutor = new SimulationExecutor(orderManager, instrumentDataManager, new SimulationClock(), rb);
+        simulationExecutor = new SimulationExecutor(providerManager, orderManager, instrumentDataManager, new SimulationClock(), rb);
         simulationExecutor.config.fillOnBar = true;
         simulationExecutor.config.fillOnQuote = true;
         simulationExecutor.config.fillOnTrade = true;
         simulationExecutor.config.fillOnBarMode = SimulatorConfig.FillOnBarMode.LastBarClose;
 
-        providerManager.addExecutionProvider(simulationExecutor);
         instrumentDataManager.clear();
     }
 

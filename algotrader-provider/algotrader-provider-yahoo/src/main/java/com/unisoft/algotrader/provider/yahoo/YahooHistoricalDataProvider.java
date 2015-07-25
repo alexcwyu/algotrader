@@ -4,10 +4,8 @@ import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
-import com.unisoft.algotrader.provider.data.HistoricalDataProvider;
-import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
-import com.unisoft.algotrader.provider.data.Subscriber;
-import com.unisoft.algotrader.provider.data.SubscriptionKey;
+import com.unisoft.algotrader.provider.ProviderManager;
+import com.unisoft.algotrader.provider.data.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,7 +28,7 @@ import java.util.List;
  * https://www.quantconnect.com/blog/downloading-yahoo-finance-data-with-c/
  */
 @Singleton
-public class YahooHistoricalDataProvider implements HistoricalDataProvider {
+public class YahooHistoricalDataProvider extends AbstractHistoricalDataProvider {
 
     public static final String PROVIDER_ID = "Yahoo";
 
@@ -45,7 +43,8 @@ public class YahooHistoricalDataProvider implements HistoricalDataProvider {
     private final RefDataStore refDataStore;
 
     @Inject
-    public YahooHistoricalDataProvider(RefDataStore refDataStore){
+    public YahooHistoricalDataProvider(ProviderManager providerManager, RefDataStore refDataStore){
+        super(providerManager);
         this.refDataStore = refDataStore;
     }
 

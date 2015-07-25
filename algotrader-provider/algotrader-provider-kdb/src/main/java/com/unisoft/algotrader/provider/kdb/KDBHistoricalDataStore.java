@@ -10,6 +10,7 @@ import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
+import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created by alex on 6/19/15.
  */
 @Singleton
-public class KDBHistoricalDataStore implements DataStoreProvider, HistoricalDataProvider {
+public class KDBHistoricalDataStore extends AbstractDataStoreProvider{
 
     private static final Logger LOG = LogManager.getLogger(KDBHistoricalDataStore.class);
 
@@ -50,7 +51,8 @@ public class KDBHistoricalDataStore implements DataStoreProvider, HistoricalData
     private final QConnection q;
 
     @Inject
-    public KDBHistoricalDataStore(KDBConfig kdbConfig){
+    public KDBHistoricalDataStore(ProviderManager providerManager, KDBConfig kdbConfig){
+        super(providerManager);
         this.kdbConfig = kdbConfig;
         this.q = new QBasicConnection(kdbConfig.host, kdbConfig.port, kdbConfig.user, kdbConfig.password);
     }
@@ -360,7 +362,8 @@ public class KDBHistoricalDataStore implements DataStoreProvider, HistoricalData
 
     public static void main(String [] args) throws Exception{
 
-        KDBHistoricalDataStore store = new KDBHistoricalDataStore(new KDBConfig("127.0.0.1", 5000, null, null));
+        ProviderManager providerManager = new ProviderManager();
+        KDBHistoricalDataStore store = new KDBHistoricalDataStore(providerManager, new KDBConfig("127.0.0.1", 5000, null, null));
         store.connect();
         long instId =100;
         for (int i = 0 ; i < 10; i ++) {

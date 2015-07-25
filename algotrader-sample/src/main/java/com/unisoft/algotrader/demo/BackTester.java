@@ -83,7 +83,7 @@ public class BackTester {
         this.strategy.setPortfolio(portfolio);
         strategyManager.register(strategy);
 
-        this.simulationExecutor = new SimulationExecutor(orderManager, new InstrumentDataManager(eventBusManager.marketDataRB), new SimulationClock(), eventBusManager.marketDataRB);
+        this.simulationExecutor = new SimulationExecutor(providerManager, orderManager, new InstrumentDataManager(eventBusManager.marketDataRB), new SimulationClock(), eventBusManager.marketDataRB);
         providerManager.addExecutionProvider(simulationExecutor);
 
         this.barFactory = new BarFactory(eventBusManager.rawMarketDataRB, eventBusManager.marketDataRB);

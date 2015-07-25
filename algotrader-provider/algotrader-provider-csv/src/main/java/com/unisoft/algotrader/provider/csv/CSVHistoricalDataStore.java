@@ -11,6 +11,7 @@ import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
+import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.*;
 import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
@@ -30,7 +31,7 @@ import static com.unisoft.algotrader.provider.data.SubscriptionKey.createSubscri
  * Created by alex on 6/16/15.
  */
 @Singleton
-public class CSVHistoricalDataStore implements DataStoreProvider, HistoricalDataProvider{
+public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
 
     private AtomicBoolean connected = new AtomicBoolean(false);
     private final CSVConfig config;
@@ -48,7 +49,8 @@ public class CSVHistoricalDataStore implements DataStoreProvider, HistoricalData
                     });
 
     @Inject
-    public CSVHistoricalDataStore(CSVConfig csvConfig, RefDataStore refDataStore){
+    public CSVHistoricalDataStore(ProviderManager providerManager, CSVConfig csvConfig, RefDataStore refDataStore){
+        super(providerManager);
         this.config = csvConfig;
         this.writer = null;
         this.refDataStore = refDataStore;
@@ -57,7 +59,8 @@ public class CSVHistoricalDataStore implements DataStoreProvider, HistoricalData
 
     }
 
-    protected CSVHistoricalDataStore(Writer writer, RefDataStore refDataStore){
+    protected CSVHistoricalDataStore(ProviderManager providerManager, Writer writer, RefDataStore refDataStore){
+        super(providerManager);
         this.writer = writer;
         this.config = null;
         this.refDataStore = refDataStore;

@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.config;
 
 import com.unisoft.algotrader.model.clock.Clock;
+import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.execution.simulation.SimulationExecutor;
 import com.unisoft.algotrader.trading.InstrumentDataManager;
 import com.unisoft.algotrader.trading.OrderManager;
@@ -13,12 +14,14 @@ import javax.inject.Provider;
  */
 public class SimulationExecutorProvider implements Provider<SimulationExecutor> {
 
+    private ProviderManager providerManager;
     private OrderManager orderManager;
     private InstrumentDataManager instrumentDataManager;
     private Clock clock;
 
     @Inject
-    public SimulationExecutorProvider(OrderManager orderManager, InstrumentDataManager instrumentDataManager, Clock clock){
+    public SimulationExecutorProvider(ProviderManager providerManager, OrderManager orderManager, InstrumentDataManager instrumentDataManager, Clock clock){
+        this.providerManager = providerManager;
         this.orderManager = orderManager;
         this.instrumentDataManager = instrumentDataManager;
         this.clock = clock;
@@ -26,6 +29,6 @@ public class SimulationExecutorProvider implements Provider<SimulationExecutor> 
 
     @Override
     public SimulationExecutor get() {
-        return new SimulationExecutor(orderManager,instrumentDataManager,clock);
+        return new SimulationExecutor(providerManager, orderManager,instrumentDataManager,clock);
     }
 }

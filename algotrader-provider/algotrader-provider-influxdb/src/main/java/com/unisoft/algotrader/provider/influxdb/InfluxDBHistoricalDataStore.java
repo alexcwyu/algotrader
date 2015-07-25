@@ -4,10 +4,8 @@ import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
-import com.unisoft.algotrader.provider.data.DataStoreProvider;
-import com.unisoft.algotrader.provider.data.HistoricalDataProvider;
-import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
-import com.unisoft.algotrader.provider.data.Subscriber;
+import com.unisoft.algotrader.provider.ProviderManager;
+import com.unisoft.algotrader.provider.data.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created by alex on 6/19/15.
  */
 @Singleton
-public class InfluxDBHistoricalDataStore implements DataStoreProvider, HistoricalDataProvider {
+public class InfluxDBHistoricalDataStore extends AbstractDataStoreProvider{
 
     private static final Logger LOG = LogManager.getLogger(InfluxDBHistoricalDataStore.class);
 
@@ -29,8 +27,10 @@ public class InfluxDBHistoricalDataStore implements DataStoreProvider, Historica
     private final InfluxDBConfig config;
 
     public static final String PROVIDER_ID = "InfluxDB";
+
     @Inject
-    public InfluxDBHistoricalDataStore(InfluxDBConfig config){
+    public InfluxDBHistoricalDataStore(ProviderManager providerManager, InfluxDBConfig config){
+        super(providerManager);
         this.config = config;
     }
 

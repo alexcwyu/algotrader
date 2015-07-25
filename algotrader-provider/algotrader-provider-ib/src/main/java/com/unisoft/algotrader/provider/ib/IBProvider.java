@@ -2,6 +2,7 @@ package com.unisoft.algotrader.provider.ib;
 
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.execution.Order;
+import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.*;
 import com.unisoft.algotrader.provider.execution.ExecutionProvider;
 
@@ -19,8 +20,11 @@ public class IBProvider implements RealTimeDataProvider, HistoricalDataProvider,
 
     public static final String PROVIDER_ID = "IB";
     @Inject
-    public IBProvider(IBConfig config){
+    public IBProvider(ProviderManager providerManager, IBConfig config){
         this.config = config;
+        providerManager.addExecutionProvider(this);
+        providerManager.addHistoricalDataProvider(this);
+        providerManager.addRealTimeDataProvider(this);
     }
 
     @Override

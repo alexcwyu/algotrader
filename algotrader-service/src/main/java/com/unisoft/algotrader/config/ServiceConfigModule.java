@@ -22,33 +22,26 @@ public class ServiceConfigModule extends BaseConfigModule {
     protected void configure() {
         super.configure();
         //bind(CSVConfig.class);
-        bind(SimulationExecutor.class).toProvider(SimulationExecutorProvider.class);
-        //bind(ProviderManager.class).toProvider(ProviderManagerProvider.class);
+
+        //DataStoreProvider
+        bind(CassandraHistoricalDataStore.class).asEagerSingleton();
+        bind(CSVHistoricalDataStore.class).asEagerSingleton();
+        bind(KDBHistoricalDataStore.class).asEagerSingleton();
+        bind(InfluxDBHistoricalDataStore.class).asEagerSingleton();
+
+        //ExecutionProvider
+        bind(IBProvider.class).asEagerSingleton();
+        bind(SimulationExecutor.class).toProvider(SimulationExecutorProvider.class).asEagerSingleton();
+
+        //HistoricalDataProvider
+        bind(YahooHistoricalDataProvider.class).asEagerSingleton();
+        bind(GoogleHistoricalDataProvider.class).asEagerSingleton();
     }
 
     public static void main(String [] args){
 
         Injector injector = Guice.createInjector(new AppConfigModule(), new ServiceConfigModule(), new DataServiceConfigModule());
         ProviderManager providerManager = injector.getInstance(ProviderManager.class);
-
-
-        providerManager.addRealTimeDataProvider(injector.getInstance(IBProvider.class));
-
-        providerManager.addDataStoreProvider(injector.getInstance(CassandraHistoricalDataStore.class));
-        providerManager.addDataStoreProvider(injector.getInstance(CSVHistoricalDataStore.class));
-        providerManager.addDataStoreProvider(injector.getInstance(KDBHistoricalDataStore.class));
-        providerManager.addDataStoreProvider(injector.getInstance(InfluxDBHistoricalDataStore.class));
-
-        providerManager.addExecutionProvider(injector.getInstance(IBProvider.class));
-        providerManager.addExecutionProvider(injector.getInstance(SimulationExecutor.class));
-
-        providerManager.addHistoricalDataProvider(injector.getInstance(IBProvider.class));
-        providerManager.addHistoricalDataProvider(injector.getInstance(CassandraHistoricalDataStore.class));
-        providerManager.addHistoricalDataProvider(injector.getInstance(CSVHistoricalDataStore.class));
-        providerManager.addHistoricalDataProvider(injector.getInstance(KDBHistoricalDataStore.class));
-        providerManager.addHistoricalDataProvider(injector.getInstance(InfluxDBHistoricalDataStore.class));
-        providerManager.addHistoricalDataProvider(injector.getInstance(YahooHistoricalDataProvider.class));
-        providerManager.addHistoricalDataProvider(injector.getInstance(GoogleHistoricalDataProvider.class));
 
         System.out.print(providerManager);
 

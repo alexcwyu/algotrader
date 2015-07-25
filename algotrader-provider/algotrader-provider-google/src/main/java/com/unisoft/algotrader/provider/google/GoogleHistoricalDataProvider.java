@@ -4,10 +4,8 @@ import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
-import com.unisoft.algotrader.provider.data.HistoricalDataProvider;
-import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
-import com.unisoft.algotrader.provider.data.Subscriber;
-import com.unisoft.algotrader.provider.data.SubscriptionKey;
+import com.unisoft.algotrader.provider.ProviderManager;
+import com.unisoft.algotrader.provider.data.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,7 +32,7 @@ import java.util.List;
  * http://www.marketcalls.in/database/google-realtime-intraday-backfill-data.html
  */
 @Singleton
-public class GoogleHistoricalDataProvider implements HistoricalDataProvider {
+public class GoogleHistoricalDataProvider extends AbstractHistoricalDataProvider {
 
     public static final String PROVIDER_ID = "Google";
 
@@ -48,7 +46,8 @@ public class GoogleHistoricalDataProvider implements HistoricalDataProvider {
     private final RefDataStore refDataStore;
 
     @Inject
-    public GoogleHistoricalDataProvider(RefDataStore refDataStore){
+    public GoogleHistoricalDataProvider(ProviderManager providerManager, RefDataStore refDataStore){
+        super(providerManager);
         this.refDataStore = refDataStore;
     }
 

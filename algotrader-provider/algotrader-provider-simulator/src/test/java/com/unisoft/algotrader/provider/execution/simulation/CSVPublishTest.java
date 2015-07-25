@@ -9,6 +9,7 @@ import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.Portfolio;
 import com.unisoft.algotrader.persistence.InMemoryTradingDataStore;
 import com.unisoft.algotrader.persistence.TradingDataStore;
+import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.DummyDataProvider;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
 import com.unisoft.algotrader.provider.data.Subscriber;
@@ -58,7 +59,8 @@ public class CSVPublishTest {
         RingBuffer<MarketDataContainer> marketDataRB
                 = RingBuffer.createSingleProducer(MarketDataContainer.FACTORY, 1024, new NoWaitStrategy());
 
-        DummyDataProvider provider = new DummyDataProvider();
+        ProviderManager providerManager = new ProviderManager();
+        DummyDataProvider provider = new DummyDataProvider(providerManager);
 
         Portfolio portfolio = new Portfolio("PID1", TradingDataStore.DEFAULT_ACCOUNT.getAccountId());
         InMemoryTradingDataStore tradingDataStore = new InMemoryTradingDataStore();

@@ -2,6 +2,7 @@ package com.unisoft.algotrader.provider.data;
 
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
+import com.unisoft.algotrader.provider.ProviderManager;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by alex on 5/19/15.
  */
-public class DummyDataProvider implements HistoricalDataProvider {
+public class DummyDataProvider extends AbstractHistoricalDataProvider {
 
     private final static long DAY_TO_MS = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS);
     private final static int DAILY_SIZE = 60 * 60 * 24;
@@ -18,6 +19,10 @@ public class DummyDataProvider implements HistoricalDataProvider {
     public static SimpleDateFormat FORMAT2 = new SimpleDateFormat("yyyyMMdd");
 
     public static final String PROVIDER_ID = "Dummy";
+
+    public DummyDataProvider(ProviderManager providerManager){
+        super(providerManager);
+    }
 
     @Override
     public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {

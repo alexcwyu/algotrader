@@ -9,6 +9,7 @@ import com.unisoft.algotrader.model.event.data.*;
 import com.unisoft.algotrader.model.event.execution.*;
 import com.unisoft.algotrader.model.trading.OrdStatus;
 import com.unisoft.algotrader.model.trading.OrdType;
+import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.execution.ExecutionProvider;
 import com.unisoft.algotrader.trading.InstrumentDataManager;
 import com.unisoft.algotrader.trading.OrderManager;
@@ -54,11 +55,12 @@ public class SimulationExecutor extends MultiEventProcessor implements Execution
 
     @Inject
     public SimulationExecutor(AppConfig config, @Nullable RingBuffer ... rbs){
-        this(config.getOrderManager(), config.getInstrumentDataManager(), config.getClock(), (rbs == null || rbs.length ==0) ? new RingBuffer[]{config.getEventBusManager().marketDataRB} : rbs);
+        this(config.getProviderManager(), config.getOrderManager(), config.getInstrumentDataManager(), config.getClock(), (rbs == null || rbs.length ==0) ? new RingBuffer[]{config.getEventBusManager().marketDataRB} : rbs);
     }
 
-    public SimulationExecutor(OrderManager orderManager, InstrumentDataManager instrumentDataManager, Clock clock, @Nullable RingBuffer... rbs) {
-        super(new NoWaitStrategy(),  null, rbs);
+    public SimulationExecutor(ProviderManager providerManager, OrderManager orderManager, InstrumentDataManager instrumentDataManager, Clock clock, @Nullable RingBuffer... rbs) {
+        super(new NoWaitStrategy(), null, rbs);
+
         this.orderManager = orderManager;
         this.instrumentDataManager = instrumentDataManager;
         this.clock = clock;
@@ -71,6 +73,7 @@ public class SimulationExecutor extends MultiEventProcessor implements Execution
         this.stopOrderHandler = new StopOrderHandler(config, this);
         this.trailingStopOrderHandler = new TrailingStopOrderHandler(config, this);
 
+        providerManager.addExecutionProvider(this);
     }
 
     @Override

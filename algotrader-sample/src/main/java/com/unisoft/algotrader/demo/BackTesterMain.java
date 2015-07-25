@@ -29,7 +29,7 @@ public class BackTesterMain {
         Injector injector = Guice.createInjector(new AppConfigModule());
         AppConfig appConfig = injector.getInstance(AppConfig.class);
 
-        DummyDataProvider provider = new DummyDataProvider();
+        DummyDataProvider provider = new DummyDataProvider(appConfig.getProviderManager());
 
         CountDownLatch latch = new CountDownLatch(1);
         Strategy strategy = new CountDownStrategy(appConfig.getOrderManager(), "Sid", appConfig.getTradingDataStore(), latch, 20, appConfig.getEventBusManager().marketDataRB);
