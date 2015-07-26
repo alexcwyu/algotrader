@@ -9,7 +9,6 @@ import com.unisoft.algotrader.config.ServiceConfigModule;
 import com.unisoft.algotrader.event.EventBusManager;
 import com.unisoft.algotrader.event.RingBufferMarketDataEventBus;
 import com.unisoft.algotrader.model.event.Event;
-import com.unisoft.algotrader.model.event.EventBus;
 import com.unisoft.algotrader.model.event.data.*;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;

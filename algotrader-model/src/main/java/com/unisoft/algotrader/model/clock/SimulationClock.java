@@ -1,7 +1,6 @@
 package com.unisoft.algotrader.model.clock;
 
 import javax.inject.Singleton;
-
 import java.util.Date;
 
 /**

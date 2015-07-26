@@ -2,7 +2,6 @@ package com.unisoft.algotrader.provider.data;
 
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
