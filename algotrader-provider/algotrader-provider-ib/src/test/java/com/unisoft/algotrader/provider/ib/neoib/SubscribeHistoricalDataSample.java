@@ -4,6 +4,7 @@ import ch.aonyx.broker.ib.api.NeoIbApiClient;
 import ch.aonyx.broker.ib.api.contract.Contract;
 import ch.aonyx.broker.ib.api.data.historical.*;
 import ch.aonyx.broker.ib.api.net.ConnectionParameters;
+import ch.aonyx.broker.ib.api.util.StringIdUtils;
 import com.unisoft.algotrader.provider.ib.neoib.listener.MyHistoricalDataEventListEventListener;
 import com.unisoft.algotrader.provider.ib.neoib.listener.MyHistoricalDataEventListener;
 
@@ -22,6 +23,7 @@ public class SubscribeHistoricalDataSample {
         connectionCallback.registerListener(new MyHistoricalDataEventListEventListener());
 
         Contract contract = ContractUtil.getStockContract("2800", "SEHK", "HKD");
+        String subId = StringIdUtils.uniqueIdFromContract(contract);
         String date = "20150601 00:00:00";
 
         subscribe(connectionCallback, contract, date);
@@ -33,7 +35,15 @@ public class SubscribeHistoricalDataSample {
 
         subscribe(connectionCallback, contract2, date2);
 
+        Thread.sleep(5000);
 
+        Contract contract3= ContractUtil.getStockContract("5", "SEHK", "HKD");
+        String date3 = "20150701 00:00:00";
+
+        subscribe(connectionCallback, contract3, date3);
+
+
+        Thread.sleep(5000);
     }
 
     private static void subscribe(MyConnectionCallback connectionCallback, Contract contract, String date) {

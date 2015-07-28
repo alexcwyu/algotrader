@@ -1,9 +1,14 @@
 package com.unisoft.algotrader.provider.ib;
 
 import ch.aonyx.broker.ib.api.*;
+import ch.aonyx.broker.ib.api.data.bar.RealTimeBarSubscriptionRequest;
+import ch.aonyx.broker.ib.api.data.historical.HistoricalDataSubscriptionRequest;
 import ch.aonyx.broker.ib.api.net.ConnectionCallback;
 import ch.aonyx.broker.ib.api.net.ConnectionException;
 import ch.aonyx.broker.ib.api.net.ConnectionParameters;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.unisoft.algotrader.model.event.EventBus;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.persistence.RefDataStore;
@@ -19,6 +24,8 @@ import org.apache.logging.log4j.Logger;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by alex on 6/20/15.
@@ -32,15 +39,20 @@ public class IBProvider implements RealTimeDataProvider, HistoricalDataProvider,
 
     private final RefDataStore refDataStore;
     private final IBConfig config;
+    public final EventBus.MarketDataEventBus marketDataEventBus;
 
     private ConnectionParameters connectionParameters;
     private NeoIbApiClient apiClient;
     private Session session;
 
+    private Set<SubscriptionKey> subscriptionKeys = Sets.newHashSet();
+    private Map<Id, SubscriptionKey> idSubscriptionMap = Maps.newHashMap();
+
     @Inject
-    public IBProvider(ProviderManager providerManager, RefDataStore refDataStore, IBConfig config){
+    public IBProvider(ProviderManager providerManager, RefDataStore refDataStore, IBConfig config, EventBus.MarketDataEventBus marketDataEventBus){
         this.refDataStore = refDataStore;
         this.config = config;
+        this.marketDataEventBus = marketDataEventBus;
         providerManager.addExecutionProvider(this);
         providerManager.addHistoricalDataProvider(this);
         providerManager.addRealTimeDataProvider(this);
@@ -49,9 +61,16 @@ public class IBProvider implements RealTimeDataProvider, HistoricalDataProvider,
 
     }
 
+    public SubscriptionKey getSubscriptionKey(Id id){
+        return idSubscriptionMap.get(id);
+    }
+
     @Override
     public void onSuccess(Session session) {
         this.session = session;
+        session.registerListener(new HistoricalDataListener(this));
+        session.registerListener(new HistoricalDataListListener(this));
+        session.registerListener(new RealTimeBarDataListener(this));
         session.start();
     }
 
@@ -62,45 +81,49 @@ public class IBProvider implements RealTimeDataProvider, HistoricalDataProvider,
 
     @Override
     public boolean subscribeRealTimeData(SubscriptionKey subscriptionKey){
-        return false;
+        subscriptionKeys.add(subscriptionKey);
+
+        RealTimeBarSubscriptionRequest request = IBUtils.createRealTimeBarSubscriptionRequest(subscriptionKey, refDataStore.getInstrument(subscriptionKey.instId));
+
+        idSubscriptionMap.put(request.getId(), subscriptionKey);
+        session.subscribe(request);
+        return true;
     }
 
     @Override
     public boolean unSubscribeRealTimeData(SubscriptionKey subscriptionKey){
-        return false;
+        UnsubscriptionRequest request = IBUtils.createRealTimeBarUnsubscriptionRequest(refDataStore.getInstrument(subscriptionKey.instId));
+        session.unsubscribe(request);
+        subscriptionKeys.remove(subscriptionKey);
+        return true;
     }
 
     @Override
     public List<MarketDataContainer> loadHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
-        return false;
+        subscriptionKeys.add(subscriptionKey);
+        HistoricalDataSubscriptionRequest request = IBUtils
+                .createHistoricalDataSubscriptionRequest(subscriptionKey,
+                        refDataStore.getInstrument(subscriptionKey.instId));
+
+        idSubscriptionMap.put(request.getId(), subscriptionKey);
+        session.subscribe(request);
+        return true;
     }
 
     @Override
     public void onOrder(Order order) {
-
+        //session.orderRequest(request);
     }
 
 
     //TODO
     public void request(SimpleRequest request){
         session.request(request);
-    }
-
-    public void orderRequest(OrderRequest request){
-        session.orderRequest(request);
-    }
-
-    public void subscribe(SubscriptionRequest request){
-        session.subscribe(request);
-    }
-
-    public void unsubscribe(UnsubscriptionRequest request){
-        session.unsubscribe(request);
     }
 
     public <E extends Event> void registerListener(EventListener<E> listener){
