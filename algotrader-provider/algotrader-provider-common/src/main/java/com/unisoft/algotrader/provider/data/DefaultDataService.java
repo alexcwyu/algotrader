@@ -1,14 +1,12 @@
 package com.unisoft.algotrader.provider.data;
 
-import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.provider.ProviderManager;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -23,7 +21,7 @@ public class DefaultDataService implements DataService {
 
     private Lock lock = new ReentrantLock();
 
-    private Map<SubscriptionKey, Set<Subscriber>> subscriptions = Maps.newHashMap();
+    private Set<SubscriptionKey> subscriptions = Sets.newHashSet();
 
     @Inject
     public DefaultDataService(ProviderManager providerManager){
@@ -40,31 +38,25 @@ public class DefaultDataService implements DataService {
     }
 
     @Override
-    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
+    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
         HistoricalDataProvider historicalDataProvider = providerManager.getHistoricalDataProvider(subscriptionKey.providerId);
         if (historicalDataProvider != null){
-            historicalDataProvider.subscribeHistoricalData(subscriptionKey, subscriber);
+            historicalDataProvider.subscribeHistoricalData(subscriptionKey);
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean subscribeRealTimeData(SubscriptionKey subscriptionKey, Subscriber subscriber) {
+    public boolean subscribeRealTimeData(SubscriptionKey subscriptionKey) {
         lock.lock();
-        try{
-            Set<Subscriber> subscribers = subscriptions.get(subscriptionKey);
-            if (subscribers == null){
-                subscribers = new HashSet<>();
-                subscriptions.put(subscriptionKey, subscribers);
+        try {
+            RealTimeDataProvider provider = providerManager.getRealTimeDataProvider(subscriptionKey.providerId);
+            if (provider != null) {
+                provider.subscribeRealTimeData(subscriptionKey);
+                return true;
             }
-            if(subscribers.add(subscriber)){
-                RealTimeDataProvider provider = providerManager.getRealTimeDataProvider(subscriptionKey.providerId);
-                if (provider != null){
-                    provider.subscribeRealTimeData(subscriptionKey, subscriber);
-                    return true;
-                }
-            }
+
         }
         finally {
             lock.unlock();
@@ -73,19 +65,16 @@ public class DefaultDataService implements DataService {
     }
 
     @Override
-    public boolean unSubscribeRealTimeData(SubscriptionKey subscriptionKey, Subscriber subscriber) {
+    public boolean unSubscribeRealTimeData(SubscriptionKey subscriptionKey) {
         lock.lock();
-        try{
-            Set<Subscriber> subscribers = subscriptions.get(subscriptionKey);
-            if (subscribers != null){
-                if (subscribers.remove(subscriber)){
-                    RealTimeDataProvider provider = providerManager.getRealTimeDataProvider(subscriptionKey.providerId);
-                    if (provider != null){
-                        provider.unSubscribeRealTimeData(subscriptionKey, subscriber);
-                        return true;
-                    }
-                }
+        try {
+
+            RealTimeDataProvider provider = providerManager.getRealTimeDataProvider(subscriptionKey.providerId);
+            if (provider != null) {
+                provider.unSubscribeRealTimeData(subscriptionKey);
+                return true;
             }
+
         }finally {
             lock.unlock();
         }

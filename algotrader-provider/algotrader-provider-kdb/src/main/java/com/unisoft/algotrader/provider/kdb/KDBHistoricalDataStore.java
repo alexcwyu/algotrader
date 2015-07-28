@@ -6,6 +6,7 @@ import com.exxeleron.qjava.QMessage;
 import com.exxeleron.qjava.QTable;
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.event.LogMarketDataEventBus;
+import com.unisoft.algotrader.model.event.EventBus;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
@@ -13,7 +14,6 @@ import com.unisoft.algotrader.model.event.data.Trade;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.AbstractDataStoreProvider;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
-import com.unisoft.algotrader.provider.data.Subscriber;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
 import com.unisoft.algotrader.utils.DateHelper;
 import org.apache.logging.log4j.LogManager;
@@ -52,12 +52,14 @@ public class KDBHistoricalDataStore extends AbstractDataStoreProvider{
     private final AtomicBoolean connected = new AtomicBoolean(false);
 
     private final KDBConfig kdbConfig;
+    private final EventBus.MarketDataEventBus marketDataEventBus;
     private final QConnection q;
 
     @Inject
-    public KDBHistoricalDataStore(ProviderManager providerManager, KDBConfig kdbConfig){
+    public KDBHistoricalDataStore(ProviderManager providerManager, KDBConfig kdbConfig, EventBus.MarketDataEventBus marketDataEventBus){
         super(providerManager);
         this.kdbConfig = kdbConfig;
+        this.marketDataEventBus = marketDataEventBus;
         this.q = new QBasicConnection(kdbConfig.host, kdbConfig.port, kdbConfig.user, kdbConfig.password);
     }
 
@@ -135,18 +137,18 @@ public class KDBHistoricalDataStore extends AbstractDataStoreProvider{
 
     /// PROVIDER
     @Override
-    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
+    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
         switch (subscriptionKey.type) {
             case Bar:
-                publishBar(subscriptionKey, subscriber);
+                publishBar(subscriptionKey);
                 break;
 
             case Trade:
-                publishTrade(subscriptionKey, subscriber);
+                publishTrade(subscriptionKey);
                 break;
 
             case Quote:
-                publishQuote(subscriptionKey, subscriber);
+                publishQuote(subscriptionKey);
                 break;
         }
 
@@ -221,38 +223,37 @@ public class KDBHistoricalDataStore extends AbstractDataStoreProvider{
         return list;
     }
 
-    private void publishBar(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
+    private void publishBar(HistoricalSubscriptionKey subscriptionKey) {
         QTable table = queryBar(subscriptionKey);
         if (table != null) {
             for (int i = 0; i < table.getRowsCount(); i++) {
                 QTable.Row row = table.get(i);
-                subscriber.marketDataEventBus.publishBar((int) row.get(0),
+                marketDataEventBus.publishBar((int) row.get(0),
                         (int) row.get(1), (long) row.get(2), (double) row.get(3), (double) row.get(4),
                         (double) row.get(5), (double) row.get(6), (int) row.get(7), (int) row.get(8));
             }
         }
     }
 
-    private void publishQuote(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
+    private void publishQuote(HistoricalSubscriptionKey subscriptionKey) {
         QTable table = queryQuote(subscriptionKey);
 
         if (table != null) {
             for (int i = 0; i < table.getRowsCount(); i++) {
                 QTable.Row row = table.get(i);
-                subscriber.marketDataEventBus.publishQuote((int) row.get(0),
+                marketDataEventBus.publishQuote((int) row.get(0),
                         (long) row.get(1), (double) row.get(2), (double) row.get(3),
                         (int) row.get(4), (int) row.get(5));
             }
         }
     }
 
-    private void publishTrade(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
+    private void publishTrade(HistoricalSubscriptionKey subscriptionKey) {
         QTable table = queryTrade(subscriptionKey);
         if (table != null) {
             for (int i = 0; i < table.getRowsCount(); i++) {
                 QTable.Row row = table.get(i);
-
-                subscriber.marketDataEventBus.publishTrade((int) row.get(0),
+                marketDataEventBus.publishTrade((int) row.get(0),
                         (long) row.get(1), (double) row.get(2), (int) row.get(3));
             }
         }
@@ -367,7 +368,7 @@ public class KDBHistoricalDataStore extends AbstractDataStoreProvider{
     public static void main(String [] args) throws Exception{
 
         ProviderManager providerManager = new ProviderManager();
-        KDBHistoricalDataStore store = new KDBHistoricalDataStore(providerManager, new KDBConfig("127.0.0.1", 5000, null, null));
+        KDBHistoricalDataStore store = new KDBHistoricalDataStore(providerManager, new KDBConfig("127.0.0.1", 5000, null, null), new LogMarketDataEventBus());
         store.connect();
         long instId =100;
         for (int i = 0 ; i < 10; i ++) {
@@ -381,11 +382,9 @@ public class KDBHistoricalDataStore extends AbstractDataStoreProvider{
             store.onTrade(trade);
         }
 
-        LogMarketDataEventBus logger = new LogMarketDataEventBus();
-        Subscriber subscriber = new Subscriber(logger);
-        store.subscribeHistoricalData(HistoricalSubscriptionKey.createDailySubscriptionKey(PROVIDER_ID, instId, 20000101, 20000112), subscriber);
-        store.subscribeHistoricalData(HistoricalSubscriptionKey.createQuoteSubscriptionKey(PROVIDER_ID, instId, 20000101, 20000112), subscriber);
-        store.subscribeHistoricalData(HistoricalSubscriptionKey.createTradeSubscriptionKey(PROVIDER_ID, instId, 20000101, 20000112), subscriber);
+        store.subscribeHistoricalData(HistoricalSubscriptionKey.createDailySubscriptionKey(PROVIDER_ID, instId, 20000101, 20000112));
+        store.subscribeHistoricalData(HistoricalSubscriptionKey.createQuoteSubscriptionKey(PROVIDER_ID, instId, 20000101, 20000112));
+        store.subscribeHistoricalData(HistoricalSubscriptionKey.createTradeSubscriptionKey(PROVIDER_ID, instId, 20000101, 20000112));
 
     }
 }

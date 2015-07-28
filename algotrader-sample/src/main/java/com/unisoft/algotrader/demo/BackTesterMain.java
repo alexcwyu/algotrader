@@ -4,6 +4,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.unisoft.algotrader.config.AppConfig;
 import com.unisoft.algotrader.config.AppConfigModule;
+import com.unisoft.algotrader.event.RingBufferMarketDataEventBus;
 import com.unisoft.algotrader.model.series.TimeSeriesHelper;
 import com.unisoft.algotrader.model.trading.Account;
 import com.unisoft.algotrader.model.trading.Performance;
@@ -29,7 +30,7 @@ public class BackTesterMain {
         Injector injector = Guice.createInjector(new AppConfigModule());
         AppConfig appConfig = injector.getInstance(AppConfig.class);
 
-        DummyDataProvider provider = new DummyDataProvider(appConfig.getProviderManager());
+        DummyDataProvider provider = new DummyDataProvider(appConfig.getProviderManager(), new RingBufferMarketDataEventBus(appConfig.getEventBusManager().marketDataRB));
 
         CountDownLatch latch = new CountDownLatch(1);
         Strategy strategy = new CountDownStrategy(appConfig.getOrderManager(), "Sid", appConfig.getTradingDataStore(), latch, 20, appConfig.getEventBusManager().marketDataRB);

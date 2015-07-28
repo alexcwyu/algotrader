@@ -29,6 +29,6 @@ public class SimulationExecutorProvider implements Provider<SimulationExecutor> 
 
     @Override
     public SimulationExecutor get() {
-        return new SimulationExecutor(providerManager, orderManager,instrumentDataManager,clock);
+        return new SimulationExecutor(providerManager, orderManager, instrumentDataManager, clock);
     }
 }

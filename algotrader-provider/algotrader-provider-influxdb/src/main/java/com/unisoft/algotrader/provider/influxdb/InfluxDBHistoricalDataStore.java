@@ -1,5 +1,6 @@
 package com.unisoft.algotrader.provider.influxdb;
 
+import com.unisoft.algotrader.model.event.EventBus;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
@@ -7,7 +8,6 @@ import com.unisoft.algotrader.model.event.data.Trade;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.AbstractDataStoreProvider;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
-import com.unisoft.algotrader.provider.data.Subscriber;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,13 +27,15 @@ public class InfluxDBHistoricalDataStore extends AbstractDataStoreProvider{
     private AtomicBoolean connected = new AtomicBoolean(false);
 
     private final InfluxDBConfig config;
+    private final EventBus.MarketDataEventBus marketDataEventBus;
 
     public static final String PROVIDER_ID = "InfluxDB";
 
     @Inject
-    public InfluxDBHistoricalDataStore(ProviderManager providerManager, InfluxDBConfig config){
+    public InfluxDBHistoricalDataStore(ProviderManager providerManager, InfluxDBConfig config, EventBus.MarketDataEventBus marketDataEventBus){
         super(providerManager);
         this.config = config;
+        this.marketDataEventBus = marketDataEventBus;
     }
 
     /// PROVIDER
@@ -82,7 +84,7 @@ public class InfluxDBHistoricalDataStore extends AbstractDataStoreProvider{
     }
 
     @Override
-    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
+    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
         return false;
     }
 }

@@ -3,8 +3,6 @@ package com.unisoft.algotrader.provider.ib;
 import ch.aonyx.broker.ib.api.contract.Contract;
 import ch.aonyx.broker.ib.api.contract.SecurityType;
 import com.unisoft.algotrader.model.refdata.Instrument;
-import sun.plugin2.os.windows.SECURITY_ATTRIBUTES;
-import uk.co.real_logic.aeron.Subscription;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

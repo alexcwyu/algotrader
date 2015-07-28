@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.provider.data;
 
 import com.google.common.collect.Lists;
+import com.unisoft.algotrader.model.event.EventBus;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.provider.ProviderManager;
 
@@ -19,13 +20,15 @@ public class DummyDataProvider extends AbstractHistoricalDataProvider {
     public static SimpleDateFormat FORMAT2 = new SimpleDateFormat("yyyyMMdd");
 
     public static final String PROVIDER_ID = "Dummy";
+    private final EventBus.MarketDataEventBus marketDataEventBus;
 
-    public DummyDataProvider(ProviderManager providerManager){
+    public DummyDataProvider(ProviderManager providerManager, EventBus.MarketDataEventBus marketDataEventBus){
         super(providerManager);
+        this.marketDataEventBus = marketDataEventBus;
     }
 
     @Override
-    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
+    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
 //        CsvParserSettings settings = new CsvParserSettings();
 //
 //        settings.getFormat().setLineSeparator("\n");
@@ -38,7 +41,7 @@ public class DummyDataProvider extends AbstractHistoricalDataProvider {
         int count = 0;
         while (dateTime < toDateTime) {
 
-            subscriber.marketDataEventBus.publishBar(subscriptionKey.instId, subscriptionKey.barSize, dateTime,
+            marketDataEventBus.publishBar(subscriptionKey.instId, subscriptionKey.barSize, dateTime,
                     900 + count,
                     1000 + count,
                     800 + count,

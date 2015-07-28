@@ -14,7 +14,6 @@ import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.AbstractDataStoreProvider;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
-import com.unisoft.algotrader.provider.data.Subscriber;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
 import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
@@ -40,6 +39,8 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
     private final CSVConfig config;
     private final Writer writer;
     private final RefDataStore refDataStore;
+    private final EventBus.MarketDataEventBus marketDataEventBus;
+
     public static final String PROVIDER_ID = "CSV";
     private CsvParserSettings settings = new CsvParserSettings();
 
@@ -52,21 +53,23 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
                     });
 
     @Inject
-    public CSVHistoricalDataStore(ProviderManager providerManager, CSVConfig csvConfig, RefDataStore refDataStore){
+    public CSVHistoricalDataStore(ProviderManager providerManager, CSVConfig csvConfig, RefDataStore refDataStore, EventBus.MarketDataEventBus marketDataEventBus){
         super(providerManager);
         this.config = csvConfig;
         this.writer = null;
         this.refDataStore = refDataStore;
+        this.marketDataEventBus = marketDataEventBus;
 
         init();
 
     }
 
-    protected CSVHistoricalDataStore(ProviderManager providerManager, Writer writer, RefDataStore refDataStore){
+    protected CSVHistoricalDataStore(ProviderManager providerManager, Writer writer, RefDataStore refDataStore, EventBus.MarketDataEventBus marketDataEventBus){
         super(providerManager);
         this.writer = writer;
         this.config = null;
         this.refDataStore = refDataStore;
+        this.marketDataEventBus = marketDataEventBus;
         init();
     }
 
@@ -172,7 +175,7 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
     }
 
     @Override
-    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
+    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
 
         long fromDateTime = subscriptionKey.fromDate;
         long toDateTime = subscriptionKey.toDate;
@@ -182,15 +185,15 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
 
         switch (subscriptionKey.type) {
             case Bar:
-                publishBar(subscriber.marketDataEventBus, subscriptionKey, parser, reader, fromDateTime, toDateTime);
+                publishBar(subscriptionKey, parser, reader, fromDateTime, toDateTime);
                 break;
 
             case Trade:
-                publishTrade(subscriber.marketDataEventBus, subscriptionKey, parser, reader, fromDateTime, toDateTime);
+                publishTrade(subscriptionKey, parser, reader, fromDateTime, toDateTime);
                 break;
 
             case Quote:
-                publishQuote(subscriber.marketDataEventBus, subscriptionKey, parser, reader, fromDateTime, toDateTime);
+                publishQuote(subscriptionKey, parser, reader, fromDateTime, toDateTime);
                 break;
         }
         return true;
@@ -301,7 +304,7 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
     }
 
 
-    protected void publishBar(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, CsvParser parser, Reader reader, long fromDateTime, long toDateTime) {
+    protected void publishBar(SubscriptionKey subscriptionKey, CsvParser parser, Reader reader, long fromDateTime, long toDateTime) {
         try {
             parser.beginParsing(reader);
             String[] row;
@@ -310,7 +313,7 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
                 long time = Long.parseLong(row[0]);
                 if (lt(time, fromDateTime)) continue;
                 if (gt(time, toDateTime)) break;
-                eventBus.publishBar(subscriptionKey.instId, subscriptionKey.barSize, time,
+                marketDataEventBus.publishBar(subscriptionKey.instId, subscriptionKey.barSize, time,
                         Double.parseDouble(row[1]), Double.parseDouble(row[2]), Double.parseDouble(row[3]), Double.parseDouble(row[4]), Long.parseLong(row[5]), 0);
             }
             parser.stopParsing();
@@ -332,7 +335,7 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
         }
     }
 
-    protected void publishQuote(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, CsvParser parser, Reader reader, long fromDateTime, long toDateTime) {
+    protected void publishQuote(SubscriptionKey subscriptionKey, CsvParser parser, Reader reader, long fromDateTime, long toDateTime) {
         try {
             parser.beginParsing(reader);
             String[] row;
@@ -342,7 +345,7 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
 
                 if (lt(time, fromDateTime)) continue;
                 if (gt(time, toDateTime)) break;
-                eventBus.publishQuote(subscriptionKey.instId, time,
+                marketDataEventBus.publishQuote(subscriptionKey.instId, time,
                         Double.parseDouble(row[1]), Double.parseDouble(row[2]), Integer.parseInt(row[3]), Integer.parseInt(row[4]));
             }
             parser.stopParsing();
@@ -352,7 +355,7 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
         }
     }
 
-    protected void publishTrade(EventBus.MarketDataEventBus eventBus, SubscriptionKey subscriptionKey, CsvParser parser, Reader reader, long fromDateTime, long toDateTime) {
+    protected void publishTrade(SubscriptionKey subscriptionKey, CsvParser parser, Reader reader, long fromDateTime, long toDateTime) {
         try {
             parser.beginParsing(reader);
             String[] row;
@@ -362,7 +365,7 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
 
                 if (lt(time, fromDateTime)) continue;
                 if (gt(time, toDateTime)) break;
-                eventBus.publishTrade(subscriptionKey.instId, time,
+                marketDataEventBus.publishTrade(subscriptionKey.instId, time,
                         Double.parseDouble(row[1]), Integer.parseInt(row[2]));
             }
             parser.stopParsing();

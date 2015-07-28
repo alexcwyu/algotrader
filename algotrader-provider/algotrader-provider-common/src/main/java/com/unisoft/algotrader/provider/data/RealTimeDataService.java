@@ -5,7 +5,7 @@ package com.unisoft.algotrader.provider.data;
  */
 public interface RealTimeDataService {
 
-    boolean subscribeRealTimeData(SubscriptionKey subscriptionKey, Subscriber subscriber);
+    boolean subscribeRealTimeData(SubscriptionKey subscriptionKey);
 
-    boolean unSubscribeRealTimeData(SubscriptionKey subscriptionKey, Subscriber subscriber);
+    boolean unSubscribeRealTimeData(SubscriptionKey subscriptionKey);
 }

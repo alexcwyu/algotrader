@@ -12,7 +12,6 @@ import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.DummyDataProvider;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
-import com.unisoft.algotrader.provider.data.Subscriber;
 import com.unisoft.algotrader.trading.Strategy;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.apache.logging.log4j.LogManager;
@@ -60,7 +59,7 @@ public class CSVPublishTest {
                 = RingBuffer.createSingleProducer(MarketDataContainer.FACTORY, 1024, new NoWaitStrategy());
 
         ProviderManager providerManager = new ProviderManager();
-        DummyDataProvider provider = new DummyDataProvider(providerManager);
+        DummyDataProvider provider = new DummyDataProvider(providerManager, new RingBufferMarketDataEventBus(marketDataRB));
 
         Portfolio portfolio = new Portfolio("PID1", TradingDataStore.DEFAULT_ACCOUNT.getAccountId());
         InMemoryTradingDataStore tradingDataStore = new InMemoryTradingDataStore();
@@ -87,7 +86,7 @@ public class CSVPublishTest {
         Thread.sleep(5000);
 
         LOG.info("start");
-        provider.subscribeHistoricalData(HistoricalSubscriptionKey.createDailySubscriptionKey(provider.providerId(), testInstrument.getInstId(), 20110101, 20141231), new Subscriber(new RingBufferMarketDataEventBus(marketDataRB)));
+        provider.subscribeHistoricalData(HistoricalSubscriptionKey.createDailySubscriptionKey(provider.providerId(), testInstrument.getInstId(), 20110101, 20141231));
 
         latch.await();
 

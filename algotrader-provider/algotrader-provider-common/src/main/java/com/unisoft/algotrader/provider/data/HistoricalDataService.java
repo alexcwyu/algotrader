@@ -11,6 +11,6 @@ public interface HistoricalDataService {
 
     List<MarketDataContainer> loadHistoricalData(HistoricalSubscriptionKey subscriptionKey);
 
-    boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber);
+    boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey);
 
 }

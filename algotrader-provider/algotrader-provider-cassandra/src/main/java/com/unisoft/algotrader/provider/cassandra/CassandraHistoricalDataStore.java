@@ -11,7 +11,6 @@ import com.unisoft.algotrader.model.event.data.Trade;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.AbstractDataStoreProvider;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
-import com.unisoft.algotrader.provider.data.Subscriber;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -47,16 +46,17 @@ public class CassandraHistoricalDataStore extends AbstractDataStoreProvider {
     public static final String PROVIDER_ID = "Cassandra";
 
     private final AtomicBoolean connected = new AtomicBoolean(false);
-
+    private final EventBus.MarketDataEventBus marketDataEventBus;
     private final CassandraHistoricalDataStoreConfig config;
     private Cluster cluster;
     private Session session;
 
     @Inject
-    public CassandraHistoricalDataStore(ProviderManager providerManager, CassandraHistoricalDataStoreConfig config){
+    public CassandraHistoricalDataStore(ProviderManager providerManager, CassandraHistoricalDataStoreConfig config, EventBus.MarketDataEventBus marketDataEventBus){
         super(providerManager);
         this.config = config;
         this.cluster = Cluster.builder().addContactPoint(config.host).build();
+        this.marketDataEventBus = marketDataEventBus;
     }
 
     /// PROVIDER
@@ -108,18 +108,18 @@ public class CassandraHistoricalDataStore extends AbstractDataStoreProvider {
 
     /// PROVIDER
     @Override
-    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
+    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
         switch (subscriptionKey.type) {
             case Bar:
-                publishBar(subscriptionKey, subscriber.marketDataEventBus);
+                publishBar(subscriptionKey);
                 break;
 
             case Trade:
-                publishTrade(subscriptionKey, subscriber.marketDataEventBus);
+                publishTrade(subscriptionKey);
                 break;
 
             case Quote:
-                publishQuote(subscriptionKey, subscriber.marketDataEventBus);
+                publishQuote(subscriptionKey);
                 break;
         }
         return true;
@@ -145,24 +145,24 @@ public class CassandraHistoricalDataStore extends AbstractDataStoreProvider {
     }
 
 
-    private void publishBar(HistoricalSubscriptionKey subscriptionKey, EventBus.MarketDataEventBus eventBus){
+    private void publishBar(HistoricalSubscriptionKey subscriptionKey){
         ResultSet results = queryBar(subscriptionKey);
         for (Row row : results) {
-            eventBus.publishBar(row.getLong(0), row.getInt(1), row.getDate(2).getTime(), row.getDouble(3), row.getDouble(4), row.getDouble(5), row.getDouble(6), row.getLong(7), row.getLong(8));
+            marketDataEventBus.publishBar(row.getLong(0), row.getInt(1), row.getDate(2).getTime(), row.getDouble(3), row.getDouble(4), row.getDouble(5), row.getDouble(6), row.getLong(7), row.getLong(8));
         }
     }
 
-    private void publishQuote(HistoricalSubscriptionKey subscriptionKey, EventBus.MarketDataEventBus eventBus){
+    private void publishQuote(HistoricalSubscriptionKey subscriptionKey){
         ResultSet results = queryQuote(subscriptionKey);
         for (Row row : results) {
-            eventBus.publishQuote(row.getLong(0), row.getDate(1).getTime(), row.getDouble(2), row.getDouble(3), row.getInt(4), row.getInt(5));
+            marketDataEventBus.publishQuote(row.getLong(0), row.getDate(1).getTime(), row.getDouble(2), row.getDouble(3), row.getInt(4), row.getInt(5));
         }
     }
 
-    private void publishTrade(HistoricalSubscriptionKey subscriptionKey, EventBus.MarketDataEventBus eventBus){
+    private void publishTrade(HistoricalSubscriptionKey subscriptionKey){
         ResultSet results = queryTrade(subscriptionKey);
         for (Row row : results) {
-            eventBus.publishTrade(row.getLong(0), row.getDate(1).getTime(), row.getDouble(2), row.getInt(3));
+            marketDataEventBus.publishTrade(row.getLong(0), row.getDate(1).getTime(), row.getDouble(2), row.getInt(3));
         }
     }
 

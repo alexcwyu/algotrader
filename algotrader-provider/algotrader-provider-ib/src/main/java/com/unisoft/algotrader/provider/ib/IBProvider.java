@@ -8,7 +8,10 @@ import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ProviderManager;
-import com.unisoft.algotrader.provider.data.*;
+import com.unisoft.algotrader.provider.data.HistoricalDataProvider;
+import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
+import com.unisoft.algotrader.provider.data.RealTimeDataProvider;
+import com.unisoft.algotrader.provider.data.SubscriptionKey;
 import com.unisoft.algotrader.provider.execution.ExecutionProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,12 +61,12 @@ public class IBProvider implements RealTimeDataProvider, HistoricalDataProvider,
     }
 
     @Override
-    public boolean subscribeRealTimeData(SubscriptionKey subscriptionKey, Subscriber subscriber){
+    public boolean subscribeRealTimeData(SubscriptionKey subscriptionKey){
         return false;
     }
 
     @Override
-    public boolean unSubscribeRealTimeData(SubscriptionKey subscriptionKey, Subscriber subscriber){
+    public boolean unSubscribeRealTimeData(SubscriptionKey subscriptionKey){
         return false;
     }
 
@@ -73,7 +76,7 @@ public class IBProvider implements RealTimeDataProvider, HistoricalDataProvider,
     }
 
     @Override
-    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
+    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
         return false;
     }
 

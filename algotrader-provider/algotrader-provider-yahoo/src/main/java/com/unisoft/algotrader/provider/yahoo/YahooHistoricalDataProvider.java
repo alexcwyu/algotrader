@@ -1,13 +1,13 @@
 package com.unisoft.algotrader.provider.yahoo;
 
 import com.google.common.collect.Lists;
+import com.unisoft.algotrader.model.event.EventBus;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.AbstractHistoricalDataProvider;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
-import com.unisoft.algotrader.provider.data.Subscriber;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
 import com.unisoft.algotrader.utils.DateHelper;
 import org.apache.logging.log4j.LogManager;
@@ -45,11 +45,13 @@ public class YahooHistoricalDataProvider extends AbstractHistoricalDataProvider 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     private final RefDataStore refDataStore;
+    private final EventBus.MarketDataEventBus marketDataEventBus;
 
     @Inject
-    public YahooHistoricalDataProvider(ProviderManager providerManager, RefDataStore refDataStore){
+    public YahooHistoricalDataProvider(ProviderManager providerManager, RefDataStore refDataStore, EventBus.MarketDataEventBus marketDataEventBus){
         super(providerManager);
         this.refDataStore = refDataStore;
+        this.marketDataEventBus = marketDataEventBus;
     }
 
     private List<String> loadData(HistoricalSubscriptionKey subscriptionKey){
@@ -72,7 +74,7 @@ public class YahooHistoricalDataProvider extends AbstractHistoricalDataProvider 
     }
 
     @Override
-    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey, Subscriber subscriber) {
+    public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
         List<String> data = loadData(subscriptionKey);
 
         String line;
@@ -82,7 +84,7 @@ public class YahooHistoricalDataProvider extends AbstractHistoricalDataProvider 
                 line = data.get(i);
                 String[] tokens = line.split(",");
 
-                subscriber.marketDataEventBus.publishBar(subscriptionKey.instId, SubscriptionKey.DAILY_SIZE, DATE_FORMAT.parse(tokens[0]).getTime(),
+                marketDataEventBus.publishBar(subscriptionKey.instId, SubscriptionKey.DAILY_SIZE, DATE_FORMAT.parse(tokens[0]).getTime(),
                         Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]), Double.parseDouble(tokens[3]), Double.parseDouble(tokens[4]), Long.parseLong(tokens[5]), 0);
             }
         }

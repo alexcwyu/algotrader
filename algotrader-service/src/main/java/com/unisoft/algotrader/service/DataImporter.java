@@ -4,6 +4,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.util.DaemonThreadFactory;
+import com.unisoft.algotrader.config.DefaultEventBusConfigModule;
 import com.unisoft.algotrader.config.SampleAppConfigModule;
 import com.unisoft.algotrader.config.ServiceConfigModule;
 import com.unisoft.algotrader.event.EventBusManager;
@@ -18,7 +19,6 @@ import com.unisoft.algotrader.provider.csv.CSVHistoricalDataStore;
 import com.unisoft.algotrader.provider.data.DataService;
 import com.unisoft.algotrader.provider.data.DataStoreProvider;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
-import com.unisoft.algotrader.provider.data.Subscriber;
 import com.unisoft.algotrader.provider.yahoo.YahooHistoricalDataProvider;
 import com.unisoft.algotrader.utils.DateHelper;
 import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
@@ -76,7 +76,7 @@ public class DataImporter extends MultiEventProcessor implements MarketDataHandl
 
     public boolean importData(HistoricalSubscriptionKey subscriptionKey){
         provider = providerManager.getDataStoreProvider(CSVHistoricalDataStore.PROVIDER_ID);
-        return dataService.subscribeHistoricalData(subscriptionKey, new Subscriber(rb));
+        return dataService.subscribeHistoricalData(subscriptionKey);
     }
 
     public static void main(String [] args){
@@ -84,7 +84,7 @@ public class DataImporter extends MultiEventProcessor implements MarketDataHandl
         final ExecutorService executor = Executors.newFixedThreadPool(2, DaemonThreadFactory.INSTANCE);
 
 
-        Injector injector = Guice.createInjector(new SampleAppConfigModule(), new ServiceConfigModule(), new DataServiceConfigModule());
+        Injector injector = Guice.createInjector(new SampleAppConfigModule(), new ServiceConfigModule(), new DefaultEventBusConfigModule(), new DataServiceConfigModule());
         ProviderManager providerManager = injector.getInstance(ProviderManager.class);
         DataService dataService = injector.getInstance(DataService.class);
         RefDataStore refDataStore = injector.getInstance(RefDataStore.class);
