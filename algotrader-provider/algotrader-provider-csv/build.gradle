@@ -1,4 +1,5 @@
 dependencies {
+    compile project(':algotrader-persistence:algotrader-persistence-common')
     compile project(':algotrader-provider:algotrader-provider-common')
     compile project(':algotrader-core')
     compile "com.univocity:univocity-parsers:${univocityVersion}"

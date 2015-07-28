@@ -294,4 +294,18 @@ public class Instrument{
     public void setGroup(String group) {
         this.group = group;
     }
+
+    public String getExchId(String providerId){
+        if (altExchIds.containsKey(providerId)){
+            return altExchIds.get(providerId);
+        }
+        return exchId;
+    }
+
+    public String getSymbol(String providerId){
+        if (altSymbols.containsKey(providerId)){
+            return altSymbols.get(providerId);
+        }
+        return symbol;
+    }
 }

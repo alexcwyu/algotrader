@@ -13,6 +13,8 @@ public class MyHistoricalDataEventListEventListener implements HistoricalDataEve
 
     @Override
     public void notify(HistoricalDataEventListEvent event) {
-        LOG.info(event);
+        if (event != null) {
+            event.getHistoricalDataEvents().forEach(e -> LOG.info(e));
+        }
     }
 }
