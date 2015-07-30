@@ -41,7 +41,6 @@ public class IBProvider implements RealTimeDataProvider, HistoricalDataProvider,
     private final IBConfig config;
     public final EventBus.MarketDataEventBus marketDataEventBus;
 
-    private ConnectionParameters connectionParameters;
     private NeoIbApiClient apiClient;
     private Session session;
 
@@ -57,7 +56,6 @@ public class IBProvider implements RealTimeDataProvider, HistoricalDataProvider,
         providerManager.addHistoricalDataProvider(this);
         providerManager.addRealTimeDataProvider(this);
         apiClient = new NeoIbApiClient(new IBClientCallback());
-        connectionParameters = new ConnectionParameters();
 
     }
 
@@ -137,7 +135,7 @@ public class IBProvider implements RealTimeDataProvider, HistoricalDataProvider,
 
     @Override
     public void connect() {
-        apiClient.connect(connectionParameters, this);
+        apiClient.connect(new ConnectionParameters(config.host, config.port, config.clientId), this);
     }
 
     @Override

@@ -9,14 +9,16 @@ import javax.inject.Named;
 public class IBConfig {
     public final String host;
     public final int port;
-    public final String clientId;
+    public final int clientId;
     public final String user;
     public final String password;
 
     @Inject
-    public IBConfig(@Named("ib.host") String host, @Named("ib.port") int port,
-                    @Named("ib.clientId") String clientId,
-                    @Named("ib.user") String user, @Named("ib.password") String password) {
+    public IBConfig(@Named("ib.host") String host,
+                    @Named("ib.port") int port,
+                    @Named("ib.clientId") int clientId,
+                    @Named("ib.user") String user,
+                    @Named("ib.password") String password) {
         this.host = host;
         this.port = port;
         this.clientId = clientId;
