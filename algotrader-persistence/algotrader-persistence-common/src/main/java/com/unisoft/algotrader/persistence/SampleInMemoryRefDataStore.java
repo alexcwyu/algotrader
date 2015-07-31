@@ -1,8 +1,11 @@
 package com.unisoft.algotrader.persistence;
 
+import com.google.common.collect.Maps;
 import com.unisoft.algotrader.model.refdata.Currency;
 
 import javax.inject.Singleton;
+
+import java.util.Collections;
 
 import static com.unisoft.algotrader.model.refdata.Currency.*;
 import static com.unisoft.algotrader.model.refdata.Exchange.*;
@@ -64,11 +67,12 @@ public class SampleInMemoryRefDataStore extends InMemoryRefDataStore {
 
         InstrumentFactory instrumentFactory = new InstrumentFactory(this);
         instrumentFactory.createIndex("HSI", "HSI Index", HKEX.getExchId(), Currency.HKD.getCcyId());
-        instrumentFactory.createFuture("HSIF", "HSI Future", HKFE.getExchId(), Currency.HKD.getCcyId());
+        instrumentFactory.createFuture("HSIF", "HSI Future", HKFE.getExchId(), Currency.HKD.getCcyId(), Collections.singletonMap("IB", "HISF"), Maps.newHashMap());
+        instrumentFactory.createFuture("HSCEIF", "HSCEI Future", HKFE.getExchId(), Currency.HKD.getCcyId(), Collections.singletonMap("IB", "HHI.HK"), Maps.newHashMap());
 
-        instrumentFactory.createStock("0005.HK", "HSBC HOLDINGS", HKEX.getExchId(), Currency.HKD.getCcyId());
-        instrumentFactory.createStock("0959.HK", "AMAX INT HOLD", HKEX.getExchId(), Currency.HKD.getCcyId());
-        instrumentFactory.createStock("2628.HK", "China Life", HKEX.getExchId(), Currency.HKD.getCcyId());
+        instrumentFactory.createStock("0005.HK", "HSBC HOLDINGS", HKEX.getExchId(), Currency.HKD.getCcyId(), Collections.singletonMap("IB", "5"), Collections.singletonMap("IB", "SEHK"));
+        instrumentFactory.createStock("0959.HK", "AMAX INT HOLD", HKEX.getExchId(), Currency.HKD.getCcyId(), Collections.singletonMap("IB", "959"), Collections.singletonMap("IB", "SEHK"));
+        instrumentFactory.createStock("2628.HK", "China Life", HKEX.getExchId(), Currency.HKD.getCcyId(), Collections.singletonMap("IB", "2628"), Collections.singletonMap("IB", "SEHK"));
 
         instrumentFactory.createStock("AAPL", "Apple Inc.", NASDAQ.getExchId(), Currency.USD.getCcyId());
         instrumentFactory.createStock("GOOG", "Google Inc.", NASDAQ.getExchId(), Currency.USD.getCcyId());

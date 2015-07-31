@@ -1,11 +1,13 @@
 package com.unisoft.algotrader.provider.ib;
 
 import ch.aonyx.broker.ib.api.*;
+import ch.aonyx.broker.ib.api.contract.Contract;
 import ch.aonyx.broker.ib.api.data.bar.RealTimeBarSubscriptionRequest;
 import ch.aonyx.broker.ib.api.data.historical.HistoricalDataSubscriptionRequest;
 import ch.aonyx.broker.ib.api.net.ConnectionCallback;
 import ch.aonyx.broker.ib.api.net.ConnectionException;
 import ch.aonyx.broker.ib.api.net.ConnectionParameters;
+import ch.aonyx.broker.ib.api.order.PlaceOrderRequest;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.unisoft.algotrader.model.event.EventBus;
@@ -115,7 +117,8 @@ public class IBProvider implements RealTimeDataProvider, HistoricalDataProvider,
 
     @Override
     public void onOrder(Order order) {
-        //session.orderRequest(request);
+        Contract contract = IBUtils.getContract(refDataStore.getInstrument(order.instId));
+        session.orderRequest(new PlaceOrderRequest(IBUtils.convertOrder(order),contract));
     }
 
 

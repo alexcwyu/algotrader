@@ -8,9 +8,16 @@ import ch.aonyx.broker.ib.api.data.bar.RealTimeBarDataType;
 import ch.aonyx.broker.ib.api.data.bar.RealTimeBarSubscriptionRequest;
 import ch.aonyx.broker.ib.api.data.bar.RealTimeBarUnsubscriptionRequest;
 import ch.aonyx.broker.ib.api.data.historical.*;
+import ch.aonyx.broker.ib.api.order.OrderAction;
+import ch.aonyx.broker.ib.api.order.OrderType;
 import ch.aonyx.broker.ib.api.util.StringIdUtils;
 import com.unisoft.algotrader.model.event.data.DataType;
+import com.unisoft.algotrader.model.event.data.Quote;
+import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Instrument;
+import com.unisoft.algotrader.model.trading.OrdType;
+import com.unisoft.algotrader.model.trading.Side;
+import com.unisoft.algotrader.model.trading.TimeInForce;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
 import zmq.Sub;
@@ -182,5 +189,86 @@ public class IBUtils {
 
     public static String convertDate(long date){
         return FORMAT.format(new Date(date));
+    }
+
+    public static ch.aonyx.broker.ib.api.order.Order convertOrder (Order order){
+        ch.aonyx.broker.ib.api.order.Order ibOrder = new ch.aonyx.broker.ib.api.order.Order();
+        //ibOrder.setAccountName();
+
+        ibOrder.setAction(convertAction(order.side));
+        ibOrder.setAllOrNone(order.tif == TimeInForce.FOK);
+        ibOrder.setStopPrice(order.stopPrice);
+        ibOrder.setLimitPrice(order.limitPrice);
+        ibOrder.setOrderType(convertOrderType(order.ordType));
+        ibOrder.setTimeInForce(convertTIF(order.tif));
+
+        int quantity = (int)order.ordQty;
+        if (order.side == Side.Sell ||order.side == Side.SellPlus ||order.side == Side.SellShort ||order.side == Side.SellShortExempt ){
+            quantity = -quantity;
+        }
+
+        ibOrder.setTotalQuantity(quantity);
+        ibOrder.setTrailingStopPrice(order.trailingStopExecPrice);
+
+        return ibOrder;
+    }
+
+    public static OrderAction convertAction(Side side){
+        switch (side){
+            case Buy:
+                return OrderAction.BUY;
+            case Sell:
+                return OrderAction.SELL;
+            case SellShort:
+                return OrderAction.SELL_SHORT;
+            default:
+                throw new IllegalArgumentException("unknown order Action, side ="+side);
+        }
+    }
+
+    public static ch.aonyx.broker.ib.api.order.TimeInForce convertTIF(TimeInForce timeInForce){
+        switch (timeInForce){
+            case Day:
+                return ch.aonyx.broker.ib.api.order.TimeInForce.DAY;
+            case GTC:
+                return ch.aonyx.broker.ib.api.order.TimeInForce.GOOD_TILL_CANCEL;
+            case IOC:
+                return ch.aonyx.broker.ib.api.order.TimeInForce.IMMEDIATE_OR_CANCEL;
+            case GoodTillDate:
+                return ch.aonyx.broker.ib.api.order.TimeInForce.GOOD_TILL_DATE;
+            case Undefined:
+                return ch.aonyx.broker.ib.api.order.TimeInForce.UNKNOWN;
+            default:
+                throw new IllegalArgumentException("unknown TimeInForce ="+timeInForce);
+        }
+    }
+
+    public static OrderType convertOrderType(OrdType ordType){
+        switch (ordType){
+            case Market:
+                return OrderType.MARKET;
+            case Limit:
+                return OrderType.LIMIT;
+            case Stop:
+                return OrderType.STOP;
+            case StopLimit:
+                return OrderType.STOP_LIMIT;
+            case MarketOnClose:
+                return OrderType.MARKET_ON_CLOSE;
+            case LimitOnClose:
+                return OrderType.LIMIT_ON_CLOSE;
+            case TrailingStop:
+                return OrderType.TRAILING_STOP;
+            case MarketWithLeftoverAsLimit:
+                return OrderType.MARKET_TO_LIMIT;
+            case MIT:
+                return OrderType.MARKET_IF_PRICE_TOUCHED;
+            case OnClose:
+                return OrderType.MARKET_ON_OPEN;
+            case Undefined:
+                return OrderType.UNKNOWN;
+            default:
+                throw new IllegalArgumentException("unknown OrdType, OrdType ="+ordType);
+        }
     }
 }

@@ -49,10 +49,10 @@ public class Instrument{
     private double margin = 0;
 
     @Column(name ="alt_symbols")
-    private Map<String, String> altSymbols = Maps.newHashMap();
+    private Map<String, String> altSymbols;
 
     @Column(name ="alt_exchids")
-    private Map<String, String> altExchIds = Maps.newHashMap();
+    private Map<String, String> altExchIds;
 
     private String sector;
 
@@ -66,14 +66,30 @@ public class Instrument{
 //    }
 
     public Instrument(long instId, InstType type, String symbol, String name, String exchId, String ccyId){
-
         this.instId = instId;
         this.type = type;
         this.symbol = symbol;
         this.name = name;
         this.exchId = exchId;
         this.ccyId = ccyId;
+        this.altSymbols = Maps.newHashMap();
+        this.altExchIds = Maps.newHashMap();
     }
+
+
+    public Instrument(long instId, InstType type, String symbol, String name, String exchId, String ccyId, Map<String, String> altSymbols, Map<String, String> altExchIds){
+        this.instId = instId;
+        this.type = type;
+        this.symbol = symbol;
+        this.name = name;
+        this.exchId = exchId;
+        this.ccyId = ccyId;
+        this.altSymbols = altSymbols;
+        this.altExchIds = altExchIds;
+    }
+
+
+
 
     @Override
     public boolean equals(Object o) {

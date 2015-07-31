@@ -5,6 +5,7 @@ import com.google.inject.Injector;
 import com.unisoft.algotrader.config.AppConfig;
 import com.unisoft.algotrader.config.AppConfigModule;
 import com.unisoft.algotrader.event.RingBufferMarketDataEventBus;
+import com.unisoft.algotrader.event.SampleEventFactory;
 import com.unisoft.algotrader.model.series.TimeSeriesHelper;
 import com.unisoft.algotrader.model.trading.Account;
 import com.unisoft.algotrader.model.trading.Performance;
@@ -38,7 +39,7 @@ public class BackTesterMain {
         Account account = TradingDataStore.DEFAULT_ACCOUNT;
         Portfolio portfolio = new Portfolio("TestPortfolio", account.getAccountId());
 
-        BackTester backTester = new BackTester(appConfig, strategy, provider, portfolio, Sample.testInstrument, 20110101, 20110111);
+        BackTester backTester = new BackTester(appConfig, strategy, provider, portfolio, SampleEventFactory.TEST_HKD_INSTRUMENT, 20110101, 20110111);
 
         backTester.run();
 
