@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.config;
 
-import com.unisoft.algotrader.event.EventBusManager;
+import com.unisoft.algotrader.model.event.EventBusManager;
 import com.unisoft.algotrader.model.clock.Clock;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.persistence.TradingDataStore;

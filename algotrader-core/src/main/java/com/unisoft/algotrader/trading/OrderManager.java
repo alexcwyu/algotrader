@@ -1,7 +1,7 @@
 package com.unisoft.algotrader.trading;
 
 import com.google.common.collect.Maps;
-import com.unisoft.algotrader.event.EventBusManager;
+import com.unisoft.algotrader.model.event.EventBusManager;
 import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.model.event.execution.*;
 import com.unisoft.algotrader.model.trading.OrdStatus;

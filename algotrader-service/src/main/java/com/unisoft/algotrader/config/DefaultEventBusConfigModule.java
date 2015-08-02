@@ -1,7 +1,7 @@
 package com.unisoft.algotrader.config;
 
 import com.google.inject.Provides;
-import com.unisoft.algotrader.event.EventBusManager;
+import com.unisoft.algotrader.model.event.EventBusManager;
 import com.unisoft.algotrader.event.RingBufferMarketDataEventBus;
 import com.unisoft.algotrader.model.event.EventBus;
 import com.unisoft.algotrader.utils.config.BaseConfigModule;

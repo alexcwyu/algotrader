@@ -7,7 +7,7 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 import com.unisoft.algotrader.config.DefaultEventBusConfigModule;
 import com.unisoft.algotrader.config.SampleAppConfigModule;
 import com.unisoft.algotrader.config.ServiceConfigModule;
-import com.unisoft.algotrader.event.EventBusManager;
+import com.unisoft.algotrader.model.event.EventBusManager;
 import com.unisoft.algotrader.event.RingBufferMarketDataEventBus;
 import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.model.event.data.*;

@@ -87,4 +87,16 @@ public interface EventBus {
     interface MarketDataEventBus extends TradeEventBus, BarEventBus, QuoteEventBus{
 
     }
+
+    interface ExecutionEventBus{
+
+    }
+
+    interface GeneralEventBus{
+        void publishEvent(EventWrapper eventWrapper, Event event);
+
+        default void setEvent(EventWrapper eventWrapper, Event event){
+            eventWrapper.setWrappedEvent(event);
+        }
+    }
 }

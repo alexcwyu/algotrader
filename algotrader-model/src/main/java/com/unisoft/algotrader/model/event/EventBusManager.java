@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.event;
+package com.unisoft.algotrader.model.event;
 
 import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
@@ -6,6 +6,7 @@ import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 
+import static com.unisoft.algotrader.model.event.EventBus.*;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -32,8 +33,26 @@ public class EventBusManager {
     public final RingBuffer<ExecutionReport> executionReportRB
             = RingBuffer.createSingleProducer(ExecutionReport.FACTORY, DEFAULT_BUFFER_SIZE, new NoWaitStrategy());
 
+
+    private MarketDataEventBus marketDataEventBus = null;
+
+    private ExecutionEventBus executionEventBus = null;
+
+    private GeneralEventBus generalEventBus = null;
     @Inject
     public EventBusManager(){
 
+    }
+
+    public MarketDataEventBus getMarketDataEventBus(){
+        return marketDataEventBus;
+    }
+
+    public ExecutionEventBus getExecutionEventBus(){
+        return executionEventBus;
+    }
+
+    public GeneralEventBus getGeneralEventBus(){
+        return generalEventBus;
     }
 }
