@@ -1,8 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api;
 
-import com.google.common.collect.Maps;
-
-import java.util.Map;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 /**
  * Created by alex on 8/2/15.
@@ -47,12 +45,11 @@ public enum OutgoingMessageId {
     CANCEL_ALL_ORDERS_REQUEST(58);
 
     private final int id;
-    private static final Map<Integer, OutgoingMessageId> MAP;
+    private static final TIntObjectHashMap<OutgoingMessageId> MAP = new TIntObjectHashMap();
 
     static {
-        MAP = Maps.newHashMap();
         for (final OutgoingMessageId outgoingMessageId : values()) {
-            MAP.put(outgoingMessageId.getId(), outgoingMessageId);
+            MAP.put(outgoingMessageId.id, outgoingMessageId);
         }
     }
 

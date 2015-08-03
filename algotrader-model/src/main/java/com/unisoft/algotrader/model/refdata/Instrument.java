@@ -178,9 +178,11 @@ public class Instrument{
         Stock,
         Future,
         Option,
+        FutureOption,
         Index,
         FX,
         ETF,
+        Combo
     }
 
     public long getInstId() {

@@ -52,7 +52,7 @@ public abstract class MarketDataProcessor<T extends MarketData> {
         public double getPrice(Order order, Quote quote, SimulatorConfig config){
             switch (order.side){
                 case Buy:
-                case BuyMinus:
+                //case BuyMinus:
                     if (quote.ask > 0)
                         return quote.ask;
                     break;

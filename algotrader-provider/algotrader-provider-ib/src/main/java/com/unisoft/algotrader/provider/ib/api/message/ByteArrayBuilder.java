@@ -1,8 +1,8 @@
 package com.unisoft.algotrader.provider.ib.api.message;
 
-import ch.aonyx.broker.ib.api.util.RequestBuilder;
-import com.google.common.primitives.Bytes;
 import org.apache.commons.lang3.StringUtils;
+
+import java.nio.ByteBuffer;
 
 /**
  * Created by alex on 8/3/15.
@@ -10,18 +10,26 @@ import org.apache.commons.lang3.StringUtils;
 public class ByteArrayBuilder {
 
     private static final byte[] EOL = { 0 };
-    private byte[] bytes = new byte[] {};
+    private ByteBuffer buf;
+
+    public ByteArrayBuilder(){
+        buf = ByteBuffer.allocate(1024);
+    }
+
+    public ByteArrayBuilder(int size){
+        buf = ByteBuffer.allocate(size);
+    }
 
     public ByteArrayBuilder append(final int i) {
         if (i != Integer.MAX_VALUE) {
-            bytes = Bytes.concat(bytes, String.valueOf(i).getBytes());
+            buf.put(Integer.toString(i).getBytes());
         }
         appendEol();
         return this;
     }
     public ByteArrayBuilder append(final long i) {
         if (i != Long.MAX_VALUE) {
-            bytes = Bytes.concat(bytes, String.valueOf(i).getBytes());
+            buf.put(Long.toString(i).getBytes());
         }
         appendEol();
         return this;
@@ -32,14 +40,14 @@ public class ByteArrayBuilder {
         if (b) {
             i = 1;
         }
-        bytes = Bytes.concat(bytes, String.valueOf(i).getBytes());
+        buf.put(Integer.toString(i).getBytes());
         appendEol();
         return this;
     }
 
     public ByteArrayBuilder append(final double d) {
         if (d != Double.MAX_VALUE) {
-            bytes = Bytes.concat(bytes, String.valueOf(d).getBytes());
+            buf.put(Double.toString(d).getBytes());
         }
         appendEol();
         return this;
@@ -47,17 +55,27 @@ public class ByteArrayBuilder {
 
     public ByteArrayBuilder append(final String s) {
         if (StringUtils.isNotEmpty(s)) {
-            bytes = Bytes.concat(bytes, s.getBytes());
+            buf.put(s.getBytes());
         }
         appendEol();
         return this;
     }
 
-    private void appendEol() {
-        bytes = Bytes.concat(bytes, EOL);
+
+    public ByteArrayBuilder append(byte [] bytes) {
+        if (bytes != null) {
+            buf.put(bytes);
+        }
+        appendEol();
+        return this;
+    }
+
+    public void appendEol() {
+        buf.put(EOL);
     }
 
     public byte[] toBytes() {
-        return bytes;
+        buf.flip();
+        return buf.array();
     }
 }

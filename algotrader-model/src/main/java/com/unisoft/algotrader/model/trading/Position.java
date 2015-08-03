@@ -153,17 +153,17 @@ public class Position implements MarketDataHandler {
 
         switch (order.side) {
             case Buy:
-            case BuyMinus:
+            //case BuyMinus:
                 qtyBought += order.getFilledQty();
                 break;
 
             case Sell:
-            case SellPlus:
+            //case SellPlus:
                 qtySold += order.getFilledQty();
                 break;
 
             case SellShort:
-            case SellShortExempt:
+            //case SellShortExempt:
                 qtySoldShort += order.getFilledQty();
                 break;
             default:

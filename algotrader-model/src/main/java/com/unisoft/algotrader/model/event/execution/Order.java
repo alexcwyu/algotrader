@@ -203,12 +203,12 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
     public double amount(){
         switch (side){
             case Buy:
-            case BuyMinus:
+            //case BuyMinus:
                 return filledQty;
             case Sell:
-            case SellPlus:
+            //case SellPlus:
             case SellShort:
-            case SellShortExempt:
+            //case SellShortExempt:
                 return -filledQty;
             default:
                 throw new UnsupportedOperationException("");

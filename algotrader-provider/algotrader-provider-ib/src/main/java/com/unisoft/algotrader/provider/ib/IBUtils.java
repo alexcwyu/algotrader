@@ -57,7 +57,7 @@ public class IBUtils {
 
     public static Contract getContract(Instrument instrument){
         return getContract(
-                convertSecurityType(instrument.getType()),
+                null,
                 instrument.getSymbol(IBProvider.PROVIDER_ID),
                 instrument.getExchId(IBProvider.PROVIDER_ID),
                 instrument.getCcyId());
@@ -195,7 +195,7 @@ public class IBUtils {
         ch.aonyx.broker.ib.api.order.Order ibOrder = new ch.aonyx.broker.ib.api.order.Order();
         //ibOrder.setAccountName();
 
-        ibOrder.setAction(convertAction(order.side));
+        ibOrder.setAction(null);
         ibOrder.setAllOrNone(order.tif == TimeInForce.FOK);
         ibOrder.setStopPrice(order.stopPrice);
         ibOrder.setLimitPrice(order.limitPrice);
@@ -203,7 +203,7 @@ public class IBUtils {
         ibOrder.setTimeInForce(convertTIF(order.tif));
 
         int quantity = (int)order.ordQty;
-        if (order.side == Side.Sell ||order.side == Side.SellPlus ||order.side == Side.SellShort ||order.side == Side.SellShortExempt ){
+        if (order.side == Side.Sell  ||order.side == Side.SellShort ){
             quantity = -quantity;
         }
 

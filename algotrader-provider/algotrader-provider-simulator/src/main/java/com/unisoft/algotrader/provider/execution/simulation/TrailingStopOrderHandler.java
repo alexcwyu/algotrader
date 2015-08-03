@@ -16,7 +16,7 @@ public class TrailingStopOrderHandler extends AbstractStopLimitOrderHandler {
         if (order.trailingStopExecPrice == 0) {
             switch (order.side) {
                 case Buy:
-                case BuyMinus:
+                //case BuyMinus:
                     order.trailingStopExecPrice = Double.MAX_VALUE;
                     break;
                 case Sell:
@@ -34,7 +34,7 @@ public class TrailingStopOrderHandler extends AbstractStopLimitOrderHandler {
         initOrderTrailingStopExecPrice(order);
         switch (order.side) {
             case Buy:
-            case BuyMinus:
+            //case BuyMinus:
                 order.trailingStopExecPrice = Math.min(order.trailingStopExecPrice, price + order.stopPrice);
 
                 if (price >= order.trailingStopExecPrice) {
@@ -61,7 +61,7 @@ public class TrailingStopOrderHandler extends AbstractStopLimitOrderHandler {
         initOrderTrailingStopExecPrice(order);
         switch (order.side) {
             case Buy:
-            case BuyMinus:
+            //case BuyMinus:
                 order.trailingStopExecPrice = Math.min(order.trailingStopExecPrice, bar.low + order.stopPrice);
 
                 if (bar.high >= order.trailingStopExecPrice) {

@@ -12,7 +12,7 @@ public class QuoteProcessor extends MarketDataProcessor<Quote> {
         if (quote != null)
             switch (order.side) {
                 case Buy:
-                case BuyMinus:
+                //case BuyMinus:
                     if (quote.ask > 0)
                         return quote.ask;
                     break;

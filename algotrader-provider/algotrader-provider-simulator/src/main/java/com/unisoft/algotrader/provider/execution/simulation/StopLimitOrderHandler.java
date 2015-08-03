@@ -17,7 +17,7 @@ public class StopLimitOrderHandler extends AbstractStopLimitOrderHandler {
     protected boolean stopLimit(Order order, double price, double qty) {
         switch (order.side) {
             case Buy:
-            case BuyMinus:
+            //case BuyMinus:
                 if (!order.stopLimitReady) {
                     if (price >= order.stopPrice) {
                         order.stopLimitReady = true;
@@ -52,7 +52,7 @@ public class StopLimitOrderHandler extends AbstractStopLimitOrderHandler {
     protected boolean stopLimit(Order order, Bar bar, double qty) {
         switch (order.side) {
             case Buy:
-            case BuyMinus:
+            //case BuyMinus:
                 if (!order.stopLimitReady) {
                     if (bar.high >= order.stopPrice) {
                         order.stopLimitReady = true;

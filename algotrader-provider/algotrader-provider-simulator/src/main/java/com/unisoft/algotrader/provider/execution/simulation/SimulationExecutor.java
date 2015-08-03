@@ -312,7 +312,7 @@ public class SimulationExecutor extends MultiEventProcessor implements Execution
             for (Order order :orderMap.get(quote.instId).values()) {
                 switch (order.side){
                     case Buy:
-                    case BuyMinus:
+                    //case BuyMinus:
                         if (diffAsk)
                             process(order, quote);
                         break;
