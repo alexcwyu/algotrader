@@ -1,9 +1,8 @@
 package com.unisoft.algotrader.provider.ib.api;
 
-import com.unisoft.algotrader.model.event.Event;
-import com.unisoft.algotrader.model.event.EventBus;
-import com.unisoft.algotrader.provider.ib.api.message.EventInputStreamConsumer;
-import com.unisoft.algotrader.provider.ib.api.message.EventInputStreamConsumerService;
+import com.unisoft.algotrader.model.event.EventBusManager;
+import com.unisoft.algotrader.provider.ib.api.message.EventSerializer;
+import com.unisoft.algotrader.provider.ib.api.message.EventSerializerFactory;
 import org.apache.commons.io.IOUtils;
 
 import java.io.InputStream;
@@ -15,15 +14,20 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readInt;
  */
 public class EventInputStreamConsumerThread implements Runnable {
 
-    private final EventInputStreamConsumerService eventInputStreamConsumerService;
+    private final EventSerializerFactory eventSerializerFactory;
     private final InputStream inputStream;
+    private final int serverCurrentVersion;
+    private final EventBusManager eventBusManager;
     private boolean running = true;
 
     public EventInputStreamConsumerThread(
-            EventInputStreamConsumerService eventInputStreamConsumerService,
-            InputStream inputStream){
-        this.eventInputStreamConsumerService = eventInputStreamConsumerService;
+            EventSerializerFactory eventSerializerFactory,
+            InputStream inputStream, int serverCurrentVersion,
+            EventBusManager eventBusManager){
+        this.eventSerializerFactory = eventSerializerFactory;
         this.inputStream = inputStream;
+        this.serverCurrentVersion = serverCurrentVersion;
+        this.eventBusManager = eventBusManager;
     }
 
     public void run(){
@@ -39,9 +43,9 @@ public class EventInputStreamConsumerThread implements Runnable {
 
     private void consumeMessage() {
         final int messageId = readInt(inputStream);
-        final EventInputStreamConsumer consumer =
-                eventInputStreamConsumerService.getEventCreatingConsumer(IncomingMessageId.fromId(messageId));
-        consumer.consume(inputStream);
+        final EventSerializer eventSerializer =
+                eventSerializerFactory.getEventSerializer(IncomingMessageId.fromId(messageId));
+        eventSerializer.publishEvent(inputStream, serverCurrentVersion, eventBusManager);
     }
 
 }

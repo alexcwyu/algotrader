@@ -97,20 +97,20 @@ public class IBUtils {
         return HistoricalDataType.MID_POINT;
     }
 
-    public static SecurityType convertSecurityType(Instrument.InstType instType){
+    public static String convertSecurityType(Instrument.InstType instType){
         switch (instType){
             case ETF:
-                return SecurityType.STOCK;
+                return "STK";
             case Future:
-                return SecurityType.FUTURE;
+                return "FUT";
             case FX:
-                return SecurityType.FOREX;
+                return "CASH";
             case Index:
-                return SecurityType.INDEX;
+                return "IND";
             case Option:
-                return SecurityType.OPTION;
+                return "OPT";
             case Stock:
-                return SecurityType.STOCK;
+                return "STK";
             default:
                 throw new IllegalArgumentException("unsupported instType:" + instType);
         }
@@ -213,14 +213,14 @@ public class IBUtils {
         return ibOrder;
     }
 
-    public static OrderAction convertAction(Side side){
+    public static String convertAction(Side side){
         switch (side){
             case Buy:
-                return OrderAction.BUY;
+                return "BUY";
             case Sell:
-                return OrderAction.SELL;
+                return "SELL";
             case SellShort:
-                return OrderAction.SELL_SHORT;
+                return "SSHORT";
             default:
                 throw new IllegalArgumentException("unknown order Action, side ="+side);
         }
@@ -269,6 +269,18 @@ public class IBUtils {
                 return OrderType.UNKNOWN;
             default:
                 throw new IllegalArgumentException("unknown OrdType, OrdType ="+ordType);
+        }
+    }
+
+    public static String convertPutCall(Instrument.PutCall putCall){
+        if (putCall == null){
+            return "";
+        }
+        if (putCall == Instrument.PutCall.Put) {
+            return "PUT";
+        }
+        else {
+            return "CALL";
         }
     }
 }
