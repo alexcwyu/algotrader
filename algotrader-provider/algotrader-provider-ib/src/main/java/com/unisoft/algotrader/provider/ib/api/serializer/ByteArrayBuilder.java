@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.provider.ib.api.message;
+package com.unisoft.algotrader.provider.ib.api.serializer;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -76,6 +76,13 @@ public class ByteArrayBuilder {
 
     public byte[] toBytes() {
         buf.flip();
-        return buf.array();
+        byte[] data = new byte[buf.remaining()];
+        buf.get(data);
+        return data;
+
+    }
+
+    public void clear(){
+        buf.clear();
     }
 }

@@ -4,7 +4,6 @@ import com.google.common.collect.Maps;
 import com.unisoft.algotrader.model.refdata.Currency;
 
 import javax.inject.Singleton;
-
 import java.util.Collections;
 
 import static com.unisoft.algotrader.model.refdata.Currency.*;

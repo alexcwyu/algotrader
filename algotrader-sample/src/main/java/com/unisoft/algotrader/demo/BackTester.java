@@ -2,8 +2,8 @@ package com.unisoft.algotrader.demo;
 
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import com.unisoft.algotrader.config.AppConfig;
-import com.unisoft.algotrader.model.event.EventBusManager;
 import com.unisoft.algotrader.model.clock.SimulationClock;
+import com.unisoft.algotrader.model.event.EventBusManager;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.Performance;
 import com.unisoft.algotrader.model.trading.Portfolio;

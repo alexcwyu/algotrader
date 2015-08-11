@@ -1,33 +1,28 @@
-package com.unisoft.algotrader.provider.ib.api.message;
+package com.unisoft.algotrader.provider.ib.api.serializer;
 
 import ch.aonyx.broker.ib.api.Feature;
 import ch.aonyx.broker.ib.api.OutgoingMessageId;
-import com.unisoft.algotrader.model.event.EventBusManager;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
-import com.unisoft.algotrader.provider.ib.IBProvider;
-import com.unisoft.algotrader.provider.ib.IBUtils;
 import com.unisoft.algotrader.provider.ib.api.IBConstants;
 
-import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by alex on 8/3/15.
  */
-public class OrderSerializer extends EventSerializer<Order>{
+public class PlaceOrderSerializer extends Serializer<Order> {
 
     private RefDataStore refDataStore;
+    private AtomicInteger counter;
 
-    public OrderSerializer(int serverCurrentVersion, EventBusManager eventBusManager, RefDataStore refDataStore) {
-        super(serverCurrentVersion, eventBusManager);
+    public PlaceOrderSerializer(AtomicInteger counter, RefDataStore refDataStore, int serverCurrentVersion) {
+        super(serverCurrentVersion);
+        this.counter = counter;
         this.refDataStore = refDataStore;
     }
 
-    @Override
-    public void publishEvent(InputStream inputStream, int serverCurrentVersion, EventBusManager eventBusManager) {
-        throw new UnsupportedOperationException();
-    }
 
     @Override
     public byte[] serialize(Order order) {
@@ -42,20 +37,11 @@ public class OrderSerializer extends EventSerializer<Order>{
         return builder.toBytes();
     }
 
-    private void appendInstrument(ByteArrayBuilder builder, Instrument instrument) {
+    protected void appendInstrument(ByteArrayBuilder builder, Instrument instrument) {
         if (Feature.PLACE_ORDER_BY_CONTRACT_ID.isSupportedByVersion(serverCurrentVersion)) {
             builder.append(instrument.getInstId());
         }
-        builder.append(instrument.getSymbol(IBProvider.PROVIDER_ID));
-        builder.append(IBConstants.SecType.convert(instrument.getType()));
-        builder.append(IBUtils.convertDate(instrument.getExpiryDate().getTime()));
-        builder.append(instrument.getStrike());
-        builder.append(IBConstants.OptionRight.convert(instrument.getPutCall()));
-        builder.append(instrument.getFactor());
-        builder.append(instrument.getExchId(IBProvider.PROVIDER_ID));
-        builder.append(instrument.getExchId(IBProvider.PROVIDER_ID));
-        builder.append(instrument.getCcyId());
-        builder.appendEol(); //localsymbol
+        super.appendInstrument(builder, instrument);
         if (Feature.SECURITY_ID_TYPE.isSupportedByVersion(serverCurrentVersion)) {
             builder.appendEol(); //SecurityIdentifierCode
             builder.appendEol(); //SecurityId
@@ -120,44 +106,20 @@ public class OrderSerializer extends EventSerializer<Order>{
         builder.appendEol(); //VolatilityType
         builder.appendEol(); //DeltaNeutralOrderType
         builder.appendEol(); //DeltaNeutralAuxPrice
-//        if (Feature.DELTA_NEUTRAL_COMBO_ORDER_BY_CONTRACT_ID.isSupportedByVersion(getServerCurrentVersion())) {
-//            if (StringUtils.isNotEmpty(order.getDeltaNeutralOrderType())) {
-//                builder.append(order.getDeltaNeutralContractId());
-//                builder.append(order.getDeltaNeutralSettlingFirm());
-//                builder.append(order.getDeltaNeutralClearingAccount());
-//                builder.append(order.getDeltaNeutralClearingIntent());
-//            }
-//        }
+
+        appendDeltaNeutralComboOrderByContractId(builder, order);
+
         builder.append(0); //ContinuouslyUpdate
         builder.appendEol(); //ReferencePriceType
         builder.append(0.0); //TrailingStopPrice
         if (Feature.TRAILING_PERCENT.isSupportedByVersion(serverCurrentVersion)) {
             builder.append(0.0); //TrailingPercent
         }
-        if (Feature.SCALE_ORDER.isSupportedByVersion(serverCurrentVersion)) {
-            builder.append(0); //ScaleInitialLevelSize
-            builder.append(0); //ScaleSubsequentLevelSize
-        } else {
-            builder.appendEol();
-            builder.append(0); //ScaleInitialLevelSize
-        }
-        builder.append(0.0); //ScalePriceIncrement
-//        if (Feature.SCALE_ORDERS.isSupportedByVersion(serverCurrentVersion)
-//                && (order.getScalePriceIncrement() > 0) && (order.getScalePriceIncrement() != Double.MAX_VALUE)) {
-//            builder.append(order.getScalePriceAdjustValue());
-//            builder.append(order.getScalePriceAdjustInterval());
-//            builder.append(order.getScaleProfitOffset());
-//            builder.append(order.isScaleAutoReset());
-//            builder.append(order.getScaleInitPosition());
-//            builder.append(order.getScaleInitFillQuantity());
-//            builder.append(order.isScaleRandomPercent());
-//        }
-        if (Feature.HEDGING_ORDER.isSupportedByVersion(serverCurrentVersion)) {
-            builder.appendEol(); //HedgeType
-//            if (StringUtils.isNotEmpty(order.getHedgeType().getInitial())) {
-//                builder.append(order.getHedgeParameter());
-//            }
-        }
+
+        appendScaleOrders(builder, order);
+
+        appendHedgingOrder(builder, order);
+
         if (Feature.OPT_OUT_DEFAULT_SMART_ROUTING_ASX_ORDER.isSupportedByVersion(serverCurrentVersion)) {
             builder.append(false); //OptOutSmartRouting
         }
@@ -168,7 +130,60 @@ public class OrderSerializer extends EventSerializer<Order>{
         if (Feature.NOT_HELD.isSupportedByVersion(serverCurrentVersion)) {
             builder.append(false); // NotHeld
         }
-//        if (Feature.DELTA_NEUTRAL_COMBO_ORDER.isSupportedByVersion(serverCurrentVersion)) {
+
+
+        appendDeltaNeutralComboOrder(builder, order);
+        appendAlgorithmStrategy(builder, order);
+        builder.append(false); //RequestPreTradeInformation
+    }
+
+    protected void appendDeltaNeutralComboOrderByContractId(ByteArrayBuilder builder, Order order) {
+        //        if (Feature.DELTA_NEUTRAL_COMBO_ORDER_BY_CONTRACT_ID.isSupportedByVersion(getServerCurrentVersion())) {
+//            if (StringUtils.isNotEmpty(order.getDeltaNeutralOrderType())) {
+//                builder.append(order.getDeltaNeutralContractId());
+//                builder.append(order.getDeltaNeutralSettlingFirm());
+//                builder.append(order.getDeltaNeutralClearingAccount());
+//                builder.append(order.getDeltaNeutralClearingIntent());
+//            }
+//        }
+    }
+
+
+    protected void appendScaleOrders(ByteArrayBuilder builder, Order order) {
+
+        if (Feature.SCALE_ORDER.isSupportedByVersion(serverCurrentVersion)) {
+            builder.append(0); //ScaleInitialLevelSize
+            builder.append(0); //ScaleSubsequentLevelSize
+        } else {
+            builder.appendEol();
+            builder.append(0); //ScaleInitialLevelSize
+        }
+        builder.append(0.0); //ScalePriceIncrement
+
+//        if (Feature.SCALE_ORDERS.isSupportedByVersion(serverCurrentVersion)
+//                && (order.getScalePriceIncrement() > 0) && (order.getScalePriceIncrement() != Double.MAX_VALUE)) {
+//            builder.append(order.getScalePriceAdjustValue());
+//            builder.append(order.getScalePriceAdjustInterval());
+//            builder.append(order.getScaleProfitOffset());
+//            builder.append(order.isScaleAutoReset());
+//            builder.append(order.getScaleInitPosition());
+//            builder.append(order.getScaleInitFillQuantity());
+//            builder.append(order.isScaleRandomPercent());
+//        }
+    }
+
+
+    protected void appendHedgingOrder(ByteArrayBuilder builder, Order order) {
+        if (Feature.HEDGING_ORDER.isSupportedByVersion(serverCurrentVersion)) {
+            builder.appendEol(); //HedgeType
+//            if (StringUtils.isNotEmpty(order.getHedgeType().getInitial())) {
+//                builder.append(order.getHedgeParameter());
+//            }
+        }
+    }
+
+    protected void appendDeltaNeutralComboOrder(ByteArrayBuilder builder, Order order) {
+        //        if (Feature.DELTA_NEUTRAL_COMBO_ORDER.isSupportedByVersion(serverCurrentVersion)) {
 //            final UnderlyingCombo underlyingCombo = contract.getUnderlyingCombo();
 //            if (underlyingCombo != null) {
 //                builder.append(true);
@@ -176,10 +191,13 @@ public class OrderSerializer extends EventSerializer<Order>{
 //                builder.append(underlyingCombo.getDelta());
 //                builder.append(underlyingCombo.getPrice());
 //            } else {
-                builder.append(false);
+        builder.append(false);
 //            }
 //        }
-//        if (Feature.ALGORITHM_ORDER.isSupportedByVersion(getServerCurrentVersion())) {
+    }
+
+    protected void appendAlgorithmStrategy(ByteArrayBuilder builder, Order order) {
+        //        if (Feature.ALGORITHM_ORDER.isSupportedByVersion(getServerCurrentVersion())) {
 //            builder.append(order.getAlgorithmStrategy());
 //            if (StringUtils.isNotEmpty(order.getAlgorithmStrategy())) {
 //                builder.append(order.getAlgorithmParameters().size());
@@ -189,7 +207,6 @@ public class OrderSerializer extends EventSerializer<Order>{
 //                }
 //            }
 //        }
-        builder.append(false); //RequestPreTradeInformation
     }
 
 
@@ -200,13 +217,4 @@ public class OrderSerializer extends EventSerializer<Order>{
         return 38;
     }
 
-    @Override
-    public Order deserialize(InputStream inputStream) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Order deserialize(byte[] bytes) {
-        throw new UnsupportedOperationException();
-    }
 }

@@ -2,8 +2,8 @@ package com.unisoft.algotrader.provider.ib.api;
 
 import ch.aonyx.broker.ib.api.io.IOStreamException;
 import org.apache.commons.lang3.text.StrBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +15,8 @@ import static ch.aonyx.broker.ib.api.ClientMessageCode.INPUT_OUTPUT_STREAM_EXCEP
  */
 public class InputStreamUtils {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(InputStreamUtils.class);
+    private static final Logger LOG = LogManager.getLogger(InputStreamUtils.class);
+
     private static final StrBuilder BUILDER = new StrBuilder();
 
     public static final int readInt(final InputStream inputStream) {
@@ -42,7 +43,7 @@ public class InputStreamUtils {
             return c;
         } catch (final IOException e) {
             final String detailedMessage = "problem reading byte";
-            LOGGER.error("{}: ", detailedMessage, e);
+            LOG.error("{}: ", detailedMessage, e);
             throw new IOStreamException(INPUT_OUTPUT_STREAM_EXCEPTION, detailedMessage, e);
         }
     }

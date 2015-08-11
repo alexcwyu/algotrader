@@ -1,6 +1,5 @@
 package com.unisoft.algotrader.provider.ib;
 
-import ch.aonyx.broker.ib.api.Id;
 import ch.aonyx.broker.ib.api.data.historical.HistoricalDataEventListEvent;
 import ch.aonyx.broker.ib.api.data.historical.HistoricalDataEventListEventListener;
 

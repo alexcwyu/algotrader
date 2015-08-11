@@ -1,0 +1,30 @@
+package com.unisoft.algotrader.provider.ib.api.deserializer;
+
+import com.google.common.collect.Maps;
+import com.unisoft.algotrader.model.event.Event;
+import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
+import com.unisoft.algotrader.provider.ib.api.serializer.Serializer;
+
+import java.util.Map;
+
+/**
+ * Created by alex on 8/2/15.
+ */
+public class DeserializerFactory {
+
+    private final Map<IncomingMessageId, Deserializer<? extends Event>> deserializerCache = Maps.newHashMap();
+
+    private final int serverCurrentVersion;
+
+    public DeserializerFactory(int serverCurrentVersion){
+        this.serverCurrentVersion = serverCurrentVersion;
+    }
+
+    public <M extends Event> Deserializer<M> getDeserializer(final IncomingMessageId messageId) {
+        if (deserializerCache.containsKey(messageId)) {
+            return (Deserializer<M>) deserializerCache.get(messageId);
+        }
+        throw new IllegalArgumentException("unsupported messageID: "+messageId);
+    }
+
+}

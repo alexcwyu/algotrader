@@ -1,18 +1,14 @@
 package com.unisoft.algotrader.provider.ib;
 
-import ch.aonyx.broker.ib.api.SubscriptionRequest;
-import ch.aonyx.broker.ib.api.UnsubscriptionRequest;
 import ch.aonyx.broker.ib.api.contract.Contract;
 import ch.aonyx.broker.ib.api.contract.SecurityType;
 import ch.aonyx.broker.ib.api.data.bar.RealTimeBarDataType;
 import ch.aonyx.broker.ib.api.data.bar.RealTimeBarSubscriptionRequest;
 import ch.aonyx.broker.ib.api.data.bar.RealTimeBarUnsubscriptionRequest;
 import ch.aonyx.broker.ib.api.data.historical.*;
-import ch.aonyx.broker.ib.api.order.OrderAction;
 import ch.aonyx.broker.ib.api.order.OrderType;
 import ch.aonyx.broker.ib.api.util.StringIdUtils;
 import com.unisoft.algotrader.model.event.data.DataType;
-import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.OrdType;
@@ -20,14 +16,12 @@ import com.unisoft.algotrader.model.trading.Side;
 import com.unisoft.algotrader.model.trading.TimeInForce;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
-import zmq.Sub;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Date;
 
 /**

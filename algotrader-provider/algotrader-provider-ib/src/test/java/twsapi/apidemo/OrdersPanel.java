@@ -160,7 +160,7 @@ public class OrdersPanel extends JPanel {
 		ApiDemo.INSTANCE.controller().reqLiveOrders( m_model);
 	}
 	
-	static class OrdersModel extends AbstractTableModel implements ILiveOrderHandler {
+	static class  OrdersModel extends AbstractTableModel implements ILiveOrderHandler {
 		private HashMap<Long,OrderRow> m_map = new HashMap<Long,OrderRow>();
 		private ArrayList<OrderRow> m_orders = new ArrayList<OrderRow>();
 

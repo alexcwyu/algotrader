@@ -6,9 +6,10 @@ import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 
-import static com.unisoft.algotrader.model.event.EventBus.*;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import static com.unisoft.algotrader.model.event.EventBus.*;
 
 /**
  * Created by alex on 5/17/15.
