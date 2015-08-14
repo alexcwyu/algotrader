@@ -33,5 +33,7 @@ public interface RefDataStore {
 
     Instrument getInstrumentBySymbolAndExchange(String symbol, String exchId);
 
+    Instrument getInstrumentBySymbolAndExchange(String providerId, String symbol, String exchId);
+
     long nextId();
 }

@@ -123,6 +123,11 @@ public class InMemoryRefDataStore implements RefDataStore {
     }
 
     @Override
+    public Instrument getInstrumentBySymbolAndExchange(String providerId, String symbol, String exchId) {
+        return instrumentCache.asMap().values().stream().filter(i -> symbol != null && symbol.equals(i.getSymbol(providerId)) && exchId != null && exchId.equals(i.getExchId(providerId))).findAny().orElse(null);
+    }
+
+    @Override
     public long nextId() {
         return idSupplier.next();
     }

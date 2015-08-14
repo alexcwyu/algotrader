@@ -1,20 +1,26 @@
 package com.unisoft.algotrader.provider.ib.api;
 
+import ch.aonyx.broker.ib.api.contract.Contract;
 import com.unisoft.algotrader.model.event.EventBusManager;
 import com.unisoft.algotrader.model.event.execution.Order;
+import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.persistence.SampleInMemoryRefDataStore;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
 import com.unisoft.algotrader.provider.ib.IBConfig;
-import com.unisoft.algotrader.provider.ib.api.deserializer.DeserializerFactory;
 import com.unisoft.algotrader.provider.ib.api.serializer.*;
+import com.unisoft.algotrader.utils.threading.NamedThreadFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by alex on 8/1/15.
@@ -33,6 +39,11 @@ public class IBSession {
     private InputStream inputStream;
     private EventInputStreamConsumer inputStreamConsumer;
 
+
+    private final ExecutorService executor = Executors.newFixedThreadPool(1, new NamedThreadFactory("IBConnection"));
+
+
+    private Lock lock = new ReentrantLock();
     private AtomicInteger orderId = new AtomicInteger(0);
     private AtomicInteger requestId = new AtomicInteger(0);
 
@@ -62,24 +73,19 @@ public class IBSession {
     public int getServerCurrentVersion() {
         return serverCurrentVersion;
     }
-
-    public Socket getSocket() {
-        return socket;
-    }
-
     public InputStream getInputStream() {
         return inputStream;
     }
 
-
     public void connect(){
-
         try {
             this.socket = new Socket(ibConfig.host, ibConfig.port);
             this.outputStream = new DataOutputStream(socket.getOutputStream());
             this.inputStream = new DataInputStream(socket.getInputStream());
 
             handShake();
+            initSerializer();
+            initInputStreamConsumer();
         }
         catch (IOException e){
             LOG.error(e);
@@ -115,29 +121,23 @@ public class IBSession {
                 send(builder.toBytes());
                 builder.clear();
             }
-
-
-
-            this.inputStreamConsumer = new EventInputStreamConsumer(this);
-            initSerializer();
-
         } catch (final Exception e) {
             LOG.error(e);
             disconnect();
         }
-
-
     }
 
     private void initSerializer(){
         placeOrderRequestSerializer = new PlaceOrderSerializer(orderId, refDataStore, serverCurrentVersion);
         cancelOrderRequestSerializer = new CancelOrderSerializer(serverCurrentVersion);
-
         realTimeMarketDataRequestSerializer = new RealTimeMarketDataSerializer(requestId, refDataStore, serverCurrentVersion);
         historicalMarketDataRequestSerializer = new HistoricalMarketDataSerializer(orderId, refDataStore, serverCurrentVersion);
-
     }
 
+    private void initInputStreamConsumer(){
+        inputStreamConsumer = new EventInputStreamConsumer(this);
+        executor.submit(this.inputStreamConsumer);
+    }
 
     public void subscribeRealTimeData(SubscriptionKey subscriptionKey) {
         try {
@@ -147,7 +147,6 @@ public class IBSession {
         }
     }
 
-
     public void subscribeHistoricalData(SubscriptionKey subscriptionKey) {
         try {
             send(historicalMarketDataRequestSerializer.serialize(subscriptionKey));
@@ -155,6 +154,12 @@ public class IBSession {
             LOG.error(e);
         }
     }
+
+    public void requestAccountUpdate(){
+        //TODO
+    }
+
+
 
     public void sendOrder(Order order){
         try {
@@ -173,8 +178,56 @@ public class IBSession {
     }
 
 
+    public void onTickPrice(final int requestId, final int tickType, final double price, final int autoExecute){
+
+    }
+
+    public void onTickSize(final int requestId, final int tickType, final int size){
+
+    }
+
+    public void onOrderStatus(final int orderId, final String orderStatus, final int filledQuantity,
+                              final int remainingQuantity, final double averageFilledPrice, final int permanentId,
+                              final int parentOrderId, final double lastFilledPrice, final int clientId, final String heldCause){
+
+    }
+
+    public void onMessage(final int requestId, final int code, final String message){
+
+    }
+
+    public void onUpdateAccountValue(final String key, final String value, final String currency,
+                                     final String accountName){
+
+    }
+
+    public void onUpdateAccountTime(final String time){
+
+    }
+
+    public void onOpenOrder(Order order){
+
+    }
+
+    public void onPortfolioUpdateEvent(final Instrument instrument, final int position, final double marketPrice,
+                                       final double marketValue, final double averageCost, final double unrealizedProfitAndLoss,
+                                       final double realizedProfitAndLoss, final String accountName){
+
+    }
+
+    public void onNextValidOrderId(final int nextValidOrderId){
+
+    }
+
+
     private void send(final byte[] bytes) throws IOException {
-        outputStream.write(bytes);
+        lock.lock();
+        try {
+            outputStream.write(bytes);
+        }
+        finally {
+            lock.unlock();
+        }
     }
 
     public void disconnect(){

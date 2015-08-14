@@ -22,23 +22,26 @@ public class IBConstants {
 
     public enum SecType{
 
-        STOCK(Instrument.InstType.Stock, "STK".getBytes()),
-        OPTION(Instrument.InstType.Option, "OPT".getBytes()),
-        FUTURE(Instrument.InstType.Future, "FUT".getBytes()),
-        INDEX(Instrument.InstType.Index, "IND".getBytes()),
-        FUTURE_ON_OPTION(Instrument.InstType.FutureOption, "FOP".getBytes()),
-        FOREX(Instrument.InstType.FX, "CASH".getBytes()),
-        COMBO(Instrument.InstType.Combo, "BAG".getBytes());
+        STOCK(Instrument.InstType.Stock, "STK"),
+        OPTION(Instrument.InstType.Option, "OPT"),
+        FUTURE(Instrument.InstType.Future, "FUT"),
+        INDEX(Instrument.InstType.Index, "IND"),
+        FUTURE_ON_OPTION(Instrument.InstType.FutureOption, "FOP"),
+        FOREX(Instrument.InstType.FX, "CASH"),
+        COMBO(Instrument.InstType.Combo, "BAG");
 
         private static Map<Instrument.InstType, byte[]> map = Maps.newHashMap();
         private static Map<byte[], Instrument.InstType> byteArrayMap = Maps.newHashMap();
+        private static Map<String, Instrument.InstType> stringMap = Maps.newHashMap();
 
         private final Instrument.InstType instType;
         private final byte[] bytes;
+        private final String shortName;
 
-        SecType(Instrument.InstType instType, byte[] bytes){
+        SecType(Instrument.InstType instType, String shortName){
             this.instType = instType;
-            this.bytes = bytes;
+            this.bytes = shortName.getBytes();
+            this.shortName = shortName;
         }
 
         public Instrument.InstType instType() {
@@ -49,10 +52,15 @@ public class IBConstants {
             return bytes;
         }
 
+        public String shortName() {
+            return shortName;
+        }
+
         static {
             for (SecType secType : SecType.values()) {
                 map.put(secType.instType, secType.bytes);
                 byteArrayMap.put(secType.bytes, secType.instType);
+                stringMap.put(secType.shortName, secType.instType);
             }
         }
 
@@ -66,6 +74,16 @@ public class IBConstants {
             return UNKNOWN_BYTES;
         }
 
+        public static Instrument.InstType convert(String name){
+            if (name!= null) {
+                for (SecType secType : SecType.values()) {
+                    if (secType.shortName.endsWith(name)) {
+                        return secType.instType;
+                    }
+                }
+            }
+            return null;
+        }
         public static Instrument.InstType convert(byte[] bytes){
             if (bytes!= null) {
                 for (SecType secType : SecType.values()) {
@@ -80,21 +98,24 @@ public class IBConstants {
 
     public enum TIF{
 
-        UNKNOWN(TimeInForce.Undefined, "UNKNOWN".getBytes()),
-        DAY(TimeInForce.Day, "DAY".getBytes()),
-        GOOD_TILL_CANCEL(TimeInForce.GTC, "GTC".getBytes()),
-        IMMEDIATE_OR_CANCEL(TimeInForce.FOK, "IOC".getBytes()),
-        GOOD_TILL_DATE(TimeInForce.GoodTillDate, "GTD".getBytes());
+        UNKNOWN(TimeInForce.Undefined, "UNKNOWN"),
+        DAY(TimeInForce.Day, "DAY"),
+        GOOD_TILL_CANCEL(TimeInForce.GTC, "GTC"),
+        IMMEDIATE_OR_CANCEL(TimeInForce.FOK, "IOC"),
+        GOOD_TILL_DATE(TimeInForce.GoodTillDate, "GTD");
 
         private static Map<TimeInForce, byte[]> map = Maps.newHashMap();
         private static Map<byte[], TimeInForce> byteArrayMap = Maps.newHashMap();
+        private static Map<String, TimeInForce> stringMap = Maps.newHashMap();
 
         private final TimeInForce tif;
         private final byte[] bytes;
+        private final String shortName;
 
-        TIF(TimeInForce tif, byte[] bytes){
+        TIF(TimeInForce tif, String shortName){
             this.tif = tif;
-            this.bytes = bytes;
+            this.shortName = shortName;
+            this.bytes = shortName.getBytes();
         }
 
         public TimeInForce tif() {
@@ -105,6 +126,9 @@ public class IBConstants {
             return bytes;
         }
 
+        public String shortName() {
+            return shortName;
+        }
         static {
             for (TIF timeInForce : TIF.values()) {
                 map.put(timeInForce.tif, timeInForce.bytes);
@@ -130,22 +154,35 @@ public class IBConstants {
             }
             return null;
         }
+        public static TimeInForce convert(String name){
+            if (name!= null) {
+                for (TIF timeInForce : TIF.values()) {
+                    if (timeInForce.shortName.equals(name)) {
+                        return timeInForce.tif;
+                    }
+                }
+            }
+            return null;
+        }
     }
 
     public enum OptionRight{
 
-        PUT(Instrument.PutCall.Put, "PUT".getBytes()),
-        CALL(Instrument.PutCall.Call, "CALL".getBytes());
+        PUT(Instrument.PutCall.Put, "PUT"),
+        CALL(Instrument.PutCall.Call, "CALL");
 
         private static Map<Instrument.PutCall, byte[]> map = Maps.newHashMap();
         private static Map<byte[], Instrument.PutCall> byteArrayMap = Maps.newHashMap();
+        private static Map<String, Instrument.PutCall> stringMap = Maps.newHashMap();
 
         private final Instrument.PutCall putCall;
         private final byte[] bytes;
+        private final String shortName;
 
-        OptionRight(Instrument.PutCall putCall, byte[] bytes){
+        OptionRight(Instrument.PutCall putCall, String shortName){
             this.putCall = putCall;
-            this.bytes = bytes;
+            this.bytes = shortName.getBytes();
+            this.shortName = shortName;
         }
 
         public Instrument.PutCall putCall() {
@@ -156,10 +193,14 @@ public class IBConstants {
             return bytes;
         }
 
+        public String shortName() {
+            return shortName;
+        }
         static {
             for (OptionRight optionRight : OptionRight.values()) {
                 map.put(optionRight.putCall, optionRight.bytes);
                 byteArrayMap.put(optionRight.bytes, optionRight.putCall);
+                stringMap.put(optionRight.shortName, optionRight.putCall);
             }
         }
 
@@ -175,6 +216,17 @@ public class IBConstants {
             if (bytes!= null) {
                 for (OptionRight optionRight : OptionRight.values()) {
                     if (Arrays.equals(bytes, optionRight.bytes)) {
+                        return optionRight.putCall;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static Instrument.PutCall convert(String name){
+            if (name!= null) {
+                for (OptionRight optionRight : OptionRight.values()) {
+                    if (optionRight.shortName.equals(name)) {
                         return optionRight.putCall;
                     }
                 }
@@ -222,27 +274,31 @@ public class IBConstants {
 
     public enum OrderType{
 
-        MARKET(OrdType.Market, "MARKET".getBytes()),
-        LIMIT(OrdType.Limit, "LIMIT".getBytes()),
-        STOP(OrdType.Stop, "STOP".getBytes()),
-        STOP_LIMIT(OrdType.StopLimit, "STOP_LIMIT".getBytes()),
-        MARKET_ON_CLOSE(OrdType.MarketOnClose, "MARKET_ON_CLOSE".getBytes()),
-        LIMIT_ON_CLOSE(OrdType.LimitOnClose, "LIMIT_ON_CLOSE".getBytes()),
-        TRAILING_STOP(OrdType.TrailingStop, "TRAILING_STOP".getBytes()),
-        MARKET_TO_LIMIT(OrdType.MarketWithLeftoverAsLimit, "MARKET_TO_LIMIT".getBytes()),
-        MARKET_IF_PRICE_TOUCHED(OrdType.MIT, "MARKET_IF_PRICE_TOUCHED".getBytes()),
-        MARKET_ON_OPEN(OrdType.OnClose, "MARKET_ON_OPEN".getBytes()),
-        UNKNOWN(OrdType.Undefined, "UNKNOWN".getBytes());
+        MARKET(OrdType.Market, "MARKET"),
+        LIMIT(OrdType.Limit, "LIMIT"),
+        STOP(OrdType.Stop, "STOP"),
+        STOP_LIMIT(OrdType.StopLimit, "STOP_LIMIT"),
+        MARKET_ON_CLOSE(OrdType.MarketOnClose, "MARKET_ON_CLOSE"),
+        LIMIT_ON_CLOSE(OrdType.LimitOnClose, "LIMIT_ON_CLOSE"),
+        TRAILING_STOP(OrdType.TrailingStop, "TRAILING_STOP"),
+        MARKET_TO_LIMIT(OrdType.MarketWithLeftoverAsLimit, "MARKET_TO_LIMIT"),
+        MARKET_IF_PRICE_TOUCHED(OrdType.MIT, "MARKET_IF_PRICE_TOUCHED"),
+        MARKET_ON_OPEN(OrdType.OnClose, "MARKET_ON_OPEN"),
+        UNKNOWN(OrdType.Undefined, "UNKNOWN");
 
         private static Map<OrdType, byte[]> ordTypeMap = Maps.newHashMap();
         private static Map<byte[], OrdType> byteArrayMap = Maps.newHashMap();
+        private static Map<String, OrdType> stringMap = Maps.newHashMap();
 
         private final OrdType ordType;
         private final byte[] bytes;
+        private final String shortName;
 
-        OrderType(OrdType ordType, byte[] bytes){
+
+        OrderType(OrdType ordType, String shortName){
             this.ordType = ordType;
-            this.bytes = bytes;
+            this.shortName = shortName;
+            this.bytes = shortName.getBytes();
         }
 
         public OrdType ordType() {
@@ -253,10 +309,14 @@ public class IBConstants {
             return bytes;
         }
 
+        public String shortName() {
+            return shortName;
+        }
         static {
             for (OrderType orderType : OrderType.values()) {
                 ordTypeMap.put(orderType.ordType, orderType.bytes);
                 byteArrayMap.put(orderType.bytes, orderType.ordType);
+                stringMap.put(orderType.shortName, orderType.ordType);
             }
         }
 
@@ -278,24 +338,37 @@ public class IBConstants {
             }
             return OrdType.Undefined;
         }
+        public static OrdType convert(String name){
+            if (name!= null) {
+                for (OrderType orderType : OrderType.values()) {
+                    if (orderType.shortName.equals(name)) {
+                        return orderType.ordType;
+                    }
+                }
+            }
+            return OrdType.Undefined;
+        }
     }
 
     public enum Action{
 
-        BUY(Side.Buy, "BUY".getBytes()),
-        SELL(Side.Sell, "SELL".getBytes()),
-        SSHORT(Side.SellShort, "SSHORT".getBytes()),
-        UNKNOWN(Side.Undefined, "UNKNOWN".getBytes());
+        BUY(Side.Buy, "BUY"),
+        SELL(Side.Sell, "SELL"),
+        SSHORT(Side.SellShort, "SSHORT"),
+        UNKNOWN(Side.Undefined, "UNKNOWN");
 
         private static Map<Side, byte[]> sideMap = Maps.newHashMap();
         private static Map<byte[], Side> byteArrayMap = Maps.newHashMap();
+        private static Map<String, Side> stringArrayMap = Maps.newHashMap();
 
         private final Side side;
         private final byte[] bytes;
+        private final String shortName;
 
-        Action(Side side, byte[] bytes){
+        Action(Side side, String shortName){
             this.side = side;
-            this.bytes = bytes;
+            this.bytes = shortName.getBytes();
+            this.shortName = shortName;
         }
 
         public Side getSide() {
@@ -306,10 +379,14 @@ public class IBConstants {
             return bytes;
         }
 
+        public String shortName() {
+            return shortName;
+        }
         static {
             for (Action action : Action.values()) {
                 sideMap.put(action.side, action.bytes);
                 byteArrayMap.put(action.bytes, action.side);
+                stringArrayMap.put(action.shortName, action.side);
             }
         }
 
@@ -325,6 +402,17 @@ public class IBConstants {
             if (bytes!= null) {
                 for (Action action : Action.values()) {
                     if (Arrays.equals(bytes, action.bytes)) {
+                        return action.side;
+                    }
+                }
+            }
+            return Side.Undefined;
+        }
+
+        public static Side convert(String name){
+            if (name!= null) {
+                for (Action action : Action.values()) {
+                    if (action.shortName.equals(name)) {
                         return action.side;
                     }
                 }
@@ -398,18 +486,44 @@ public class IBConstants {
         int DAY_1  = 11;
     }
 
-    public interface TickType{
-        // Constants
-        int BID_SIZE		= 0;
-        int BID			= 1;
-        int ASK			= 2;
-        int ASK_SIZE		= 3;
-        int LAST			= 4;
-        int LAST_SIZE	= 5;
-        int HIGH			= 6;
-        int LOW			= 7;
-        int VOLUME		= 8; // not defined
-        int CLOSE		= 9; // last day close
+    public enum TickType {
+
+        UNKNOWN(-1), BID_SIZE(0), BID_PRICE(1), ASK_PRICE(2), ASK_SIZE(3), LAST_PRICE(4), LAST_SIZE(5), DAY_HIGH(6),
+        DAY_LOW(7), VOLUME(8), CLOSE(9), BID_OPTION_COMPUTATION(10), ASK_OPTION_COMPUTATION(11),
+        LAST_OPTION_COMPUTATION(12), MODEL_OPTION_COMPUTATION(13), DAY_OPEN(14), LOW_13_WEEK(15), HIGH_13_WEEK(16),
+        LOW_26_WEEK(17), HIGH_26_WEEK(18), LOW_52_WEEK(19), HIGH_52_WEEK(20), AVERAGE_VOLUME(21), OPEN_INTEREST(22),
+        OPTION_HISTORICAL_VOLATILITY(23), OPTION_IMPLIED_VOLATILITY(24), OPTION_BID_EXCHANGE(25), OPTION_ASK_EXCHANGE(26),
+        OPTION_CALL_OPEN_INTEREST(27), OPTION_PUT_OPEN_INTEREST(28), OPTION_CALL_VOLUME(29), OPTION_PUT_VOLUME(30),
+        INDEX_FUTURE_PREMIUM(31), BID_EXCHANGE(32), ASK_EXCHANGE(33), AUCTION_VOLUME(34), AUCTION_PRICE(35),
+        AUCTION_IMBALANCE(36), MARK_PRICE(37), BID_EFP_COMPUTATION(38), ASK_EFP_COMPUTATION(39), LAST_EFP_COMPUTATION(40),
+        OPEN_EFP_COMPUTATION(41), HIGH_EFP_COMPUTATION(42), LOW_EFP_COMPUTATION(43), CLOSE_EFP_COMPUTATION(44),
+        LAST_TIMESTAMP(45), SHORTABLE(46), FUNDAMENTAL_RATIOS(47), REAL_TIME_VOLUME(48), HALTED(49), BID_YIELD(50),
+        ASK_YIELD(51), LAST_YIELD(52), CUSTOM_OPTION_COMPUTATION(53), TRADE_COUNT(54), TRADE_RATE(55), VOLUME_RATE(56);
+
+        private final int value;
+        private static final Map<Integer, TickType> MAP;
+
+        static {
+            MAP = Maps.newHashMap();
+            for (final TickType tickType : values()) {
+                MAP.put(tickType.getValue(), tickType);
+            }
+        }
+
+        private TickType(final int value) {
+            this.value = value;
+        }
+
+        public final int getValue() {
+            return value;
+        }
+
+        public static final TickType fromValue(final int value) {
+            if (MAP.containsKey(value)) {
+                return MAP.get(value);
+            }
+            return UNKNOWN;
+        }
     }
 
     public interface ErrorCode{

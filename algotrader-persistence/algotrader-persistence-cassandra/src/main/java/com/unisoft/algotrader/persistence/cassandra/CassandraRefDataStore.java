@@ -117,6 +117,12 @@ public class CassandraRefDataStore implements RefDataStore {
         return  result!=null && result.size()>0 ? result.get(0) : null;
     }
 
+    @Override
+    public Instrument getInstrumentBySymbolAndExchange(String providerId, String symbol, String exchId){
+        return getAllInstruments().stream().filter(i -> symbol != null && symbol.equals(i.getSymbol(providerId)) && exchId != null && exchId.equals(i.getExchId(providerId))).findAny().orElse(null);
+    }
+
+
     public long nextId(){
         return idSupplier.next();
     }
