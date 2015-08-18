@@ -2,12 +2,16 @@ package com.unisoft.algotrader.provider.ib.api;
 
 import ch.aonyx.broker.ib.api.contract.Contract;
 import com.unisoft.algotrader.model.event.EventBusManager;
+import com.unisoft.algotrader.model.event.data.Bar;
+import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.persistence.SampleInMemoryRefDataStore;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
 import com.unisoft.algotrader.provider.ib.IBConfig;
+import com.unisoft.algotrader.provider.ib.api.model.InstrumentSpecification;
+import com.unisoft.algotrader.provider.ib.api.model.MarketScannerData;
 import com.unisoft.algotrader.provider.ib.api.serializer.*;
 import com.unisoft.algotrader.utils.threading.NamedThreadFactory;
 import org.apache.commons.io.IOUtils;
@@ -16,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -192,6 +197,47 @@ public class IBSession {
 
     }
 
+    public void onMarketDepthUpdate(final int requestId, final int rowId, final int operation,
+                                    final int bookSide, final double price, final int size){
+
+    }
+
+    public void onTickOptionComputationEvent(final int requestId, final int tickType,
+                   final double impliedVolatility, final double delta, final double price, final double presentValueDividend,
+                   final double gamma, final double vega, final double theta, final double underlyingPrice){
+
+    }
+
+    public void onMarketDepthL2Update(final int requestId, final int rowId,
+                                      final String marketMakerName, final int operation, final int bookSide, final double price, final int size){
+
+    }
+    public void onNewsBulletinUpdate(final int newsBulletinId, final int newBulletinTypeValue,
+                                     final String message, final String exchange){
+
+    }
+
+    public void onMarketScannerValidParameters(final String xml){
+
+    }
+
+
+    public void onMarketScannerData(int requestId, List<MarketScannerData> marketScannerData){
+
+    }
+
+    public void onManagedAccountList(String commaSeparatedAccountList){
+
+    }
+
+    public void onFinancialAdvisorConfiguration(int dataType, String xml){
+
+    }
+
+    public void onhistoricalDataEvents(int requestId, List<Bar> historicalDataEvents){
+
+    }
+
     public void onMessage(final int requestId, final int code, final String message){
 
     }
@@ -209,6 +255,10 @@ public class IBSession {
 
     }
 
+    public void onExecutionReport(int requestId, ExecutionReport executionReport){
+
+    }
+
     public void onPortfolioUpdateEvent(final Instrument instrument, final int position, final double marketPrice,
                                        final double marketValue, final double averageCost, final double unrealizedProfitAndLoss,
                                        final double realizedProfitAndLoss, final String accountName){
@@ -219,6 +269,9 @@ public class IBSession {
 
     }
 
+    public void onInstrumentSpecification(final int requestId, final InstrumentSpecification instrumentSpecification){
+
+    }
 
     private void send(final byte[] bytes) throws IOException {
         lock.lock();

@@ -419,10 +419,78 @@ public class IBConstants {
             }
             return Side.Undefined;
         }
-
-
     }
 
+
+    public enum IBSide{
+
+        BUY(Side.Buy, "BOT"),
+        SELL(Side.Sell, "SLD"),
+        UNKNOWN(Side.Undefined, "UNKNOWN");
+
+        private static Map<Side, byte[]> sideMap = Maps.newHashMap();
+        private static Map<byte[], Side> byteArrayMap = Maps.newHashMap();
+        private static Map<String, Side> stringArrayMap = Maps.newHashMap();
+
+        private final Side side;
+        private final byte[] bytes;
+        private final String shortName;
+
+        IBSide(Side side, String shortName){
+            this.side = side;
+            this.bytes = shortName.getBytes();
+            this.shortName = shortName;
+        }
+
+        public Side getSide() {
+            return side;
+        }
+
+        public byte[] getBytes() {
+            return bytes;
+        }
+
+        public String shortName() {
+            return shortName;
+        }
+        static {
+            for (Action action : Action.values()) {
+                sideMap.put(action.side, action.bytes);
+                byteArrayMap.put(action.bytes, action.side);
+                stringArrayMap.put(action.shortName, action.side);
+            }
+        }
+
+        public static byte[] convert(Side side){
+            if (side == null)
+                return EMPTY_BYTES;
+            if (sideMap.containsKey(side))
+                return sideMap.get(side);
+            return UNKNOWN.bytes;
+        }
+
+        public static Side convert(byte[] bytes){
+            if (bytes!= null) {
+                for (Action action : Action.values()) {
+                    if (Arrays.equals(bytes, action.bytes)) {
+                        return action.side;
+                    }
+                }
+            }
+            return Side.Undefined;
+        }
+
+        public static Side convert(String name){
+            if (name!= null) {
+                for (Action action : Action.values()) {
+                    if (action.shortName.equals(name)) {
+                        return action.side;
+                    }
+                }
+            }
+            return Side.Undefined;
+        }
+    }
     public enum RealTimeBarDataType{
         UNKNOWN("UNKNOWN"), EMPTY(""), TRADES("TRADES"), BID("BID"), ASK("ASK"), MID_POINT("MIDPOINT");
 
