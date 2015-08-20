@@ -19,7 +19,7 @@ public class TickOptionComputationEventDeserializer extends Deserializer {
     private static final int VERSION = 6;
 
     public TickOptionComputationEventDeserializer(int serverCurrentVersion){
-        super(IncomingMessageId.MARKET_DEPTH_UPDATE, serverCurrentVersion);
+        super(IncomingMessageId.TICK_OPTION_COMPUTATION, serverCurrentVersion);
     }
 
     @Override

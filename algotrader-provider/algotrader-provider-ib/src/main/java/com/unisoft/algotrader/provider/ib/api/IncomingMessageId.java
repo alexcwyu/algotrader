@@ -43,7 +43,18 @@ public enum IncomingMessageId {
     DELTA_NEUTRAL_VALIDATION(56),
     TICK_SNAPSHOT_END(57),
     MARKET_DATA_TYPE(58),
-    COMMISSION_REPORT(59);
+    COMMISSION_REPORT(59),
+
+    POSITION(61),
+    POSITION_END(62),
+    ACCOUNT_SUMMARY(63),
+    ACCOUNT_SUMMARY_END(64),
+    VERIFY_MESSAGE_API(65),
+    VERIFY_COMPLETED(66),
+    DISPLAY_GROUP_LIST(67),
+    DISPLAY_GROUP_UPDATED(68),
+
+    ;
 
     private final int id;
     private static final TIntObjectHashMap<IncomingMessageId> MAP = new TIntObjectHashMap();

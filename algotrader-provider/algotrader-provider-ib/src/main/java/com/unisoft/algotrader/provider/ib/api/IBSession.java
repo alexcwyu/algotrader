@@ -10,6 +10,7 @@ import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.persistence.SampleInMemoryRefDataStore;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
 import com.unisoft.algotrader.provider.ib.IBConfig;
+import com.unisoft.algotrader.provider.ib.api.model.CommissionReport;
 import com.unisoft.algotrader.provider.ib.api.model.InstrumentSpecification;
 import com.unisoft.algotrader.provider.ib.api.model.MarketScannerData;
 import com.unisoft.algotrader.provider.ib.api.serializer.*;
@@ -188,6 +189,101 @@ public class IBSession {
     }
 
     public void onTickSize(final int requestId, final int tickType, final int size){
+
+    }
+
+    public void onTickGenericEvent(final int requestId, final IBConstants.TickType tickType, final double value){
+
+    }
+
+    public void onTickStringEvent(final int requestId, final IBConstants.TickType tickType, final String value){
+
+    }
+
+    public void onServerCurrentTime(final long timestamp){
+
+    }
+
+    public void onRealTimeBarEvent(final int requestId, final long timestamp, final double open,
+                                   final double high, final double low, final double close, final long volume,
+                                   final double weightedAveragePrice, final int tradeNumber){
+
+    }
+
+    public void onFundamentalDataEvent(final int requestId, final String xml){
+
+    }
+
+    public void onRetrieveOpenOrderEndEvent(){
+
+    }
+
+    public void onContractSpecificationEndEvent(final int requestId){
+
+    }
+
+    public void onAccountUpdateValueEndEvent(final String accountName){
+    }
+
+    public void onExecutionReportEndEvent(final int requestId){
+    }
+
+
+    public void onDeltaNeutralValidationEvent(final int requestId,
+        final int instId,
+        final double delta,
+        final double price){
+    }
+
+
+    public void onTickSnapshotEndEvent(final int requestId){
+
+    }
+
+    public void onMarketDataTypeEvent(final int requestId, IBConstants.MarketDataType marketDataType){
+
+    }
+
+    public void onCommissionReport(final CommissionReport commissionReport){
+
+    }
+
+    public void onPosition(){
+        //TODO
+    }
+    public void onPositionEnd(){
+
+    }
+
+    public void onAccountSummary(int value, String errorText, String open, String completedIndicator, String high){
+
+    }
+
+    public void onAccountSummaryEnd(int value){
+
+    }
+
+
+    public void onVerifyMessageAPI(String message){
+
+    }
+
+
+    public void onVerifyCompleted(boolean bool, String errorText){
+
+    }
+    public void onDisplayGroupList(final int requestId, final String contractInfo){
+
+    }
+
+    public void onDisplayGroupUpdated(final int requestId, final String contractInfo){
+
+    }
+
+
+    public void onTickEfpEvent(final int requestId, final IBConstants.TickType tickType, final double basisPoints,
+                               final String formattedBasisPoints, final double impliedFuturePrice, final int holdDays,
+                               final String futureExpiry, final double dividendImpact, final double dividendToExpiry){
 
     }
 
