@@ -18,11 +18,9 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
 public class InstrumentSpecificationEventDeserializer extends Deserializer {
 
 
-    private final RefDataStore refDataStore;
 
-    public InstrumentSpecificationEventDeserializer(int serverCurrentVersion, RefDataStore refDataStore){
+    public InstrumentSpecificationEventDeserializer(){
         super(IncomingMessageId.CONTRACT_SPECIFICATION);
-        this.refDataStore = refDataStore;
     }
 
     @Override
@@ -31,13 +29,13 @@ public class InstrumentSpecificationEventDeserializer extends Deserializer {
         if (version >= 3) {
             requestId = readInt(inputStream);
         }
-        final InstrumentSpecification instrumentSpecification = consumeInstrumentSpecification(version, inputStream);
+        final InstrumentSpecification instrumentSpecification = consumeInstrumentSpecification(version, inputStream, ibSession);
 
         ibSession.onInstrumentSpecification(requestId, instrumentSpecification);
     }
 
 
-    private InstrumentSpecification consumeInstrumentSpecification(final int version, final InputStream inputStream) {
+    private InstrumentSpecification consumeInstrumentSpecification(final int version, final InputStream inputStream, final IBSession ibSession) {
         final InstrumentSpecification instrumentSpecification = new InstrumentSpecification();
         final String symbol = readString(inputStream);
         final Instrument.InstType instType = IBConstants.SecType.convert(readString(inputStream));
@@ -69,7 +67,7 @@ public class InstrumentSpecificationEventDeserializer extends Deserializer {
             primaryExchange = readString(inputStream);
         }
 
-        Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
+        Instrument instrument = ibSession.getRefDataStore().getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
         instrumentSpecification.setInstrument(instrument);
 
         if (version >= 6) {

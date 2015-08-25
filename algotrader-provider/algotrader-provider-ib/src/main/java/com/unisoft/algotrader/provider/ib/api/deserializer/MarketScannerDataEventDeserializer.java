@@ -22,12 +22,8 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readString
  */
 public class MarketScannerDataEventDeserializer extends Deserializer {
 
-
-    private final RefDataStore refDataStore;
-
-    public MarketScannerDataEventDeserializer(int serverCurrentVersion, RefDataStore refDataStore){
+    public MarketScannerDataEventDeserializer(){
         super(IncomingMessageId.MARKET_SCANNER_DATA);
-        this.refDataStore = refDataStore;
     }
 
     @Override
@@ -36,13 +32,13 @@ public class MarketScannerDataEventDeserializer extends Deserializer {
         final List<MarketScannerData> marketScannerDataEvents = Lists.newArrayList();
         final int marketScannerDatas = readInt(inputStream);
         for (int i = 0; i < marketScannerDatas; i++) {
-            marketScannerDataEvents.add(consumeMarketScannerDataEvent(version, requestId, inputStream));
+            marketScannerDataEvents.add(consumeMarketScannerDataEvent(version, inputStream, ibSession, requestId));
         }
 
         ibSession.onMarketScannerData(requestId, marketScannerDataEvents);
     }
 
-    private MarketScannerData consumeMarketScannerDataEvent(final int version, final int requestId, final InputStream inputStream) {
+    private MarketScannerData consumeMarketScannerDataEvent(final int version, final InputStream inputStream, final IBSession ibSession, final int requestId) {
 
         final InstrumentSpecification contractSpecification = new InstrumentSpecification();
         final int ranking = readInt(inputStream);
@@ -72,7 +68,7 @@ public class MarketScannerDataEventDeserializer extends Deserializer {
             comboLegDescription = readString(inputStream);
         }
 
-        Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
+        Instrument instrument = ibSession.getRefDataStore().getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
         if (instrument == null){
             throw new RuntimeException("Cannot find instrumnet symbol=" + symbol +", primaryExchange="+exchange);
         }

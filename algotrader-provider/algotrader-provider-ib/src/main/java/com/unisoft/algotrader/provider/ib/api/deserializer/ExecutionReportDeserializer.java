@@ -19,11 +19,9 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
  */
 public class ExecutionReportDeserializer extends Deserializer {
 
-    private final RefDataStore refDataStore;
 
-    public ExecutionReportDeserializer(int serverCurrentVersion, RefDataStore refDataStore){
+    public ExecutionReportDeserializer(){
         super(IncomingMessageId.EXECUTION_REPORT);
-        this.refDataStore = refDataStore;
     }
 
     @Override
@@ -33,12 +31,12 @@ public class ExecutionReportDeserializer extends Deserializer {
             requestId = readInt(inputStream);
         }
         final int orderId = readInt(inputStream);
-        final Instrument instrument = parseInstrument(version, inputStream);
+        final Instrument instrument = parseInstrument(version, inputStream, ibSession);
         final ExecutionReport executionReport = consumeExecutionReport(version, inputStream, orderId);
         ibSession.onExecutionReport(requestId, executionReport);
     }
 
-    protected Instrument parseInstrument(final int version, final InputStream inputStream) {
+    protected Instrument parseInstrument(final int version, final InputStream inputStream, final IBSession ibSession) {
         final int instId = (version >= 5)? InputStreamUtils.readInt(inputStream) : 0;
         final String symbol = readString(inputStream);
         final Instrument.InstType instType = IBConstants.SecType.convert(readString(inputStream));
@@ -51,7 +49,7 @@ public class ExecutionReportDeserializer extends Deserializer {
         final String localSymbol = readString(inputStream);
         final String tradingClass = (version >= 10)? readString(inputStream) : null;
 
-        Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
+        Instrument instrument = ibSession.getRefDataStore().getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
         if (instrument == null){
             throw new RuntimeException("Cannot find instrumnet symbol=" + symbol +", primaryExchange="+exchange);
         }

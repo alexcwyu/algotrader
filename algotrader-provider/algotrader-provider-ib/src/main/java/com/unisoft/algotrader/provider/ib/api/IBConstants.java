@@ -20,6 +20,129 @@ public class IBConstants {
     public static final byte[] EMPTY_BYTES = EMPTY.getBytes();
     public static final byte[] UNKNOWN_BYTES = UNKNOWN.getBytes();
 
+    public enum NewsBulletinType {
+
+        UNKNOWN(-1), REGULAR(1), EXCHANGE_NON_AVAILABLE(2), EXCHANGE_AVAILABLE(3);
+
+        private final int value;
+        private static final Map<Integer, NewsBulletinType> MAP;
+
+        static {
+            MAP = Maps.newHashMap();
+            for (final NewsBulletinType newsBulletinType : values()) {
+                MAP.put(newsBulletinType.getValue(), newsBulletinType);
+            }
+        }
+
+        private NewsBulletinType(final int value) {
+            this.value = value;
+        }
+
+        public final int getValue() {
+            return value;
+        }
+
+        public static final NewsBulletinType fromValue(final int value) {
+            if (MAP.containsKey(value)) {
+                return MAP.get(value);
+            }
+            return UNKNOWN;
+        }
+    }
+
+
+    public enum Operation {
+
+        UNKNOWN(-1), INSERT(0), UPDATE(1), DELETE(2);
+
+        private final int value;
+        private static final Map<Integer, Operation> MAP;
+
+        static {
+            MAP = Maps.newHashMap();
+            for (final Operation operation : values()) {
+                MAP.put(operation.getValue(), operation);
+            }
+        }
+
+        private Operation(final int value) {
+            this.value = value;
+        }
+
+        public final int getValue() {
+            return value;
+        }
+
+        public static final Operation fromValue(final int value) {
+            if (MAP.containsKey(value)) {
+                return MAP.get(value);
+            }
+            return UNKNOWN;
+        }
+    }
+
+
+    public enum FinancialAdvisorDataType {
+
+        UNKNOWN(-1), GROUPS(1), PROFILE(2), ACCOUNT_ALIASES(3);
+
+        private final int value;
+        private static final Map<Integer, FinancialAdvisorDataType> MAP;
+
+        static {
+            MAP = Maps.newHashMap();
+            for (final FinancialAdvisorDataType dataType : values()) {
+                MAP.put(dataType.getValue(), dataType);
+            }
+        }
+
+        private FinancialAdvisorDataType(final int value) {
+            this.value = value;
+        }
+
+        public final int getValue() {
+            return value;
+        }
+
+        public static final FinancialAdvisorDataType fromValue(final int value) {
+            if (MAP.containsKey(value)) {
+                return MAP.get(value);
+            }
+            return UNKNOWN;
+        }
+    }
+
+
+    public enum BookSide {
+
+        UNKNOWN(-1), ASK(0), BID(1);
+
+        private final int value;
+        private static final Map<Integer, BookSide> MAP;
+
+        static {
+            MAP = Maps.newHashMap();
+            for (final BookSide bookSide : values()) {
+                MAP.put(bookSide.getValue(), bookSide);
+            }
+        }
+
+        private BookSide(final int value) {
+            this.value = value;
+        }
+
+        public final int getValue() {
+            return value;
+        }
+
+        public static final BookSide fromValue(final int value) {
+            if (MAP.containsKey(value)) {
+                return MAP.get(value);
+            }
+            return UNKNOWN;
+        }
+    }
+
     public enum SecType{
 
         STOCK(Instrument.InstType.Stock, "STK"),
