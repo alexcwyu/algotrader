@@ -1,6 +1,5 @@
 package com.unisoft.algotrader.provider.ib.api;
 
-import ch.aonyx.broker.ib.api.contract.Contract;
 import com.unisoft.algotrader.model.event.EventBusManager;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;

@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.provider.ib.api.serializer;
 
-import ch.aonyx.broker.ib.api.OutgoingMessageId;
+
+import com.unisoft.algotrader.provider.ib.api.OutgoingMessageId;
 
 /**
  * Created by alex on 8/11/15.

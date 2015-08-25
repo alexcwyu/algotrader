@@ -7,7 +7,8 @@ import com.unisoft.algotrader.provider.ib.api.IBConstants;
 
 import java.io.InputStream;
 
-import static ch.aonyx.broker.ib.api.util.InputStreamUtils.readInt;
+import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readInt;
+
 
 /**
  * Created by alex on 8/2/15.

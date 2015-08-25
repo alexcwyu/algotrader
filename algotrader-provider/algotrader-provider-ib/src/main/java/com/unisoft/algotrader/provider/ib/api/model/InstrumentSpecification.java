@@ -1,6 +1,5 @@
 package com.unisoft.algotrader.provider.ib.api.model;
 
-import ch.aonyx.broker.ib.api.order.OrderType;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.refdata.Instrument;
@@ -8,10 +7,6 @@ import com.unisoft.algotrader.model.trading.OrdType;
 import com.unisoft.algotrader.provider.ib.api.IBConstants;
 import com.unisoft.algotrader.utils.collection.Tuple2;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.List;
 

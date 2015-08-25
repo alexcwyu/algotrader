@@ -554,6 +554,7 @@ public class IBConstants {
         int DAY_1  = 11;
     }
 
+
     public enum TickType {
 
         UNKNOWN(-1), BID_SIZE(0), BID_PRICE(1), ASK_PRICE(2), ASK_SIZE(3), LAST_PRICE(4), LAST_SIZE(5), DAY_HIGH(6),

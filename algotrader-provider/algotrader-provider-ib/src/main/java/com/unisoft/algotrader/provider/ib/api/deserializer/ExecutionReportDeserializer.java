@@ -1,6 +1,5 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
-import ch.aonyx.broker.ib.api.execution.Side;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;

@@ -6,7 +6,6 @@ import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
 
 import java.io.InputStream;
 
-import static ch.aonyx.broker.ib.api.util.InputStreamUtils.readDouble;
 import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
 
 /**

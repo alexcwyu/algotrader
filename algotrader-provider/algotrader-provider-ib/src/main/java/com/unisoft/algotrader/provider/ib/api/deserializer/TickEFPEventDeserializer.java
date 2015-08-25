@@ -1,13 +1,13 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
-import ch.aonyx.broker.ib.api.util.InputStreamUtils;
 import com.unisoft.algotrader.provider.ib.api.IBConstants;
 import com.unisoft.algotrader.provider.ib.api.IBSession;
 import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
 
 import java.io.InputStream;
 
-import static ch.aonyx.broker.ib.api.util.InputStreamUtils.*;
+import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
+
 
 /**
  * Created by alex on 8/13/15.

@@ -1,7 +1,5 @@
 package com.unisoft.algotrader.provider.ib.api.model;
 
-import ch.aonyx.broker.ib.api.contract.ContractSpecification;
-
 /**
  * Created by alex on 8/19/15.
  */

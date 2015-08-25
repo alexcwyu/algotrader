@@ -1,10 +1,10 @@
 package com.unisoft.algotrader.provider.ib.api.serializer;
 
-import ch.aonyx.broker.ib.api.Feature;
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
+import com.unisoft.algotrader.provider.ib.api.Feature;
 import com.unisoft.algotrader.provider.ib.api.IBConstants;
 import com.unisoft.algotrader.provider.ib.api.OutgoingMessageId;
 import org.apache.commons.lang3.StringUtils;

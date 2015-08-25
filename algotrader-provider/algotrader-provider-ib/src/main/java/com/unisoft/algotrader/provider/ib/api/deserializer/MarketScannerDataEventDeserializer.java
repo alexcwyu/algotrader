@@ -1,10 +1,5 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
-import ch.aonyx.broker.ib.api.contract.Contract;
-import ch.aonyx.broker.ib.api.contract.ContractSpecification;
-import ch.aonyx.broker.ib.api.contract.OptionRight;
-import ch.aonyx.broker.ib.api.contract.SecurityType;
-import ch.aonyx.broker.ib.api.data.scanner.MarketScannerDataEvent;
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
@@ -19,9 +14,6 @@ import com.unisoft.algotrader.provider.ib.api.model.MarketScannerData;
 import java.io.InputStream;
 import java.util.List;
 
-import static ch.aonyx.broker.ib.api.util.InputStreamUtils.readDouble;
-import static ch.aonyx.broker.ib.api.util.InputStreamUtils.readInt;
-import static ch.aonyx.broker.ib.api.util.InputStreamUtils.readString;
 import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
 
 /**
