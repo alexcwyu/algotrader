@@ -5,7 +5,7 @@ import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
 
 import java.io.InputStream;
 
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
+import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readLong;
 
 /**
  * Created by alex on 8/13/15.
@@ -13,12 +13,12 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
 public class ServerCurrentTimeDeserializer extends Deserializer {
 
 
-    public ServerCurrentTimeDeserializer(int serverCurrentVersion){
-        super(IncomingMessageId.SERVER_CURRENT_TIME, serverCurrentVersion);
+    public ServerCurrentTimeDeserializer(){
+        super(IncomingMessageId.SERVER_CURRENT_TIME);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         final long timestamp = readLong(inputStream);
 
         ibSession.onServerCurrentTime(timestamp);

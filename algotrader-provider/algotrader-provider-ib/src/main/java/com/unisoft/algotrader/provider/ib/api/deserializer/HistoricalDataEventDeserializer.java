@@ -14,32 +14,30 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
  */
 public class HistoricalDataEventDeserializer extends Deserializer {
 
-
-    //private static final String FINISHED = "finished";
-    public HistoricalDataEventDeserializer(int serverCurrentVersion){
-        super(IncomingMessageId.HISTORICAL_DATA, serverCurrentVersion);
+    public HistoricalDataEventDeserializer(){
+        super(IncomingMessageId.HISTORICAL_DATA);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         final List<Bar> historicalDataEvents = Lists.newArrayList();
         final int requestId = readInt(inputStream);
         String startDate = null;
         String endDate = null;
         //String finishedRetrievingHistoricalData = FINISHED;
-        if (getVersion() >= 2) {
+        if (version >= 2) {
             startDate = readString(inputStream);
             endDate = readString(inputStream);
             //finishedRetrievingHistoricalData = finishedRetrievingHistoricalData + "-" + startDate + "-" + endDate;
         }
         final int historicalDatas = readInt(inputStream);
         for (int i = 0; i < historicalDatas; i++) {
-            historicalDataEvents.add(consumeHistoricalData(requestId, inputStream));
+            historicalDataEvents.add(consumeHistoricalData(version, requestId, inputStream));
         }
         ibSession.onhistoricalDataEvents(requestId, historicalDataEvents);
     }
 
-    private Bar consumeHistoricalData(final int requestId, final InputStream inputStream) {
+    private Bar consumeHistoricalData(final int version, final int requestId, final InputStream inputStream) {
         final String dateTime = readString(inputStream);
         final double open = readDouble(inputStream);
         final double high = readDouble(inputStream);
@@ -49,7 +47,7 @@ public class HistoricalDataEventDeserializer extends Deserializer {
         final double weightedAveragePrice = readDouble(inputStream);
         final String hasGap = readString(inputStream);
         int tradeNumber = -1;
-        if (getVersion() >= 3) {
+        if (version >= 3) {
             tradeNumber = readInt(inputStream);
         }
 

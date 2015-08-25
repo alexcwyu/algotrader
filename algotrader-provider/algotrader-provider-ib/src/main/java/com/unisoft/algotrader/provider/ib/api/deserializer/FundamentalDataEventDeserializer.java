@@ -5,7 +5,8 @@ import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
 
 import java.io.InputStream;
 
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
+import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readInt;
+import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readString;
 
 
 /**
@@ -14,12 +15,12 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
 public class FundamentalDataEventDeserializer extends Deserializer {
 
 
-    public FundamentalDataEventDeserializer(int serverCurrentVersion){
-        super(IncomingMessageId.FUNDAMENTAL_DATA, serverCurrentVersion);
+    public FundamentalDataEventDeserializer(){
+        super(IncomingMessageId.FUNDAMENTAL_DATA);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         final int requestId = readInt(inputStream);
         final String xml = readString(inputStream);
         ibSession.onFundamentalDataEvent(requestId, xml);

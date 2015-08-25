@@ -5,7 +5,8 @@ import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
 
 import java.io.InputStream;
 
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
+import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readInt;
+import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readString;
 
 /**
  * Created by alex on 8/13/15.
@@ -13,13 +14,13 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
 public class ServerMessageDeserializer extends Deserializer {
 
 
-    public ServerMessageDeserializer(int serverCurrentVersion){
-        super(IncomingMessageId.SERVER_MESSAGE, serverCurrentVersion);
+    public ServerMessageDeserializer(){
+        super(IncomingMessageId.SERVER_MESSAGE);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
-        if (getVersion() < VERSION_2) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
+        if (version < VERSION_2) {
             final String message = readString(inputStream);
             ibSession.onMessage(-1, 0, message);
         } else {

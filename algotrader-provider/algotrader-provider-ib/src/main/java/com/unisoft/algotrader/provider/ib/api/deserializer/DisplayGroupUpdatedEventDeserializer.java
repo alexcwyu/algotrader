@@ -14,12 +14,12 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readString
 public class DisplayGroupUpdatedEventDeserializer extends Deserializer {
 
 
-    public DisplayGroupUpdatedEventDeserializer(int serverCurrentVersion){
-        super(IncomingMessageId.DISPLAY_GROUP_UPDATED, serverCurrentVersion);
+    public DisplayGroupUpdatedEventDeserializer(){
+        super(IncomingMessageId.DISPLAY_GROUP_UPDATED);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         final int requestId = readInt(inputStream);
         final String contractInfo = readString(inputStream);;
         

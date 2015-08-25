@@ -15,12 +15,12 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readInt;
 public class TickGenericEventDeserializer extends Deserializer {
 
 
-    public TickGenericEventDeserializer(int serverCurrentVersion){
-        super(IncomingMessageId.TICK_GENERIC, serverCurrentVersion);
+    public TickGenericEventDeserializer(){
+        super(IncomingMessageId.TICK_GENERIC);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         final int requestId = readInt(inputStream);
         final int tickType = readInt(inputStream);
         final double value = readDouble(inputStream);

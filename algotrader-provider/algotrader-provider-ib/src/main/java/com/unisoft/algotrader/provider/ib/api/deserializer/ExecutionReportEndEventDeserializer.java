@@ -14,12 +14,12 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readInt;
 public class ExecutionReportEndEventDeserializer extends Deserializer {
 
 
-    public ExecutionReportEndEventDeserializer(int serverCurrentVersion){
-        super(IncomingMessageId.EXECUTION_REPORT_END, serverCurrentVersion);
+    public ExecutionReportEndEventDeserializer(){
+        super(IncomingMessageId.EXECUTION_REPORT_END);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         final int requestId = readInt(inputStream);
         ibSession.onExecutionReportEndEvent(requestId);
     }

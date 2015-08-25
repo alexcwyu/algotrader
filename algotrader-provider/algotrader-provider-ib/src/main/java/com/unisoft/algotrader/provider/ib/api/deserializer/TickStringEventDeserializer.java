@@ -7,7 +7,7 @@ import com.unisoft.algotrader.provider.ib.api.InputStreamUtils;
 
 import java.io.InputStream;
 
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
+import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readString;
 
 /**
  * Created by alex on 8/13/15.
@@ -15,12 +15,12 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
 public class TickStringEventDeserializer extends Deserializer {
 
 
-    public TickStringEventDeserializer(int serverCurrentVersion){
-        super(IncomingMessageId.TICK_STRING, serverCurrentVersion);
+    public TickStringEventDeserializer(){
+        super(IncomingMessageId.TICK_STRING);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         final int requestId = InputStreamUtils.readInt(inputStream);
         final int tickType = InputStreamUtils.readInt(inputStream);
         final String value = readString(inputStream);

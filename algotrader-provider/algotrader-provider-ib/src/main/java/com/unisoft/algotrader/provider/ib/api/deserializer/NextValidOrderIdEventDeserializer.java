@@ -12,12 +12,12 @@ import java.io.InputStream;
 public class NextValidOrderIdEventDeserializer extends Deserializer {
 
 
-    public NextValidOrderIdEventDeserializer(int serverCurrentVersion){
-        super(IncomingMessageId.NEXT_VALID_ORDER_ID, serverCurrentVersion);
+    public NextValidOrderIdEventDeserializer(){
+        super(IncomingMessageId.NEXT_VALID_ORDER_ID);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         final int nextValidOrderId = InputStreamUtils.readInt(inputStream);
         ibSession.onNextValidOrderId(nextValidOrderId);
 

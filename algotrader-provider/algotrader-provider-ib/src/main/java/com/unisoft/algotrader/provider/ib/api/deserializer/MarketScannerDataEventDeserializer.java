@@ -14,7 +14,8 @@ import com.unisoft.algotrader.provider.ib.api.model.MarketScannerData;
 import java.io.InputStream;
 import java.util.List;
 
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
+import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readInt;
+import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readString;
 
 /**
  * Created by alex on 8/13/15.
@@ -25,28 +26,28 @@ public class MarketScannerDataEventDeserializer extends Deserializer {
     private final RefDataStore refDataStore;
 
     public MarketScannerDataEventDeserializer(int serverCurrentVersion, RefDataStore refDataStore){
-        super(IncomingMessageId.MARKET_SCANNER_DATA, serverCurrentVersion);
+        super(IncomingMessageId.MARKET_SCANNER_DATA);
         this.refDataStore = refDataStore;
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         final int requestId = readInt(inputStream);
         final List<MarketScannerData> marketScannerDataEvents = Lists.newArrayList();
         final int marketScannerDatas = readInt(inputStream);
         for (int i = 0; i < marketScannerDatas; i++) {
-            marketScannerDataEvents.add(consumeMarketScannerDataEvent(requestId, inputStream));
+            marketScannerDataEvents.add(consumeMarketScannerDataEvent(version, requestId, inputStream));
         }
 
         ibSession.onMarketScannerData(requestId, marketScannerDataEvents);
     }
 
-    private MarketScannerData consumeMarketScannerDataEvent(final int requestId, final InputStream inputStream) {
+    private MarketScannerData consumeMarketScannerDataEvent(final int version, final int requestId, final InputStream inputStream) {
 
         final InstrumentSpecification contractSpecification = new InstrumentSpecification();
         final int ranking = readInt(inputStream);
         int instid = 0;
-        if (getVersion() >= 3) {
+        if (version >= 3) {
             instid = readInt(inputStream);
         }
 
@@ -67,7 +68,7 @@ public class MarketScannerDataEventDeserializer extends Deserializer {
         final String benchmark = readString(inputStream);
         final String projection = readString(inputStream);
         String comboLegDescription = null;
-        if (getVersion() >= 2) {
+        if (version >= 2) {
             comboLegDescription = readString(inputStream);
         }
 

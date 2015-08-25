@@ -21,23 +21,23 @@ public class InstrumentSpecificationEventDeserializer extends Deserializer {
     private final RefDataStore refDataStore;
 
     public InstrumentSpecificationEventDeserializer(int serverCurrentVersion, RefDataStore refDataStore){
-        super(IncomingMessageId.CONTRACT_SPECIFICATION, serverCurrentVersion);
+        super(IncomingMessageId.CONTRACT_SPECIFICATION);
         this.refDataStore = refDataStore;
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         int requestId = -1;
-        if (getVersion() >= 3) {
+        if (version >= 3) {
             requestId = readInt(inputStream);
         }
-        final InstrumentSpecification instrumentSpecification = consumeInstrumentSpecification(inputStream);
+        final InstrumentSpecification instrumentSpecification = consumeInstrumentSpecification(version, inputStream);
 
         ibSession.onInstrumentSpecification(requestId, instrumentSpecification);
     }
 
 
-    private InstrumentSpecification consumeInstrumentSpecification(final InputStream inputStream) {
+    private InstrumentSpecification consumeInstrumentSpecification(final int version, final InputStream inputStream) {
         final InstrumentSpecification instrumentSpecification = new InstrumentSpecification();
         final String symbol = readString(inputStream);
         final Instrument.InstType instType = IBConstants.SecType.convert(readString(inputStream));
@@ -57,14 +57,14 @@ public class InstrumentSpecificationEventDeserializer extends Deserializer {
 
         instrumentSpecification.setValidOrderTypes(readString(inputStream));
         instrumentSpecification.setValidExchanges(readString(inputStream));
-        if (getVersion() >= 2) {
+        if (version >= 2) {
             instrumentSpecification.setPriceMagnifier(readInt(inputStream));
         }
-        if (getVersion() >= 4) {
+        if (version >= 4) {
             instrumentSpecification.setUnderlyingContractId(readInt(inputStream));
         }
         String primaryExchange = exchange;
-        if (getVersion() >= 5) {
+        if (version >= 5) {
             instrumentSpecification.setLongName(readString(inputStream));
             primaryExchange = readString(inputStream);
         }
@@ -72,7 +72,7 @@ public class InstrumentSpecificationEventDeserializer extends Deserializer {
         Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
         instrumentSpecification.setInstrument(instrument);
 
-        if (getVersion() >= 6) {
+        if (version >= 6) {
             instrumentSpecification.setContractMonth(readString(inputStream));
             instrumentSpecification.setIndustry(readString(inputStream));
             instrumentSpecification.setCategory(readString(inputStream));
@@ -81,11 +81,11 @@ public class InstrumentSpecificationEventDeserializer extends Deserializer {
             instrumentSpecification.setTradingHours(readString(inputStream));
             instrumentSpecification.setLiquidHours(readString(inputStream));
         }
-        if (getVersion() >= 8) {
+        if (version >= 8) {
             instrumentSpecification.setEconomicValueRule(readString(inputStream));
             instrumentSpecification.setEconomicValueMultiplier(readDouble(inputStream));
         }
-        if (getVersion() >= 7) {
+        if (version >= 7) {
             final int securityIdsCount = readInt(inputStream);
             for (int i = 0; i < securityIdsCount; i++) {
                 final Tuple2<String, String> pairTagValue = new Tuple2(readString(inputStream), readString(inputStream));

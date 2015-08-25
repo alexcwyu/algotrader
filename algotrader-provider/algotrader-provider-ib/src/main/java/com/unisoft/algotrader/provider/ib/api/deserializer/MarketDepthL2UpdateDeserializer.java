@@ -13,12 +13,12 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
 public class MarketDepthL2UpdateDeserializer extends Deserializer {
 
 
-    public MarketDepthL2UpdateDeserializer(int serverCurrentVersion){
-        super(IncomingMessageId.MARKET_DEPTH_LEVEL_TWO_UPDATE, serverCurrentVersion);
+    public MarketDepthL2UpdateDeserializer(){
+        super(IncomingMessageId.MARKET_DEPTH_LEVEL_TWO_UPDATE);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         final int requestId = readInt(inputStream);
         final int rowId = readInt(inputStream);
         final String marketMakerName = readString(inputStream);

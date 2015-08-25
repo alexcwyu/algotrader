@@ -12,12 +12,12 @@ import java.io.InputStream;
 public class RetrieveOpenOrderEndEventDeserializer extends Deserializer {
 
 
-    public RetrieveOpenOrderEndEventDeserializer(int serverCurrentVersion){
-        super(IncomingMessageId.RETRIEVE_OPEN_ORDER_END, serverCurrentVersion);
+    public RetrieveOpenOrderEndEventDeserializer(){
+        super(IncomingMessageId.RETRIEVE_OPEN_ORDER_END);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         ibSession.onRetrieveOpenOrderEndEvent();
     }
 }

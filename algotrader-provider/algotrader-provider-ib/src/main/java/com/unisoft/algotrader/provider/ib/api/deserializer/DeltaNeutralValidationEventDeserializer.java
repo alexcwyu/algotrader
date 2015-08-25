@@ -5,7 +5,8 @@ import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
 
 import java.io.InputStream;
 
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
+import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readDouble;
+import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readInt;
 
 
 /**
@@ -14,12 +15,12 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
 public class DeltaNeutralValidationEventDeserializer extends Deserializer {
 
 
-    public DeltaNeutralValidationEventDeserializer(int serverCurrentVersion){
-        super(IncomingMessageId.DELTA_NEUTRAL_VALIDATION, serverCurrentVersion);
+    public DeltaNeutralValidationEventDeserializer(){
+        super(IncomingMessageId.DELTA_NEUTRAL_VALIDATION);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         final int requestId = readInt(inputStream);
         final int instId = (readInt(inputStream));
         final double delta = readDouble(inputStream);

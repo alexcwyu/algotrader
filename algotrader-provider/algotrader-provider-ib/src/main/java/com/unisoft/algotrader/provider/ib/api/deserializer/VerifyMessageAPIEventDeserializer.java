@@ -5,7 +5,6 @@ import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
 
 import java.io.InputStream;
 
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readInt;
 import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readString;
 
 /**
@@ -14,12 +13,12 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readString
 public class VerifyMessageAPIEventDeserializer extends Deserializer {
 
 
-    public VerifyMessageAPIEventDeserializer(int serverCurrentVersion){
-        super(IncomingMessageId.VERIFY_MESSAGE_API, serverCurrentVersion);
+    public VerifyMessageAPIEventDeserializer(){
+        super(IncomingMessageId.VERIFY_MESSAGE_API);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         final String message = readString(inputStream);
         
         ibSession.onVerifyMessageAPI(message);

@@ -1,6 +1,5 @@
 package com.unisoft.algotrader.provider.ib.api;
 
-import com.unisoft.algotrader.model.event.EventBusManager;
 import com.unisoft.algotrader.provider.ib.api.deserializer.Deserializer;
 import com.unisoft.algotrader.provider.ib.api.deserializer.DeserializerFactory;
 import org.apache.commons.io.IOUtils;
@@ -22,7 +21,7 @@ public class EventInputStreamConsumer implements Runnable {
     public EventInputStreamConsumer(
             IBSession ibSession){
         this.ibSession = ibSession;
-        this.deserializerFactory = new DeserializerFactory(ibSession.getRefDataStore(), ibSession.getServerCurrentVersion());
+        this.deserializerFactory = new DeserializerFactory();
         this.inputStream = ibSession.getInputStream();
     }
 

@@ -17,32 +17,29 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
  */
 public class PortfolioUpdateEventDeserializer extends Deserializer {
 
-    private final RefDataStore refDataStore;
-
-    public PortfolioUpdateEventDeserializer(RefDataStore refDataStore, int serverCurrentVersion){
-        super(IncomingMessageId.PORTFOLIO_UPDATE, serverCurrentVersion);
-        this.refDataStore = refDataStore;
+    public PortfolioUpdateEventDeserializer(){
+        super(IncomingMessageId.PORTFOLIO_UPDATE);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
-        final Instrument instrument = parseInstrument(inputStream ,refDataStore);
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
+        final Instrument instrument = parseInstrument(version, inputStream, ibSession.getRefDataStore());
         final int position = readInt(inputStream);
         final double marketPrice = readDouble(inputStream);
         final double marketValue = readDouble(inputStream);
         double averageCost = 0;
         double unrealizedProfitAndLoss = 0;
         double realizedProfitAndLoss = 0;
-        if (getVersion() >= 3) {
+        if (version >= 3) {
             averageCost = readDouble(inputStream);
             unrealizedProfitAndLoss = readDouble(inputStream);
             realizedProfitAndLoss = readDouble(inputStream);
         }
         String accountName = null;
-        if (getVersion() >= 4) {
+        if (version >= 4) {
             accountName = readString(inputStream);
         }
-        if ((getVersion() == 6) && (getServerCurrentVersion() == 39)) {
+        if ((version == 6) && (ibSession.getServerCurrentVersion() == 39)) {
             final String primaryExchange = readString(inputStream);
             //instrument.setExchId(exchId);
         }
@@ -53,18 +50,18 @@ public class PortfolioUpdateEventDeserializer extends Deserializer {
     }
 
 
-    protected Instrument parseInstrument(final InputStream inputStream, final RefDataStore refDataStore) {
+    protected Instrument parseInstrument(final int version, final InputStream inputStream, final RefDataStore refDataStore) {
         final int instId = InputStreamUtils.readInt(inputStream);
         final String symbol = readString(inputStream);
         final Instrument.InstType instType = IBConstants.SecType.convert(readString(inputStream));
         final String expString = readString(inputStream);
         final double strike = InputStreamUtils.readDouble(inputStream);
         final Instrument.PutCall putCall = IBConstants.OptionRight.convert(readString(inputStream));
-        final String multiplier = (getVersion() >= 7)?readString(inputStream) : null;
-        final String primaryExchange = (getVersion() >= 7)?readString(inputStream) : null;
+        final String multiplier = (version >= 7)?readString(inputStream) : null;
+        final String primaryExchange = (version >= 7)?readString(inputStream) : null;
         final String ccyCode = readString(inputStream);
-        final String localSymbol = (getVersion() >= 2)?readString(inputStream) : null;
-        final String tradingClass = (getVersion() >= 8)? readString(inputStream): null;
+        final String localSymbol = (version >= 2)?readString(inputStream) : null;
+        final String tradingClass = (version >= 8)? readString(inputStream): null;
 
         Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, primaryExchange);
         if (instrument == null){

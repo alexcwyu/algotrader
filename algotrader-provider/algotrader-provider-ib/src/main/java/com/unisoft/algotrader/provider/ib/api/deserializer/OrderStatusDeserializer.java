@@ -13,22 +13,22 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
 public class OrderStatusDeserializer extends Deserializer {
 
 
-    public OrderStatusDeserializer(int serverCurrentVersion){
-        super(IncomingMessageId.ORDER_STATE_UPDATE, serverCurrentVersion);
+    public OrderStatusDeserializer(){
+        super(IncomingMessageId.ORDER_STATE_UPDATE);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         final int orderId = readInt(inputStream);
         final String orderStatus = readString(inputStream);
         final int filledQuantity = readInt(inputStream);
         final int remainingQuantity = readInt(inputStream);
         final double averageFilledPrice = readDouble(inputStream);
-        final int permanentId = (getVersion() >= 2) ? readInt(inputStream) : 0;
-        final int parentOrderId = (getVersion() >= 3) ? readInt(inputStream) : 0;
-        final double lastFilledPrice = (getVersion() >= 4) ? readDouble(inputStream) : 0;
-        final int clientId =  (getVersion() >= 5) ? readInt(inputStream) : 0;
-        final String heldCause = (getVersion() >= 6) ? readString(inputStream) : null;
+        final int permanentId = (version >= 2) ? readInt(inputStream) : 0;
+        final int parentOrderId = (version >= 3) ? readInt(inputStream) : 0;
+        final double lastFilledPrice = (version >= 4) ? readDouble(inputStream) : 0;
+        final int clientId =  (version >= 5) ? readInt(inputStream) : 0;
+        final String heldCause = (version >= 6) ? readString(inputStream) : null;
 
         ibSession.onOrderStatus(orderId, orderStatus, filledQuantity, remainingQuantity, averageFilledPrice, permanentId,
                 parentOrderId, lastFilledPrice, clientId, heldCause);

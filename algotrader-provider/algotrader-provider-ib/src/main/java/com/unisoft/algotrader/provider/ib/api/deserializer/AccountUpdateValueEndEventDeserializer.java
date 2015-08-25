@@ -13,12 +13,12 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readString
 public class AccountUpdateValueEndEventDeserializer extends Deserializer {
 
 
-    public AccountUpdateValueEndEventDeserializer(int serverCurrentVersion){
-        super(IncomingMessageId.ACCOUNT_UPDATE_VALUE_END, serverCurrentVersion);
+    public AccountUpdateValueEndEventDeserializer(){
+        super(IncomingMessageId.ACCOUNT_UPDATE_VALUE_END);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         final String accountName = readString(inputStream);
         ibSession.onAccountUpdateValueEndEvent(accountName);
     }

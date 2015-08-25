@@ -1,7 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.unisoft.algotrader.model.refdata.Instrument;
-import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
 import com.unisoft.algotrader.provider.ib.api.IBConstants;
 import com.unisoft.algotrader.provider.ib.api.IBSession;
@@ -19,26 +18,23 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
 public class BondInstrumentSpecificationEventDeserializer extends Deserializer {
 
 
-    private final RefDataStore refDataStore;
-
-    public BondInstrumentSpecificationEventDeserializer(int serverCurrentVersion, RefDataStore refDataStore){
-        super(IncomingMessageId.BOND_CONTRACT_SPECIFICATION, serverCurrentVersion);
-        this.refDataStore = refDataStore;
+    public BondInstrumentSpecificationEventDeserializer(){
+        super(IncomingMessageId.BOND_CONTRACT_SPECIFICATION);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         int requestId = -1;
-        if (getVersion() >= 3) {
+        if (version >= 3) {
             requestId = readInt(inputStream);
         }
-        final InstrumentSpecification instrumentSpecification = consumeInstrumentSpecification(inputStream);
+        final InstrumentSpecification instrumentSpecification = consumeInstrumentSpecification(version, inputStream, ibSession);
 
         ibSession.onInstrumentSpecification(requestId, instrumentSpecification);
     }
 
 
-    private InstrumentSpecification consumeInstrumentSpecification(final InputStream inputStream) {
+    private InstrumentSpecification consumeInstrumentSpecification(final int version, final InputStream inputStream, final IBSession ibSession) {
         final InstrumentSpecification instrumentSpecification = new InstrumentSpecification();
         String symbol = readString(inputStream);
         final Instrument.InstType instType = IBConstants.SecType.convert(readString(inputStream));
@@ -61,20 +57,20 @@ public class BondInstrumentSpecificationEventDeserializer extends Deserializer {
         instrumentSpecification.setMinimumFluctuation(readDouble(inputStream));
         instrumentSpecification.setValidOrderTypes(readString(inputStream));
         instrumentSpecification.setValidExchanges(readString(inputStream));
-        if (getVersion() >= 2) {
+        if (version >= 2) {
             instrumentSpecification.setNextOptionDate(readString(inputStream));
             instrumentSpecification.setNextOptionType(readString(inputStream));
             instrumentSpecification.setNextOptionPartial(readBoolean(inputStream));
             instrumentSpecification.setNotes(readString(inputStream));
         }
-        if (getVersion() >= 4) {
+        if (version >= 4) {
             instrumentSpecification.setLongName(readString(inputStream));
         }
-        if (getVersion() >= 6) {
+        if (version >= 6) {
             instrumentSpecification.setEconomicValueRule(readString(inputStream));
             instrumentSpecification.setEconomicValueMultiplier(readDouble(inputStream));
         }
-        if (getVersion() >= 5) {
+        if (version >= 5) {
             final int securityIdsCount = readInt(inputStream);
             for (int i = 0; i < securityIdsCount; i++) {
                 final Tuple2<String, String> pairTagValue = new Tuple2(readString(inputStream), readString(inputStream));
@@ -82,7 +78,7 @@ public class BondInstrumentSpecificationEventDeserializer extends Deserializer {
             }
         }
 
-        Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
+        Instrument instrument = ibSession.getRefDataStore().getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
         instrumentSpecification.setInstrument(instrument);
 
         return instrumentSpecification;

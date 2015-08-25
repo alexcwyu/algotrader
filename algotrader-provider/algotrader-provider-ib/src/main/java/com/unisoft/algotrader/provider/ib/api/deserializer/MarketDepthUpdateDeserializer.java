@@ -5,7 +5,8 @@ import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
 
 import java.io.InputStream;
 
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
+import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readDouble;
+import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readInt;
 
 /**
  * Created by alex on 8/13/15.
@@ -13,12 +14,12 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
 public class MarketDepthUpdateDeserializer extends Deserializer {
 
 
-    public MarketDepthUpdateDeserializer(int serverCurrentVersion){
-        super(IncomingMessageId.MARKET_DEPTH_UPDATE, serverCurrentVersion);
+    public MarketDepthUpdateDeserializer(){
+        super(IncomingMessageId.MARKET_DEPTH_UPDATE);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         final int requestId = readInt(inputStream);
         final int rowId = readInt(inputStream);
         final int operation = readInt(inputStream);

@@ -5,21 +5,18 @@ import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
 
 import java.io.InputStream;
 
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readInt;
-
 /**
  * Created by alex on 8/13/15.
  */
 public class PositionEndEventDeserializer extends Deserializer {
 
 
-    public PositionEndEventDeserializer(int serverCurrentVersion){
-        super(IncomingMessageId.POSITION_END, serverCurrentVersion);
+    public PositionEndEventDeserializer(){
+        super(IncomingMessageId.POSITION_END);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
-        
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         ibSession.onPositionEnd();
     }
 }

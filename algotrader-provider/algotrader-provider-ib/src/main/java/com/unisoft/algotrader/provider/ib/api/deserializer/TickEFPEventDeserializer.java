@@ -15,12 +15,12 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
 public class TickEFPEventDeserializer extends Deserializer {
 
 
-    public TickEFPEventDeserializer(int serverCurrentVersion){
-        super(IncomingMessageId.TICK_EXCHANFE_FOR_PHYSICAL, serverCurrentVersion);
+    public TickEFPEventDeserializer(){
+        super(IncomingMessageId.TICK_EXCHANFE_FOR_PHYSICAL);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         final int requestId = readInt(inputStream);
         final int tickType = readInt(inputStream);
         final double basisPoints = readDouble(inputStream);

@@ -14,12 +14,12 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readInt;
 public class ContractSpecificationEndEventDeserializer extends Deserializer {
 
 
-    public ContractSpecificationEndEventDeserializer(int serverCurrentVersion){
-        super(IncomingMessageId.CONTRACT_SPECIFICATION_END, serverCurrentVersion);
+    public ContractSpecificationEndEventDeserializer(){
+        super(IncomingMessageId.CONTRACT_SPECIFICATION_END);
     }
 
     @Override
-    public void consumeVersionLess(InputStream inputStream, IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         final int requestId = readInt(inputStream);
         ibSession.onContractSpecificationEndEvent(requestId);
     }
