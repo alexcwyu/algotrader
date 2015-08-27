@@ -1,6 +1,5 @@
 package com.unisoft.algotrader.provider.ib;
 
-import ch.aonyx.broker.ib.api.Id;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
 
 /**
@@ -14,7 +13,7 @@ public abstract class MarketDataListener {
         this.ibProvider = ibProvider;
     }
     public void publish(
-            final Id id,
+            final long id,
             final long dateTime,
             final double open,
             final double high,
@@ -22,13 +21,13 @@ public abstract class MarketDataListener {
             final double close,
             final long volume){
         SubscriptionKey subscriptionKey = ibProvider.getSubscriptionKey(id);
-        ibProvider.marketDataEventBus.publishBar(subscriptionKey.instId, subscriptionKey.barSize, dateTime,
+        ibProvider.eventBusManager.getMarketDataEventBus().publishBar(subscriptionKey.instId, subscriptionKey.barSize, dateTime,
                 open, high, low, close, volume, 0);
 
     }
 
     public void publish(
-            final Id id,
+            final long id,
             final String dateTimeStr,
             final double open,
             final double high,

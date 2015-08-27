@@ -26,4 +26,8 @@ public class MarketScannerDataEvent extends IBEvent<MarketScannerDataEvent>  {
         this.comboLegDescription = comboLegDescription;
     }
 
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onMarketScannerDataEvent(this);
+    }
 }

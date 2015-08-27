@@ -10,4 +10,8 @@ public class ExecutionReportEndEvent extends IBEvent<ExecutionReportEndEvent>  {
         super(requestId);
     }
 
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onExecutionReportEndEvent(this);
+    }
 }

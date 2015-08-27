@@ -11,4 +11,8 @@ public class AccountUpdateValueEndEvent extends IBEvent<AccountUpdateValueEndEve
         this.accountName = accountName;
     }
 
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onAccountUpdateValueEndEvent(this);
+    }
 }

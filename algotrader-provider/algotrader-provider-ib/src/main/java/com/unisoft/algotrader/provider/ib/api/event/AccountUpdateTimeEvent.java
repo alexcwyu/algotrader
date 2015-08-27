@@ -17,4 +17,9 @@ public class AccountUpdateTimeEvent extends IBEvent<AccountUpdateTimeEvent>  {
     public DateTime getDateTime() {
         return LocalTime.parse(time).toDateTimeToday();
     }
+
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onAccountUpdateTimeEvent(this);
+    }
 }

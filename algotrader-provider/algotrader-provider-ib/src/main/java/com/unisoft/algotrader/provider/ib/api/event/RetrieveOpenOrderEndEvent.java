@@ -10,4 +10,8 @@ public class RetrieveOpenOrderEndEvent extends IBEvent<RetrieveOpenOrderEndEvent
         super(requestId);
     }
 
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onRetrieveOpenOrderEndEvent(this);
+    }
 }

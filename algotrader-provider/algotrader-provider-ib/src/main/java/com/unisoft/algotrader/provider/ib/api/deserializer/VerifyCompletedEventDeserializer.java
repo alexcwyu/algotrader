@@ -19,10 +19,10 @@ public class VerifyCompletedEventDeserializer extends Deserializer {
 
     @Override
     public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
-        final boolean bool = "true".equals(readString(inputStream));
+        final boolean isSuccessful = "true".equals(readString(inputStream));
 
         final String errorText = readString(inputStream);
         
-        ibSession.onVerifyCompleted(bool, errorText);
+        ibSession.onVerifyCompleted(isSuccessful, errorText);
     }
 }

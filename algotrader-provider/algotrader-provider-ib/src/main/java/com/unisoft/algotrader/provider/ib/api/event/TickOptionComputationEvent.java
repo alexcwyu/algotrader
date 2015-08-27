@@ -31,4 +31,9 @@ public class TickOptionComputationEvent  extends IBEvent<TickOptionComputationEv
         this.theta = theta;
         this.underlyingPrice = underlyingPrice;
     }
+
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onTickOptionComputationEvent(this);
+    }
 }

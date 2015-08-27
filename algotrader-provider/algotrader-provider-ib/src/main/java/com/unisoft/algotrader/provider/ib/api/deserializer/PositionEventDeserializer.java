@@ -21,6 +21,8 @@ public class PositionEventDeserializer extends Deserializer {
 
     @Override
     public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
+        final String account = readString(inputStream);
+
         final int instId =readInt(inputStream);
         final String symbol = readString(inputStream);
         final Instrument.InstType instType = IBConstants.SecType.convert(readString(inputStream));
@@ -33,9 +35,8 @@ public class PositionEventDeserializer extends Deserializer {
         final String localSymbol = readString(inputStream);
         final String tradingClass = (version >= 2)? readString(inputStream): null;
 
-
-        final int field1 = readInt(inputStream);
-        final double field2 =(version >= 3)? readDouble(inputStream) : 0.0;
+        final int pos = readInt(inputStream);
+        final double avgCost =(version >= 3)? readDouble(inputStream) : 0.0;
 
         ibSession.onPosition();
     }

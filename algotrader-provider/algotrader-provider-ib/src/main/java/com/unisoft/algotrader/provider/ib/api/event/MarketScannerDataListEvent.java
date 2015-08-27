@@ -13,4 +13,9 @@ public class MarketScannerDataListEvent extends IBEvent<MarketScannerDataListEve
         super(requestId);
         this.marketScannerDataEvents = marketScannerDataEvents;
     }
+
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onMarketScannerDataListEvent(this);
+    }
 }

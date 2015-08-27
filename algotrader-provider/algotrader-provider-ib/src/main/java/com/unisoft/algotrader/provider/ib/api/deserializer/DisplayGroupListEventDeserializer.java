@@ -21,8 +21,8 @@ public class DisplayGroupListEventDeserializer extends Deserializer {
     @Override
     public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         final int requestId = readInt(inputStream);
-        final String contractInfo = readString(inputStream);;
+        final String groups = readString(inputStream);;
         
-        ibSession.onDisplayGroupList(requestId, contractInfo);
+        ibSession.onDisplayGroupList(requestId, groups);
     }
 }

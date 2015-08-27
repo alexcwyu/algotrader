@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by alex on 8/7/15.
  */
-public class HistoricalMarketDataSerializer extends Serializer<SubscriptionKey> {
+public class HistoricalMarketDataSubscriptionRequestSerializer extends Serializer<SubscriptionKey> {
 
     private static final int VERSION = 9;
     private final RefDataStore refDataStore;
@@ -25,7 +25,7 @@ public class HistoricalMarketDataSerializer extends Serializer<SubscriptionKey> 
     private final IBConstants.ReturnedTickTypeFilter[] returnedTickTypeFilters;
     private AtomicInteger counter;
 
-    public HistoricalMarketDataSerializer(
+    public HistoricalMarketDataSubscriptionRequestSerializer(
             AtomicInteger counter, RefDataStore refDataStore, int serverCurrentVersion, final IBConstants.ReturnedTickTypeFilter... returnedTickTypeFilters){
         super(serverCurrentVersion);
         this.counter = counter;

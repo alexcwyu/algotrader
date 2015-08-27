@@ -28,4 +28,9 @@ public class HistoricalDataEvent extends IBEvent<HistoricalDataEvent>  {
         this.weightedAveragePrice = weightedAveragePrice;
         this.hasGap = hasGap;
     }
+
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onHistoricalDataEvent(this);
+    }
 }

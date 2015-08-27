@@ -7,11 +7,15 @@ import com.unisoft.algotrader.provider.ib.api.model.InstrumentSpecification;
  */
 public class InstrumentSpecificationEvent extends IBEvent<InstrumentSpecificationEvent>  {
 
-    public final InstrumentSpecification contractSpecification;
+    public final InstrumentSpecification instrumentSpecification;
 
-    public InstrumentSpecificationEvent(final String requestId, final InstrumentSpecification contractSpecification){
+    public InstrumentSpecificationEvent(final String requestId, final InstrumentSpecification instrumentSpecification){
         super(requestId);
-        this.contractSpecification = contractSpecification;
+        this.instrumentSpecification = instrumentSpecification;
     }
 
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onInstrumentSpecificationEvent(this);
+    }
 }

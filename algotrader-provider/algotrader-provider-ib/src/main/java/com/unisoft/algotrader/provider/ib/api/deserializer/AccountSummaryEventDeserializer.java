@@ -21,12 +21,12 @@ public class AccountSummaryEventDeserializer extends Deserializer {
     @Override
     public void consumeVersionLess(final int version, final InputStream inputStream,
                                    final IBSession ibSession) {
-        final int value = readInt(inputStream);
-        final String errorText = readString(inputStream);
-        final String open = readString(inputStream);
-        final String completedIndicator = readString(inputStream);
-        final String high = readString(inputStream);
-        
-        ibSession.onAccountSummary(value, errorText, open, completedIndicator, high);
+        final int reqId = readInt(inputStream);
+        final String account = readString(inputStream);
+        final String tag = readString(inputStream);
+        final String value = readString(inputStream);
+        final String currency = readString(inputStream);
+
+        ibSession.onAccountSummary(reqId, account, tag, value, currency);
     }
 }

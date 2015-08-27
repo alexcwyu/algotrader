@@ -18,4 +18,9 @@ public class TickPriceEvent extends IBEvent<TickPriceEvent>  {
         this.price = price;
         this.autoExecute = autoExecute;
     }
+
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onTickPriceEvent(this);
+    }
 }

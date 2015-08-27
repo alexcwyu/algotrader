@@ -13,4 +13,9 @@ public class FinancialAdvisorConfigurationEvent extends IBEvent<FinancialAdvisor
         this.dataTypeValue = dataTypeValue;
         this.xml = xml;
     }
+
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onFinancialAdvisorConfigurationEvent(this);
+    }
 }

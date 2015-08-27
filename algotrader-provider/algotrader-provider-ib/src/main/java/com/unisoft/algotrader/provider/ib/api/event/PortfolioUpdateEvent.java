@@ -29,4 +29,9 @@ public class PortfolioUpdateEvent extends IBEvent<PortfolioUpdateEvent>  {
         this.realizedProfitAndLoss = realizedProfitAndLoss;
         this.accountName = accountName;
     }
+
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onPortfolioUpdateEvent(this);
+    }
 }

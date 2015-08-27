@@ -13,4 +13,8 @@ public class CommissionReportEvent extends IBEvent<CommissionReportEvent>  {
         this.commissionReport = commissionReport;
     }
 
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onCommissionReportEvent(this);
+    }
 }

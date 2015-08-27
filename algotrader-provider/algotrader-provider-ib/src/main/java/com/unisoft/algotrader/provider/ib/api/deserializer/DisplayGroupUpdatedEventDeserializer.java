@@ -21,7 +21,7 @@ public class DisplayGroupUpdatedEventDeserializer extends Deserializer {
     @Override
     public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
         final int requestId = readInt(inputStream);
-        final String contractInfo = readString(inputStream);;
+        final String contractInfo = readString(inputStream);
         
         ibSession.onDisplayGroupUpdated(requestId, contractInfo);
     }

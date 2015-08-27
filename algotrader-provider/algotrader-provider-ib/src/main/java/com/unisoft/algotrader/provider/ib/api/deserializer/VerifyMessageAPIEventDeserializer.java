@@ -19,8 +19,8 @@ public class VerifyMessageAPIEventDeserializer extends Deserializer {
 
     @Override
     public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
-        final String message = readString(inputStream);
+        final String apiData = readString(inputStream);
         
-        ibSession.onVerifyMessageAPI(message);
+        ibSession.onVerifyMessageAPI(apiData);
     }
 }

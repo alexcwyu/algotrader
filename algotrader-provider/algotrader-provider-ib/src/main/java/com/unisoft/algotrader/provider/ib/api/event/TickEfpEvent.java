@@ -31,4 +31,8 @@ public class TickEfpEvent extends IBEvent<TickEfpEvent> {
         this.dividendToExpiry = dividendToExpiry;
     }
 
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onTickEfpEvent(this);
+    }
 }

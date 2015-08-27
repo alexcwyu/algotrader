@@ -14,4 +14,8 @@ public class MarketDataTypeEvent extends IBEvent<MarketDataTypeEvent>  {
         this.marketDataType = marketDataType;
     }
 
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onMarketDataTypeEvent(this);
+    }
 }

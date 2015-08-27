@@ -26,5 +26,8 @@ public class ServerMessageEvent extends IBEvent<ServerMessageEvent>  {
         this.message = message;
     }
 
-
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onServerMessageEvent(this);
+    }
 }

@@ -19,8 +19,8 @@ public class AccountSummaryEndEventDeserializer extends Deserializer {
 
     @Override
     public void consumeVersionLess(final int version, InputStream inputStream, IBSession ibSession) {
-        final int value = readInt(inputStream);
+        final int reqId = readInt(inputStream);
         
-        ibSession.onAccountSummaryEnd(value);
+        ibSession.onAccountSummaryEnd(reqId);
     }
 }

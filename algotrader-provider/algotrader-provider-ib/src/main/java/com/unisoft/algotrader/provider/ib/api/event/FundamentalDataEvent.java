@@ -10,4 +10,9 @@ public class FundamentalDataEvent extends IBEvent<FundamentalDataEvent>  {
         super(requestId);
         this.xml = xml;
     }
+
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onFundamentalDataEvent(this);
+    }
 }

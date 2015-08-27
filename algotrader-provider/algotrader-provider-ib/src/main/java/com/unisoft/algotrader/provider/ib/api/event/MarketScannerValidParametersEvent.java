@@ -10,4 +10,9 @@ public class MarketScannerValidParametersEvent extends IBEvent<MarketScannerVali
     public MarketScannerValidParametersEvent(final String xml){
         this.xml = xml;
     }
+
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onMarketScannerValidParametersEvent(this);
+    }
 }

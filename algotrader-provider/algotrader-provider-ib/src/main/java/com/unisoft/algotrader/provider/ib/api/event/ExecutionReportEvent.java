@@ -17,4 +17,8 @@ public class ExecutionReportEvent extends IBEvent<ExecutionReportEvent>  {
         this.executionReport = executionReport;
     }
 
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onExecutionReportEvent(this);
+    }
 }

@@ -17,4 +17,9 @@ public class AccountUpdateValueEvent extends IBEvent<AccountUpdateValueEvent>  {
         this.accountName = accountName;
     }
 
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onAccountUpdateValueEvent(this);
+    }
+
 }

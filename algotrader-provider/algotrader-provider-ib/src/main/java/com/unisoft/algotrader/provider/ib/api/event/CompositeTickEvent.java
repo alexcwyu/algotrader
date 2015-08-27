@@ -13,5 +13,8 @@ public class CompositeTickEvent extends IBEvent<CompositeTickEvent> {
         this.tickPriceEvent = tickPriceEvent;
         this.tickSizeEvent = tickSizeEvent;
     }
-
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onCompositeTickEvent(this);
+    }
 }

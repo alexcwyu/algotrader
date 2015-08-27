@@ -21,4 +21,9 @@ public class RetrieveOpenOrderEvent extends IBEvent<RetrieveOpenOrderEvent>  {
         this.order = order;
         this.orderExecution = orderExecution;
     }
+
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onRetrieveOpenOrderEvent(this);
+    }
 }

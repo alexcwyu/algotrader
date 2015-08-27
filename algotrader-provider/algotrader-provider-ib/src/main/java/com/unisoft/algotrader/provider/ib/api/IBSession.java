@@ -38,7 +38,7 @@ public class IBSession {
 
     private final EventBusManager eventBusManager;
     private int serverCurrentVersion;
-
+    private int nextOrderId = 0 ;
     private Socket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
@@ -52,10 +52,10 @@ public class IBSession {
     private AtomicInteger orderId = new AtomicInteger(0);
     private AtomicInteger requestId = new AtomicInteger(0);
 
-    private RealTimeMarketDataSerializer realTimeMarketDataRequestSerializer;
+    private RealTimeMarketDataSubscriptionRequestSerializer realTimeMarketDataRequestSerializer;
     private PlaceOrderSerializer placeOrderRequestSerializer;
     private CancelOrderSerializer cancelOrderRequestSerializer;
-    private HistoricalMarketDataSerializer historicalMarketDataRequestSerializer;
+    private HistoricalMarketDataSubscriptionRequestSerializer historicalMarketDataRequestSerializer;
 
     public IBSession(IBConfig ibConfig, RefDataStore refDataStore, EventBusManager eventBusManager){
         this.ibConfig = ibConfig;
@@ -135,8 +135,8 @@ public class IBSession {
     private void initSerializer(){
         placeOrderRequestSerializer = new PlaceOrderSerializer(orderId, refDataStore, serverCurrentVersion);
         cancelOrderRequestSerializer = new CancelOrderSerializer(serverCurrentVersion);
-        realTimeMarketDataRequestSerializer = new RealTimeMarketDataSerializer(requestId, refDataStore, serverCurrentVersion);
-        historicalMarketDataRequestSerializer = new HistoricalMarketDataSerializer(orderId, refDataStore, serverCurrentVersion);
+        realTimeMarketDataRequestSerializer = new RealTimeMarketDataSubscriptionRequestSerializer(requestId, refDataStore, serverCurrentVersion);
+        historicalMarketDataRequestSerializer = new HistoricalMarketDataSubscriptionRequestSerializer(orderId, refDataStore, serverCurrentVersion);
     }
 
     private void initInputStreamConsumer(){
@@ -361,11 +361,15 @@ public class IBSession {
     }
 
     public void onNextValidOrderId(final int nextValidOrderId){
-
+        nextOrderId = nextValidOrderId;
     }
 
     public void onInstrumentSpecification(final int requestId, final InstrumentSpecification instrumentSpecification){
 
+    }
+
+    public int getNextOrderId(){
+        return nextOrderId++;
     }
 
     private void send(final byte[] bytes) throws IOException {

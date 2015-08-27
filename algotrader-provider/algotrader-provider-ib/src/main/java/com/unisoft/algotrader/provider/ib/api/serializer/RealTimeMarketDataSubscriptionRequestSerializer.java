@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by alex on 8/7/15.
  */
-public class RealTimeMarketDataSerializer extends Serializer<SubscriptionKey> {
+public class RealTimeMarketDataSubscriptionRequestSerializer extends Serializer<SubscriptionKey> {
 
     private static final int VERSION = 1;
     private final RefDataStore refDataStore;
@@ -21,7 +21,7 @@ public class RealTimeMarketDataSerializer extends Serializer<SubscriptionKey> {
 
     private AtomicInteger counter;
 
-    public RealTimeMarketDataSerializer(
+    public RealTimeMarketDataSubscriptionRequestSerializer(
             AtomicInteger counter, RefDataStore refDataStore, int serverCurrentVersion){
         super(serverCurrentVersion);
         this.counter = counter;

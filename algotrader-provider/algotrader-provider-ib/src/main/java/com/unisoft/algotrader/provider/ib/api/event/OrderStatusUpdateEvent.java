@@ -32,4 +32,9 @@ public class OrderStatusUpdateEvent extends IBEvent<OrderStatusUpdateEvent>  {
         this.clientId = clientId;
         this.heldCause = heldCause;
     }
+
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onOrderStatusUpdateEvent(this);
+    }
 }

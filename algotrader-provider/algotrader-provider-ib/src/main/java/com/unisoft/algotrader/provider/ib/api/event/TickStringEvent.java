@@ -16,4 +16,9 @@ public class TickStringEvent extends IBEvent<TickStringEvent>  {
         this.type = type;
         this.value = value;
     }
+
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onTickStringEvent(this);
+    }
 }

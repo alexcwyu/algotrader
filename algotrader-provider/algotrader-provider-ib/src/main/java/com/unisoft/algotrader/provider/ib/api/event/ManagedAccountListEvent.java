@@ -14,7 +14,6 @@ public class ManagedAccountListEvent extends IBEvent<ManagedAccountListEvent>  {
 
     public static final char SEPARATOR = ',';
     public final String commaSeparatedAccountList;
-    public char separator = SEPARATOR;
     public final Function<String, String> toTrimmedStringFunction = new Function<String, String>() {
         @Override
         public String apply(final String input) {
@@ -29,7 +28,12 @@ public class ManagedAccountListEvent extends IBEvent<ManagedAccountListEvent>  {
 
     public List<String> getAccounts() {
         return Collections.unmodifiableList(Lists.transform(
-                Lists.newArrayList(StringUtils.split(commaSeparatedAccountList, separator)), toTrimmedStringFunction));
+                Lists.newArrayList(StringUtils.split(commaSeparatedAccountList, SEPARATOR)), toTrimmedStringFunction));
+    }
+
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onManagedAccountListEvent(this);
     }
 
 }

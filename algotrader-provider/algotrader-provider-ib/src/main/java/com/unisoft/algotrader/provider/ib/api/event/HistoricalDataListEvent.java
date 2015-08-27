@@ -13,4 +13,9 @@ public class HistoricalDataListEvent extends IBEvent<HistoricalDataListEvent>  {
         super(requestId);
         this.historicalDataEvents = historicalDataEvents;
     }
+
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onHistoricalDataListEvent(this);
+    }
 }

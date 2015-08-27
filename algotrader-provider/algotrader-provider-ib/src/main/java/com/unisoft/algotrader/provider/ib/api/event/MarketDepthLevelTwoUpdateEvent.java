@@ -25,4 +25,9 @@ public class MarketDepthLevelTwoUpdateEvent extends IBEvent<MarketDepthLevelTwoU
         this.size = size;
     }
 
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onMarketDepthLevelTwoUpdateEvent(this);
+    }
+
 }

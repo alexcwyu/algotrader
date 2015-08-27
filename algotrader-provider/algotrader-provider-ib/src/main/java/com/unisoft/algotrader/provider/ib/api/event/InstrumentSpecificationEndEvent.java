@@ -10,4 +10,8 @@ public class InstrumentSpecificationEndEvent extends IBEvent<InstrumentSpecifica
         super(requestId);
     }
 
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onInstrumentSpecificationEndEvent(this);
+    }
 }

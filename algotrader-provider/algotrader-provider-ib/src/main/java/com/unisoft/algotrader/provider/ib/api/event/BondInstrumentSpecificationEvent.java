@@ -14,4 +14,8 @@ public class BondInstrumentSpecificationEvent extends IBEvent<BondInstrumentSpec
         this.contractSpecification = contractSpecification;
     }
 
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onBondInstrumentSpecificationEvent(this);
+    }
 }

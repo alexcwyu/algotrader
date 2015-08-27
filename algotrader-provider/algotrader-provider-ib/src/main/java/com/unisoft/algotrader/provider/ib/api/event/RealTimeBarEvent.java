@@ -28,4 +28,9 @@ public class RealTimeBarEvent extends IBEvent<RealTimeBarEvent>  {
         this.weightedAveragePrice = weightedAveragePrice;
         this.tradeNumber = tradeNumber;
     }
+
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onRealTimeBarEvent(this);
+    }
 }

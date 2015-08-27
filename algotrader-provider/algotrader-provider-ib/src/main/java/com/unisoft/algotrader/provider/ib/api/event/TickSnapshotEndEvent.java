@@ -10,4 +10,9 @@ public class TickSnapshotEndEvent extends IBEvent<TickSnapshotEndEvent>  {
         super(requestId);
     }
 
+
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onTickSnapshotEndEvent(this);
+    }
 }

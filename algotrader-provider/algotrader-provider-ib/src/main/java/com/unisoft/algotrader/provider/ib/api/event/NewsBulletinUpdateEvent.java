@@ -20,4 +20,10 @@ public class NewsBulletinUpdateEvent extends IBEvent<NewsBulletinUpdateEvent>  {
         this.message = message;
         this.exchange = exchange;
     }
+
+
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onNewsBulletinUpdateEvent(this);
+    }
 }

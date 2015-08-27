@@ -17,4 +17,8 @@ public class ServerCurrentTimeEvent extends IBEvent<ServerCurrentTimeEvent>  {
         return new DateTime(timestamp * 1000);
     }
 
+    @Override
+    public void on(IBEventHandler handler) {
+        handler.onServerCurrentTimeEvent(this);
+    }
 }
