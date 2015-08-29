@@ -6,5 +6,6 @@ package com.unisoft.algotrader.model.event.data;
 public enum DataType {
     Bar,
     Quote,
-    Trade
+    Trade,
+    MarketDepth
 }
