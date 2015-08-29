@@ -8,8 +8,8 @@ public class DisplayGroupListEvent extends IBEvent<DisplayGroupListEvent>  {
 
     public final String groups;
 
-    public DisplayGroupListEvent(final int requestId, final String groups){
-        super(requestId+"");
+    public DisplayGroupListEvent(final long requestId, final String groups){
+        super(requestId);
         this.groups = groups;
     }
 

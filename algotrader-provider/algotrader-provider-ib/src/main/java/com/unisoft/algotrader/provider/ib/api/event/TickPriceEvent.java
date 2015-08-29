@@ -11,7 +11,7 @@ public class TickPriceEvent extends IBEvent<TickPriceEvent>  {
     public final double price;
     public final boolean autoExecute;
 
-    public TickPriceEvent(final String requestId, final IBConstants.TickType type,
+    public TickPriceEvent(final long requestId, final IBConstants.TickType type,
                           final double price, final boolean autoExecute){
         super(requestId);
         this.type = type;

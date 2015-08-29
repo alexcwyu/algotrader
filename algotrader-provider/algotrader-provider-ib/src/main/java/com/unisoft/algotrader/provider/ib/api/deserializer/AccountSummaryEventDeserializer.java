@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
-import com.unisoft.algotrader.provider.ib.api.IBSession;
+import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.IBSocket;
 import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
 
 import java.io.InputStream;
@@ -20,13 +21,13 @@ public class AccountSummaryEventDeserializer extends Deserializer {
 
     @Override
     public void consumeVersionLess(final int version, final InputStream inputStream,
-                                   final IBSession ibSession) {
+                                   final IBProvider ibProvider) {
         final int reqId = readInt(inputStream);
         final String account = readString(inputStream);
         final String tag = readString(inputStream);
         final String value = readString(inputStream);
         final String currency = readString(inputStream);
 
-        ibSession.onAccountSummary(reqId, account, tag, value, currency);
+        ibProvider.onAccountSummaryEvent(reqId, account, tag, value, currency);
     }
 }

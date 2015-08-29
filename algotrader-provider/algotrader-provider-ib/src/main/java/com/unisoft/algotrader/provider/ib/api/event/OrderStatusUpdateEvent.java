@@ -18,10 +18,10 @@ public class OrderStatusUpdateEvent extends IBEvent<OrderStatusUpdateEvent>  {
     public final int clientId;
     public final String heldCause;
 
-    public OrderStatusUpdateEvent(final String orderId, final IBConstants.OrderStatus orderStatus, final int filledQuantity,
+    public OrderStatusUpdateEvent(final long requestId, final IBConstants.OrderStatus orderStatus, final int filledQuantity,
                                   final int remainingQuantity, final double averageFilledPrice, final int permanentId,
                                   final String parentOrderId, final double lastFilledPrice, final int clientId, final String heldCause){
-        super(orderId);
+        super(requestId);
         this.orderStatus = orderStatus;
         this.filledQuantity = filledQuantity;
         this.remainingQuantity = remainingQuantity;

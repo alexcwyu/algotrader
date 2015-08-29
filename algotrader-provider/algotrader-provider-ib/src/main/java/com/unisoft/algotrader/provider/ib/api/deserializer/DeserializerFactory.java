@@ -16,7 +16,7 @@ public class DeserializerFactory {
     public DeserializerFactory(){
         register(new AccountSummaryEndEventDeserializer());
         register(new AccountSummaryEventDeserializer());
-        register(new AccountUpdateEventDeserializer());
+        register(new AccountUpdateValueEventDeserializer());
         register(new AccountUpdateTimeEventDeserializer());
         register(new AccountUpdateValueEndEventDeserializer());
         register(new BondInstrumentSpecificationEventDeserializer());

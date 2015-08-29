@@ -14,7 +14,7 @@ public class MarketScannerDataEvent extends IBEvent<MarketScannerDataEvent>  {
     public final String projection;
     public final String comboLegDescription;
 
-    public MarketScannerDataEvent(final String requestId, final int ranking,
+    public MarketScannerDataEvent(final long requestId, final int ranking,
                                   final InstrumentSpecification instrumentSpecification, final String distance, final String benchmark,
                                   final String projection, final String comboLegDescription){
         super(requestId);

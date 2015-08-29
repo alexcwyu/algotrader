@@ -1,5 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api;
 
+import com.unisoft.algotrader.provider.ib.IBProvider;
 import com.unisoft.algotrader.provider.ib.api.deserializer.Deserializer;
 import com.unisoft.algotrader.provider.ib.api.deserializer.DeserializerFactory;
 import org.apache.commons.io.IOUtils;
@@ -14,15 +15,18 @@ import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readInt;
 public class EventInputStreamConsumer implements Runnable {
 
     private final DeserializerFactory deserializerFactory;
-    private final IBSession ibSession;
+    private final IBProvider ibProvider;
+    private final IBSocket ibSocket;
     private final InputStream inputStream;
     private boolean running = true;
 
     public EventInputStreamConsumer(
-            IBSession ibSession){
-        this.ibSession = ibSession;
+            IBProvider ibProvider,
+            IBSocket ibSocket){
+        this.ibProvider = ibProvider;
+        this.ibSocket = ibSocket;
         this.deserializerFactory = new DeserializerFactory();
-        this.inputStream = ibSession.getInputStream();
+        this.inputStream = ibSocket.getInputStream();
     }
 
     public void run(){
@@ -40,7 +44,7 @@ public class EventInputStreamConsumer implements Runnable {
         final int messageId = readInt(inputStream);
         final Deserializer serializer =
                 deserializerFactory.getDeserializer(IncomingMessageId.fromId(messageId));
-        serializer.consume(inputStream, ibSession);
+        serializer.consume(inputStream, ibProvider);
     }
 
 }

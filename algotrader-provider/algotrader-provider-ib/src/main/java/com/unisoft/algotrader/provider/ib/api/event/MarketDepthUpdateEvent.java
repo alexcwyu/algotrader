@@ -13,7 +13,7 @@ public class MarketDepthUpdateEvent extends IBEvent<MarketDepthUpdateEvent>  {
     public final double price;
     public final int size;
 
-    public MarketDepthUpdateEvent(final String requestId, final int rowId,
+    public MarketDepthUpdateEvent(final long requestId, final int rowId,
                                   final IBConstants.Operation operation, final IBConstants.BookSide bookSide, final double price, final int size){
         super(requestId);
         this.rowId = rowId;

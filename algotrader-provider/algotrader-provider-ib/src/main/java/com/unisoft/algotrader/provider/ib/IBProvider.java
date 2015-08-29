@@ -3,8 +3,6 @@ package com.unisoft.algotrader.provider.ib;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.unisoft.algotrader.model.event.Event;
-import com.unisoft.algotrader.model.event.EventBus;
 import com.unisoft.algotrader.model.event.EventBusManager;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.execution.Order;
@@ -15,7 +13,8 @@ import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
 import com.unisoft.algotrader.provider.data.RealTimeDataProvider;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
 import com.unisoft.algotrader.provider.execution.ExecutionProvider;
-import com.unisoft.algotrader.provider.ib.api.IBSession;
+import com.unisoft.algotrader.provider.ib.api.IBSocket;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,20 +28,21 @@ import java.util.Set;
  * Created by alex on 6/20/15.
  */
 @Singleton
-public class IBProvider implements RealTimeDataProvider, HistoricalDataProvider, ExecutionProvider{
+public class IBProvider implements IBEventHandler, RealTimeDataProvider, HistoricalDataProvider, ExecutionProvider{
 
     private static final Logger LOG = LogManager.getLogger(IBProvider.class);
 
     public static final String PROVIDER_ID = "IB";
 
-    private final RefDataStore refDataStore;
+
     private final IBConfig config;
+    private final RefDataStore refDataStore;
     public final EventBusManager eventBusManager;
 
-    private IBSession session;
-
+    private final IBSocket ibSocket;
     private Set<SubscriptionKey> subscriptionKeys = Sets.newHashSet();
     private Map<Long, SubscriptionKey> idSubscriptionMap = Maps.newHashMap();
+
 
     @Inject
     public IBProvider(ProviderManager providerManager, IBConfig config, RefDataStore refDataStore, EventBusManager eventBusManager){
@@ -52,8 +52,7 @@ public class IBProvider implements RealTimeDataProvider, HistoricalDataProvider,
         providerManager.addExecutionProvider(this);
         providerManager.addHistoricalDataProvider(this);
         providerManager.addRealTimeDataProvider(this);
-        session = new IBSession(config, refDataStore, eventBusManager);
-
+        this.ibSocket = new IBSocket(this);
     }
 
     public SubscriptionKey getSubscriptionKey(long id){
@@ -63,20 +62,17 @@ public class IBProvider implements RealTimeDataProvider, HistoricalDataProvider,
 
     @Override
     public boolean subscribeRealTimeData(SubscriptionKey subscriptionKey){
+
         subscriptionKeys.add(subscriptionKey);
-
-        RealTimeBarSubscriptionRequest request = IBUtils.createRealTimeBarSubscriptionRequest(subscriptionKey, refDataStore.getInstrument(subscriptionKey.instId));
-
-        idSubscriptionMap.put(request.getId(), subscriptionKey);
-        session.subscribe(request);
+        idSubscriptionMap.put(subscriptionKey.subscriptionId, subscriptionKey);
+        ibSocket.subscribeRealTimeData(subscriptionKey);
         return true;
     }
 
     @Override
     public boolean unSubscribeRealTimeData(SubscriptionKey subscriptionKey){
-        UnsubscriptionRequest request = IBUtils.createRealTimeBarUnsubscriptionRequest(refDataStore.getInstrument(subscriptionKey.instId));
-        session.unsubscribe(request);
         subscriptionKeys.remove(subscriptionKey);
+        ibSocket.unsubscribeRealTimeData(subscriptionKey);
         return true;
     }
 
@@ -88,53 +84,58 @@ public class IBProvider implements RealTimeDataProvider, HistoricalDataProvider,
     @Override
     public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
         subscriptionKeys.add(subscriptionKey);
-        HistoricalDataSubscriptionRequest request = IBUtils
-                .createHistoricalDataSubscriptionRequest(subscriptionKey,
-                        refDataStore.getInstrument(subscriptionKey.instId));
-
-        idSubscriptionMap.put(request.getId(), subscriptionKey);
-        session.subscribe(request);
+        idSubscriptionMap.put(subscriptionKey.subscriptionId, subscriptionKey);
+        ibSocket.subscribeHistoricalData(subscriptionKey);
         return true;
     }
 
     @Override
     public void onOrder(Order order) {
-        Contract contract = IBUtils.getContract(refDataStore.getInstrument(order.instId));
-        session.orderRequest(new PlaceOrderRequest(IBUtils.convertOrder(order),contract));
+        ibSocket.sendOrder(order);
     }
 
-
-    //TODO
-    public void request(SimpleRequest request){
-        session.request(request);
-    }
-
-    public <E extends Event> void registerListener(EventListener<E> listener){
-        session.registerListener(listener);
-    }
-
-    public <E extends Event> void unregisterListener(EventListener<E> listener){
-        session.unregisterListener(listener);
-    }
+//    public <E extends Event> void registerListener(EventListener<E> listener){
+//        session.registerListener(listener);
+//    }
+//
+//    public <E extends Event> void unregisterListener(EventListener<E> listener){
+//        session.unregisterListener(listener);
+//    }
 
 
     @Override
     public void connect() {
-        session.connect();
+        ibSocket.connect();
     }
 
     @Override
     public boolean connected() {
-        return session != null && session.isConnected();
+        return ibSocket != null && ibSocket.isConnected();
     }
 
     @Override
     public void disconnect() {
-        session.disconnect();
+        ibSocket.disconnect();
     }
 
     @Override
     public String providerId() {
         return PROVIDER_ID;
+    }
+
+    public RefDataStore getRefDataStore() {
+        return refDataStore;
+    }
+
+    public EventBusManager getEventBusManager() {
+        return eventBusManager;
+    }
+
+    public IBConfig getConfig() {
+        return config;
+    }
+
+    public IBSocket getIbSocket() {
+        return ibSocket;
     }
 }

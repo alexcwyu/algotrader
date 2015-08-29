@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
-import com.unisoft.algotrader.provider.ib.api.IBSession;
+import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.IBSocket;
 import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
 import com.unisoft.algotrader.provider.ib.api.model.CommissionReport;
 
@@ -18,7 +19,7 @@ public class CommissionReportEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final CommissionReport commissionReport = new CommissionReport();
         commissionReport.setExecutionId(readString(inputStream));
         commissionReport.setCommission(readDouble(inputStream));
@@ -26,6 +27,6 @@ public class CommissionReportEventDeserializer extends Deserializer {
         commissionReport.setRealizedProfitAndLoss(readDouble(inputStream));
         commissionReport.setYield(readDouble(inputStream));
         commissionReport.setYieldRedemptionDate(readInt(inputStream));
-        ibSession.onCommissionReport(commissionReport);
+        ibProvider.onCommissionReportEvent(commissionReport);
     }
 }

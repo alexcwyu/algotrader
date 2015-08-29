@@ -1,11 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.serializer;
 
-import com.unisoft.algotrader.model.refdata.Instrument;
-import com.unisoft.algotrader.persistence.RefDataStore;
-import com.unisoft.algotrader.provider.data.MarketDepthSubscriptionKey;
 import com.unisoft.algotrader.provider.ib.api.OutgoingMessageId;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by alex on 8/7/15.

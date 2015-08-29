@@ -19,12 +19,10 @@ public class RealTimeMarketDataSubscriptionRequestSerializer extends Serializer<
     private final static IBConstants.RealTimeBarDataType type = IBConstants.RealTimeBarDataType.TRADES;
     private final static boolean useRegularTradingHours = false;
 
-    private AtomicInteger counter;
 
     public RealTimeMarketDataSubscriptionRequestSerializer(
-            AtomicInteger counter, RefDataStore refDataStore, int serverCurrentVersion){
+            RefDataStore refDataStore, int serverCurrentVersion){
         super(serverCurrentVersion);
-        this.counter = counter;
         this.refDataStore = refDataStore;
     }
 
@@ -35,7 +33,7 @@ public class RealTimeMarketDataSubscriptionRequestSerializer extends Serializer<
 
         builder.append(OutgoingMessageId.REAL_TIME_BAR_SUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);
-        builder.append(counter.incrementAndGet());
+        builder.append(subscriptionKey.subscriptionId);
         appendInstrument(builder, instrument);
         builder.append(size);
         builder.append(type.getBytes());

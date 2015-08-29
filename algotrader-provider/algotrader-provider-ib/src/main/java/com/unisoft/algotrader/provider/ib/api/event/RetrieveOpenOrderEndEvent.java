@@ -6,8 +6,8 @@ package com.unisoft.algotrader.provider.ib.api.event;
 public class RetrieveOpenOrderEndEvent extends IBEvent<RetrieveOpenOrderEndEvent>  {
 
 
-    public RetrieveOpenOrderEndEvent(final String requestId){
-        super(requestId);
+    public RetrieveOpenOrderEndEvent(){
+        super();
     }
 
     @Override

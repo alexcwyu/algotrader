@@ -14,7 +14,7 @@ public class HistoricalDataEvent extends IBEvent<HistoricalDataEvent>  {
     public final int tradeNumber;
     public final double weightedAveragePrice;
     public final boolean hasGap;
-    public HistoricalDataEvent(final String requestId, final String dateTime, final double open, final double high,
+    public HistoricalDataEvent(final long requestId, final String dateTime, final double open, final double high,
                                final double low, final double close, final int volume, final int tradeNumber,
                                final double weightedAveragePrice, final boolean hasGap){
         super(requestId);

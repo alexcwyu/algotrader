@@ -1,10 +1,9 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.unisoft.algotrader.model.refdata.Instrument;
-import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
 import com.unisoft.algotrader.provider.ib.api.IBConstants;
-import com.unisoft.algotrader.provider.ib.api.IBSession;
+import com.unisoft.algotrader.provider.ib.api.IBSocket;
 import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
 import com.unisoft.algotrader.provider.ib.api.model.InstrumentSpecification;
 import com.unisoft.algotrader.utils.collection.Tuple2;
@@ -24,18 +23,18 @@ public class InstrumentSpecificationEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         int requestId = -1;
         if (version >= 3) {
             requestId = readInt(inputStream);
         }
-        final InstrumentSpecification instrumentSpecification = consumeInstrumentSpecification(version, inputStream, ibSession);
+        final InstrumentSpecification instrumentSpecification = consumeInstrumentSpecification(version, inputStream, ibProvider);
 
-        ibSession.onInstrumentSpecification(requestId, instrumentSpecification);
+        ibProvider.onInstrumentSpecificationEvent(requestId, instrumentSpecification);
     }
 
 
-    private InstrumentSpecification consumeInstrumentSpecification(final int version, final InputStream inputStream, final IBSession ibSession) {
+    private InstrumentSpecification consumeInstrumentSpecification(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final InstrumentSpecification instrumentSpecification = new InstrumentSpecification();
         final String symbol = readString(inputStream);
         final Instrument.InstType instType = IBConstants.SecType.convert(readString(inputStream));
@@ -67,7 +66,7 @@ public class InstrumentSpecificationEventDeserializer extends Deserializer {
             primaryExchange = readString(inputStream);
         }
 
-        Instrument instrument = ibSession.getRefDataStore().getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
+        Instrument instrument = ibProvider.getRefDataStore().getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
         instrumentSpecification.setInstrument(instrument);
 
         if (version >= 6) {

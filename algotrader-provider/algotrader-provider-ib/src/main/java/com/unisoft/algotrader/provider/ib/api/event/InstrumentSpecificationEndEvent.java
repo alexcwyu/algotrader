@@ -6,7 +6,7 @@ package com.unisoft.algotrader.provider.ib.api.event;
 public class InstrumentSpecificationEndEvent extends IBEvent<InstrumentSpecificationEndEvent>  {
 
 
-    public InstrumentSpecificationEndEvent(final String requestId){
+    public InstrumentSpecificationEndEvent(final long requestId){
         super(requestId);
     }
 

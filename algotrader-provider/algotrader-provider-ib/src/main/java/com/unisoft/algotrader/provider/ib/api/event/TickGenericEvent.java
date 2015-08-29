@@ -10,7 +10,7 @@ public class TickGenericEvent extends IBEvent<TickGenericEvent>  {
     public final IBConstants.TickType type;
     public final double value;
 
-    public TickGenericEvent(final String requestId, final IBConstants.TickType type, final double value){
+    public TickGenericEvent(final long requestId, final IBConstants.TickType type, final double value){
         super(requestId);
         this.type = type;
         this.value = value;

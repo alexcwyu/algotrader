@@ -9,7 +9,7 @@ public class BondInstrumentSpecificationEvent extends IBEvent<BondInstrumentSpec
 
     public final InstrumentSpecification contractSpecification;
 
-    public BondInstrumentSpecificationEvent(final String requestId, final InstrumentSpecification contractSpecification){
+    public BondInstrumentSpecificationEvent(final long requestId, final InstrumentSpecification contractSpecification){
         super(requestId);
         this.contractSpecification = contractSpecification;
     }

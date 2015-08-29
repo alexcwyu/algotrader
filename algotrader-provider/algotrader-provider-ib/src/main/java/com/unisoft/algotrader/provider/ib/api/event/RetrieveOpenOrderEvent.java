@@ -14,9 +14,9 @@ public class RetrieveOpenOrderEvent extends IBEvent<RetrieveOpenOrderEvent>  {
     public final Order order;
     public final OrderExecution orderExecution;
 
-    public RetrieveOpenOrderEvent(final String orderId, final Instrument instrument,
+    public RetrieveOpenOrderEvent(final long requestId, final Instrument instrument,
                                   final Order order, final OrderExecution orderExecution){
-        super(orderId);
+        super(requestId);
         this.instrument = instrument;
         this.order = order;
         this.orderExecution = orderExecution;

@@ -3,10 +3,6 @@ package com.unisoft.algotrader.provider.ib.api.serializer;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.data.MarketDepthSubscriptionKey;
-import com.unisoft.algotrader.provider.data.SubscriptionKey;
-import com.unisoft.algotrader.provider.ib.IBProvider;
-import com.unisoft.algotrader.provider.ib.IBUtils;
-import com.unisoft.algotrader.provider.ib.api.IBConstants;
 import com.unisoft.algotrader.provider.ib.api.OutgoingMessageId;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -19,12 +15,8 @@ public class MarketDepthSubscriptionRequestSerializer extends Serializer<MarketD
     private static final int VERSION = 1;
     private final RefDataStore refDataStore;
 
-    private AtomicInteger counter;
-
-    public MarketDepthSubscriptionRequestSerializer(
-            AtomicInteger counter, RefDataStore refDataStore, int serverCurrentVersion){
+    public MarketDepthSubscriptionRequestSerializer(RefDataStore refDataStore, int serverCurrentVersion){
         super(serverCurrentVersion);
-        this.counter = counter;
         this.refDataStore = refDataStore;
     }
 
@@ -35,7 +27,7 @@ public class MarketDepthSubscriptionRequestSerializer extends Serializer<MarketD
 
         builder.append(OutgoingMessageId.MARKET_DEPTH_SUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);
-        builder.append(counter.incrementAndGet());
+        builder.append(subscriptionKey.subscriptionId);
         appendInstrument(builder, instrument);
         builder.append(subscriptionKey.numRows);
 

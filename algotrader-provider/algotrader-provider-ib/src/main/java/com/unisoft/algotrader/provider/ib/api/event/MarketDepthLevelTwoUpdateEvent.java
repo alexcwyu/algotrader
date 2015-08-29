@@ -14,7 +14,7 @@ public class MarketDepthLevelTwoUpdateEvent extends IBEvent<MarketDepthLevelTwoU
     public final double price;
     public final int size;
 
-    public MarketDepthLevelTwoUpdateEvent(final String requestId, final int rowId, final String marketMakerName,
+    public MarketDepthLevelTwoUpdateEvent(final long requestId, final int rowId, final String marketMakerName,
                                           final IBConstants.Operation operation, final IBConstants.BookSide bookSide, final double price, final int size){
         super(requestId);
         this.rowId = rowId;

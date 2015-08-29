@@ -10,7 +10,7 @@ public class TickStringEvent extends IBEvent<TickStringEvent>  {
     public final IBConstants.TickType type;
     public final String value;
 
-    public TickStringEvent(final String requestId, final IBConstants.TickType type,
+    public TickStringEvent(final long requestId, final IBConstants.TickType type,
                            final String value){
         super(requestId);
         this.type = type;

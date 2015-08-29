@@ -1,6 +1,8 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
-import com.unisoft.algotrader.provider.ib.api.IBSession;
+import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.IBConstants;
+import com.unisoft.algotrader.provider.ib.api.IBSocket;
 import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
 
 import java.io.InputStream;
@@ -19,7 +21,7 @@ public class TickPriceDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
 
         final int requestId = readInt(inputStream);
         final int tickType = readInt(inputStream);
@@ -28,7 +30,7 @@ public class TickPriceDeserializer extends Deserializer {
         final int size = (version >= VERSION_2) ? readInt(inputStream): 0;
         final int autoExecute = (version >= VERSION_3) ? readInt(inputStream) : 0;
 
-        ibSession.onTickPrice(requestId, tickType, price, autoExecute);
-        ibSession.onTickSize(requestId, tickType, size);
+        ibProvider.onTickPriceEvent(requestId, IBConstants.TickType.fromValue(tickType), price, autoExecute);
+        ibProvider.onTickSizeEvent(requestId, IBConstants.TickType.fromValue(tickType), size);
     }
 }

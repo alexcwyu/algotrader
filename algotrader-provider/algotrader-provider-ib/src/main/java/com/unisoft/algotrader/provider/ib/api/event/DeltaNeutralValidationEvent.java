@@ -9,7 +9,7 @@ public class DeltaNeutralValidationEvent extends IBEvent<DeltaNeutralValidationE
 
     public final UnderlyingCombo underlyingCombo;
 
-    public DeltaNeutralValidationEvent(final String requestId, final UnderlyingCombo underlyingCombo){
+    public DeltaNeutralValidationEvent(final long requestId, final UnderlyingCombo underlyingCombo){
         super(requestId);
         this.underlyingCombo = underlyingCombo;
     }

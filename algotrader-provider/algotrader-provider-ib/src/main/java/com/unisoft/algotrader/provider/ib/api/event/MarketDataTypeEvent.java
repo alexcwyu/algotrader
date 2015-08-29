@@ -9,7 +9,7 @@ public class MarketDataTypeEvent extends IBEvent<MarketDataTypeEvent>  {
 
     public final IBConstants.MarketDataType marketDataType;
 
-    public MarketDataTypeEvent(final String requestId, final IBConstants.MarketDataType marketDataType){
+    public MarketDataTypeEvent(final long requestId, final IBConstants.MarketDataType marketDataType){
         super(requestId);
         this.marketDataType = marketDataType;
     }

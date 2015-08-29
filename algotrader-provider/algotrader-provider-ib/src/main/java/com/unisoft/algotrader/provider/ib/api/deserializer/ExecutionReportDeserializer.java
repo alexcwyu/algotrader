@@ -2,10 +2,9 @@ package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.refdata.Instrument;
-import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
 import com.unisoft.algotrader.provider.ib.api.IBConstants;
-import com.unisoft.algotrader.provider.ib.api.IBSession;
+import com.unisoft.algotrader.provider.ib.api.IBSocket;
 import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
 import com.unisoft.algotrader.provider.ib.api.InputStreamUtils;
 
@@ -25,18 +24,18 @@ public class ExecutionReportDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         int requestId = -1;
         if (version >= 7) {
             requestId = readInt(inputStream);
         }
         final int orderId = readInt(inputStream);
-        final Instrument instrument = parseInstrument(version, inputStream, ibSession);
+        final Instrument instrument = parseInstrument(version, inputStream, ibProvider);
         final ExecutionReport executionReport = consumeExecutionReport(version, inputStream, orderId);
-        ibSession.onExecutionReport(requestId, executionReport);
+        ibProvider.onExecutionReportEvent(requestId, instrument, executionReport);
     }
 
-    protected Instrument parseInstrument(final int version, final InputStream inputStream, final IBSession ibSession) {
+    protected Instrument parseInstrument(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final int instId = (version >= 5)? InputStreamUtils.readInt(inputStream) : 0;
         final String symbol = readString(inputStream);
         final Instrument.InstType instType = IBConstants.SecType.convert(readString(inputStream));
@@ -49,7 +48,7 @@ public class ExecutionReportDeserializer extends Deserializer {
         final String localSymbol = readString(inputStream);
         final String tradingClass = (version >= 10)? readString(inputStream) : null;
 
-        Instrument instrument = ibSession.getRefDataStore().getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
+        Instrument instrument = ibProvider.getRefDataStore().getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
         if (instrument == null){
             throw new RuntimeException("Cannot find instrumnet symbol=" + symbol +", primaryExchange="+exchange);
         }

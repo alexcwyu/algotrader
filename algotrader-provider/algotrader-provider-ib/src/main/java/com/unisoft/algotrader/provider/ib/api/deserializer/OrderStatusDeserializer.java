@@ -1,6 +1,8 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
-import com.unisoft.algotrader.provider.ib.api.IBSession;
+import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.IBConstants;
+import com.unisoft.algotrader.provider.ib.api.IBSocket;
 import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
 
 import java.io.InputStream;
@@ -18,7 +20,7 @@ public class OrderStatusDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final int orderId = readInt(inputStream);
         final String orderStatus = readString(inputStream);
         final int filledQuantity = readInt(inputStream);
@@ -30,7 +32,7 @@ public class OrderStatusDeserializer extends Deserializer {
         final int clientId =  (version >= 5) ? readInt(inputStream) : 0;
         final String heldCause = (version >= 6) ? readString(inputStream) : null;
 
-        ibSession.onOrderStatus(orderId, orderStatus, filledQuantity, remainingQuantity, averageFilledPrice, permanentId,
+        ibProvider.onOrderStatusUpdateEvent(orderId, IBConstants.OrderStatus.fromLabel(orderStatus), filledQuantity, remainingQuantity, averageFilledPrice, permanentId,
                 parentOrderId, lastFilledPrice, clientId, heldCause);
     }
 }

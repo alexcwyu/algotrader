@@ -9,7 +9,7 @@ import java.util.List;
 public class MarketScannerDataListEvent extends IBEvent<MarketScannerDataListEvent>  {
 
     public final List<MarketScannerDataEvent> marketScannerDataEvents;
-    public MarketScannerDataListEvent(final String requestId, List<MarketScannerDataEvent> marketScannerDataEvents){
+    public MarketScannerDataListEvent(final long requestId, List<MarketScannerDataEvent> marketScannerDataEvents){
         super(requestId);
         this.marketScannerDataEvents = marketScannerDataEvents;
     }

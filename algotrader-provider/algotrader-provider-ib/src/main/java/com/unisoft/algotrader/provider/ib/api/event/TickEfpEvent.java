@@ -17,7 +17,7 @@ public class TickEfpEvent extends IBEvent<TickEfpEvent> {
     public final double dividendImpact;
     public final double dividendToExpiry;
 
-    public TickEfpEvent(final String requestId, final IBConstants.TickType type, final double basisPoints,
+    public TickEfpEvent(final long requestId, final IBConstants.TickType type, final double basisPoints,
                         final String formattedBasisPoints, final double impliedFuturePrice, final int holdDays,
                         final String futureExpiry, final double dividendImpact, final double dividendToExpiry) {
         super(requestId);

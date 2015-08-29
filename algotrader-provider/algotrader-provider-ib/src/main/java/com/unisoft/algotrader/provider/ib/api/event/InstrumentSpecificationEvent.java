@@ -9,7 +9,7 @@ public class InstrumentSpecificationEvent extends IBEvent<InstrumentSpecificatio
 
     public final InstrumentSpecification instrumentSpecification;
 
-    public InstrumentSpecificationEvent(final String requestId, final InstrumentSpecification instrumentSpecification){
+    public InstrumentSpecificationEvent(final long requestId, final InstrumentSpecification instrumentSpecification){
         super(requestId);
         this.instrumentSpecification = instrumentSpecification;
     }

@@ -7,8 +7,9 @@ import com.unisoft.algotrader.model.trading.Side;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
 import com.unisoft.algotrader.provider.ib.api.IBConstants;
-import com.unisoft.algotrader.provider.ib.api.IBSession;
+import com.unisoft.algotrader.provider.ib.api.IBSocket;
 import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.OrderExecution;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.InputStream;
@@ -26,12 +27,12 @@ public class OpenOrderEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final int orderId = readInt(inputStream);
-        final Instrument instrument = parseInstrument(version, inputStream, ibSession.getRefDataStore());
-        Order order = parseOrder(version, inputStream, ibSession, orderId);
-        order = parseOrderExecution(version, inputStream, order);
-        ibSession.onOpenOrder(order);
+        final Instrument instrument = parseInstrument(version, inputStream, ibProvider.getRefDataStore());
+        Order order = parseOrder(version, inputStream, ibProvider, orderId);
+        OrderExecution orderExecution = parseOrderExecution(version, inputStream, order);
+        ibProvider.onRetrieveOpenOrderEvent(orderId, instrument, order, orderExecution);
     }
 
     protected Instrument parseInstrument(final int version, final InputStream inputStream, final RefDataStore refDataStore) {
@@ -55,7 +56,7 @@ public class OpenOrderEventDeserializer extends Deserializer {
         return instrument;
     }
 
-    protected Order parseOrder(final int version, final InputStream inputStream, final IBSession ibSession, final int orderId){
+    protected Order parseOrder(final int version, final InputStream inputStream, final IBProvider ibProvider, final int orderId){
 
         final Side side = IBConstants.Action.convert(readString(inputStream));
         final int totalQty = readInt(inputStream);
@@ -117,7 +118,7 @@ public class OpenOrderEventDeserializer extends Deserializer {
             String settlingFirm = readString(inputStream);
             int shortSaleSlot = readInt(inputStream);
             String designatedLocation = readString(inputStream);
-            if (ibSession.getServerCurrentVersion() == 51) {
+            if (ibProvider.getIbSocket().getServerCurrentVersion() == 51) {
                 readInt(inputStream);
             } else if (version >= 23) {
                 int exemptionCode = readInt(inputStream);
@@ -169,7 +170,7 @@ public class OpenOrderEventDeserializer extends Deserializer {
                 }
             }
             int continuouslyUpdate = readInt(inputStream);
-            if (ibSession.getServerCurrentVersion() == 26) {
+            if (ibProvider.getIbSocket().getServerCurrentVersion() == 26) {
                 double lowerStockPriceRange = readDouble(inputStream);
                 double upperStockPriceRange = readDouble(inputStream);
             }
@@ -282,19 +283,23 @@ public class OpenOrderEventDeserializer extends Deserializer {
     }
 
     //TODO
-    protected Order parseOrderExecution(final int version, final InputStream inputStream, Order order){
+    protected OrderExecution parseOrderExecution(final int version, final InputStream inputStream, Order order){
 
         if (version >= 16) {
-            String orderStatus = readString(inputStream);
-            String initialMargin = readString(inputStream);
-            String maintenanceMargin = readString(inputStream);
-            String equityWithLoan = readString(inputStream);
-            double commission = readDoubleMax(inputStream);
-            double minCommission = readDoubleMax(inputStream);
-            double maxCommission  = readDoubleMax(inputStream);
-            String commissionCurrencyCode = readString(inputStream);
-            String warningText = readString(inputStream);
+
+            OrderExecution orderExecution = new OrderExecution();
+            orderExecution.setOrderStatus(IBConstants.OrderStatus.fromLabel(readString(inputStream)));
+            orderExecution.setInitialMargin(readString(inputStream));
+            orderExecution.setMaintenanceMargin(readString(inputStream));
+            orderExecution.setEquityWithLoan(readString(inputStream));
+            orderExecution.setCommission(readDoubleMax(inputStream));
+            orderExecution.setMinCommission(readDoubleMax(inputStream));
+            orderExecution.setMaxCommission(readDoubleMax(inputStream));
+            orderExecution.setCommissionCurrencyCode(readString(inputStream));
+            orderExecution.setWarningText(readString(inputStream));
+
+            return orderExecution;
         }
-        return order;
+        return null;
     }
 }

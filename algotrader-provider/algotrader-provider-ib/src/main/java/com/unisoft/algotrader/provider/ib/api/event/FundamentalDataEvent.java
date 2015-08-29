@@ -6,7 +6,7 @@ package com.unisoft.algotrader.provider.ib.api.event;
 public class FundamentalDataEvent extends IBEvent<FundamentalDataEvent>  {
 
     public final String xml;
-    public FundamentalDataEvent(final String requestId, final String xml){
+    public FundamentalDataEvent(final long requestId, final String xml){
         super(requestId);
         this.xml = xml;
     }

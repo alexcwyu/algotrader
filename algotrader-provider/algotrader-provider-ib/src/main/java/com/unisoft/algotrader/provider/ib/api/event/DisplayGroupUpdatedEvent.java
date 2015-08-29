@@ -7,8 +7,8 @@ public class DisplayGroupUpdatedEvent extends IBEvent<DisplayGroupUpdatedEvent> 
 
     public final String contractInfo;
 
-    public DisplayGroupUpdatedEvent(final int requestId, final String contractInfo){
-        super(requestId+"");
+    public DisplayGroupUpdatedEvent(final long requestId, final String contractInfo){
+        super(requestId);
         this.contractInfo = contractInfo;
     }
 

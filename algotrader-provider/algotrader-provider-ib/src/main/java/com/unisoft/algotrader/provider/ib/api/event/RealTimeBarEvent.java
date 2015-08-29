@@ -15,7 +15,7 @@ public class RealTimeBarEvent extends IBEvent<RealTimeBarEvent>  {
     public final double weightedAveragePrice;
     public final int tradeNumber;
 
-    public RealTimeBarEvent(final String requestId, final long timestamp, final double open, final double high,
+    public RealTimeBarEvent(final long requestId, final long timestamp, final double open, final double high,
                             final double low, final double close, final long volume, final double weightedAveragePrice,
                             final int tradeNumber){
         super(requestId);

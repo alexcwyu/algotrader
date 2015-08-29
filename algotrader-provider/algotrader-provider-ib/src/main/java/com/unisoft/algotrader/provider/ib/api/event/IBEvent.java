@@ -8,14 +8,14 @@ import com.unisoft.algotrader.model.event.Event;
 public abstract class IBEvent <E extends IBEvent<? super E>> implements Event<IBEventHandler, E> {
 
     private long sequence;
-    private String requestId;
+    private long requestId;
     public final long timeStamp;
 
     protected IBEvent(){
         timeStamp = System.currentTimeMillis();
     }
 
-    public IBEvent(String requestId){
+    public IBEvent(long requestId){
         this();
         this.requestId = requestId;
     }
@@ -32,7 +32,7 @@ public abstract class IBEvent <E extends IBEvent<? super E>> implements Event<IB
         return sequence;
     }
 
-    public final String getRequestId() {
+    public final long getRequestId() {
         return requestId;
     }
 

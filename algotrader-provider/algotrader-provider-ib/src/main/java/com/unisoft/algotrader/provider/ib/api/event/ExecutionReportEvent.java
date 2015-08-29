@@ -11,7 +11,7 @@ public class ExecutionReportEvent extends IBEvent<ExecutionReportEvent>  {
     public final Instrument instrument;
     public final ExecutionReport executionReport;
 
-    public ExecutionReportEvent(final String requestId, final Instrument instrument, final ExecutionReport executionReport){
+    public ExecutionReportEvent(final long requestId, final Instrument instrument, final ExecutionReport executionReport){
         super(requestId);
         this.instrument = instrument;
         this.executionReport = executionReport;

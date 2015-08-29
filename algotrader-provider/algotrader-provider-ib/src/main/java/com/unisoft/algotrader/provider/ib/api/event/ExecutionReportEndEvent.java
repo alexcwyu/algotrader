@@ -6,7 +6,7 @@ package com.unisoft.algotrader.provider.ib.api.event;
 public class ExecutionReportEndEvent extends IBEvent<ExecutionReportEndEvent>  {
 
 
-    public ExecutionReportEndEvent(final String requestId){
+    public ExecutionReportEndEvent(final long requestId){
         super(requestId);
     }
 

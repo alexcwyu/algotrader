@@ -17,7 +17,7 @@ public class TickOptionComputationEvent  extends IBEvent<TickOptionComputationEv
     public final double theta;
     public final double underlyingPrice;
 
-    public TickOptionComputationEvent(final String requestId, final IBConstants.TickType type, final double impliedVolatility,
+    public TickOptionComputationEvent(final long requestId, final IBConstants.TickType type, final double impliedVolatility,
                                       final double delta, final double price, final double presentValueDividend, final double gamma,
                                       final double vega, final double theta, final double underlyingPrice){
         super(requestId);

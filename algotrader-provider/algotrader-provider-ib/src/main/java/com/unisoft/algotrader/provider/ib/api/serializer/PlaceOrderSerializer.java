@@ -15,11 +15,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PlaceOrderSerializer extends Serializer<Order> {
 
     private RefDataStore refDataStore;
-    private AtomicInteger counter;
 
-    public PlaceOrderSerializer(AtomicInteger counter, RefDataStore refDataStore, int serverCurrentVersion) {
+    public PlaceOrderSerializer(RefDataStore refDataStore, int serverCurrentVersion) {
         super(serverCurrentVersion);
-        this.counter = counter;
         this.refDataStore = refDataStore;
     }
 

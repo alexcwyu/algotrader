@@ -14,13 +14,13 @@ public class ServerMessageEvent extends IBEvent<ServerMessageEvent>  {
     public List<Object> parameters = Lists.newArrayList();
 
     public ServerMessageEvent(final int code, final String message, final Object... parameters) {
-        this(null, code, message);
+        this(-1, code, message);
         if ((parameters != null) && (parameters.length > 0)) {
             this.parameters = Lists.newArrayList(parameters);
         }
     }
 
-    public ServerMessageEvent(final String requestId, final int code, final String message) {
+    public ServerMessageEvent(final long requestId, final int code, final String message) {
         super(requestId);
         this.code = code;
         this.message = message;

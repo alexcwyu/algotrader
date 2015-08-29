@@ -2,10 +2,9 @@ package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.refdata.Instrument;
-import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
 import com.unisoft.algotrader.provider.ib.api.IBConstants;
-import com.unisoft.algotrader.provider.ib.api.IBSession;
+import com.unisoft.algotrader.provider.ib.api.IBSocket;
 import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
 import com.unisoft.algotrader.provider.ib.api.InputStreamUtils;
 import com.unisoft.algotrader.provider.ib.api.model.InstrumentSpecification;
@@ -27,18 +26,18 @@ public class MarketScannerDataEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final int requestId = readInt(inputStream);
         final List<MarketScannerData> marketScannerDataEvents = Lists.newArrayList();
         final int marketScannerDatas = readInt(inputStream);
         for (int i = 0; i < marketScannerDatas; i++) {
-            marketScannerDataEvents.add(consumeMarketScannerDataEvent(version, inputStream, ibSession, requestId));
+            marketScannerDataEvents.add(consumeMarketScannerDataEvent(version, inputStream, ibProvider, requestId));
         }
 
-        ibSession.onMarketScannerData(requestId, marketScannerDataEvents);
+        ibProvider.onMarketScannerDataListEvent(requestId, marketScannerDataEvents);
     }
 
-    private MarketScannerData consumeMarketScannerDataEvent(final int version, final InputStream inputStream, final IBSession ibSession, final int requestId) {
+    private MarketScannerData consumeMarketScannerDataEvent(final int version, final InputStream inputStream, final IBProvider ibProvider, final int requestId) {
 
         final InstrumentSpecification contractSpecification = new InstrumentSpecification();
         final int ranking = readInt(inputStream);
@@ -68,7 +67,7 @@ public class MarketScannerDataEventDeserializer extends Deserializer {
             comboLegDescription = readString(inputStream);
         }
 
-        Instrument instrument = ibSession.getRefDataStore().getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
+        Instrument instrument = ibProvider.getRefDataStore().getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
         if (instrument == null){
             throw new RuntimeException("Cannot find instrumnet symbol=" + symbol +", primaryExchange="+exchange);
         }

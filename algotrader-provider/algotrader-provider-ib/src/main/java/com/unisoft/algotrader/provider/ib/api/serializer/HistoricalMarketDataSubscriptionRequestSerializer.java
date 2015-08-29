@@ -23,12 +23,9 @@ public class HistoricalMarketDataSubscriptionRequestSerializer extends Serialize
     private final static boolean snapshot = false;
 
     private final IBConstants.ReturnedTickTypeFilter[] returnedTickTypeFilters;
-    private AtomicInteger counter;
 
-    public HistoricalMarketDataSubscriptionRequestSerializer(
-            AtomicInteger counter, RefDataStore refDataStore, int serverCurrentVersion, final IBConstants.ReturnedTickTypeFilter... returnedTickTypeFilters){
+    public HistoricalMarketDataSubscriptionRequestSerializer(RefDataStore refDataStore, int serverCurrentVersion, final IBConstants.ReturnedTickTypeFilter... returnedTickTypeFilters){
         super(serverCurrentVersion);
-        this.counter = counter;
         this.refDataStore = refDataStore;
         this.returnedTickTypeFilters = returnedTickTypeFilters;
     }
@@ -40,7 +37,7 @@ public class HistoricalMarketDataSubscriptionRequestSerializer extends Serialize
 
         builder.append(OutgoingMessageId.MARKET_DATA_SUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);
-        builder.append(counter.incrementAndGet());
+        builder.append(subscriptionKey.subscriptionId);
         appendInstrument(builder, instrument);
         appendCombo(builder, instrument);
         appendUnderlyingCombo(builder, instrument);

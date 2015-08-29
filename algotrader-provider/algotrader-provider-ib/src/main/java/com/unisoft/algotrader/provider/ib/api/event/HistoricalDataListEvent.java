@@ -9,7 +9,7 @@ import java.util.List;
 public class HistoricalDataListEvent extends IBEvent<HistoricalDataListEvent>  {
 
     public final List<HistoricalDataEvent> historicalDataEvents;
-    public HistoricalDataListEvent(final String requestId, List<HistoricalDataEvent> historicalDataEvents){
+    public HistoricalDataListEvent(final long requestId, List<HistoricalDataEvent> historicalDataEvents){
         super(requestId);
         this.historicalDataEvents = historicalDataEvents;
     }

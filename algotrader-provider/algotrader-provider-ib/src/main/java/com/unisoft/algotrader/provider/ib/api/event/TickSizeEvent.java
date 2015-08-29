@@ -10,7 +10,7 @@ public class TickSizeEvent extends IBEvent<TickSizeEvent>  {
     public final IBConstants.TickType type;
     public final int size;
 
-    public TickSizeEvent(final String requestId, final IBConstants.TickType type,
+    public TickSizeEvent(final long requestId, final IBConstants.TickType type,
                           final int size){
         super(requestId);
         this.type = type;

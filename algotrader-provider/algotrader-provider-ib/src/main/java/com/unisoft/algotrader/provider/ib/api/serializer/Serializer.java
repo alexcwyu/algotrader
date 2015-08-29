@@ -27,8 +27,6 @@ public abstract class Serializer<M> {
 
     public abstract byte[] serialize(M event);
 
-
-
     protected int getServerCurrentVersion(){
         return serverCurrentVersion;
     }

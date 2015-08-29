@@ -1,7 +1,8 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.event.data.Bar;
-import com.unisoft.algotrader.provider.ib.api.IBSession;
+import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.IBSocket;
 import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
 
 import java.io.InputStream;
@@ -19,7 +20,7 @@ public class HistoricalDataEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final List<Bar> historicalDataEvents = Lists.newArrayList();
         final int requestId = readInt(inputStream);
         String startDate = null;
@@ -34,7 +35,7 @@ public class HistoricalDataEventDeserializer extends Deserializer {
         for (int i = 0; i < historicalDatas; i++) {
             historicalDataEvents.add(consumeHistoricalData(version, requestId, inputStream));
         }
-        ibSession.onhistoricalDataEvents(requestId, historicalDataEvents);
+        ibProvider.onHistoricalDataListEvent(requestId, historicalDataEvents);
     }
 
     private Bar consumeHistoricalData(final int version, final int requestId, final InputStream inputStream) {

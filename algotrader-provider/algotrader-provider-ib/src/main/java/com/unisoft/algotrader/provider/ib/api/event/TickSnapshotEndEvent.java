@@ -6,7 +6,7 @@ package com.unisoft.algotrader.provider.ib.api.event;
 public class TickSnapshotEndEvent extends IBEvent<TickSnapshotEndEvent>  {
 
 
-    public TickSnapshotEndEvent(final String requestId){
+    public TickSnapshotEndEvent(final long requestId){
         super(requestId);
     }
 

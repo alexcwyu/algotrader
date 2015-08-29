@@ -4,7 +4,7 @@ import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
 import com.unisoft.algotrader.provider.ib.api.IBConstants;
-import com.unisoft.algotrader.provider.ib.api.IBSession;
+import com.unisoft.algotrader.provider.ib.api.IBSocket;
 import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
 import com.unisoft.algotrader.provider.ib.api.InputStreamUtils;
 
@@ -22,8 +22,8 @@ public class PortfolioUpdateEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBSession ibSession) {
-        final Instrument instrument = parseInstrument(version, inputStream, ibSession.getRefDataStore());
+    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+        final Instrument instrument = parseInstrument(version, inputStream, ibProvider.getRefDataStore());
         final int position = readInt(inputStream);
         final double marketPrice = readDouble(inputStream);
         final double marketValue = readDouble(inputStream);
@@ -39,12 +39,12 @@ public class PortfolioUpdateEventDeserializer extends Deserializer {
         if (version >= 4) {
             accountName = readString(inputStream);
         }
-        if ((version == 6) && (ibSession.getServerCurrentVersion() == 39)) {
+        if ((version == 6) && (ibProvider.getIbSocket().getServerCurrentVersion() == 39)) {
             final String primaryExchange = readString(inputStream);
             //instrument.setExchId(exchId);
         }
 
-        ibSession.onPortfolioUpdateEvent(instrument, position, marketPrice, marketValue, averageCost, unrealizedProfitAndLoss,
+        ibProvider.onPortfolioUpdateEvent(instrument, position, marketPrice, marketValue, averageCost, unrealizedProfitAndLoss,
                 realizedProfitAndLoss, accountName);
 
     }
