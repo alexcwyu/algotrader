@@ -3,11 +3,7 @@ package com.unisoft.algotrader.provider.ib.api.serializer;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
-import com.unisoft.algotrader.provider.ib.api.Feature;
-import com.unisoft.algotrader.provider.ib.api.IBConstants;
-import com.unisoft.algotrader.provider.ib.api.OutgoingMessageId;
-
-import java.util.concurrent.atomic.AtomicInteger;
+import com.unisoft.algotrader.provider.ib.api.model.constants.*;
 
 /**
  * Created by alex on 8/3/15.
@@ -47,13 +43,13 @@ public class PlaceOrderSerializer extends Serializer<Order> {
     }
 
     private void appendOrder(ByteArrayBuilder builder, Order order){
-        builder.append(IBConstants.Action.convert(order.getSide()));
+        builder.append(Action.convert(order.getSide()));
         builder.append(order.getOrdQty());
-        builder.append(IBConstants.OrderType.convert(order.getOrdType()));
+        builder.append(OrderType.convert(order.getOrdType()));
 
         builder.append(order.getLimitPrice());
         builder.append(order.getStopPrice());
-        builder.append(IBConstants.TIF.convert(order.getTif()));
+        builder.append(TIF.convert(order.getTif()));
 
         builder.appendEol(); //OCA Group
         builder.appendEol(); //Account

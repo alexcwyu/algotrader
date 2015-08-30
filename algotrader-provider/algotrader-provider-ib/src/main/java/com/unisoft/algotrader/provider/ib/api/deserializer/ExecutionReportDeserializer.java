@@ -3,14 +3,15 @@ package com.unisoft.algotrader.provider.ib.api.deserializer;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.provider.ib.IBProvider;
-import com.unisoft.algotrader.provider.ib.api.IBConstants;
-import com.unisoft.algotrader.provider.ib.api.IBSocket;
-import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
-import com.unisoft.algotrader.provider.ib.api.InputStreamUtils;
+import com.unisoft.algotrader.provider.ib.InputStreamUtils;
+import com.unisoft.algotrader.provider.ib.api.model.constants.IBSide;
+import com.unisoft.algotrader.provider.ib.api.model.constants.IncomingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.constants.OptionRight;
+import com.unisoft.algotrader.provider.ib.api.model.constants.SecType;
 
 import java.io.InputStream;
 
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
+import static com.unisoft.algotrader.provider.ib.InputStreamUtils.*;
 
 
 /**
@@ -38,10 +39,10 @@ public class ExecutionReportDeserializer extends Deserializer {
     protected Instrument parseInstrument(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final int instId = (version >= 5)? InputStreamUtils.readInt(inputStream) : 0;
         final String symbol = readString(inputStream);
-        final Instrument.InstType instType = IBConstants.SecType.convert(readString(inputStream));
+        final Instrument.InstType instType = SecType.convert(readString(inputStream));
         final String expString = readString(inputStream);
         final double strike = readDouble(inputStream);
-        final Instrument.PutCall putCall = IBConstants.OptionRight.convert(readString(inputStream));
+        final Instrument.PutCall putCall = OptionRight.convert(readString(inputStream));
         final String multiplier = (version >= 9)? readString(inputStream) : null;
         final String exchange = readString(inputStream);
         final String ccyCode = readString(inputStream);
@@ -64,7 +65,7 @@ public class ExecutionReportDeserializer extends Deserializer {
         String time = readString(inputStream);
         String account = readString(inputStream);
         String exchange = readString(inputStream);
-        executionReport.setSide(IBConstants.IBSide.convert(readString(inputStream)));
+        executionReport.setSide(IBSide.convert(readString(inputStream)));
         executionReport.setLastQty(readInt(inputStream));
         executionReport.setLastPrice(readDouble(inputStream));
         if (version >= 2) {

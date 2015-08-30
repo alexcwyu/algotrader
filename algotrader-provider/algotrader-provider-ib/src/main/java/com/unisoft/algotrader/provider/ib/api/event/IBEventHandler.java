@@ -5,8 +5,8 @@ import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Instrument;
-import com.unisoft.algotrader.provider.ib.api.IBConstants;
 import com.unisoft.algotrader.provider.ib.api.model.*;
+import com.unisoft.algotrader.provider.ib.api.model.constants.*;
 
 import java.util.List;
 
@@ -71,7 +71,7 @@ public interface IBEventHandler extends EventHandler {
 
     default void onFinancialAdvisorConfigurationEvent(final FinancialAdvisorConfigurationEvent financialAdvisorConfigurationEvent){}
 
-    default void onFinancialAdvisorConfigurationEvent(IBConstants.FinancialAdvisorDataType dataTypeValue, String xml){}
+    default void onFinancialAdvisorConfigurationEvent(FinancialAdvisorDataType dataTypeValue, String xml){}
 
     default void onFundamentalDataEvent(final FundamentalDataEvent fundamentalDataEvent){}
 
@@ -103,17 +103,17 @@ public interface IBEventHandler extends EventHandler {
 
     default void onMarketDataTypeEvent(final MarketDataTypeEvent marketDataTypeEvent){}
 
-    default void onMarketDataTypeEvent(final int requestId, IBConstants.MarketDataType marketDataType){}
+    default void onMarketDataTypeEvent(final int requestId, MarketDataType marketDataType){}
 
     default void onMarketDepthLevelTwoUpdateEvent(final MarketDepthLevelTwoUpdateEvent marketDepthLevelTwoUpdateEvent){}
 
     default void onMarketDepthLevelTwoUpdateEvent(final int requestId, final int rowId,
-                                      final String marketMakerName, final IBConstants.Operation operation, final IBConstants.BookSide bookSide, final double price, final int size){}
+                                      final String marketMakerName, final Operation operation, final BookSide bookSide, final double price, final int size){}
 
     default void onMarketDepthUpdateEvent(final MarketDepthUpdateEvent marketDepthUpdateEvent){}
 
-    default void onMarketDepthUpdateEvent(final int requestId, final int rowId, final IBConstants.Operation operation,
-                                    final IBConstants.BookSide bookSide, final double price, final int size){}
+    default void onMarketDepthUpdateEvent(final int requestId, final int rowId, final Operation operation,
+                                    final BookSide bookSide, final double price, final int size){}
 
     default void onMarketScannerDataEvent(final MarketScannerDataEvent marketScannerDataEvent){}
 
@@ -133,7 +133,7 @@ public interface IBEventHandler extends EventHandler {
 
     default void onNewsBulletinUpdateEvent(final NewsBulletinUpdateEvent newsBulletinUpdateEvent){}
 
-    default void onNewsBulletinUpdateEvent(final int newsBulletinId, final IBConstants.NewsBulletinType newBulletinTypeValue,
+    default void onNewsBulletinUpdateEvent(final int newsBulletinId, final NewsBulletinType newBulletinTypeValue,
                                      final String message, final String exchange){}
 
     default void onNextValidOrderIdEvent(final NextValidOrderIdEvent nextValidOrderIdEvent){}
@@ -142,7 +142,7 @@ public interface IBEventHandler extends EventHandler {
 
     default void onOrderStatusUpdateEvent(final OrderStatusUpdateEvent orderStatusUpdateEvent){}
 
-    default void onOrderStatusUpdateEvent(final int orderId, final IBConstants.OrderStatus orderStatus, final int filledQuantity,
+    default void onOrderStatusUpdateEvent(final int orderId, final OrderStatus orderStatus, final int filledQuantity,
                               final int remainingQuantity, final double averageFilledPrice, final int permanentId,
                               final int parentOrderId, final double lastFilledPrice, final int clientId, final String heldCause){}
 
@@ -186,27 +186,27 @@ public interface IBEventHandler extends EventHandler {
 
     default void onTickEfpEvent(final TickEfpEvent tickEfpEvent){}
 
-    default void onTickEfpEvent(final int requestId, final IBConstants.TickType tickType, final double basisPoints,
+    default void onTickEfpEvent(final int requestId, final TickType tickType, final double basisPoints,
                                final String formattedBasisPoints, final double impliedFuturePrice, final int holdDays,
                                final String futureExpiry, final double dividendImpact, final double dividendToExpiry){}
 
     default void onTickGenericEvent(final TickGenericEvent tickGenericEvent){}
 
-    default void onTickGenericEvent(final int requestId, final IBConstants.TickType tickType, final double value){}
+    default void onTickGenericEvent(final int requestId, final TickType tickType, final double value){}
 
     default void onTickOptionComputationEvent(final TickOptionComputationEvent tickOptionComputationEvent){}
 
-    default void onTickOptionComputationEvent(final int requestId, final IBConstants.TickType tickType,
+    default void onTickOptionComputationEvent(final int requestId, final TickType tickType,
                                              final double impliedVolatility, final double delta, final double price, final double presentValueDividend,
                                              final double gamma, final double vega, final double theta, final double underlyingPrice){}
 
     default void onTickPriceEvent(final TickPriceEvent tickPriceEvent){}
 
-    default void onTickPriceEvent(final int requestId, final IBConstants.TickType tickType, final double price, final int autoExecute){}
+    default void onTickPriceEvent(final int requestId, final TickType tickType, final double price, final int autoExecute){}
 
     default void onTickSizeEvent(final TickSizeEvent tickSizeEvent){}
 
-    default void onTickSizeEvent(final int requestId, final IBConstants.TickType tickType, final int size){}
+    default void onTickSizeEvent(final int requestId, final TickType tickType, final int size){}
 
     default void onTickSnapshotEndEvent(final TickSnapshotEndEvent tickSnapshotEndEvent){}
 
@@ -214,7 +214,7 @@ public interface IBEventHandler extends EventHandler {
 
     default void onTickStringEvent(final TickStringEvent tickStringEvent){}
 
-    default void onTickStringEvent(final int requestId, final IBConstants.TickType tickType, final String value){}
+    default void onTickStringEvent(final int requestId, final TickType tickType, final String value){}
 
     default void onVerifyMessageAPIEvent(final VerifyMessageAPIEvent verifyMessageAPIEvent){}
 

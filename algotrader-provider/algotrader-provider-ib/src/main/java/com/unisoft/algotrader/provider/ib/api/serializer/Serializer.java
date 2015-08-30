@@ -2,12 +2,13 @@ package com.unisoft.algotrader.provider.ib.api.serializer;
 
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.provider.ib.IBProvider;
-import com.unisoft.algotrader.provider.ib.IBUtils;
-import com.unisoft.algotrader.provider.ib.api.IBConstants;
+import com.unisoft.algotrader.provider.ib.api.model.constants.IBModelUtils;
+import com.unisoft.algotrader.provider.ib.api.model.constants.OptionRight;
+import com.unisoft.algotrader.provider.ib.api.model.constants.SecType;
 
 import java.io.InputStream;
 
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readInt;
+import static com.unisoft.algotrader.provider.ib.InputStreamUtils.readInt;
 
 
 /**
@@ -33,10 +34,10 @@ public abstract class Serializer<M> {
 
     protected void appendInstrument(ByteArrayBuilder builder, Instrument instrument) {
         builder.append(instrument.getSymbol(IBProvider.PROVIDER_ID));
-        builder.append(IBConstants.SecType.convert(instrument.getType()));
-        builder.append(IBUtils.convertDate(instrument.getExpiryDate().getTime()));
+        builder.append(SecType.convert(instrument.getType()));
+        builder.append(IBModelUtils.convertDate(instrument.getExpiryDate().getTime()));
         builder.append(instrument.getStrike());
-        builder.append(IBConstants.OptionRight.convert(instrument.getPutCall()));
+        builder.append(OptionRight.convert(instrument.getPutCall()));
         builder.append(instrument.getFactor());
         builder.append(instrument.getExchId(IBProvider.PROVIDER_ID));
         builder.append(instrument.getExchId(IBProvider.PROVIDER_ID));

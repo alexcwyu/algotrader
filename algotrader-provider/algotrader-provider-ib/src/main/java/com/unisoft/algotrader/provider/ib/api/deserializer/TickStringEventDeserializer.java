@@ -1,14 +1,13 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.unisoft.algotrader.provider.ib.IBProvider;
-import com.unisoft.algotrader.provider.ib.api.IBConstants;
-import com.unisoft.algotrader.provider.ib.api.IBSocket;
-import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
-import com.unisoft.algotrader.provider.ib.api.InputStreamUtils;
+import com.unisoft.algotrader.provider.ib.InputStreamUtils;
+import com.unisoft.algotrader.provider.ib.api.model.constants.IncomingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.constants.TickType;
 
 import java.io.InputStream;
 
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readString;
+import static com.unisoft.algotrader.provider.ib.InputStreamUtils.readString;
 
 /**
  * Created by alex on 8/13/15.
@@ -26,6 +25,6 @@ public class TickStringEventDeserializer extends Deserializer {
         final int tickType = InputStreamUtils.readInt(inputStream);
         final String value = readString(inputStream);
 
-        ibProvider.onTickStringEvent(requestId, IBConstants.TickType.fromValue(tickType), value);
+        ibProvider.onTickStringEvent(requestId, TickType.fromValue(tickType), value);
     }
 }

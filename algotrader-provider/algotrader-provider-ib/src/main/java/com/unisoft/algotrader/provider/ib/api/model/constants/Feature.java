@@ -1,4 +1,4 @@
-package com.unisoft.algotrader.provider.ib.api;
+package com.unisoft.algotrader.provider.ib.api.model.constants;
 
 /**
  * Created by alex on 8/3/15.

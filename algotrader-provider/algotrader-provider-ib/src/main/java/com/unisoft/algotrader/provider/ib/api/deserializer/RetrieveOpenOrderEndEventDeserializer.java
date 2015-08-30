@@ -1,8 +1,7 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.unisoft.algotrader.provider.ib.IBProvider;
-import com.unisoft.algotrader.provider.ib.api.IBSocket;
-import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.constants.IncomingMessageId;
 
 import java.io.InputStream;
 

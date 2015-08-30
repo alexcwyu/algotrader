@@ -1,14 +1,13 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.unisoft.algotrader.provider.ib.IBProvider;
-import com.unisoft.algotrader.provider.ib.api.IBConstants;
-import com.unisoft.algotrader.provider.ib.api.IBSocket;
-import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.constants.IncomingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.constants.TickType;
 
 import java.io.InputStream;
 
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readDouble;
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readInt;
+import static com.unisoft.algotrader.provider.ib.InputStreamUtils.readDouble;
+import static com.unisoft.algotrader.provider.ib.InputStreamUtils.readInt;
 
 /**
  * Created by alex on 8/13/15.
@@ -35,7 +34,7 @@ public class TickOptionComputationEventDeserializer extends Deserializer {
         double vega = Double.MAX_VALUE;
         double theta = Double.MAX_VALUE;
         double underlyingPrice = Double.MAX_VALUE;
-        if ((version >= VERSION) || (tickType == IBConstants.TickType.MODEL_OPTION_COMPUTATION.getValue())) {
+        if ((version >= VERSION) || (tickType == TickType.MODEL_OPTION_COMPUTATION.getValue())) {
             price = getComputedValue0(inputStream);
             presentValueDividend = getComputedValue0(inputStream);
         }
@@ -46,7 +45,7 @@ public class TickOptionComputationEventDeserializer extends Deserializer {
             underlyingPrice = getComputedValue0(inputStream);
         }
 
-        ibProvider.onTickOptionComputationEvent(requestId, IBConstants.TickType.fromValue(tickType),
+        ibProvider.onTickOptionComputationEvent(requestId, TickType.fromValue(tickType),
         impliedVolatility, delta, price, presentValueDividend,
         gamma, vega, theta, underlyingPrice);
     }

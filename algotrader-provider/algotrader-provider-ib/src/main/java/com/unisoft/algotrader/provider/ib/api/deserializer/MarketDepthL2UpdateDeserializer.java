@@ -1,13 +1,13 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.unisoft.algotrader.provider.ib.IBProvider;
-import com.unisoft.algotrader.provider.ib.api.IBConstants;
-import com.unisoft.algotrader.provider.ib.api.IBSocket;
-import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.constants.BookSide;
+import com.unisoft.algotrader.provider.ib.api.model.constants.IncomingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.constants.Operation;
 
 import java.io.InputStream;
 
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
+import static com.unisoft.algotrader.provider.ib.InputStreamUtils.*;
 
 /**
  * Created by alex on 8/13/15.
@@ -29,7 +29,7 @@ public class MarketDepthL2UpdateDeserializer extends Deserializer {
         final double price = readDouble(inputStream);
         final int size = readInt(inputStream);
 
-        ibProvider.onMarketDepthLevelTwoUpdateEvent(requestId, rowId, marketMakerName, IBConstants.Operation.fromValue(operation),
-                IBConstants.BookSide.fromValue(bookSide), price, size);
+        ibProvider.onMarketDepthLevelTwoUpdateEvent(requestId, rowId, marketMakerName, Operation.fromValue(operation),
+                BookSide.fromValue(bookSide), price, size);
     }
 }

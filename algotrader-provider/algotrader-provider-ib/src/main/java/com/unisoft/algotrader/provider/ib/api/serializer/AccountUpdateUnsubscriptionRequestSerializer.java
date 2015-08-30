@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.serializer;
 
-import com.unisoft.algotrader.provider.ib.api.OutgoingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.constants.OutgoingMessageId;
 
 /**
  * Created by alex on 8/7/15.

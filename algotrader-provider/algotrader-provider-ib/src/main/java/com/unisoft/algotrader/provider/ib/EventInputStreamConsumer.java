@@ -1,13 +1,13 @@
-package com.unisoft.algotrader.provider.ib.api;
+package com.unisoft.algotrader.provider.ib;
 
-import com.unisoft.algotrader.provider.ib.IBProvider;
 import com.unisoft.algotrader.provider.ib.api.deserializer.Deserializer;
 import com.unisoft.algotrader.provider.ib.api.deserializer.DeserializerFactory;
+import com.unisoft.algotrader.provider.ib.api.model.constants.IncomingMessageId;
 import org.apache.commons.io.IOUtils;
 
 import java.io.InputStream;
 
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readInt;
+import static com.unisoft.algotrader.provider.ib.InputStreamUtils.readInt;
 
 /**
  * Created by alex on 8/1/15.

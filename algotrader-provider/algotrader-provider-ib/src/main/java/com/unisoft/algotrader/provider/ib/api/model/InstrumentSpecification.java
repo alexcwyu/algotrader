@@ -4,7 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.OrdType;
-import com.unisoft.algotrader.provider.ib.api.IBConstants;
+import com.unisoft.algotrader.provider.ib.api.model.constants.OrderType;
 import com.unisoft.algotrader.utils.collection.Tuple2;
 import org.apache.commons.lang3.StringUtils;
 
@@ -57,7 +57,7 @@ public class InstrumentSpecification {
     private static final Function<String, OrdType> FROM_STRING_TO_ORDER_TYPE_FUNCTION = new Function<String, OrdType>() {
         @Override
         public OrdType apply(final String input) {
-            return IBConstants.OrderType.convert(input);
+            return OrderType.convert(input);
         }
     };
     public String getBondType() {

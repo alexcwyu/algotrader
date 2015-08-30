@@ -1,13 +1,12 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.unisoft.algotrader.provider.ib.IBProvider;
-import com.unisoft.algotrader.provider.ib.api.IBConstants;
-import com.unisoft.algotrader.provider.ib.api.IBSocket;
-import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.constants.IncomingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.constants.OrderStatus;
 
 import java.io.InputStream;
 
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
+import static com.unisoft.algotrader.provider.ib.InputStreamUtils.*;
 
 /**
  * Created by alex on 8/13/15.
@@ -32,7 +31,7 @@ public class OrderStatusDeserializer extends Deserializer {
         final int clientId =  (version >= 5) ? readInt(inputStream) : 0;
         final String heldCause = (version >= 6) ? readString(inputStream) : null;
 
-        ibProvider.onOrderStatusUpdateEvent(orderId, IBConstants.OrderStatus.fromLabel(orderStatus), filledQuantity, remainingQuantity, averageFilledPrice, permanentId,
+        ibProvider.onOrderStatusUpdateEvent(orderId, OrderStatus.fromLabel(orderStatus), filledQuantity, remainingQuantity, averageFilledPrice, permanentId,
                 parentOrderId, lastFilledPrice, clientId, heldCause);
     }
 }

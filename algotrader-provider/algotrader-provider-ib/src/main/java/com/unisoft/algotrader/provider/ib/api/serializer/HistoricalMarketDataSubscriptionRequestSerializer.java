@@ -4,13 +4,13 @@ import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
-import com.unisoft.algotrader.provider.ib.api.Feature;
-import com.unisoft.algotrader.provider.ib.api.IBConstants;
-import com.unisoft.algotrader.provider.ib.api.OutgoingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.constants.Feature;
+import com.unisoft.algotrader.provider.ib.api.model.constants.OutgoingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.constants.RealTimeBarDataType;
+import com.unisoft.algotrader.provider.ib.api.model.constants.ReturnedTickTypeFilter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by alex on 8/7/15.
@@ -19,12 +19,12 @@ public class HistoricalMarketDataSubscriptionRequestSerializer extends Serialize
 
     private static final int VERSION = 9;
     private final RefDataStore refDataStore;
-    private final static IBConstants.RealTimeBarDataType type = IBConstants.RealTimeBarDataType.TRADES;
+    private final static RealTimeBarDataType type = RealTimeBarDataType.TRADES;
     private final static boolean snapshot = false;
 
-    private final IBConstants.ReturnedTickTypeFilter[] returnedTickTypeFilters;
+    private final ReturnedTickTypeFilter[] returnedTickTypeFilters;
 
-    public HistoricalMarketDataSubscriptionRequestSerializer(RefDataStore refDataStore, int serverCurrentVersion, final IBConstants.ReturnedTickTypeFilter... returnedTickTypeFilters){
+    public HistoricalMarketDataSubscriptionRequestSerializer(RefDataStore refDataStore, int serverCurrentVersion, final ReturnedTickTypeFilter... returnedTickTypeFilters){
         super(serverCurrentVersion);
         this.refDataStore = refDataStore;
         this.returnedTickTypeFilters = returnedTickTypeFilters;

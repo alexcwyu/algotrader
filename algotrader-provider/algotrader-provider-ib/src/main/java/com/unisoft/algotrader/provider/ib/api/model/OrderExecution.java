@@ -1,7 +1,7 @@
 package com.unisoft.algotrader.provider.ib.api.model;
 
 import com.google.common.base.Objects;
-import com.unisoft.algotrader.provider.ib.api.IBConstants;
+import com.unisoft.algotrader.provider.ib.api.model.constants.OrderStatus;
 
 /**
  * Created by alex on 8/26/15.
@@ -16,7 +16,7 @@ public class OrderExecution {
     private String maintenanceMargin = EMTPY;
     private double maxCommission;
     private double minCommission;
-    private IBConstants.OrderStatus orderStatus = IBConstants.OrderStatus.EMPTY;
+    private OrderStatus orderStatus = OrderStatus.EMPTY;
     private String warningText = EMTPY;
 
     public double getCommission() {
@@ -75,11 +75,11 @@ public class OrderExecution {
         this.minCommission = minCommission;
     }
 
-    public IBConstants.OrderStatus getOrderStatus() {
+    public OrderStatus getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(IBConstants.OrderStatus orderStatus) {
+    public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
 

@@ -1,7 +1,7 @@
 package com.unisoft.algotrader.provider.ib.api.event;
 
 
-import com.unisoft.algotrader.provider.ib.api.IBConstants;
+import com.unisoft.algotrader.provider.ib.api.model.constants.NewsBulletinType;
 
 /**
  * Created by alex on 8/26/15.
@@ -9,11 +9,11 @@ import com.unisoft.algotrader.provider.ib.api.IBConstants;
 public class NewsBulletinUpdateEvent extends IBEvent<NewsBulletinUpdateEvent>  {
 
     public final int newsBulletinId;
-    public final IBConstants.NewsBulletinType newsBulletinType;
+    public final NewsBulletinType newsBulletinType;
     public final String message;
     public final String exchange;
 
-    public NewsBulletinUpdateEvent(final int newsBulletinId, final IBConstants.NewsBulletinType newsBulletinType,
+    public NewsBulletinUpdateEvent(final int newsBulletinId, final NewsBulletinType newsBulletinType,
                                    final String message, final String exchange){
         this.newsBulletinId = newsBulletinId;
         this.newsBulletinType = newsBulletinType;

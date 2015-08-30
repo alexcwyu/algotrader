@@ -3,18 +3,18 @@ package com.unisoft.algotrader.provider.ib.api.deserializer;
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.provider.ib.IBProvider;
-import com.unisoft.algotrader.provider.ib.api.IBConstants;
-import com.unisoft.algotrader.provider.ib.api.IBSocket;
-import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
-import com.unisoft.algotrader.provider.ib.api.InputStreamUtils;
+import com.unisoft.algotrader.provider.ib.InputStreamUtils;
 import com.unisoft.algotrader.provider.ib.api.model.InstrumentSpecification;
 import com.unisoft.algotrader.provider.ib.api.model.MarketScannerData;
+import com.unisoft.algotrader.provider.ib.api.model.constants.IncomingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.constants.OptionRight;
+import com.unisoft.algotrader.provider.ib.api.model.constants.SecType;
 
 import java.io.InputStream;
 import java.util.List;
 
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readInt;
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.readString;
+import static com.unisoft.algotrader.provider.ib.InputStreamUtils.readInt;
+import static com.unisoft.algotrader.provider.ib.InputStreamUtils.readString;
 
 /**
  * Created by alex on 8/13/15.
@@ -48,10 +48,10 @@ public class MarketScannerDataEventDeserializer extends Deserializer {
 
 
         final String symbol = InputStreamUtils.readString(inputStream);
-        final Instrument.InstType instType = IBConstants.SecType.convert(InputStreamUtils.readString(inputStream));
+        final Instrument.InstType instType = SecType.convert(InputStreamUtils.readString(inputStream));
         final String expString = InputStreamUtils.readString(inputStream);
         final double strike = InputStreamUtils.readDouble(inputStream);
-        final Instrument.PutCall putCall = IBConstants.OptionRight.convert(InputStreamUtils.readString(inputStream));
+        final Instrument.PutCall putCall = OptionRight.convert(InputStreamUtils.readString(inputStream));
         final String exchange = InputStreamUtils.readString(inputStream);
         final String ccyCode = InputStreamUtils.readString(inputStream);
         final String localSymbol = InputStreamUtils.readString(inputStream);

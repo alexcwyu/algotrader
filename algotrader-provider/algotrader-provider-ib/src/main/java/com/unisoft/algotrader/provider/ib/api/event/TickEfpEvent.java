@@ -1,14 +1,14 @@
 package com.unisoft.algotrader.provider.ib.api.event;
 
 
-import com.unisoft.algotrader.provider.ib.api.IBConstants;
+import com.unisoft.algotrader.provider.ib.api.model.constants.TickType;
 
 /**
  * Created by alex on 8/26/15.
  */
 public class TickEfpEvent extends IBEvent<TickEfpEvent> {
 
-    public final IBConstants.TickType type;
+    public final TickType type;
     public final double basisPoints;
     public final String formattedBasisPoints;
     public final double impliedFuturePrice;
@@ -17,7 +17,7 @@ public class TickEfpEvent extends IBEvent<TickEfpEvent> {
     public final double dividendImpact;
     public final double dividendToExpiry;
 
-    public TickEfpEvent(final long requestId, final IBConstants.TickType type, final double basisPoints,
+    public TickEfpEvent(final long requestId, final TickType type, final double basisPoints,
                         final String formattedBasisPoints, final double impliedFuturePrice, final int holdDays,
                         final String futureExpiry, final double dividendImpact, final double dividendToExpiry) {
         super(requestId);

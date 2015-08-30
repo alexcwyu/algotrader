@@ -6,15 +6,13 @@ import com.unisoft.algotrader.model.trading.OrdType;
 import com.unisoft.algotrader.model.trading.Side;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
-import com.unisoft.algotrader.provider.ib.api.IBConstants;
-import com.unisoft.algotrader.provider.ib.api.IBSocket;
-import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
 import com.unisoft.algotrader.provider.ib.api.model.OrderExecution;
+import com.unisoft.algotrader.provider.ib.api.model.constants.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.InputStream;
 
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
+import static com.unisoft.algotrader.provider.ib.InputStreamUtils.*;
 
 /**
  * Created by alex on 8/13/15.
@@ -38,10 +36,10 @@ public class OpenOrderEventDeserializer extends Deserializer {
     protected Instrument parseInstrument(final int version, final InputStream inputStream, final RefDataStore refDataStore) {
         final int instId = (version >= 17)? readInt(inputStream) : 0;
         final String symbol = readString(inputStream);
-        final Instrument.InstType instType = IBConstants.SecType.convert(readString(inputStream));
+        final Instrument.InstType instType = SecType.convert(readString(inputStream));
         final String expString = readString(inputStream);
         final double strike = readDouble(inputStream);
-        final Instrument.PutCall putCall = IBConstants.OptionRight.convert(readString(inputStream));
+        final Instrument.PutCall putCall = OptionRight.convert(readString(inputStream));
         final String multiplier = (version >= 17)? readString(inputStream) : null;
         final String exchange = readString(inputStream);
         final String ccyCode = readString(inputStream);
@@ -58,14 +56,14 @@ public class OpenOrderEventDeserializer extends Deserializer {
 
     protected Order parseOrder(final int version, final InputStream inputStream, final IBProvider ibProvider, final int orderId){
 
-        final Side side = IBConstants.Action.convert(readString(inputStream));
+        final Side side = Action.convert(readString(inputStream));
         final int totalQty = readInt(inputStream);
-        final OrdType orderType = IBConstants.OrderType.convert(readString(inputStream));
+        final OrdType orderType = OrderType.convert(readString(inputStream));
 
         final double limitPrice = (version < 29)? readDouble(inputStream) : readDoubleMax(inputStream);
         final double stopPrice = (version < 30) ? readDouble(inputStream) : readDoubleMax(inputStream);
 
-        final com.unisoft.algotrader.model.trading.TimeInForce tif = IBConstants.TIF.convert(readString(inputStream));
+        final com.unisoft.algotrader.model.trading.TimeInForce tif = TIF.convert(readString(inputStream));
 
         final String ocaGroupName = readString(inputStream);
         final String accountName = readString(inputStream);
@@ -194,7 +192,7 @@ public class OpenOrderEventDeserializer extends Deserializer {
                 //contract.addComboLeg(comboLeg);
                 int contractId = readInt(inputStream);
                 int ratio = readInt(inputStream);
-                final Side side1 = IBConstants.Action.convert(readString(inputStream));
+                final Side side1 = Action.convert(readString(inputStream));
                 String exchange = readString(inputStream);
                 int openClose = readInt(inputStream);
                 int shortSaleSlotValue= readInt(inputStream);
@@ -288,7 +286,7 @@ public class OpenOrderEventDeserializer extends Deserializer {
         if (version >= 16) {
 
             OrderExecution orderExecution = new OrderExecution();
-            orderExecution.setOrderStatus(IBConstants.OrderStatus.fromLabel(readString(inputStream)));
+            orderExecution.setOrderStatus(OrderStatus.fromLabel(readString(inputStream)));
             orderExecution.setInitialMargin(readString(inputStream));
             orderExecution.setMaintenanceMargin(readString(inputStream));
             orderExecution.setEquityWithLoan(readString(inputStream));

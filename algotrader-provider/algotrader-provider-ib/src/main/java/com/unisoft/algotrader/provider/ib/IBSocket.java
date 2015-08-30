@@ -1,10 +1,8 @@
-package com.unisoft.algotrader.provider.ib.api;
+package com.unisoft.algotrader.provider.ib;
 
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
-import com.unisoft.algotrader.provider.ib.IBConfig;
-import com.unisoft.algotrader.provider.ib.IBProvider;
 import com.unisoft.algotrader.provider.ib.api.serializer.*;
 import com.unisoft.algotrader.utils.threading.NamedThreadFactory;
 import org.apache.commons.io.IOUtils;
@@ -15,7 +13,6 @@ import java.io.*;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 

@@ -2,15 +2,14 @@ package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.provider.ib.IBProvider;
-import com.unisoft.algotrader.provider.ib.api.IBConstants;
-import com.unisoft.algotrader.provider.ib.api.IBSocket;
-import com.unisoft.algotrader.provider.ib.api.IncomingMessageId;
 import com.unisoft.algotrader.provider.ib.api.model.InstrumentSpecification;
+import com.unisoft.algotrader.provider.ib.api.model.constants.IncomingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.constants.SecType;
 import com.unisoft.algotrader.utils.collection.Tuple2;
 
 import java.io.InputStream;
 
-import static com.unisoft.algotrader.provider.ib.api.InputStreamUtils.*;
+import static com.unisoft.algotrader.provider.ib.InputStreamUtils.*;
 
 /**
  * Created by alex on 8/13/15.
@@ -37,7 +36,7 @@ public class BondInstrumentSpecificationEventDeserializer extends Deserializer {
     private InstrumentSpecification consumeInstrumentSpecification(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final InstrumentSpecification instrumentSpecification = new InstrumentSpecification();
         String symbol = readString(inputStream);
-        final Instrument.InstType instType = IBConstants.SecType.convert(readString(inputStream));
+        final Instrument.InstType instType = SecType.convert(readString(inputStream));
         instrumentSpecification.setCusip(readString(inputStream));
         instrumentSpecification.setCoupon(readDouble(inputStream));
         instrumentSpecification.setMaturity(readString(inputStream));

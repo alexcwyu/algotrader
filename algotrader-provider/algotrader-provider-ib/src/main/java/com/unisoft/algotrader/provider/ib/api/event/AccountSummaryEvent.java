@@ -1,8 +1,5 @@
 package com.unisoft.algotrader.provider.ib.api.event;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalTime;
-
 /**
  * Created by alex on 8/26/15.
  */

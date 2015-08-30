@@ -3,10 +3,8 @@ package com.unisoft.algotrader.provider.ib.api.serializer;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
-import com.unisoft.algotrader.provider.ib.api.IBConstants;
-import com.unisoft.algotrader.provider.ib.api.OutgoingMessageId;
-
-import java.util.concurrent.atomic.AtomicInteger;
+import com.unisoft.algotrader.provider.ib.api.model.constants.OutgoingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.constants.RealTimeBarDataType;
 
 /**
  * Created by alex on 8/7/15.
@@ -16,7 +14,7 @@ public class RealTimeMarketDataSubscriptionRequestSerializer extends Serializer<
     private static final int VERSION = 1;
     private final RefDataStore refDataStore;
     private final static int size = 5;
-    private final static IBConstants.RealTimeBarDataType type = IBConstants.RealTimeBarDataType.TRADES;
+    private final static RealTimeBarDataType type = RealTimeBarDataType.TRADES;
     private final static boolean useRegularTradingHours = false;
 
 

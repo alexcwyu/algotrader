@@ -1,16 +1,16 @@
 package com.unisoft.algotrader.provider.ib.api.event;
 
-import com.unisoft.algotrader.provider.ib.api.IBConstants;
+import com.unisoft.algotrader.provider.ib.api.model.constants.TickType;
 
 /**
  * Created by alex on 8/26/15.
  */
 public class TickGenericEvent extends IBEvent<TickGenericEvent>  {
 
-    public final IBConstants.TickType type;
+    public final TickType type;
     public final double value;
 
-    public TickGenericEvent(final long requestId, final IBConstants.TickType type, final double value){
+    public TickGenericEvent(final long requestId, final TickType type, final double value){
         super(requestId);
         this.type = type;
         this.value = value;
