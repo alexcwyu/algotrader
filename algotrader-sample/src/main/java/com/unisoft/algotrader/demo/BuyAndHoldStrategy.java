@@ -77,15 +77,15 @@ public class BuyAndHoldStrategy extends Strategy {
     }
 
     @Override
-    public void onOrder(Order order) {
-        LOG.info("onOrder {}", order);
+    public void onNewOrderRequest(Order order) {
+        LOG.info("onNewOrderRequest {}", order);
         orders.add(order);
     }
 
     public void sendOrder(Order order){
         order.portfolioId = portfolio.getPortfolioId();
         order.strategyId = strategyId;
-        orderManager.onOrder(order);
+        orderManager.onNewOrderRequest(order);
     }
 
     public List<Order> getOrders(){

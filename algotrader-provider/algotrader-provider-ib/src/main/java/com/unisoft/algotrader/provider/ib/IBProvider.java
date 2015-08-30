@@ -42,6 +42,7 @@ public class IBProvider implements IBEventHandler, RealTimeDataProvider, Histori
     private Set<SubscriptionKey> subscriptionKeys = Sets.newHashSet();
     private Map<Long, SubscriptionKey> idSubscriptionMap = Maps.newHashMap();
 
+    private int requestId = 0;
 
     @Inject
     public IBProvider(ProviderManager providerManager, IBConfig config, RefDataStore refDataStore, EventBusManager eventBusManager){
@@ -54,16 +55,11 @@ public class IBProvider implements IBEventHandler, RealTimeDataProvider, Histori
         this.ibSocket = new IBSocket(this);
     }
 
-    public SubscriptionKey getSubscriptionKey(long id){
-        return idSubscriptionMap.get(id);
-    }
-
-
     @Override
     public boolean subscribeRealTimeData(SubscriptionKey subscriptionKey){
-
+        subscriptionKey.setSubscriptionId(nextRequestId());
         subscriptionKeys.add(subscriptionKey);
-        idSubscriptionMap.put(subscriptionKey.subscriptionId, subscriptionKey);
+        idSubscriptionMap.put(subscriptionKey.getSubscriptionId(), subscriptionKey);
         ibSocket.subscribeRealTimeData(subscriptionKey);
         return true;
     }
@@ -82,25 +78,27 @@ public class IBProvider implements IBEventHandler, RealTimeDataProvider, Histori
 
     @Override
     public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
+        subscriptionKey.setSubscriptionId(nextRequestId());
         subscriptionKeys.add(subscriptionKey);
-        idSubscriptionMap.put(subscriptionKey.subscriptionId, subscriptionKey);
+        idSubscriptionMap.put(subscriptionKey.getSubscriptionId(), subscriptionKey);
         ibSocket.subscribeHistoricalData(subscriptionKey);
         return true;
     }
 
     @Override
-    public void onOrder(Order order) {
+    public void onNewOrderRequest(Order order) {
         ibSocket.sendOrder(order);
     }
 
-//    public <E extends Event> void registerListener(EventListener<E> listener){
-//        session.registerListener(listener);
-//    }
-//
-//    public <E extends Event> void unregisterListener(EventListener<E> listener){
-//        session.unregisterListener(listener);
-//    }
+    @Override
+    public void onOrderReplaceRequest(Order order){
+        ibSocket.sendOrder(order);
+    }
 
+    @Override
+    public void onOrderCancelRequest(Order order){
+        ibSocket.cancelOrder(order.orderId);
+    }
 
     @Override
     public void connect() {
@@ -136,5 +134,13 @@ public class IBProvider implements IBEventHandler, RealTimeDataProvider, Histori
 
     public IBSocket getIbSocket() {
         return ibSocket;
+    }
+
+    private int nextRequestId(){
+        return requestId++;
+    }
+
+    public void onNextValidOrderIdEvent(final int nextValidOrderId){
+        this.requestId = nextValidOrderId;
     }
 }

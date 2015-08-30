@@ -172,7 +172,7 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
 
     @Override
     public void on(OrderHandler handler) {
-        handler.onOrder(this);
+        handler.onNewOrderRequest(this);
     }
 
     @Override

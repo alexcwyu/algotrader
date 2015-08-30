@@ -4,6 +4,8 @@ import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.provider.ib.IBProvider;
 import com.unisoft.algotrader.provider.ib.api.model.constants.IncomingMessageId;
 import org.apache.commons.lang3.Validate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
 
@@ -16,6 +18,8 @@ public abstract class Deserializer<M extends Event> {
 
     protected static final int VERSION_2 = 2;
     protected static final int VERSION_3 = 3;
+
+    protected static final Logger LOG = LogManager.getLogger(Deserializer.class);
 
     private final IncomingMessageId messageId;
 

@@ -13,8 +13,6 @@ import java.util.concurrent.atomic.AtomicLong;
  * Created by alex on 6/16/15.
  */
 public class SubscriptionKey {
-
-    protected final static AtomicLong COUNTER = new AtomicLong(1);
     public final static int M1_SIZE = 60;
     public final static int M15_SIZE = 60*15;
     public final static int M30_SIZE = 60*30;
@@ -24,7 +22,7 @@ public class SubscriptionKey {
 
     public final static int DAILY_SIZE = 60*60*24;
 
-    public final long subscriptionId;
+    private long subscriptionId;
 
     public final String providerId;
     
@@ -40,11 +38,18 @@ public class SubscriptionKey {
     }
 
     protected SubscriptionKey(String providerId, DataType type, long instId, int barSize){
-        this.subscriptionId = COUNTER.getAndIncrement();
         this.providerId = providerId;
         this.type = type;
         this.instId = instId;
         this.barSize = barSize;
+    }
+
+    public long getSubscriptionId() {
+        return subscriptionId;
+    }
+
+    public void setSubscriptionId(long subscriptionId) {
+        this.subscriptionId = subscriptionId;
     }
 
     @Override

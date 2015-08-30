@@ -54,7 +54,7 @@ class CountDownStrategy extends Strategy {
             order.ordType = OrdType.Market;
             order.side = Side.Buy;
             order.ordQty = 500;
-            orderManager.onOrder(order);
+            orderManager.onNewOrderRequest(order);
             LOG.info("CountDownStrategy send order");
         }
     }
@@ -73,7 +73,7 @@ class CountDownStrategy extends Strategy {
             order.portfolioId = portfolio.getPortfolioId();
             order.side = Side.Buy;
             order.ordQty = 500;
-            orderManager.onOrder(order);
+            orderManager.onNewOrderRequest(order);
             ordered = true;
         }
     }

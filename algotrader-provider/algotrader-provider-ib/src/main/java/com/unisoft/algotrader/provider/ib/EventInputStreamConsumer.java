@@ -4,6 +4,8 @@ import com.unisoft.algotrader.provider.ib.api.deserializer.Deserializer;
 import com.unisoft.algotrader.provider.ib.api.deserializer.DeserializerFactory;
 import com.unisoft.algotrader.provider.ib.api.model.constants.IncomingMessageId;
 import org.apache.commons.io.IOUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
 
@@ -14,6 +16,8 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.readInt;
  */
 public class EventInputStreamConsumer implements Runnable {
 
+    private static final Logger LOG = LogManager.getLogger(EventInputStreamConsumer.class);
+    
     private final DeserializerFactory deserializerFactory;
     private final IBProvider ibProvider;
     private final IBSocket ibSocket;

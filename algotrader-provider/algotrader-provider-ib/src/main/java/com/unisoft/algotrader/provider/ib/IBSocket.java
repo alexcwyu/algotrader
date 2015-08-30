@@ -33,8 +33,6 @@ public class IBSocket {
     private EventInputStreamConsumer inputStreamConsumer;
 
     private Lock lock = new ReentrantLock();
-    //private AtomicInteger orderId = new AtomicInteger(0);
-    //private AtomicInteger requestId = new AtomicInteger(0);
 
     private AccountUpdateSubscriptionRequestSerializer accountUpdateSubscriptionRequestSerializer;
     private RealTimeMarketDataSubscriptionRequestSerializer realTimeMarketDataRequestSerializer;
@@ -132,7 +130,7 @@ public class IBSocket {
 
     public void unsubscribeRealTimeData(SubscriptionKey subscriptionKey) {
         try {
-            send(realTimeMarketDataUnsubscriptionRequestSerializer.serialize(subscriptionKey.subscriptionId));
+            send(realTimeMarketDataUnsubscriptionRequestSerializer.serialize(subscriptionKey.getSubscriptionId()));
         } catch (IOException e) {
             LOG.error(e);
         }
@@ -148,7 +146,7 @@ public class IBSocket {
 
     public void unsubscribeHistoricalData(SubscriptionKey subscriptionKey) {
         try {
-            send(historicalMarketDataUnsubscriptionRequestSerializer.serialize(subscriptionKey.subscriptionId));
+            send(historicalMarketDataUnsubscriptionRequestSerializer.serialize(subscriptionKey.getSubscriptionId()));
         } catch (IOException e) {
             LOG.error(e);
         }
@@ -196,5 +194,4 @@ public class IBSocket {
     public boolean isConnected(){
         return socket != null && socket.isConnected();
     }
-
 }

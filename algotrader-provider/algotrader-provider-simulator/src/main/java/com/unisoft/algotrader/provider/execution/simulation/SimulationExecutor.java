@@ -109,8 +109,8 @@ public class SimulationExecutor extends MultiEventProcessor implements Execution
     }
 
     @Override
-    public void onOrder(Order order) {
-        LOG.info("onOrder = {}", order);
+    public void onNewOrderRequest(Order order) {
+        LOG.info("onNewOrderRequest = {}", order);
 
         addOrder(order);
 

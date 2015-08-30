@@ -71,7 +71,7 @@ public class SimulationExecutorTest {
     public void test_fill_market_order_immediate_on_current_quote(){
         instrumentDataManager.onQuote(createQuote(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), 89, 91, 98000, 98000));
         Order order = SampleEventFactory.createOrder(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), Side.Buy, OrdType.Market, 98000, 0);
-        orderManager.onOrder(order);
+        orderManager.onNewOrderRequest(order);
 
         ArgumentCaptor<ExecutionReport> argument1 = ArgumentCaptor.forClass(ExecutionReport.class);
         verify(orderManager, atLeast(2)).onExecutionReport(argument1.capture());
@@ -85,7 +85,7 @@ public class SimulationExecutorTest {
     @Test
     public void test_fill_market_order_on_next_quote(){
         Order order = SampleEventFactory.createOrder(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), Side.Buy, OrdType.Market, 98000, 0);
-        orderManager.onOrder(order);
+        orderManager.onNewOrderRequest(order);
 
         ArgumentCaptor<ExecutionReport> argument1 = ArgumentCaptor.forClass(ExecutionReport.class);
         verify(orderManager, times(1)).onExecutionReport(argument1.capture());
@@ -106,7 +106,7 @@ public class SimulationExecutorTest {
 
         instrumentDataManager.onQuote(createQuote(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), 89, 91, 98000, 98000));
         Order order = SampleEventFactory.createOrder(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), Side.Buy, OrdType.Limit, 98000, 91);
-        orderManager.onOrder(order);
+        orderManager.onNewOrderRequest(order);
 
         ArgumentCaptor<ExecutionReport> argument1 = ArgumentCaptor.forClass(ExecutionReport.class);
         verify(orderManager, atLeast(2)).onExecutionReport(argument1.capture());
@@ -120,7 +120,7 @@ public class SimulationExecutorTest {
 
         instrumentDataManager.onQuote(createQuote(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), 89, 91, 98000, 98000));
         Order order = SampleEventFactory.createOrder(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), Side.Buy, OrdType.Limit, 98000, 89);
-        orderManager.onOrder(order);
+        orderManager.onNewOrderRequest(order);
 
         ArgumentCaptor<ExecutionReport> argument1 = ArgumentCaptor.forClass(ExecutionReport.class);
         verify(orderManager, times(1)).onExecutionReport(argument1.capture());
@@ -142,7 +142,7 @@ public class SimulationExecutorTest {
         Quote quote = createQuote(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), 89, 91, 98000, 98000);
         instrumentDataManager.onQuote(quote);
         Order order = SampleEventFactory.createOrder(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), Side.Buy, OrdType.Stop, 98000, 0, 89.5);
-        orderManager.onOrder(order);
+        orderManager.onNewOrderRequest(order);
 
         ArgumentCaptor<ExecutionReport> argument1 = ArgumentCaptor.forClass(ExecutionReport.class);
         verify(orderManager, times(2)).onExecutionReport(argument1.capture());
@@ -156,7 +156,7 @@ public class SimulationExecutorTest {
     public void test_fill_stop_order_on_next_quote(){
 
         Order order = SampleEventFactory.createOrder(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), Side.Buy, OrdType.Stop, 98000, 0, 89.5);
-        orderManager.onOrder(order);
+        orderManager.onNewOrderRequest(order);
 
         ArgumentCaptor<ExecutionReport> argument1 = ArgumentCaptor.forClass(ExecutionReport.class);
         verify(orderManager, times(1)).onExecutionReport(argument1.capture());
@@ -178,7 +178,7 @@ public class SimulationExecutorTest {
     @Test
     public void test_stop_limit_order_become_ready_on_next_quote(){
         Order order = SampleEventFactory.createOrder(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), Side.Buy, OrdType.StopLimit, 98000, 85, 89.5);
-        orderManager.onOrder(order);
+        orderManager.onNewOrderRequest(order);
 
         ArgumentCaptor<ExecutionReport> argument = ArgumentCaptor.forClass(ExecutionReport.class);
         verify(orderManager, times(1)).onExecutionReport(argument.capture());
@@ -214,7 +214,7 @@ public class SimulationExecutorTest {
         Quote quote = createQuote(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), 89, 91, 98000, 98000);
         instrumentDataManager.onQuote(quote);
         Order order = SampleEventFactory.createOrder(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), Side.Buy, OrdType.StopLimit, 98000, 85, 89.5);
-        orderManager.onOrder(order);
+        orderManager.onNewOrderRequest(order);
 
         ArgumentCaptor<ExecutionReport> argument = ArgumentCaptor.forClass(ExecutionReport.class);
         verify(orderManager, times(1)).onExecutionReport(argument.capture());
@@ -239,7 +239,7 @@ public class SimulationExecutorTest {
         Quote quote = createQuote(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), 89, 91, 98000, 98000);
         instrumentDataManager.onQuote(quote);
         Order order = SampleEventFactory.createOrder(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), Side.Buy, OrdType.TrailingStop, 98000, 0, 10);
-        orderManager.onOrder(order);
+        orderManager.onNewOrderRequest(order);
 
         ArgumentCaptor<ExecutionReport> argument = ArgumentCaptor.forClass(ExecutionReport.class);
         verify(orderManager, times(1)).onExecutionReport(argument.capture());
@@ -265,7 +265,7 @@ public class SimulationExecutorTest {
         Quote quote = createQuote(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), 89, 91, 98000, 98000);
         instrumentDataManager.onQuote(quote);
         Order order = SampleEventFactory.createOrder(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), Side.Buy, OrdType.TrailingStop, 98000, 0, 10);
-        orderManager.onOrder(order);
+        orderManager.onNewOrderRequest(order);
 
         ArgumentCaptor<ExecutionReport> argument = ArgumentCaptor.forClass(ExecutionReport.class);
         verify(orderManager, times(1)).onExecutionReport(argument.capture());
@@ -293,7 +293,7 @@ public class SimulationExecutorTest {
         Quote quote = createQuote(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), 89, 91, 98000, 98000);
         instrumentDataManager.onQuote(quote);
         Order order = SampleEventFactory.createOrder(SampleEventFactory.TEST_HKD_INSTRUMENT.getInstId(), Side.Buy, OrdType.TrailingStop, 98000, 0, 10);
-        orderManager.onOrder(order);
+        orderManager.onNewOrderRequest(order);
 
         ArgumentCaptor<ExecutionReport> argument = ArgumentCaptor.forClass(ExecutionReport.class);
         verify(orderManager, times(1)).onExecutionReport(argument.capture());

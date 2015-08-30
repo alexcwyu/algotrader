@@ -56,23 +56,29 @@ public class OrderManager extends MultiEventProcessor implements OrderHandler, E
         return null;
     }
 
-    public void addOrder(Order order){
+    private void addOrder(Order order){
         getOrders(order.instId).put(order.orderId, order);
 
         //TODO persist
     }
 
     @Override
-    public void onOrder(Order order) {
-        LOG.info("onOrder {}" , order);
+    public void onNewOrderRequest(Order order) {
+        LOG.info("onNewOrderRequest {}" , order);
 
         addOrder(order);
-        providerManager.getExecutionProvider(order.execProviderId).onOrder(order);
+        providerManager.getExecutionProvider(order.execProviderId).onNewOrderRequest(order);
     }
 
-    // TODO new order
-    // TODO cancel order
-    // TODO replace order
+    @Override
+    public void onOrderReplaceRequest(Order order){
+
+    }
+
+    @Override
+    public void onOrderCancelRequest(Order order){
+
+    }
 
     @Override
     public void onExecutionReport(ExecutionReport executionReport) {

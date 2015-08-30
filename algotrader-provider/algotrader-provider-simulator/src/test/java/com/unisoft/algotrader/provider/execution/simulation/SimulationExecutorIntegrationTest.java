@@ -61,12 +61,12 @@ public class SimulationExecutorIntegrationTest {
         }
 
         @Override
-        public void onOrder(Order order) {
+        public void onNewOrderRequest(Order order) {
             orders.add(order);
         }
 
         public void sendOrder(Order order){
-            orderManager.onOrder(order);
+            orderManager.onNewOrderRequest(order);
         }
 
     }
