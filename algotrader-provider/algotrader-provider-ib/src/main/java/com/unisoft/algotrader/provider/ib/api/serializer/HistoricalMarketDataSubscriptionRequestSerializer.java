@@ -37,7 +37,7 @@ public class HistoricalMarketDataSubscriptionRequestSerializer extends Serialize
 
         builder.append(OutgoingMessageId.MARKET_DATA_SUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);
-        builder.append(subscriptionKey.subscriptionId);
+        builder.append(subscriptionKey.getSubscriptionId());
         appendInstrument(builder, instrument);
         appendCombo(builder, instrument);
         appendUnderlyingCombo(builder, instrument);

@@ -76,11 +76,12 @@ public class BuyAndHoldStrategy extends Strategy {
         executionReports.add(executionReport);
     }
 
-    @Override
-    public void onNewOrderRequest(Order order) {
-        LOG.info("onNewOrderRequest {}", order);
-        orders.add(order);
-    }
+//
+//    @Override
+//    public void onNewOrderRequest(Order order) {
+//        LOG.info("onNewOrderRequest {}", order);
+//        orders.add(order);
+//    }
 
     public void sendOrder(Order order){
         order.portfolioId = portfolio.getPortfolioId();

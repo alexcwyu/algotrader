@@ -31,7 +31,7 @@ public class RealTimeMarketDataSubscriptionRequestSerializer extends Serializer<
 
         builder.append(OutgoingMessageId.REAL_TIME_BAR_SUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);
-        builder.append(subscriptionKey.subscriptionId);
+        builder.append(subscriptionKey.getSubscriptionId());
         appendInstrument(builder, instrument);
         builder.append(size);
         builder.append(type.getBytes());

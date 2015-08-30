@@ -59,11 +59,11 @@ public class SimulationExecutorIntegrationTest {
             executionReports.add(executionReport);
 
         }
-
-        @Override
-        public void onNewOrderRequest(Order order) {
-            orders.add(order);
-        }
+//
+//        @Override
+//        public void onNewOrderRequest(Order order) {
+//            orders.add(order);
+//        }
 
         public void sendOrder(Order order){
             orderManager.onNewOrderRequest(order);

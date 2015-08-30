@@ -33,7 +33,6 @@ public class IBProvider implements IBEventHandler, RealTimeDataProvider, Histori
 
     public static final String PROVIDER_ID = "IB";
 
-
     private final IBConfig config;
     private final RefDataStore refDataStore;
     public final EventBusManager eventBusManager;

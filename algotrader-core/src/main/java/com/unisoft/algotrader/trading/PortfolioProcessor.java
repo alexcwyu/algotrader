@@ -81,8 +81,15 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
     public void onNewOrderRequest(Order order) {
         add(order);
     }
+    @Override
+    public void onOrderReplaceRequest(Order order) {
+        //TODO
+    }
 
-
+    @Override
+    public void onOrderCancelRequest(Order order) {
+        //TODO
+    }
 
     public void add(Order order){
 

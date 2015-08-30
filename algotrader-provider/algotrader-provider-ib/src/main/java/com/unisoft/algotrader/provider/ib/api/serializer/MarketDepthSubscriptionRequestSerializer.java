@@ -25,7 +25,7 @@ public class MarketDepthSubscriptionRequestSerializer extends Serializer<MarketD
 
         builder.append(OutgoingMessageId.MARKET_DEPTH_SUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);
-        builder.append(subscriptionKey.subscriptionId);
+        builder.append(subscriptionKey.getSubscriptionId());
         appendInstrument(builder, instrument);
         builder.append(subscriptionKey.numRows);
 

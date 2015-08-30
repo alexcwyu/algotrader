@@ -142,21 +142,14 @@ public class SimulationExecutor extends MultiEventProcessor implements Execution
     }
 
 
-    private void cancel(Order order){
+    @Override
+    public void onOrderCancelRequest(Order order){
         //TODO
     }
 
-    private void replace(Order order){
+    @Override
+    public void onOrderReplaceRequest(Order order){
         //TODO
-    }
-
-    public void onOrderCancelRequest(OrderCancelRequest request){
-        //TODO
-    }
-
-    public void onOrderCancelReplaceRequest(OrderCancelReplaceRequest request){
-        //TODO
-        // process replace
     }
 
     public void onOrderStatusRequest(OrderStatusRequest request){

@@ -17,7 +17,7 @@ import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrat
  * Created by alex on 5/17/15.
  */
 
-public abstract class Strategy extends MultiEventProcessor implements MarketDataHandler, OrderHandler, ExecutionHandler {
+public abstract class Strategy extends MultiEventProcessor implements MarketDataHandler, ExecutionHandler {
 
     protected final String strategyId;
     protected Portfolio portfolio;
@@ -64,11 +64,6 @@ public abstract class Strategy extends MultiEventProcessor implements MarketData
     @Override
     public void onExecutionReport(ExecutionReport executionReport) {
     }
-
-    @Override
-    public void onNewOrderRequest(Order order) {
-    }
-
 
     @Override
     public void onOrderCancelReject(OrderCancelReject orderCancelReject) {
