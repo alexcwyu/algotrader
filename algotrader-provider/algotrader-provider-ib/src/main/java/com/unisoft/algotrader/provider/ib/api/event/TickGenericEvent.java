@@ -20,4 +20,12 @@ public class TickGenericEvent extends IBEvent<TickGenericEvent>  {
     public void on(IBEventHandler handler) {
         handler.onTickGenericEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "TickGenericEvent{" +
+                "type=" + type +
+                ", value=" + value +
+                "} " + super.toString();
+    }
 }

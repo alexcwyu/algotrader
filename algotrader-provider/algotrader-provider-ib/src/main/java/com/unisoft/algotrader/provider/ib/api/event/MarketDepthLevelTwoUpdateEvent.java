@@ -31,4 +31,15 @@ public class MarketDepthLevelTwoUpdateEvent extends IBEvent<MarketDepthLevelTwoU
         handler.onMarketDepthLevelTwoUpdateEvent(this);
     }
 
+    @Override
+    public String toString() {
+        return "MarketDepthLevelTwoUpdateEvent{" +
+                "rowId=" + rowId +
+                ", marketMakerName='" + marketMakerName + '\'' +
+                ", operation=" + operation +
+                ", bookSide=" + bookSide +
+                ", price=" + price +
+                ", size=" + size +
+                "} " + super.toString();
+    }
 }

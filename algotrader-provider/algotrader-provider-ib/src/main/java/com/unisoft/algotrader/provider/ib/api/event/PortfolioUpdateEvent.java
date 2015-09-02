@@ -34,4 +34,18 @@ public class PortfolioUpdateEvent extends IBEvent<PortfolioUpdateEvent>  {
     public void on(IBEventHandler handler) {
         handler.onPortfolioUpdateEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "PortfolioUpdateEvent{" +
+                "instrument=" + instrument +
+                ", marketPosition=" + marketPosition +
+                ", marketPrice=" + marketPrice +
+                ", marketValue=" + marketValue +
+                ", averageCost=" + averageCost +
+                ", unrealizedProfitAndLoss=" + unrealizedProfitAndLoss +
+                ", realizedProfitAndLoss=" + realizedProfitAndLoss +
+                ", accountName='" + accountName + '\'' +
+                "} " + super.toString();
+    }
 }

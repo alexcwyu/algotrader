@@ -48,7 +48,7 @@ public class Currency{
         return "Currency{" +
                 "ccyId='" + ccyId + '\'' +
                 ", name='" + name + '\'' +
-                '}';
+                "} " + super.toString();
     }
 
     @Override

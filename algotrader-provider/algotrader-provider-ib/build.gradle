@@ -1,6 +1,7 @@
 dependencies {
     compile project(':algotrader-persistence:algotrader-persistence-common')
     compile project(':algotrader-provider:algotrader-provider-common')
+    compile project(':algotrader-core')
     compile "ch.aonyx.broker.ib:neo-ib-api:1.1.5"
     compile files('libs/twsapi-javaclient-971.01.jar')
 }

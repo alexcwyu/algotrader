@@ -17,4 +17,12 @@ public class CompositeTickEvent extends IBEvent<CompositeTickEvent> {
     public void on(IBEventHandler handler) {
         handler.onCompositeTickEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "CompositeTickEvent{" +
+                "tickPriceEvent=" + tickPriceEvent +
+                ", tickSizeEvent=" + tickSizeEvent +
+                "} " + super.toString();
+    }
 }

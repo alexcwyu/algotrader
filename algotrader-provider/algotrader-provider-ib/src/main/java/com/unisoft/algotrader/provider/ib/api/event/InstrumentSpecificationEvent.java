@@ -18,4 +18,11 @@ public class InstrumentSpecificationEvent extends IBEvent<InstrumentSpecificatio
     public void on(IBEventHandler handler) {
         handler.onInstrumentSpecificationEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "InstrumentSpecificationEvent{" +
+                "instrumentSpecification=" + instrumentSpecification +
+                "} " + super.toString();
+    }
 }

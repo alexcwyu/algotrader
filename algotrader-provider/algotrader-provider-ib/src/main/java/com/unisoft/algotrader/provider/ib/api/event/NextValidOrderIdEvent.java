@@ -17,4 +17,11 @@ public class NextValidOrderIdEvent extends IBEvent<NextValidOrderIdEvent>  {
     public void on(IBEventHandler handler) {
         handler.onNextValidOrderIdEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "NextValidOrderIdEvent{" +
+                "nextValidOrderId=" + nextValidOrderId +
+                "} " + super.toString();
+    }
 }

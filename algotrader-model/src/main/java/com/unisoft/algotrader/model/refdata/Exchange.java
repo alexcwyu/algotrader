@@ -96,6 +96,6 @@ public class Exchange{
         return "Exchange{" +
                 "exchId='" + exchId + '\'' +
                 ", name='" + name + '\'' +
-                '}';
+                "} " + super.toString();
     }
 }

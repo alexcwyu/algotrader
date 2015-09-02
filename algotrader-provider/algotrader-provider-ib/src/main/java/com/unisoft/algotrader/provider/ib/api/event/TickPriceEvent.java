@@ -23,4 +23,13 @@ public class TickPriceEvent extends IBEvent<TickPriceEvent>  {
     public void on(IBEventHandler handler) {
         handler.onTickPriceEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "TickPriceEvent{" +
+                "type=" + type +
+                ", price=" + price +
+                ", autoExecute=" + autoExecute +
+                "} " + super.toString();
+    }
 }

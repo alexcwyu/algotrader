@@ -15,4 +15,11 @@ public class FundamentalDataEvent extends IBEvent<FundamentalDataEvent>  {
     public void on(IBEventHandler handler) {
         handler.onFundamentalDataEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "FundamentalDataEvent{" +
+                "xml='" + xml + '\'' +
+                "} " + super.toString();
+    }
 }

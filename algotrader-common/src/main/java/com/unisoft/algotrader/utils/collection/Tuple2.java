@@ -41,6 +41,6 @@ public class Tuple2<T1, T2> {
         return "Tuple2{" +
                 "v1=" + v1 +
                 ", v2=" + v2 +
-                '}';
+                "} " + super.toString();
     }
 }

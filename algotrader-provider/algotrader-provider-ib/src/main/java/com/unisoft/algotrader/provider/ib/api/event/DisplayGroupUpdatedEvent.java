@@ -16,4 +16,11 @@ public class DisplayGroupUpdatedEvent extends IBEvent<DisplayGroupUpdatedEvent> 
     public void on(IBEventHandler handler) {
         handler.onDisplayGroupUpdatedEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "DisplayGroupUpdatedEvent{" +
+                "contractInfo='" + contractInfo + '\'' +
+                "} " + super.toString();
+    }
 }

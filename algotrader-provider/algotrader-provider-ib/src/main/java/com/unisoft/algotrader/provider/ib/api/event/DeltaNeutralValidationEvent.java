@@ -18,4 +18,11 @@ public class DeltaNeutralValidationEvent extends IBEvent<DeltaNeutralValidationE
     public void on(IBEventHandler handler) {
         handler.onDeltaNeutralValidationEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "DeltaNeutralValidationEvent{" +
+                "underlyingCombo=" + underlyingCombo +
+                "} " + super.toString();
+    }
 }

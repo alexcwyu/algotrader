@@ -14,7 +14,7 @@
         </RandomAccessFile>
     </Appenders>
     <Loggers>
-        <Logger name = "Console" level="info">
+        <Logger name = "Console" level="debug">
             <AppenderRef ref="Console"/>
         </Logger>
         <Root level="info" includeLocation="false">

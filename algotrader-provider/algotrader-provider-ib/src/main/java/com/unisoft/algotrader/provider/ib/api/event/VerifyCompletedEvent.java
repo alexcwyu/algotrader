@@ -18,4 +18,11 @@ public class VerifyCompletedEvent extends IBEvent<VerifyCompletedEvent>  {
         handler.onVerifyCompletedEvent(this);
     }
 
+    @Override
+    public String toString() {
+        return "VerifyCompletedEvent{" +
+                "isSuccessful=" + isSuccessful +
+                ", errorText='" + errorText + '\'' +
+                "} " + super.toString();
+    }
 }

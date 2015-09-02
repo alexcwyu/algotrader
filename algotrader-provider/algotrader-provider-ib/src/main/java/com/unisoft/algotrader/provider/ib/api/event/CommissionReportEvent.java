@@ -17,4 +17,11 @@ public class CommissionReportEvent extends IBEvent<CommissionReportEvent>  {
     public void on(IBEventHandler handler) {
         handler.onCommissionReportEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "CommissionReportEvent{" +
+                "commissionReport=" + commissionReport +
+                "} " + super.toString();
+    }
 }

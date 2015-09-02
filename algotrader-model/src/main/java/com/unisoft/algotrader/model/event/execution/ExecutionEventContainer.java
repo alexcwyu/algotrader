@@ -93,6 +93,6 @@ public class ExecutionEventContainer<E extends ExecutionEventContainer<? super E
                 "bitset=" + bitset +
                 ", executionReport=" + executionReport +
                 ", orderCancelReject=" + orderCancelReject +
-                '}';
+                "} " + super.toString();
     }
 }

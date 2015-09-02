@@ -30,4 +30,13 @@ public class ServerMessageEvent extends IBEvent<ServerMessageEvent>  {
     public void on(IBEventHandler handler) {
         handler.onServerMessageEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "ServerMessageEvent{" +
+                "code=" + code +
+                ", message='" + message + '\'' +
+                ", parameters=" + parameters +
+                "} " + super.toString();
+    }
 }

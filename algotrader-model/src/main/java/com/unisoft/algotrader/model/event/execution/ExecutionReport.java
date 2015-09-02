@@ -88,7 +88,7 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
                 ", tif=" + tif +
                 ", side=" + side +
                 ", getText='" + text + '\'' +
-                '}';
+                "} " + super.toString();
     }
 
     @Override

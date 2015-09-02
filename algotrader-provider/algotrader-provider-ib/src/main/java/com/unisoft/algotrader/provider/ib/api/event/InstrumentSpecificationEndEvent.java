@@ -14,4 +14,9 @@ public class InstrumentSpecificationEndEvent extends IBEvent<InstrumentSpecifica
     public void on(IBEventHandler handler) {
         handler.onInstrumentSpecificationEndEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "InstrumentSpecificationEndEvent{}";
+    }
 }

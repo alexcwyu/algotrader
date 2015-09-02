@@ -101,6 +101,7 @@ ext{
     quasarVersion        = "latest.release"
     akkaVersion          = "latest.release"
     guiceVersion         = "latest.release"
+    guiceJmxVersion         = "latest.release"
     logbackVersion       = "latest.release"
     springVersion        = "latest.release"
     springBootVersion    = "latest.release"
@@ -169,6 +170,7 @@ ext{
     agronaVersion = "latest.release"
     univocityVersion = "latest.release"
     influxdbVersion = "latest.release"
+
 
 }
 

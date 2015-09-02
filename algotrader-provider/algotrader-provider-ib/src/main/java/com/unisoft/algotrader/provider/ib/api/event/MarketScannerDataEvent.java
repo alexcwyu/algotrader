@@ -30,4 +30,16 @@ public class MarketScannerDataEvent extends IBEvent<MarketScannerDataEvent>  {
     public void on(IBEventHandler handler) {
         handler.onMarketScannerDataEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "MarketScannerDataEvent{" +
+                "ranking=" + ranking +
+                ", instrumentSpecification=" + instrumentSpecification +
+                ", distance='" + distance + '\'' +
+                ", benchmark='" + benchmark + '\'' +
+                ", projection='" + projection + '\'' +
+                ", comboLegDescription='" + comboLegDescription + '\'' +
+                "} " + super.toString();
+    }
 }

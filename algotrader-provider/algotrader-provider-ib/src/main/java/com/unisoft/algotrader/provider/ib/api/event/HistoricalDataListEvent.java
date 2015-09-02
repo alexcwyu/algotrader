@@ -18,4 +18,11 @@ public class HistoricalDataListEvent extends IBEvent<HistoricalDataListEvent>  {
     public void on(IBEventHandler handler) {
         handler.onHistoricalDataListEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "HistoricalDataListEvent{" +
+                "historicalDataEvents=" + historicalDataEvents +
+                "} " + super.toString();
+    }
 }

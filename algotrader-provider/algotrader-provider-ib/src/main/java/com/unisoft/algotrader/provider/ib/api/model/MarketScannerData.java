@@ -46,5 +46,15 @@ public class MarketScannerData {
         return comboLegDescription;
     }
 
-
+    @Override
+    public String toString() {
+        return "MarketScannerData{" +
+                "ranking=" + ranking +
+                ", instrumentSpecification=" + instrumentSpecification +
+                ", distance='" + distance + '\'' +
+                ", benchmark='" + benchmark + '\'' +
+                ", projection='" + projection + '\'' +
+                ", comboLegDescription='" + comboLegDescription + '\'' +
+                '}';
+    }
 }

@@ -17,4 +17,11 @@ public class DisplayGroupListEvent extends IBEvent<DisplayGroupListEvent>  {
     public void on(IBEventHandler handler) {
         handler.onDisplayGroupListEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "DisplayGroupListEvent{" +
+                "groups='" + groups + '\'' +
+                "} " + super.toString();
+    }
 }

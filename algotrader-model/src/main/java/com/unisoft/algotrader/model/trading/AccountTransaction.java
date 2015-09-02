@@ -63,7 +63,7 @@ public class AccountTransaction {
                 ", getValue=" + value +
                 ", getOrderId=" + orderId +
                 ", getText='" + text + '\'' +
-                '}';
+                "} " + super.toString();
     }
 
     @Override

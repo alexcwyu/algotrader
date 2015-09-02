@@ -33,4 +33,18 @@ public class RealTimeBarEvent extends IBEvent<RealTimeBarEvent>  {
     public void on(IBEventHandler handler) {
         handler.onRealTimeBarEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "RealTimeBarEvent{" +
+                "timestamp=" + timestamp +
+                ", open=" + open +
+                ", high=" + high +
+                ", low=" + low +
+                ", close=" + close +
+                ", volume=" + volume +
+                ", weightedAveragePrice=" + weightedAveragePrice +
+                ", tradeNumber=" + tradeNumber +
+                "} " + super.toString();
+    }
 }

@@ -49,4 +49,13 @@ public abstract class IBEvent <E extends IBEvent<? super E>> implements Event<IB
     public void copy(E event) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public String toString() {
+        return "IBEvent{" +
+                "sequence=" + sequence +
+                ", requestId=" + requestId +
+                ", timeStamp=" + timeStamp +
+                "} " + super.toString();
+    }
 }

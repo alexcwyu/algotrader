@@ -52,7 +52,7 @@ public class Quote extends MarketData<Quote> {
                 ", ask=" + ask +
                 ", bidSize=" + bidSize +
                 ", askSize=" + askSize +
-                '}';
+                "} " + super.toString();
     }
 
     @Override

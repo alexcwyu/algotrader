@@ -29,7 +29,7 @@ public class DoubleTimeSeries implements Iterable<DoubleTimeSeries.Tuple>{
             return "Tuple{" +
                     "dateTime=" + dateTime +
                     ", data=" + data +
-                    '}';
+                    "} " + super.toString();
         }
 
         @Override

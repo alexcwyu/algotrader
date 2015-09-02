@@ -36,7 +36,7 @@ public class Trade extends MarketData<Trade> {
                 "dateTime=" + dateTime +
                 ", marketPrice=" + price +
                 ", size=" + size +
-                '}';
+                "} " + super.toString();
     }
 
     @Override

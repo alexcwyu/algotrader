@@ -19,4 +19,14 @@ public class AccountSummaryEvent extends IBEvent<AccountSummaryEvent>  {
         this.currency = currency;
     }
 
+    @Override
+    public String toString() {
+        return "AccountSummaryEvent{" +
+                "reqId=" + reqId +
+                ", account='" + account + '\'' +
+                ", tag='" + tag + '\'' +
+                ", value='" + value + '\'' +
+                ", currency='" + currency + '\'' +
+                "} " + super.toString();
+    }
 }

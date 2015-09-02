@@ -124,6 +124,6 @@ public class OrderExecution {
                 ", minCommission=" + minCommission +
                 ", orderStatus=" + orderStatus +
                 ", warningText='" + warningText + '\'' +
-                '}';
+                "} " + super.toString();
     }
 }

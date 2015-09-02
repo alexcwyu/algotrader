@@ -51,4 +51,8 @@ public class EventInputStreamConsumer implements Runnable {
         serializer.consume(inputStream, ibProvider);
     }
 
+    public void stop(){
+        running = false;
+    }
+
 }

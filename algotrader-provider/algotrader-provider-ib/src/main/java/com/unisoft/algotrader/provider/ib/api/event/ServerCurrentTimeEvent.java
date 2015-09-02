@@ -21,4 +21,11 @@ public class ServerCurrentTimeEvent extends IBEvent<ServerCurrentTimeEvent>  {
     public void on(IBEventHandler handler) {
         handler.onServerCurrentTimeEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "ServerCurrentTimeEvent{" +
+                "timestamp=" + timestamp +
+                "} " + super.toString();
+    }
 }

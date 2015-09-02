@@ -13,6 +13,7 @@ import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
 import com.unisoft.algotrader.provider.data.RealTimeDataProvider;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
 import com.unisoft.algotrader.provider.execution.ExecutionProvider;
+import com.unisoft.algotrader.provider.ib.api.event.DefaultIBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,7 +28,7 @@ import java.util.Set;
  * Created by alex on 6/20/15.
  */
 @Singleton
-public class IBProvider implements IBEventHandler, RealTimeDataProvider, HistoricalDataProvider, ExecutionProvider{
+public class IBProvider extends DefaultIBEventHandler implements IBEventHandler, RealTimeDataProvider, HistoricalDataProvider, ExecutionProvider{
 
     private static final Logger LOG = LogManager.getLogger(IBProvider.class);
 

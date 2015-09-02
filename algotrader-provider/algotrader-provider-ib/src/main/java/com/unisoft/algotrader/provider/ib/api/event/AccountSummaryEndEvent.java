@@ -15,4 +15,11 @@ public class AccountSummaryEndEvent extends IBEvent<AccountSummaryEndEvent>  {
     public void on(IBEventHandler handler) {
         handler.onAccountSummaryEndEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "AccountSummaryEndEvent{" +
+                "reqId=" + reqId +
+                "} " + super.toString();
+    }
 }

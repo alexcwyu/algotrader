@@ -16,4 +16,11 @@ public class VerifyMessageAPIEvent extends IBEvent<VerifyMessageAPIEvent>  {
     public void on(IBEventHandler handler) {
         handler.onVerifyMessageAPIEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "VerifyMessageAPIEvent{" +
+                "apiData='" + apiData + '\'' +
+                "} " + super.toString();
+    }
 }

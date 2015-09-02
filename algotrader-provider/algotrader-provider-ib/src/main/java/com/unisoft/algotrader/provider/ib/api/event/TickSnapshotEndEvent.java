@@ -15,4 +15,9 @@ public class TickSnapshotEndEvent extends IBEvent<TickSnapshotEndEvent>  {
     public void on(IBEventHandler handler) {
         handler.onTickSnapshotEndEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "TickSnapshotEndEvent{}";
+    }
 }

@@ -72,6 +72,6 @@ public class Event {
                 ", type='" + type + '\'' +
                 ", bucket='" + bucket + '\'' +
                 ", tags=" + tags +
-                '}';
+                "} " + super.toString();
     }
 }

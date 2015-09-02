@@ -187,11 +187,12 @@ public class IBSocket {
     }
 
     public void disconnect(){
+        inputStreamConsumer.stop();
         IOUtils.closeQuietly(outputStream);
         IOUtils.closeQuietly(socket);
     }
 
     public boolean isConnected(){
-        return socket != null && socket.isConnected();
+        return socket != null && socket.isConnected() && !socket.isClosed();
     }
 }

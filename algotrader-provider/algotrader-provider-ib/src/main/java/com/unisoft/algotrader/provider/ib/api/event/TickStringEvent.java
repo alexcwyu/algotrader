@@ -21,4 +21,12 @@ public class TickStringEvent extends IBEvent<TickStringEvent>  {
     public void on(IBEventHandler handler) {
         handler.onTickStringEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "TickStringEvent{" +
+                "type=" + type +
+                ", value='" + value + '\'' +
+                "} " + super.toString();
+    }
 }

@@ -124,7 +124,7 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
                 ", strategyId='" + strategyId + '\'' +
                 ", getText='" + text + '\'' +
                 ", ordStatus=" + ordStatus +
-                '}';
+                "} " + super.toString();
     }
 
     @Override

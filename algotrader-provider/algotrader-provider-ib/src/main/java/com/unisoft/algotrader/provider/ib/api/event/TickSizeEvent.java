@@ -21,4 +21,12 @@ public class TickSizeEvent extends IBEvent<TickSizeEvent>  {
     public void on(IBEventHandler handler) {
         handler.onTickSizeEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "TickSizeEvent{" +
+                "type=" + type +
+                ", size=" + size +
+                "} " + super.toString();
+    }
 }

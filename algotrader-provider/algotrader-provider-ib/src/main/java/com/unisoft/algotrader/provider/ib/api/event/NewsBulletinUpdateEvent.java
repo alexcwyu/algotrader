@@ -26,4 +26,14 @@ public class NewsBulletinUpdateEvent extends IBEvent<NewsBulletinUpdateEvent>  {
     public void on(IBEventHandler handler) {
         handler.onNewsBulletinUpdateEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "NewsBulletinUpdateEvent{" +
+                "newsBulletinId=" + newsBulletinId +
+                ", newsBulletinType=" + newsBulletinType +
+                ", message='" + message + '\'' +
+                ", exchange='" + exchange + '\'' +
+                "} " + super.toString();
+    }
 }

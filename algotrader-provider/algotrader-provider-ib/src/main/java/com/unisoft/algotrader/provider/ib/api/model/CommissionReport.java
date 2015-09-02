@@ -112,6 +112,6 @@ public class CommissionReport {
                 ", realizedProfitAndLoss=" + realizedProfitAndLoss +
                 ", yield=" + yield +
                 ", yieldRedemptionDate=" + yieldRedemptionDate +
-                '}';
+                "} " + super.toString();
     }
 }

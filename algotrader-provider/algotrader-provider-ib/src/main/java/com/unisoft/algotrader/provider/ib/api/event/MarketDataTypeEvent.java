@@ -18,4 +18,11 @@ public class MarketDataTypeEvent extends IBEvent<MarketDataTypeEvent>  {
     public void on(IBEventHandler handler) {
         handler.onMarketDataTypeEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "MarketDataTypeEvent{" +
+                "marketDataType=" + marketDataType +
+                "} " + super.toString();
+    }
 }

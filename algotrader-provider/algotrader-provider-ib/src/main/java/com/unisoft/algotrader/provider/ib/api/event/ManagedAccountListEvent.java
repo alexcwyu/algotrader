@@ -36,4 +36,11 @@ public class ManagedAccountListEvent extends IBEvent<ManagedAccountListEvent>  {
         handler.onManagedAccountListEvent(this);
     }
 
+    @Override
+    public String toString() {
+        return "ManagedAccountListEvent{" +
+                "commaSeparatedAccountList='" + commaSeparatedAccountList + '\'' +
+                ", toTrimmedStringFunction=" + toTrimmedStringFunction +
+                "} " + super.toString();
+    }
 }

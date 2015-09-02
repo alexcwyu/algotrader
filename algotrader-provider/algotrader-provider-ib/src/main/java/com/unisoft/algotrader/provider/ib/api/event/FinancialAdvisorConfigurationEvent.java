@@ -18,4 +18,12 @@ public class FinancialAdvisorConfigurationEvent extends IBEvent<FinancialAdvisor
     public void on(IBEventHandler handler) {
         handler.onFinancialAdvisorConfigurationEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "FinancialAdvisorConfigurationEvent{" +
+                "dataTypeValue=" + dataTypeValue +
+                ", xml='" + xml + '\'' +
+                "} " + super.toString();
+    }
 }

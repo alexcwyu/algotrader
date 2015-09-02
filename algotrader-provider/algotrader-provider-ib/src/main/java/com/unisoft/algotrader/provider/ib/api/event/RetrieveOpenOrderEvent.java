@@ -26,4 +26,13 @@ public class RetrieveOpenOrderEvent extends IBEvent<RetrieveOpenOrderEvent>  {
     public void on(IBEventHandler handler) {
         handler.onRetrieveOpenOrderEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "RetrieveOpenOrderEvent{" +
+                "instrument=" + instrument +
+                ", order=" + order +
+                ", orderExecution=" + orderExecution +
+                "} " + super.toString();
+    }
 }

@@ -71,7 +71,7 @@ public class AccountPosition {
                 "currency=" + ccyId +
                 ", getValue=" + value +
                 ", getAccountTransactions=" + accountTransactions +
-                '}';
+                "} " + super.toString();
     }
 
     @Override

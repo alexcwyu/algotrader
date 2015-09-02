@@ -153,6 +153,6 @@ public class Account {
                 ", name='" + name + '\'' +
                 ", ccyId=" + ccyId +
                 ", accountPositions=" + accountPositions +
-                '}';
+                "} " + super.toString();
     }
 }

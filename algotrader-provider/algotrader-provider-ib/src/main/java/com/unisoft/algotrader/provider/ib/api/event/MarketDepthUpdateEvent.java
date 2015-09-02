@@ -28,4 +28,15 @@ public class MarketDepthUpdateEvent extends IBEvent<MarketDepthUpdateEvent>  {
     public void on(IBEventHandler handler) {
         handler.onMarketDepthUpdateEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "MarketDepthUpdateEvent{" +
+                "rowId=" + rowId +
+                ", operation=" + operation +
+                ", bookSide=" + bookSide +
+                ", price=" + price +
+                ", size=" + size +
+                "} " + super.toString();
+    }
 }

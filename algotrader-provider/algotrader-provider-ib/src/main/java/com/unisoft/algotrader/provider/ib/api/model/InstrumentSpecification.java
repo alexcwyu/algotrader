@@ -361,4 +361,43 @@ public class InstrumentSpecification {
         this.securityIds = securityIds;
     }
 
+    @Override
+    public String toString() {
+        return "InstrumentSpecification{" +
+                "bondType='" + bondType + '\'' +
+                ", callable=" + callable +
+                ", category='" + category + '\'' +
+                ", contractMonth='" + contractMonth + '\'' +
+                ", convertible=" + convertible +
+                ", coupon=" + coupon +
+                ", couponType='" + couponType + '\'' +
+                ", cusip='" + cusip + '\'' +
+                ", description='" + description + '\'' +
+                ", industry='" + industry + '\'' +
+                ", issueDate='" + issueDate + '\'' +
+                ", liquidHours='" + liquidHours + '\'' +
+                ", longName='" + longName + '\'' +
+                ", marketName='" + marketName + '\'' +
+                ", maturity='" + maturity + '\'' +
+                ", minimumFluctuation=" + minimumFluctuation +
+                ", nextOptionDate='" + nextOptionDate + '\'' +
+                ", nextOptionPartial=" + nextOptionPartial +
+                ", nextOptionType='" + nextOptionType + '\'' +
+                ", notes='" + notes + '\'' +
+                ", validOrderTypes='" + validOrderTypes + '\'' +
+                ", priceMagnifier=" + priceMagnifier +
+                ", putable=" + putable +
+                ", ratings='" + ratings + '\'' +
+                ", subcategory='" + subcategory + '\'' +
+                ", instrument=" + instrument +
+                ", timeZoneId='" + timeZoneId + '\'' +
+                ", tradingClass='" + tradingClass + '\'' +
+                ", tradingHours='" + tradingHours + '\'' +
+                ", underlyingContractId=" + underlyingContractId +
+                ", validExchanges='" + validExchanges + '\'' +
+                ", economicValueRule='" + economicValueRule + '\'' +
+                ", economicValueMultiplier=" + economicValueMultiplier +
+                ", securityIds=" + securityIds +
+                '}';
+    }
 }

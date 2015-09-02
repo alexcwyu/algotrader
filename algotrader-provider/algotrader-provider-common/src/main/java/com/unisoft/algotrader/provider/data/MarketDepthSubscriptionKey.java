@@ -32,7 +32,7 @@ public class MarketDepthSubscriptionKey extends SubscriptionKey {
     public String toString() {
         return "MarketDepthSubscriptionKey{" +
                 "numRows=" + numRows +
-                '}';
+                "} " + super.toString();
     }
 
     public static MarketDepthSubscriptionKey createSubscriptionKey(String providerId, long instId, int numRows){

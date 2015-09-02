@@ -77,7 +77,7 @@ public class SubscriptionKey {
                 ", type=" + type +
                 ", instId=" + instId +
                 ", barSize=" + barSize +
-                '}';
+                "} " + super.toString();
     }
 
     public static SubscriptionKey createBarSubscriptionKey(String providerId, long instId, int frequency){

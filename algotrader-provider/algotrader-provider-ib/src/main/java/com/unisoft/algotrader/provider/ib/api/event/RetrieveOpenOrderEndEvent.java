@@ -14,4 +14,9 @@ public class RetrieveOpenOrderEndEvent extends IBEvent<RetrieveOpenOrderEndEvent
     public void on(IBEventHandler handler) {
         handler.onRetrieveOpenOrderEndEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "RetrieveOpenOrderEndEvent{}";
+    }
 }

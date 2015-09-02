@@ -36,4 +36,19 @@ public class TickOptionComputationEvent  extends IBEvent<TickOptionComputationEv
     public void on(IBEventHandler handler) {
         handler.onTickOptionComputationEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "TickOptionComputationEvent{" +
+                "type=" + type +
+                ", impliedVolatility=" + impliedVolatility +
+                ", delta=" + delta +
+                ", price=" + price +
+                ", presentValueDividend=" + presentValueDividend +
+                ", gamma=" + gamma +
+                ", vega=" + vega +
+                ", theta=" + theta +
+                ", underlyingPrice=" + underlyingPrice +
+                "} " + super.toString();
+    }
 }

@@ -219,7 +219,7 @@ public class Performance {
                 ", drawdownPercent=" + drawdownPercent +
                 ", currentDrawdown=" + currentDrawdown +
                 ", currentRunUp=" + currentRunUp +
-                '}';
+                "} " + super.toString();
     }
 
 

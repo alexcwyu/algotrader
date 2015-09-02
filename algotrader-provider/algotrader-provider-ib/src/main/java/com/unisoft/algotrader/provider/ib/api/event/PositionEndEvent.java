@@ -12,4 +12,9 @@ public class PositionEndEvent extends IBEvent<PositionEndEvent>  {
     public void on(IBEventHandler handler) {
         handler.onPositionEndEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "PositionEndEvent{}";
+    }
 }

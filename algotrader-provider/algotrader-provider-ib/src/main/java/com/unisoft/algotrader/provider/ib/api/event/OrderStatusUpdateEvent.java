@@ -37,4 +37,19 @@ public class OrderStatusUpdateEvent extends IBEvent<OrderStatusUpdateEvent>  {
     public void on(IBEventHandler handler) {
         handler.onOrderStatusUpdateEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "OrderStatusUpdateEvent{" +
+                "orderStatus=" + orderStatus +
+                ", filledQuantity=" + filledQuantity +
+                ", remainingQuantity=" + remainingQuantity +
+                ", averageFilledPrice=" + averageFilledPrice +
+                ", permanentId=" + permanentId +
+                ", parentOrderId='" + parentOrderId + '\'' +
+                ", lastFilledPrice=" + lastFilledPrice +
+                ", clientId=" + clientId +
+                ", heldCause='" + heldCause + '\'' +
+                "} " + super.toString();
+    }
 }

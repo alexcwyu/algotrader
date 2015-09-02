@@ -15,7 +15,9 @@ import java.util.List;
  */
 public interface IBEventHandler extends EventHandler {
 
-    default void onIBEvent(final IBEvent ibEvent){}
+    default void onIBEvent(final IBEvent ibEvent){
+        ibEvent.on(this);
+    }
 
     default void onAccountSummaryEvent(final AccountSummaryEvent accountSummaryEvent){}
 
@@ -39,7 +41,7 @@ public interface IBEventHandler extends EventHandler {
 
     default void onBondInstrumentSpecificationEvent(final BondInstrumentSpecificationEvent bondInstrumentSpecificationEvent){}
 
-    default void onBondInstrumentSpecificationEvent(final String requestId, final InstrumentSpecification contractSpecification){}
+    default void onBondInstrumentSpecificationEvent(final int requestId, final InstrumentSpecification contractSpecification){}
 
     default void onCommissionReportEvent(final CommissionReportEvent commissionReportEvent){}
 
@@ -79,9 +81,9 @@ public interface IBEventHandler extends EventHandler {
 
     default void onHistoricalDataEvent(final HistoricalDataEvent historicalDataEvent){}
 
-    default void onHistoricalDataEvent(String requestId, Bar bar){}
+    default void onHistoricalDataEvent(final int requestId, final Bar bar){}
 
-    default void onHistoricalDataEvent(final String requestId, final String dateTime, final double open, final double high,
+    default void onHistoricalDataEvent(final int requestId, final String dateTime, final double open, final double high,
                                final double low, final double close, final int volume, final int tradeNumber,
                                final double weightedAveragePrice, final boolean hasGap){}
 

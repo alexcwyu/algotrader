@@ -23,4 +23,14 @@ public class PositionEvent extends IBEvent<PositionEvent>  {
     public void on(IBEventHandler handler) {
         handler.onPositionEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "PositionEvent{" +
+                "account='" + account + '\'' +
+                ", instrument=" + instrument +
+                ", pos=" + pos +
+                ", avgCost=" + avgCost +
+                "} " + super.toString();
+    }
 }

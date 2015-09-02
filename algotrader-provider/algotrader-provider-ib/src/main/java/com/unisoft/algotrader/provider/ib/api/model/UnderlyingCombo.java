@@ -56,6 +56,6 @@ public class UnderlyingCombo {
                 "instId=" + instId +
                 ", delta=" + delta +
                 ", price=" + price +
-                '}';
+                "} " + super.toString();
     }
 }

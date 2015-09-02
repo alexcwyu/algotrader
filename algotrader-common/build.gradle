@@ -7,6 +7,7 @@ dependencies {
 
     compile "com.typesafe:config:${typesafeConfigVersion}"
     compile "com.google.inject:guice:${guiceVersion}"
+    compile "com.google.inject.extensions:guice-jmx:${guiceVersion}"
     compile "com.google.guava:guava:${guavaVersion}"
 
     compile "uk.co.real-logic:aeron-client:${aeronVersion}"

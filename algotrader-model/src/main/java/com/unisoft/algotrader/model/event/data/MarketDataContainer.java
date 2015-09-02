@@ -162,7 +162,7 @@ public class MarketDataContainer extends MarketData<MarketDataContainer> {
                 ", bar=" + bar +
                 ", quote=" + quote +
                 ", trade=" + trade +
-                '}';
+                "} " + super.toString();
     }
 
     @Override

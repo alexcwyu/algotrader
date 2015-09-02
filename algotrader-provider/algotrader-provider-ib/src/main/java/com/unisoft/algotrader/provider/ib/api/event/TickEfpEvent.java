@@ -35,4 +35,18 @@ public class TickEfpEvent extends IBEvent<TickEfpEvent> {
     public void on(IBEventHandler handler) {
         handler.onTickEfpEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "TickEfpEvent{" +
+                "type=" + type +
+                ", basisPoints=" + basisPoints +
+                ", formattedBasisPoints='" + formattedBasisPoints + '\'' +
+                ", impliedFuturePrice=" + impliedFuturePrice +
+                ", holdDays=" + holdDays +
+                ", futureExpiry='" + futureExpiry + '\'' +
+                ", dividendImpact=" + dividendImpact +
+                ", dividendToExpiry=" + dividendToExpiry +
+                "} " + super.toString();
+    }
 }

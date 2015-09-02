@@ -94,7 +94,7 @@ public class Bar extends MarketData<Bar> {
                 ", close=" + close +
                 ", volume=" + volume +
                 ", openInt=" + openInt +
-                '}';
+                "} " + super.toString();
     }
 
     @Override

@@ -33,4 +33,19 @@ public class HistoricalDataEvent extends IBEvent<HistoricalDataEvent>  {
     public void on(IBEventHandler handler) {
         handler.onHistoricalDataEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "HistoricalDataEvent{" +
+                "dateTime='" + dateTime + '\'' +
+                ", open=" + open +
+                ", high=" + high +
+                ", low=" + low +
+                ", close=" + close +
+                ", volume=" + volume +
+                ", tradeNumber=" + tradeNumber +
+                ", weightedAveragePrice=" + weightedAveragePrice +
+                ", hasGap=" + hasGap +
+                "} " + super.toString();
+    }
 }

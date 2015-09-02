@@ -18,4 +18,11 @@ public class BondInstrumentSpecificationEvent extends IBEvent<BondInstrumentSpec
     public void on(IBEventHandler handler) {
         handler.onBondInstrumentSpecificationEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "BondInstrumentSpecificationEvent{" +
+                "contractSpecification=" + contractSpecification +
+                "} " + super.toString();
+    }
 }

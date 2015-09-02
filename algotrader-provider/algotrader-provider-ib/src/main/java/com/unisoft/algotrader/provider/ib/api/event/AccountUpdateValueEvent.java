@@ -22,4 +22,13 @@ public class AccountUpdateValueEvent extends IBEvent<AccountUpdateValueEvent>  {
         handler.onAccountUpdateValueEvent(this);
     }
 
+    @Override
+    public String toString() {
+        return "AccountUpdateValueEvent{" +
+                "key='" + key + '\'' +
+                ", value='" + value + '\'' +
+                ", currency='" + currency + '\'' +
+                ", accountName='" + accountName + '\'' +
+                "} " + super.toString();
+    }
 }

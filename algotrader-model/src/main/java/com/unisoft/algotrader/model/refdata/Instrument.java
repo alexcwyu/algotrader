@@ -118,7 +118,7 @@ public class Instrument{
                 ", symbol='" + symbol + '\'' +
                 ", exchId='" + exchId + '\'' +
                 ", ccyId='" + ccyId + '\'' +
-                '}';
+                "} " + super.toString();
     }
 
     public void addAltSymbol(String providerId, String symbol){

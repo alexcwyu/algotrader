@@ -14,4 +14,9 @@ public class ExecutionReportEndEvent extends IBEvent<ExecutionReportEndEvent>  {
     public void on(IBEventHandler handler) {
         handler.onExecutionReportEndEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "ExecutionReportEndEvent{}";
+    }
 }

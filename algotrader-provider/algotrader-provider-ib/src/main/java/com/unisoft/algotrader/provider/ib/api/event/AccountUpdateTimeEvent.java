@@ -22,4 +22,11 @@ public class AccountUpdateTimeEvent extends IBEvent<AccountUpdateTimeEvent>  {
     public void on(IBEventHandler handler) {
         handler.onAccountUpdateTimeEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "AccountUpdateTimeEvent{" +
+                "time='" + time + '\'' +
+                "} " + super.toString();
+    }
 }

@@ -87,7 +87,7 @@ public class Person {
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", age=" + age +
-                '}';
+                "} " + super.toString();
     }
 
 }

@@ -21,4 +21,12 @@ public class ExecutionReportEvent extends IBEvent<ExecutionReportEvent>  {
     public void on(IBEventHandler handler) {
         handler.onExecutionReportEvent(this);
     }
+
+    @Override
+    public String toString() {
+        return "ExecutionReportEvent{" +
+                "instrument=" + instrument +
+                ", executionReport=" + executionReport +
+                "} " + super.toString();
+    }
 }
