@@ -74,22 +74,22 @@ public class InstrumentFactory {
     }
 
     public Instrument createFX(String symbol, String name, String exchId, String ccyId, Map<String, String> altSymbols, Map<String, String> altExchIds){
-        return createInstrument(Instrument.InstType.FX, symbol, name, exchId, ccyId);
+        return createInstrument(Instrument.InstType.FX, symbol, name, exchId, ccyId, altSymbols, altExchIds);
 
     }
     public Instrument createFuture(String symbol, String name, String exchId, String ccyId, Map<String, String> altSymbols, Map<String, String> altExchIds){
-        return createInstrument(Instrument.InstType.Future, symbol, name, exchId, ccyId);
+        return createInstrument(Instrument.InstType.Future, symbol, name, exchId, ccyId, altSymbols, altExchIds);
     }
 
     public Instrument createIndex(String symbol, String name, String exchId, String ccyId, Map<String, String> altSymbols, Map<String, String> altExchIds){
-        return createInstrument(Instrument.InstType.Index, symbol, name, exchId, ccyId);
+        return createInstrument(Instrument.InstType.Index, symbol, name, exchId, ccyId, altSymbols, altExchIds);
     }
 
     public Instrument createETF(String symbol, String name, String exchId, String ccyId, Map<String, String> altSymbols, Map<String, String> altExchIds){
-        return createInstrument(Instrument.InstType.ETF, symbol, name, exchId, ccyId);
+        return createInstrument(Instrument.InstType.ETF, symbol, name, exchId, ccyId, altSymbols, altExchIds);
     }
 
     public Instrument createOption(String symbol, String name, String exchId, String ccyId, Map<String, String> altSymbols, Map<String, String> altExchIds){
-        return createInstrument(Instrument.InstType.Option, symbol, name, exchId, ccyId);
+        return createInstrument(Instrument.InstType.Option, symbol, name, exchId, ccyId, altSymbols, altExchIds);
     }
 }

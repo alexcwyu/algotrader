@@ -15,7 +15,7 @@ public class SubscribeRealTimeDataSample {
         NeoIbApiClient apiClient = new NeoIbApiClient(new MyClientCallback());
 
         MyConnectionCallback connectionCallback = new MyConnectionCallback();
-        apiClient.connect(new ConnectionParameters(), connectionCallback);
+        apiClient.connect(new ConnectionParameters("localhost", 4001, 2), connectionCallback);
 
         connectionCallback.registerListener(new MyRealTimeBarEventListener());
 

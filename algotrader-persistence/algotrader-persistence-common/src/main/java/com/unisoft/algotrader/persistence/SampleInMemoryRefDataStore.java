@@ -79,5 +79,7 @@ public class SampleInMemoryRefDataStore extends InMemoryRefDataStore {
         instrumentFactory.createStock("TSLA", "Tesla Motors, Inc.", NASDAQ.getExchId(), Currency.USD.getCcyId());
 
         instrumentFactory.createStock("IBM", "International Business Machines Corporation", NYSE.getExchId(), Currency.USD.getCcyId());
+
+        instrumentFactory.createFX("EURUSD", "EURUSD", IDEALPRO.getExchId(), Currency.USD.getCcyId() , Collections.singletonMap("IB", "EUR"), Collections.EMPTY_MAP);
     }
 }

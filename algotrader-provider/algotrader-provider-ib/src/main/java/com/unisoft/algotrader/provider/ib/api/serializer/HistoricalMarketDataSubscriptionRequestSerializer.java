@@ -1,57 +1,70 @@
 package com.unisoft.algotrader.provider.ib.api.serializer;
 
-import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
-import com.unisoft.algotrader.provider.data.SubscriptionKey;
-import com.unisoft.algotrader.provider.ib.api.model.constants.Feature;
-import com.unisoft.algotrader.provider.ib.api.model.constants.OutgoingMessageId;
-import com.unisoft.algotrader.provider.ib.api.model.constants.RealTimeBarDataType;
-import com.unisoft.algotrader.provider.ib.api.model.constants.ReturnedTickTypeFilter;
-import org.apache.commons.lang3.StringUtils;
+import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
+import com.unisoft.algotrader.provider.ib.api.model.constants.*;
+import com.unisoft.algotrader.utils.DateHelper;
 
-import java.util.List;
+import java.time.Period;
+import java.time.ZoneId;
+import java.util.Date;
 
 /**
  * Created by alex on 8/7/15.
  */
-public class HistoricalMarketDataSubscriptionRequestSerializer extends Serializer<SubscriptionKey> {
+public class HistoricalMarketDataSubscriptionRequestSerializer extends Serializer<HistoricalSubscriptionKey> {
 
-    private static final int VERSION = 9;
+    private static final int VERSION = 6;
     private final RefDataStore refDataStore;
-    private final static RealTimeBarDataType type = RealTimeBarDataType.TRADES;
-    private final static boolean snapshot = false;
 
-    private final ReturnedTickTypeFilter[] returnedTickTypeFilters;
-
-    public HistoricalMarketDataSubscriptionRequestSerializer(RefDataStore refDataStore, int serverCurrentVersion, final ReturnedTickTypeFilter... returnedTickTypeFilters){
+    public HistoricalMarketDataSubscriptionRequestSerializer(RefDataStore refDataStore, int serverCurrentVersion){
         super(serverCurrentVersion);
         this.refDataStore = refDataStore;
-        this.returnedTickTypeFilters = returnedTickTypeFilters;
     }
 
-    public byte [] serialize(SubscriptionKey subscriptionKey){
+    public byte [] serialize(HistoricalSubscriptionKey subscriptionKey){
         Instrument instrument = refDataStore.getInstrument(subscriptionKey.instId);
 
         ByteArrayBuilder builder = new ByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.MARKET_DATA_SUBSCRIPTION_REQUEST.getId());
+        builder.append(OutgoingMessageId.HISTORICAL_DATA_SUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);
         builder.append(subscriptionKey.getSubscriptionId());
         appendInstrument(builder, instrument);
+        builder.append(DateHelper.formatYYYYMMDDHHMMSS(subscriptionKey.toDate));
+        builder.append(BarSize.getFormattedBarSize(subscriptionKey.barSize));
+        Period period = Period.between(
+                (new Date(subscriptionKey.fromDate)).toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+                (new Date(subscriptionKey.toDate)).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        if (period.getYears() > 0) {
+            builder.append(period.getYears() + " Y");
+        }
+        else if (period.getMonths() > 0){
+            builder.append(period.getMonths() + " M");
+        }
+        else {
+            builder.append(period.getDays() + " D");
+        }
+        builder.append(false);
+        builder.append(HistoricalDataType.from(subscriptionKey.type));
+        builder.append(DateFormat.YYYYMMDD__HH_MM_SS.getValue());
         appendCombo(builder, instrument);
-        appendUnderlyingCombo(builder, instrument);
-        appendReturnedTickTypeFilters(builder);
-        builder.append(snapshot);
-
+        if (Feature.LINKING.isSupportedByVersion(getServerCurrentVersion())) {
+            builder.appendEol(); // chartOptions
+        }
         return builder.toBytes();
     }
 
     protected void appendInstrument(ByteArrayBuilder builder, Instrument instrument) {
-        if (Feature.MARKET_DATA_REQUEST_BY_CONTRACT_ID.isSupportedByVersion(getServerCurrentVersion())) {
-            builder.append(instrument.getInstId());
+        if (Feature.TRADING_CLASS.isSupportedByVersion(getServerCurrentVersion())) {
+           builder.append(0); //contract / instrument id
         }
         super.appendInstrument(builder, instrument);
+        if (Feature.TRADING_CLASS.isSupportedByVersion(getServerCurrentVersion())) {
+            builder.appendEol(); // trading class
+        }
+        builder.append(false); // include expiry
     }
 
     private void appendCombo(ByteArrayBuilder builder, Instrument instrument) {
@@ -66,27 +79,4 @@ public class HistoricalMarketDataSubscriptionRequestSerializer extends Serialize
 //        }
     }
 
-    private void appendUnderlyingCombo(ByteArrayBuilder builder, Instrument instrument) {
-        if (Feature.DELTA_NEUTRAL_COMBO_ORDER.isSupportedByVersion(getServerCurrentVersion())) {
-//            final UnderlyingCombo underComp = contract.getUnderlyingCombo();
-//            if (underComp != null) {
-//                builder.append(true);
-//                builder.append(underComp.getContractId());
-//                builder.append(underComp.getDelta());
-//                builder.append(underComp.getPrice());
-//            } else {
-                builder.append(false);
-//            }
-        }
-    }
-
-    private void appendReturnedTickTypeFilters(ByteArrayBuilder builder) {
-        String returnedTickTypeFilterCommaSeparatedList = null;
-        if ((returnedTickTypeFilters != null) && (returnedTickTypeFilters.length > 0)) {
-            final List<String> returnedTickTypeFilterValues = Lists.transform(
-                    Lists.newArrayList(returnedTickTypeFilters), (input) -> String.valueOf(input.getId()));
-            returnedTickTypeFilterCommaSeparatedList = StringUtils.join(returnedTickTypeFilterValues, ',');
-        }
-        builder.append(returnedTickTypeFilterCommaSeparatedList);
-    }
 }

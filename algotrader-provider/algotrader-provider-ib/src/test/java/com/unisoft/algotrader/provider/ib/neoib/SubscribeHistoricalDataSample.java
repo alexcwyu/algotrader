@@ -17,7 +17,7 @@ public class SubscribeHistoricalDataSample {
         NeoIbApiClient apiClient = new NeoIbApiClient(new MyClientCallback());
 
         MyConnectionCallback connectionCallback = new MyConnectionCallback();
-        apiClient.connect(new ConnectionParameters(), connectionCallback);
+        apiClient.connect(new ConnectionParameters("localhost", 4001, 2), connectionCallback);
 
         connectionCallback.registerListener(new MyHistoricalDataEventListener());
         connectionCallback.registerListener(new MyHistoricalDataEventListEventListener());
@@ -49,8 +49,8 @@ public class SubscribeHistoricalDataSample {
     private static void subscribe(MyConnectionCallback connectionCallback, Contract contract, String date) {
         connectionCallback.subscribe(new HistoricalDataSubscriptionRequest(contract,
                 date,
-                new TimeSpan(1, TimeSpanUnit.MONTH),
-                BarSize.ONE_HOUR,
+                new TimeSpan(8, TimeSpanUnit.MONTH),
+                BarSize.ONE_DAY,
                 HistoricalDataType.TRADES, false, DateFormat.YYYYMMDD__HH_MM_SS));
     }
 }

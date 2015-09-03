@@ -15,6 +15,7 @@ import com.unisoft.algotrader.provider.data.SubscriptionKey;
 import com.unisoft.algotrader.provider.execution.ExecutionProvider;
 import com.unisoft.algotrader.provider.ib.api.event.DefaultIBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
+import com.unisoft.algotrader.provider.ib.api.model.constants.FinancialAdvisorDataType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -83,6 +84,21 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
         idSubscriptionMap.put(subscriptionKey.getSubscriptionId(), subscriptionKey);
         ibSocket.subscribeHistoricalData(subscriptionKey);
         return true;
+    }
+
+    public boolean unSubscribeHistoricalData(long subscriptionId){
+        if (idSubscriptionMap.containsKey(subscriptionId)){
+            idSubscriptionMap.remove(subscriptionId);
+            ibSocket.unsubscribeHistoricalData(subscriptionId);
+            return true;
+        }
+        return false;
+    }
+
+    private void requestFA(){
+        ibSocket.requestFA(FinancialAdvisorDataType.GROUPS);
+        ibSocket.requestFA(FinancialAdvisorDataType.PROFILE);
+        ibSocket.requestFA(FinancialAdvisorDataType.ACCOUNT_ALIASES);
     }
 
     @Override

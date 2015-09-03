@@ -2,7 +2,9 @@ package com.unisoft.algotrader.provider.ib;
 
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.persistence.RefDataStore;
+import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
+import com.unisoft.algotrader.provider.ib.api.model.constants.FinancialAdvisorDataType;
 import com.unisoft.algotrader.provider.ib.api.serializer.*;
 import com.unisoft.algotrader.utils.threading.NamedThreadFactory;
 import org.apache.commons.io.IOUtils;
@@ -35,6 +37,7 @@ public class IBSocket {
     private Lock lock = new ReentrantLock();
 
     private AccountUpdateSubscriptionRequestSerializer accountUpdateSubscriptionRequestSerializer;
+    private FAConfigurationRequestSerializer faConfigurationRequestSerializer;
     private RealTimeMarketDataSubscriptionRequestSerializer realTimeMarketDataRequestSerializer;
     private RealTimeMarketDataUnsubscriptionRequestSerializer realTimeMarketDataUnsubscriptionRequestSerializer;
     private PlaceOrderSerializer placeOrderRequestSerializer;
@@ -63,6 +66,7 @@ public class IBSocket {
             handShake();
             initSerializer();
             initInputStreamConsumer();
+            requestAccountUpdate(null);
         }
         catch (IOException e){
             LOG.error(e);
@@ -107,6 +111,7 @@ public class IBSocket {
     private void initSerializer(){
         RefDataStore refDataStore = ibProvider.getRefDataStore();
         accountUpdateSubscriptionRequestSerializer = new AccountUpdateSubscriptionRequestSerializer(serverCurrentVersion);
+        faConfigurationRequestSerializer = new FAConfigurationRequestSerializer(serverCurrentVersion);
         placeOrderRequestSerializer = new PlaceOrderSerializer(refDataStore, serverCurrentVersion);
         cancelOrderRequestSerializer = new CancelOrderSerializer(serverCurrentVersion);
         realTimeMarketDataRequestSerializer = new RealTimeMarketDataSubscriptionRequestSerializer(refDataStore, serverCurrentVersion);
@@ -122,7 +127,9 @@ public class IBSocket {
 
     public void subscribeRealTimeData(SubscriptionKey subscriptionKey) {
         try {
-            send(realTimeMarketDataRequestSerializer.serialize(subscriptionKey));
+            byte [] bytes = realTimeMarketDataRequestSerializer.serialize(subscriptionKey);
+            LOG.debug("subscribeRealTimeData, {}", new String(bytes));
+            send(bytes);
         } catch (IOException e) {
             LOG.error(e);
         }
@@ -130,23 +137,31 @@ public class IBSocket {
 
     public void unsubscribeRealTimeData(SubscriptionKey subscriptionKey) {
         try {
-            send(realTimeMarketDataUnsubscriptionRequestSerializer.serialize(subscriptionKey.getSubscriptionId()));
+            byte [] bytes = realTimeMarketDataUnsubscriptionRequestSerializer.serialize(subscriptionKey.getSubscriptionId());
+            LOG.debug("unsubscribeRealTimeData, {}", new String(bytes));
+            send(bytes);
         } catch (IOException e) {
             LOG.error(e);
         }
     }
 
-    public void subscribeHistoricalData(SubscriptionKey subscriptionKey) {
+    public void subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
         try {
-            send(historicalMarketDataRequestSerializer.serialize(subscriptionKey));
+
+            byte [] bytes = historicalMarketDataRequestSerializer.serialize(subscriptionKey);
+            LOG.debug("subscribeHistoricalData, {}", new String(bytes));
+            send(bytes);
         } catch (IOException e) {
             LOG.error(e);
         }
     }
 
-    public void unsubscribeHistoricalData(SubscriptionKey subscriptionKey) {
+    public void unsubscribeHistoricalData(long subscriptionId) {
         try {
-            send(historicalMarketDataUnsubscriptionRequestSerializer.serialize(subscriptionKey.getSubscriptionId()));
+
+            byte [] bytes = historicalMarketDataUnsubscriptionRequestSerializer.serialize(subscriptionId);
+            LOG.debug("unsubscribeHistoricalData, {}", new String(bytes));
+            send(bytes);
         } catch (IOException e) {
             LOG.error(e);
         }
@@ -154,7 +169,19 @@ public class IBSocket {
 
     public void requestAccountUpdate(String accountName) {
         try {
-            send(accountUpdateSubscriptionRequestSerializer.serialize(accountName));
+            byte [] bytes = accountUpdateSubscriptionRequestSerializer.serialize(accountName);
+            LOG.debug("requestAccountUpdate, {}", new String(bytes));
+            send(bytes);
+        } catch (IOException e) {
+            LOG.error(e);
+        }
+    }
+
+    public void requestFA(FinancialAdvisorDataType dataType){
+        try {
+            byte [] bytes = faConfigurationRequestSerializer.serialize(dataType);
+            LOG.debug("requestFA, {}", new String(bytes));
+            send(bytes);
         } catch (IOException e) {
             LOG.error(e);
         }
@@ -162,7 +189,9 @@ public class IBSocket {
 
     public void sendOrder(Order order){
         try {
-            send(placeOrderRequestSerializer.serialize(order));
+            byte [] bytes = placeOrderRequestSerializer.serialize(order);
+            LOG.debug("sendOrder, {}", new String(bytes));
+            send(bytes);
         } catch (IOException e) {
             LOG.error(e);
         }
@@ -170,7 +199,9 @@ public class IBSocket {
 
     public void cancelOrder(long orderId){
         try {
-            send(cancelOrderRequestSerializer.serialize(orderId));
+            byte [] bytes = cancelOrderRequestSerializer.serialize(orderId);
+            LOG.debug("cancelOrder, {}", new String(bytes));
+            send(bytes);
         } catch (IOException e) {
             LOG.error(e);
         }
