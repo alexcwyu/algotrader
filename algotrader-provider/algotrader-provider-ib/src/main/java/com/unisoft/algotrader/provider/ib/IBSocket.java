@@ -66,7 +66,7 @@ public class IBSocket {
             handShake();
             initSerializer();
             initInputStreamConsumer();
-            requestAccountUpdate(null);
+            //requestAccountUpdate(null);
         }
         catch (IOException e){
             LOG.error(e);

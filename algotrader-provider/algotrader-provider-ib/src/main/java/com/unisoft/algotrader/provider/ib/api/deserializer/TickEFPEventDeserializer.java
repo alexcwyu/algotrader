@@ -16,11 +16,11 @@ public class TickEFPEventDeserializer extends Deserializer {
 
 
     public TickEFPEventDeserializer(){
-        super(IncomingMessageId.TICK_EXCHANFE_FOR_PHYSICAL);
+        super(IncomingMessageId.TICK_EXCHANGE_FOR_PHYSICAL);
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final int requestId = readInt(inputStream);
         final int tickType = readInt(inputStream);
         final double basisPoints = readDouble(inputStream);

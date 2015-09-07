@@ -20,7 +20,7 @@ public class FinancialAdvisorConfigurationEventDeserializer extends Deserializer
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final int dataType = readInt(inputStream);
         final String xml = readString(inputStream);
         ibProvider.onFinancialAdvisorConfigurationEvent(FinancialAdvisorDataType.fromValue(dataType), xml);

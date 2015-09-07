@@ -18,7 +18,7 @@ public class ServerCurrentTimeDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final long timestamp = readLong(inputStream);
 
         ibProvider.onServerCurrentTimeEvent(timestamp);

@@ -19,7 +19,7 @@ public class OrderStatusDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final int orderId = readInt(inputStream);
         final String orderStatus = readString(inputStream);
         final int filledQuantity = readInt(inputStream);

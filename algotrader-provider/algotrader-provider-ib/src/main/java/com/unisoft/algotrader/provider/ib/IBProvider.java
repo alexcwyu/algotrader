@@ -16,6 +16,7 @@ import com.unisoft.algotrader.provider.execution.ExecutionProvider;
 import com.unisoft.algotrader.provider.ib.api.event.DefaultIBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.constants.FinancialAdvisorDataType;
+import com.unisoft.algotrader.trading.OrderManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,6 +25,7 @@ import javax.inject.Singleton;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by alex on 6/20/15.
@@ -43,7 +45,12 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
     private Set<SubscriptionKey> subscriptionKeys = Sets.newHashSet();
     private Map<Long, SubscriptionKey> idSubscriptionMap = Maps.newHashMap();
 
-    private int requestId = 0;
+    private Map<Long, Order> extOrderIdOrderMap = Maps.newHashMap();
+    private Map<Long, Order> orderIdOrderMap = Maps.newHashMap();
+
+
+    private AtomicInteger requestId = new AtomicInteger(1);
+    private AtomicInteger orderId = null;
 
     @Inject
     public IBProvider(ProviderManager providerManager, IBConfig config, RefDataStore refDataStore, EventBusManager eventBusManager){
@@ -103,22 +110,46 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
 
     @Override
     public void onNewOrderRequest(Order order) {
+        if (order.getExtOrderId() == -1) {
+            order.setExtOrderId(nextOrderId());
+        }
+        extOrderIdOrderMap.put(order.extOrderId, order);
+        orderIdOrderMap.put(order.orderId, order);
         ibSocket.sendOrder(order);
     }
 
     @Override
     public void onOrderReplaceRequest(Order order){
+        if (order.getExtOrderId() == -1) {
+            Order existingOrder = orderIdOrderMap.get(order.orderId);
+            order.setExtOrderId(existingOrder.getExtOrderId());
+        }
+        extOrderIdOrderMap.put(order.extOrderId, order);
+        orderIdOrderMap.put(order.orderId, order);
         ibSocket.sendOrder(order);
     }
 
     @Override
     public void onOrderCancelRequest(Order order){
-        ibSocket.cancelOrder(order.orderId);
+        if (order.getExtOrderId() == -1) {
+            Order existingOrder = orderIdOrderMap.get(order.orderId);
+            order.setExtOrderId(existingOrder.getExtOrderId());
+        }
+        ibSocket.cancelOrder(order.getExtOrderId());
     }
 
     @Override
     public void connect() {
         ibSocket.connect();
+        synchronized (this) {
+            while (this.orderId == null) {
+                try {
+                    this.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override
@@ -153,10 +184,18 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
     }
 
     private int nextRequestId(){
-        return requestId++;
+        return requestId.getAndIncrement();
+    }
+
+    private int nextOrderId(){
+        return orderId.getAndIncrement();
     }
 
     public void onNextValidOrderIdEvent(final int nextValidOrderId){
-        this.requestId = nextValidOrderId;
+        this.orderId = new AtomicInteger(nextValidOrderId);
+
+        synchronized (this) {
+            this.notify();
+        }
     }
 }

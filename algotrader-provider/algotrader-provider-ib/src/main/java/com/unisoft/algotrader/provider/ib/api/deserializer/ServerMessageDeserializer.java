@@ -19,7 +19,7 @@ public class ServerMessageDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         if (version < VERSION_2) {
             final String message = readString(inputStream);
             ibProvider.onServerMessageEvent(-1, 0, message);

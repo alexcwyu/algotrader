@@ -18,7 +18,7 @@ public class CommissionReportEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final CommissionReport commissionReport = new CommissionReport();
         commissionReport.setExecutionId(readString(inputStream));
         commissionReport.setCommission(readDouble(inputStream));

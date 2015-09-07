@@ -20,7 +20,7 @@ public class TickPriceDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
 
         final int requestId = readInt(inputStream);
         final int tickType = readInt(inputStream);
@@ -29,7 +29,28 @@ public class TickPriceDeserializer extends Deserializer {
         final int size = (version >= VERSION_2) ? readInt(inputStream): 0;
         final int autoExecute = (version >= VERSION_3) ? readInt(inputStream) : 0;
 
-        ibProvider.onTickPriceEvent(requestId, TickType.fromValue(tickType), price, autoExecute);
-        ibProvider.onTickSizeEvent(requestId, TickType.fromValue(tickType), size);
+        TickType tickPriceType = TickType.fromValue(tickType);
+        ibProvider.onTickPriceEvent(requestId, tickPriceType, price, autoExecute);
+
+        if (version >= VERSION_2) {
+            int sizeTickType = TickType.UNKNOWN.getValue();
+            switch (tickPriceType) {
+                case BID_PRICE:
+                    sizeTickType = TickType.BID_SIZE.getValue();
+                    break;
+                case ASK_PRICE:
+                    sizeTickType = TickType.ASK_SIZE.getValue();
+                    break;
+                case LAST_PRICE:
+                    sizeTickType = TickType.LAST_SIZE.getValue();
+                    break;
+                default:
+                    sizeTickType = TickType.UNKNOWN.getValue();
+                    break;
+            }
+            if (sizeTickType != TickType.UNKNOWN.getValue()) {
+                ibProvider.onTickSizeEvent(requestId, TickType.fromValue(sizeTickType), size);
+            }
+        }
     }
 }

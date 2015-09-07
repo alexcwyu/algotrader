@@ -17,8 +17,7 @@ public class RetrieveOpenOrderEndEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
-        //TODO
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         ibProvider.onRetrieveOpenOrderEndEvent();
     }
 }

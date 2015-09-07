@@ -18,7 +18,7 @@ public class RealTimeBarEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final int requestId = readInt(inputStream);
         final long timestamp = readLong(inputStream);
         final double open = readDouble(inputStream);

@@ -19,7 +19,7 @@ public class HistoricalDataEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final List<Bar> historicalDataEvents = Lists.newArrayList();
         final int requestId = readInt(inputStream);
         String startDate = null;

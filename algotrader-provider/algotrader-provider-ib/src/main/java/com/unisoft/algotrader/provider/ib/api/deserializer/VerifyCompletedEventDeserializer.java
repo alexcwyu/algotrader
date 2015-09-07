@@ -18,11 +18,15 @@ public class VerifyCompletedEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final boolean isSuccessful = "true".equals(readString(inputStream));
 
         final String errorText = readString(inputStream);
 
+        //TODO
+        //if(isSuccessful) {
+        // this.m_parent.startAPI();
+        //}
         ibProvider.onVerifyCompletedEvent(isSuccessful, errorText);
     }
 }

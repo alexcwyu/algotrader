@@ -39,6 +39,10 @@ public class EventInputStreamConsumer implements Runnable {
                 consumeMessage();
             }
         }
+        catch(Exception e){
+            LOG.error("fail to consume message", e);
+            throw new RuntimeException(e);
+        }
         finally {
             IOUtils.closeQuietly(inputStream);
         }
@@ -46,8 +50,10 @@ public class EventInputStreamConsumer implements Runnable {
 
     private void consumeMessage() {
         final int messageId = readInt(inputStream);
+        final IncomingMessageId incomingMessageId = IncomingMessageId.fromId(messageId);
         final Deserializer serializer =
-                deserializerFactory.getDeserializer(IncomingMessageId.fromId(messageId));
+                deserializerFactory.getDeserializer(incomingMessageId);
+        LOG.info("consumeMessage, incomingMessageId {}", incomingMessageId);
         serializer.consume(inputStream, ibProvider);
     }
 

@@ -25,18 +25,15 @@ public class ExecutionReportDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
-        int requestId = -1;
-        if (version >= 7) {
-            requestId = readInt(inputStream);
-        }
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+        int requestId = (version >= 7) ? readInt(inputStream) : -1;
         final int orderId = readInt(inputStream);
-        final Instrument instrument = parseInstrument(version, inputStream, ibProvider);
+        final Instrument instrument = consumeInstrument(version, inputStream, ibProvider);
         final ExecutionReport executionReport = consumeExecutionReport(version, inputStream, orderId);
         ibProvider.onExecutionReportEvent(requestId, instrument, executionReport);
     }
 
-    protected Instrument parseInstrument(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    protected Instrument consumeInstrument(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final int instId = (version >= 5)? InputStreamUtils.readInt(inputStream) : 0;
         final String symbol = readString(inputStream);
         final Instrument.InstType instType = SecType.convert(readString(inputStream));
@@ -57,9 +54,9 @@ public class ExecutionReportDeserializer extends Deserializer {
         return instrument;
     }
 
-    protected ExecutionReport consumeExecutionReport(final int version, final InputStream inputStream, final int orderId){
+    protected ExecutionReport consumeExecutionReport(final int version, final InputStream inputStream, final int extOrderId){
         ExecutionReport executionReport = new ExecutionReport();
-        executionReport.setOrderId(orderId);
+        executionReport.setExtOrderId(extOrderId);
         //TODO string to execID mapping?
         executionReport.setExecId(Long.parseLong(readString(inputStream)));
         String time = readString(inputStream);

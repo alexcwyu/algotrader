@@ -26,7 +26,7 @@ public class MarketScannerDataEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final int requestId = readInt(inputStream);
         final List<MarketScannerData> marketScannerDataEvents = Lists.newArrayList();
         final int marketScannerDatas = readInt(inputStream);
@@ -41,11 +41,7 @@ public class MarketScannerDataEventDeserializer extends Deserializer {
 
         final InstrumentSpecification contractSpecification = new InstrumentSpecification();
         final int ranking = readInt(inputStream);
-        int instid = 0;
-        if (version >= 3) {
-            instid = readInt(inputStream);
-        }
-
+        int instid = (version >= 3) ? readInt(inputStream) : 0;
 
         final String symbol = InputStreamUtils.readString(inputStream);
         final Instrument.InstType instType = SecType.convert(InputStreamUtils.readString(inputStream));
@@ -62,14 +58,11 @@ public class MarketScannerDataEventDeserializer extends Deserializer {
         final String distance = readString(inputStream);
         final String benchmark = readString(inputStream);
         final String projection = readString(inputStream);
-        String comboLegDescription = null;
-        if (version >= 2) {
-            comboLegDescription = readString(inputStream);
-        }
+        String comboLegDescription = (version >= 2) ? readString(inputStream) : null;
 
         Instrument instrument = ibProvider.getRefDataStore().getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
         if (instrument == null){
-            throw new RuntimeException("Cannot find instrumnet symbol=" + symbol +", primaryExchange="+exchange);
+            throw new RuntimeException("Cannot find instrument symbol=" + symbol +", primaryExchange="+exchange);
         }
         contractSpecification.setInstrument(instrument);
 

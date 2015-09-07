@@ -5,6 +5,9 @@ import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.model.event.EventBusManager;
 import com.unisoft.algotrader.model.event.execution.*;
 import com.unisoft.algotrader.model.trading.OrdStatus;
+import com.unisoft.algotrader.model.trading.OrdType;
+import com.unisoft.algotrader.model.trading.Side;
+import com.unisoft.algotrader.model.trading.TimeInForce;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
@@ -119,5 +122,32 @@ public class OrderManager extends MultiEventProcessor implements OrderHandler, E
 
     public void clear(){
         this.orderMap.clear();
+    }
+
+    public Order newLimitOrder(long instId, String strategyId, String providerId, Side side, double price, double qty, TimeInForce tif){
+        Order order = new Order();
+        order.orderId = nextOrdId();
+        order.instId = instId;
+        order.strategyId = strategyId;
+        order.execProviderId = providerId;
+        order.side= side;
+        order.ordType = OrdType.Limit;
+        order.ordQty=qty;
+        order.limitPrice = price;
+        order.tif = tif;
+        return order;
+    }
+
+    public Order newMarketOrder(long instId, String strategyId, String providerId, Side side, double qty, TimeInForce tif){
+        Order order = new Order();
+        order.orderId = nextOrdId();
+        order.instId = instId;
+        order.strategyId = strategyId;
+        order.execProviderId = providerId;
+        order.side= side;
+        order.ordType = OrdType.Market;
+        order.ordQty=qty;
+        order.tif = tif;
+        return order;
     }
 }

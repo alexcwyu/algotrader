@@ -4,10 +4,15 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.unisoft.algotrader.config.AppConfigModule;
 import com.unisoft.algotrader.config.SampleAppConfigModule;
+import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Instrument;
+import com.unisoft.algotrader.model.trading.OrdType;
+import com.unisoft.algotrader.model.trading.Side;
+import com.unisoft.algotrader.model.trading.TimeInForce;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
+import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.utils.DateHelper;
 import org.junit.After;
 import org.junit.Before;
@@ -29,12 +34,14 @@ public class IBProviderIntegrationTest {
 
     public static IBProvider provider;
     public static RefDataStore refDataStore;
+    public static OrderManager orderManager;
 
     @BeforeClass
     public static void init(){
         Injector injector = Guice.createInjector(new SampleAppConfigModule());
         provider = injector.getInstance(IBProvider.class);
         refDataStore = injector.getInstance(RefDataStore.class);
+        orderManager = injector.getInstance(OrderManager.class);
     }
 
     @Before
@@ -80,5 +87,19 @@ public class IBProviderIntegrationTest {
         assertTrue(provider.unSubscribeRealTimeData(subscriptionKey));
         Thread.sleep(1000);
     }
+
+
+    @Test
+    public void testSubmitOrder()throws Exception{
+        Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange("EURUSD", IDEALPRO.getExchId());
+        Order order = orderManager.newLimitOrder(instrument.getInstId(), "Test", IBProvider.PROVIDER_ID, Side.Buy, 1.1, 1000000, TimeInForce.Day);
+        order.orderId = 8;
+        provider.onNewOrderRequest(order);
+        Thread.sleep(5000);
+
+        provider.onOrderCancelRequest(order);
+        Thread.sleep(5000);
+    }
+
 
 }

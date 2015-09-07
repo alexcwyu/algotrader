@@ -14,20 +14,17 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.*;
 /**
  * Created by alex on 8/13/15.
  */
-public class InstrumentSpecificationEventDeserializer extends Deserializer {
+public class ContractSpecificationEventDeserializer extends Deserializer {
 
 
 
-    public InstrumentSpecificationEventDeserializer(){
+    public ContractSpecificationEventDeserializer(){
         super(IncomingMessageId.CONTRACT_SPECIFICATION);
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
-        int requestId = -1;
-        if (version >= 3) {
-            requestId = readInt(inputStream);
-        }
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+        final int requestId = (version >= 3) ? readInt(inputStream) : -1;
         final InstrumentSpecification instrumentSpecification = consumeInstrumentSpecification(version, inputStream, ibProvider);
 
         ibProvider.onInstrumentSpecificationEvent(requestId, instrumentSpecification);

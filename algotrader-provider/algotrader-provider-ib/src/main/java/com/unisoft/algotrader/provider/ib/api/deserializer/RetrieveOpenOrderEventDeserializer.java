@@ -4,6 +4,7 @@ import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.OrdType;
 import com.unisoft.algotrader.model.trading.Side;
+import com.unisoft.algotrader.model.trading.TimeInForce;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
 import com.unisoft.algotrader.provider.ib.api.model.OrderExecution;
@@ -17,30 +18,30 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.*;
 /**
  * Created by alex on 8/13/15.
  */
-public class OpenOrderEventDeserializer extends Deserializer {
+public class RetrieveOpenOrderEventDeserializer extends Deserializer {
 
 
-    public OpenOrderEventDeserializer(){
+    public RetrieveOpenOrderEventDeserializer(){
         super(IncomingMessageId.RETRIEVE_OPEN_ORDER);
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final int orderId = readInt(inputStream);
-        final Instrument instrument = parseInstrument(version, inputStream, ibProvider.getRefDataStore());
-        Order order = parseOrder(version, inputStream, ibProvider, orderId);
-        OrderExecution orderExecution = parseOrderExecution(version, inputStream, order);
+        final Instrument instrument = consumeInstrument(version, inputStream, ibProvider.getRefDataStore());
+        Order order = consumeOrder(version, inputStream, ibProvider, orderId);
+        OrderExecution orderExecution = consumeOrderExecution(version, inputStream, order);
         ibProvider.onRetrieveOpenOrderEvent(orderId, instrument, order, orderExecution);
     }
 
-    protected Instrument parseInstrument(final int version, final InputStream inputStream, final RefDataStore refDataStore) {
+    protected Instrument consumeInstrument(final int version, final InputStream inputStream, final RefDataStore refDataStore) {
         final int instId = (version >= 17)? readInt(inputStream) : 0;
         final String symbol = readString(inputStream);
         final Instrument.InstType instType = SecType.convert(readString(inputStream));
         final String expString = readString(inputStream);
         final double strike = readDouble(inputStream);
         final Instrument.PutCall putCall = OptionRight.convert(readString(inputStream));
-        final String multiplier = (version >= 17)? readString(inputStream) : null;
+        final String multiplier = (version >= 32)? readString(inputStream) : null;
         final String exchange = readString(inputStream);
         final String ccyCode = readString(inputStream);
         final String localSymbol = (version >= 2)?readString(inputStream) : null;
@@ -54,16 +55,19 @@ public class OpenOrderEventDeserializer extends Deserializer {
         return instrument;
     }
 
-    protected Order parseOrder(final int version, final InputStream inputStream, final IBProvider ibProvider, final int orderId){
+    protected Order consumeOrder(final int version, final InputStream inputStream, final IBProvider ibProvider, final int extOrderId){
 
         final Side side = Action.convert(readString(inputStream));
         final int totalQty = readInt(inputStream);
         final OrdType orderType = OrderType.convert(readString(inputStream));
 
-        final double limitPrice = (version < 29)? readDouble(inputStream) : readDoubleMax(inputStream);
-        final double stopPrice = (version < 30) ? readDouble(inputStream) : readDoubleMax(inputStream);
+//        final double limitPrice = (version < 29)? readDouble(inputStream) : readDoubleMax(inputStream);
+//        final double stopPrice = (version < 30) ? readDouble(inputStream) : readDoubleMax(inputStream);
 
-        final com.unisoft.algotrader.model.trading.TimeInForce tif = TIF.convert(readString(inputStream));
+        final double limitPrice = (version < 29)? readDouble(inputStream) : 0.0;
+        final double stopPrice = (version < 30) ? readDouble(inputStream) : 0.0;
+
+        final TimeInForce tif = TIF.convert(readString(inputStream));
 
         final String ocaGroupName = readString(inputStream);
         final String accountName = readString(inputStream);
@@ -281,7 +285,7 @@ public class OpenOrderEventDeserializer extends Deserializer {
     }
 
     //TODO
-    protected OrderExecution parseOrderExecution(final int version, final InputStream inputStream, Order order){
+    protected OrderExecution consumeOrderExecution(final int version, final InputStream inputStream, Order order){
 
         if (version >= 16) {
 

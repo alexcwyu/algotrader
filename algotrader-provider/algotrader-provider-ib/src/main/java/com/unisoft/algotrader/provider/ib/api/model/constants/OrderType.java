@@ -11,16 +11,16 @@ import java.util.Map;
  */
 public enum OrderType {
 
-    MARKET(OrdType.Market, "MARKET"),
-    LIMIT(OrdType.Limit, "LIMIT"),
-    STOP(OrdType.Stop, "STOP"),
-    STOP_LIMIT(OrdType.StopLimit, "STOP_LIMIT"),
-    MARKET_ON_CLOSE(OrdType.MarketOnClose, "MARKET_ON_CLOSE"),
-    LIMIT_ON_CLOSE(OrdType.LimitOnClose, "LIMIT_ON_CLOSE"),
-    TRAILING_STOP(OrdType.TrailingStop, "TRAILING_STOP"),
-    MARKET_TO_LIMIT(OrdType.MarketWithLeftoverAsLimit, "MARKET_TO_LIMIT"),
-    MARKET_IF_PRICE_TOUCHED(OrdType.MIT, "MARKET_IF_PRICE_TOUCHED"),
-    MARKET_ON_OPEN(OrdType.OnClose, "MARKET_ON_OPEN"),
+    MARKET(OrdType.Market, "MKT"),
+    LIMIT(OrdType.Limit, "LMT"),
+    STOP(OrdType.Stop, "STP"),
+    STOP_LIMIT(OrdType.StopLimit, "STPLMT"),
+    MARKET_ON_CLOSE(OrdType.MarketOnClose, "MOC"),
+    LIMIT_ON_CLOSE(OrdType.LimitOnClose, "LOC"),
+    TRAILING_STOP(OrdType.TrailingStop, "TRAIL"),
+    MARKET_TO_LIMIT(OrdType.MarketWithLeftoverAsLimit, "MTL"),
+    MARKET_IF_PRICE_TOUCHED(OrdType.MIT, "MIT"),
+    MARKET_ON_OPEN(OrdType.OnClose, "MOO"),
     UNKNOWN(OrdType.Undefined, "UNKNOWN");
 
     private static Map<OrdType, byte[]> ordTypeMap = Maps.newHashMap();

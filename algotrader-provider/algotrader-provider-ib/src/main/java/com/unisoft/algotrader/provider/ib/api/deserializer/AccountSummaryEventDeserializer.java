@@ -19,8 +19,8 @@ public class AccountSummaryEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream,
-                                   final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream,
+                                      final IBProvider ibProvider) {
         final int reqId = readInt(inputStream);
         final String account = readString(inputStream);
         final String tag = readString(inputStream);

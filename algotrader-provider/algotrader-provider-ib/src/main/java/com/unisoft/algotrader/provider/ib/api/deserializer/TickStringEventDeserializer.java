@@ -20,7 +20,7 @@ public class TickStringEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final int requestId = InputStreamUtils.readInt(inputStream);
         final int tickType = InputStreamUtils.readInt(inputStream);
         final String value = readString(inputStream);

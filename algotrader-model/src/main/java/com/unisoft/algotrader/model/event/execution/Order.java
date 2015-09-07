@@ -25,6 +25,9 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
     @Column(name="order_id")
     public long orderId;
 
+    @Column(name="ext_order_id")
+    public long extOrderId = -1;
+
     @Column(name="inst_id")
     public long instId;
 
@@ -106,7 +109,8 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
     @Override
     public String toString() {
         return "Order{" +
-                "getOrderId=" + orderId +
+                "orderId=" + orderId +
+                "extOrderId=" + extOrderId +
                 ", instId='" + instId + '\'' +
                 ", dateTime=" + dateTime +
                 ", ordType=" + ordType +
@@ -133,6 +137,7 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
         if (!(o instanceof Order)) return false;
         Order<?> order = (Order<?>) o;
         return Objects.equal(orderId, order.orderId) &&
+                Objects.equal(extOrderId, order.extOrderId) &&
                 Objects.equal(instId, order.instId) &&
                 Objects.equal(dateTime, order.dateTime) &&
                 Objects.equal(limitPrice, order.limitPrice) &&
@@ -160,7 +165,7 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(orderId, instId, dateTime, ordType, ordStatus, limitPrice, stopPrice, ordQty, filledQty, avgPrice, lastQty, lastPrice, stopLimitReady, trailingStopExecPrice, tif, side, execProviderId, portfolioId, strategyId, text, executionReports, commissions, pnl, realizedPnl);
+        return Objects.hashCode(orderId, extOrderId, instId, dateTime, ordType, ordStatus, limitPrice, stopPrice, ordQty, filledQty, avgPrice, lastQty, lastPrice, stopLimitReady, trailingStopExecPrice, tif, side, execProviderId, portfolioId, strategyId, text, executionReports, commissions, pnl, realizedPnl);
     }
 
     public static final EventFactory<Order> FACTORY = new EventFactory(){
@@ -257,6 +262,13 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
 
     public void setOrderId(long orderId) {
         this.orderId = orderId;
+    }
+    public long getExtOrderId() {
+        return extOrderId;
+    }
+
+    public void setExtOrderId(long extOrderId) {
+        this.extOrderId = extOrderId;
     }
 
     public long getInstId() {

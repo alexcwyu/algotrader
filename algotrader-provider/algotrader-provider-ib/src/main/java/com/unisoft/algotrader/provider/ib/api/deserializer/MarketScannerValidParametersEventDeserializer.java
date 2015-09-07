@@ -18,7 +18,7 @@ public class MarketScannerValidParametersEventDeserializer extends Deserializer 
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final String xml = readString(inputStream);
 
         ibProvider.onMarketScannerValidParametersEvent(xml);

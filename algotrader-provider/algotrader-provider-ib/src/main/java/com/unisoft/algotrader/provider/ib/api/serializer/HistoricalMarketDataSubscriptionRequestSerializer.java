@@ -3,6 +3,7 @@ package com.unisoft.algotrader.provider.ib.api.serializer;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
+import com.unisoft.algotrader.provider.ib.IBProvider;
 import com.unisoft.algotrader.provider.ib.api.model.constants.*;
 import com.unisoft.algotrader.utils.DateHelper;
 
@@ -60,7 +61,28 @@ public class HistoricalMarketDataSubscriptionRequestSerializer extends Serialize
         if (Feature.TRADING_CLASS.isSupportedByVersion(getServerCurrentVersion())) {
            builder.append(0); //contract / instrument id
         }
-        super.appendInstrument(builder, instrument);
+
+        builder.append(instrument.getSymbol(IBProvider.PROVIDER_ID));
+        builder.append(SecType.convert(instrument.getType()));
+        if (instrument.getExpiryDate() != null) {
+            builder.append(IBModelUtils.convertDate(instrument.getExpiryDate().getTime()));
+        }
+        else {
+            builder.appendEol();
+        }
+        builder.append(instrument.getStrike());
+        builder.append(OptionRight.convert(instrument.getPutCall()));
+        if (instrument.getFactor() == 0.0 || instrument.getFactor() == 1.0){
+            builder.appendEol();
+        }
+        else {
+            builder.append(instrument.getFactor());
+        }
+        builder.append(instrument.getExchId(IBProvider.PROVIDER_ID));
+        builder.appendEol(); // primary exch
+        builder.append(instrument.getCcyId());
+        builder.appendEol(); //localsymbol
+
         if (Feature.TRADING_CLASS.isSupportedByVersion(getServerCurrentVersion())) {
             builder.appendEol(); // trading class
         }
@@ -68,15 +90,16 @@ public class HistoricalMarketDataSubscriptionRequestSerializer extends Serialize
     }
 
     private void appendCombo(ByteArrayBuilder builder, Instrument instrument) {
-//        if (IBConstants.SecType.COMBO.equals(IBConstants.SecType.convert(instrument.getType()))) {
-//            builder.append(contract.getComboLegs().size());
+        //should never happen
+        if (SecType.COMBO.equals(SecType.convert(instrument.getType()))) {
+            builder.append(0);
 //            for (final ComboLeg comboLeg : contract.getComboLegs()) {
 //                builder.append(comboLeg.getContractId());
 //                builder.append(comboLeg.getRatio());
 //                builder.append(comboLeg.getOrderAction().getAbbreviation());
 //                builder.append(comboLeg.getExchange());
 //            }
-//        }
+        }
     }
 
 }

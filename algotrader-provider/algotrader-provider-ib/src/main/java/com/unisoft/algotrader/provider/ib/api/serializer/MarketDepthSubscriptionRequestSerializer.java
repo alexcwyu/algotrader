@@ -3,14 +3,15 @@ package com.unisoft.algotrader.provider.ib.api.serializer;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.data.MarketDepthSubscriptionKey;
-import com.unisoft.algotrader.provider.ib.api.model.constants.OutgoingMessageId;
+import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.model.constants.*;
 
 /**
  * Created by alex on 8/7/15.
  */
 public class MarketDepthSubscriptionRequestSerializer extends Serializer<MarketDepthSubscriptionKey> {
 
-    private static final int VERSION = 1;
+    private static final int VERSION = 5;
     private final RefDataStore refDataStore;
 
     public MarketDepthSubscriptionRequestSerializer(RefDataStore refDataStore, int serverCurrentVersion){
@@ -28,21 +29,38 @@ public class MarketDepthSubscriptionRequestSerializer extends Serializer<MarketD
         builder.append(subscriptionKey.getSubscriptionId());
         appendInstrument(builder, instrument);
         builder.append(subscriptionKey.numRows);
-
+        if (Feature.LINKING.isSupportedByVersion(getServerCurrentVersion())) {
+            builder.appendEol(); // options
+        }
         return builder.toBytes();
     }
 
     protected void appendInstrument(ByteArrayBuilder builder, Instrument instrument) {
-//        builder.append(instrument.getSymbol(IBProvider.PROVIDER_ID));
-//        builder.append(IBConstants.SecType.convert(instrument.getType()));
-//        builder.append(IBUtils.convertDate(instrument.getExpiryDate().getTime()));
-//        builder.append(instrument.getStrike());
-//        builder.append(IBConstants.OptionRight.convert(instrument.getPutCall()));
-//        builder.append(instrument.getFactor());
-//        builder.append(instrument.getExchId(IBProvider.PROVIDER_ID));
-//        builder.append(instrument.getExchId(IBProvider.PROVIDER_ID));
-//        builder.append(instrument.getCcyId());
-//        builder.appendEol(); //localsymbol
-        super.appendInstrument(builder, instrument);
+        if (Feature.MARKET_DATA_REQUEST_BY_CONTRACT_ID.isSupportedByVersion(getServerCurrentVersion())) {
+            builder.append(0);
+        }
+        builder.append(instrument.getSymbol(IBProvider.PROVIDER_ID));
+        builder.append(SecType.convert(instrument.getType()));
+        if (instrument.getExpiryDate() != null) {
+            builder.append(IBModelUtils.convertDate(instrument.getExpiryDate().getTime()));
+        }
+        else {
+            builder.appendEol();
+        }
+        builder.append(instrument.getStrike());
+        builder.append(OptionRight.convert(instrument.getPutCall()));
+        if (instrument.getFactor() == 0.0 || instrument.getFactor() == 1.0){
+            builder.appendEol();
+        }
+        else {
+            builder.append(instrument.getFactor());
+        }
+        builder.append(instrument.getExchId(IBProvider.PROVIDER_ID));
+        builder.append(instrument.getCcyId());
+        builder.appendEol(); //localsymbol
+
+        if (Feature.TRADING_CLASS.isSupportedByVersion(getServerCurrentVersion())) {
+            builder.appendEol(); // trading class
+        }
     }
 }

@@ -74,6 +74,7 @@ CREATE TABLE IF NOT EXISTS portfolios (
 
 CREATE TABLE IF NOT EXISTS orders (
     order_id bigint,
+    ext_order_id bigint,
     inst_id bigint,
     date_time bigint,
     ord_type text,

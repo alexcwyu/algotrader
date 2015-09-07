@@ -3,6 +3,8 @@ package com.unisoft.algotrader.provider.ib.api.serializer;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
+import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.model.UnderlyingCombo;
 import com.unisoft.algotrader.provider.ib.api.model.constants.*;
 
 /**
@@ -24,7 +26,7 @@ public class PlaceOrderSerializer extends Serializer<Order> {
 
         builder.append(OutgoingMessageId.PLACE_ORDER_REQUEST.getId());
         builder.append(getVersion());
-        builder.append(order.orderId);
+        builder.append(order.getExtOrderId());
         Instrument instrument = refDataStore.getInstrument(order.getInstId());
         appendInstrument(builder, instrument);
         appendOrder(builder, order);
@@ -33,9 +35,30 @@ public class PlaceOrderSerializer extends Serializer<Order> {
 
     protected void appendInstrument(ByteArrayBuilder builder, Instrument instrument) {
         if (Feature.PLACE_ORDER_BY_CONTRACT_ID.isSupportedByVersion(serverCurrentVersion)) {
-            builder.append(instrument.getInstId());
+            //builder.append(instrument.getInstId());
+            builder.append(0); //contract / instrument id
         }
-        super.appendInstrument(builder, instrument);
+        builder.append(instrument.getSymbol(IBProvider.PROVIDER_ID));
+        builder.append(SecType.convert(instrument.getType()));
+        if (instrument.getExpiryDate() != null) {
+            builder.append(IBModelUtils.convertDate(instrument.getExpiryDate().getTime()));
+        }
+        else {
+            builder.appendEol();
+        }
+        builder.append(instrument.getStrike());
+        builder.append(OptionRight.convert(instrument.getPutCall()));
+        if (instrument.getFactor() == 0.0 || instrument.getFactor() == 1.0){
+            builder.appendEol();
+        }
+        else {
+            builder.append(instrument.getFactor());
+        }
+        builder.append(instrument.getExchId(IBProvider.PROVIDER_ID));
+        builder.appendEol(); // primary exch
+        builder.append(instrument.getCcyId());
+        builder.appendEol(); //localsymbol
+
         if (Feature.SECURITY_ID_TYPE.isSupportedByVersion(serverCurrentVersion)) {
             builder.appendEol(); //SecurityIdentifierCode
             builder.appendEol(); //SecurityId
@@ -44,20 +67,22 @@ public class PlaceOrderSerializer extends Serializer<Order> {
 
     private void appendOrder(ByteArrayBuilder builder, Order order){
         builder.append(Action.convert(order.getSide()));
-        builder.append(order.getOrdQty());
+        builder.append((int)order.getOrdQty());
         builder.append(OrderType.convert(order.getOrdType()));
 
         builder.append(order.getLimitPrice());
-        builder.append(order.getStopPrice());
+        if (order.getStopPrice() != 0.0)
+            builder.append(order.getStopPrice());
+        else
+            builder.appendEol();
         builder.append(TIF.convert(order.getTif()));
 
         builder.appendEol(); //OCA Group
         builder.appendEol(); //Account
-        builder.appendEol(); //OpenClose
-        builder.appendEol(); //Origin
+        builder.append("O"); //OpenClose
+        builder.append(0); //Origin
         builder.appendEol(); //OrderReference
-        builder.appendEol(); //OrderReference
-        builder.append(false); //transmit
+        builder.append(true); //transmit
         builder.append(0); //ParentId
 
         builder.append(false); //isBlockOrder
@@ -78,25 +103,25 @@ public class PlaceOrderSerializer extends Serializer<Order> {
         builder.append(0); //ShortSaleSlot
         builder.appendEol(); //DesignatedLocation
         if (Feature.SHORT_SALE_EXEMPT_ORDER_OLD.isSupportedByVersion(serverCurrentVersion)) {
-            builder.append(0); //ExemptionCode
+            builder.append(-1); //ExemptionCode
         }
         builder.append(0); //OcaType
         builder.appendEol(); //Rule80A
         builder.appendEol(); //SettlingFirm
-        builder.append(0); //all or none
-        builder.append(0); //MinimumQuantity
-        builder.append(0.0); //PercentageOffset
+        builder.append(false); //all or none
+        builder.appendEol(); //MinimumQuantity
+        builder.appendEol(); //PercentageOffset
         builder.append(false); //ElectronicTradeOnly
         builder.append(false); //FirmQuoteOnly
-        builder.append(0.0); //NbboPriceCap
+        builder.appendEol(); //NbboPriceCap
         builder.append(0); //AuctionStrategy
-        builder.append(0.0); //StartingPrice
-        builder.append(0.0); //StockReferencePrice
-        builder.append(0.0); //Delta
-        builder.append(0.0); //LowerStockPriceRange
-        builder.append(0.0); //UpperStockPriceRange
+        builder.appendEol(); //StartingPrice
+        builder.appendEol(); //StockReferencePrice
+        builder.appendEol(); //Delta
+        builder.appendEol(); //LowerStockPriceRange
+        builder.appendEol(); //UpperStockPriceRange
         builder.append(false); //overridePercentageConstraints
-        builder.append(0.0); //Volatility
+        builder.appendEol(); //Volatility
         builder.appendEol(); //VolatilityType
         builder.appendEol(); //DeltaNeutralOrderType
         builder.appendEol(); //DeltaNeutralAuxPrice
@@ -105,9 +130,9 @@ public class PlaceOrderSerializer extends Serializer<Order> {
 
         builder.append(0); //ContinuouslyUpdate
         builder.appendEol(); //ReferencePriceType
-        builder.append(0.0); //TrailingStopPrice
+        builder.appendEol(); //TrailingStopPrice
         if (Feature.TRAILING_PERCENT.isSupportedByVersion(serverCurrentVersion)) {
-            builder.append(0.0); //TrailingPercent
+            builder.appendEol(); //TrailingPercent
         }
 
         appendScaleOrders(builder, order);
@@ -146,13 +171,13 @@ public class PlaceOrderSerializer extends Serializer<Order> {
     protected void appendScaleOrders(ByteArrayBuilder builder, Order order) {
 
         if (Feature.SCALE_ORDER.isSupportedByVersion(serverCurrentVersion)) {
-            builder.append(0); //ScaleInitialLevelSize
-            builder.append(0); //ScaleSubsequentLevelSize
+            builder.appendEol(); //ScaleInitialLevelSize
+            builder.appendEol(); //ScaleSubsequentLevelSize
         } else {
             builder.appendEol();
-            builder.append(0); //ScaleInitialLevelSize
+            builder.appendEol(); //ScaleInitialLevelSize
         }
-        builder.append(0.0); //ScalePriceIncrement
+        builder.appendEol(); //ScalePriceIncrement
 
 //        if (Feature.SCALE_ORDERS.isSupportedByVersion(serverCurrentVersion)
 //                && (order.getScalePriceIncrement() > 0) && (order.getScalePriceIncrement() != Double.MAX_VALUE)) {
@@ -177,22 +202,22 @@ public class PlaceOrderSerializer extends Serializer<Order> {
     }
 
     protected void appendDeltaNeutralComboOrder(ByteArrayBuilder builder, Order order) {
-        //        if (Feature.DELTA_NEUTRAL_COMBO_ORDER.isSupportedByVersion(serverCurrentVersion)) {
-//            final UnderlyingCombo underlyingCombo = contract.getUnderlyingCombo();
-//            if (underlyingCombo != null) {
+        if (Feature.DELTA_NEUTRAL_COMBO_ORDER.isSupportedByVersion(serverCurrentVersion)) {
+            final UnderlyingCombo underlyingCombo = null;
+            if (underlyingCombo != null) {
 //                builder.append(true);
 //                builder.append(underlyingCombo.getContractId());
 //                builder.append(underlyingCombo.getDelta());
 //                builder.append(underlyingCombo.getPrice());
-//            } else {
-        builder.append(false);
-//            }
-//        }
+            } else {
+                builder.append(false);
+            }
+        }
     }
 
     protected void appendAlgorithmStrategy(ByteArrayBuilder builder, Order order) {
-        //        if (Feature.ALGORITHM_ORDER.isSupportedByVersion(getServerCurrentVersion())) {
-//            builder.append(order.getAlgorithmStrategy());
+        if (Feature.ALGORITHM_ORDER.isSupportedByVersion(getServerCurrentVersion())) {
+            builder.appendEol(); //AlgorithmStrategy
 //            if (StringUtils.isNotEmpty(order.getAlgorithmStrategy())) {
 //                builder.append(order.getAlgorithmParameters().size());
 //                for (final PairTagValue pairTagValue : order.getAlgorithmParameters()) {
@@ -200,7 +225,7 @@ public class PlaceOrderSerializer extends Serializer<Order> {
 //                    builder.append(pairTagValue.getValue());
 //                }
 //            }
-//        }
+        }
     }
 
 

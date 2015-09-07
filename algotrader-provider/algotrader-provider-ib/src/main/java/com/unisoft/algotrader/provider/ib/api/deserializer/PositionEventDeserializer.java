@@ -22,11 +22,11 @@ public class PositionEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
 
         final String account = readString(inputStream);
 
-        Instrument instrument = parseInstrument(version, inputStream, ibProvider.getRefDataStore());
+        Instrument instrument = consumeInstrument(version, inputStream, ibProvider.getRefDataStore());
 
         final int pos = readInt(inputStream);
         final double avgCost =(version >= 3)? readDouble(inputStream) : 0.0;
@@ -35,7 +35,7 @@ public class PositionEventDeserializer extends Deserializer {
     }
 
 
-    protected Instrument parseInstrument(final int version, final InputStream inputStream, final RefDataStore refDataStore) {
+    protected Instrument consumeInstrument(final int version, final InputStream inputStream, final RefDataStore refDataStore) {
 
         final int instId =readInt(inputStream);
         final String symbol = readString(inputStream);

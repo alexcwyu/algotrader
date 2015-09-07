@@ -18,7 +18,7 @@ public class AccountUpdateTimeEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
         final String time = readString(inputStream);
         ibProvider.onAccountUpdateTimeEvent(time);
 

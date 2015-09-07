@@ -31,15 +31,15 @@ public abstract class Deserializer<M extends Event> {
                      final IBProvider ibProvider) {
         Validate.notNull(inputStream);
         int version = readInt(inputStream);
-        consumeVersionLess(version, inputStream, ibProvider);
+        consumeMessageContent(version, inputStream, ibProvider);
     }
 
     public IncomingMessageId messageId(){
         return messageId;
     }
 
-    public abstract void consumeVersionLess(final int version, final InputStream inputStream,
-            final IBProvider ibProvider);
+    public abstract void consumeMessageContent(final int version, final InputStream inputStream,
+                                               final IBProvider ibProvider);
 
 
 

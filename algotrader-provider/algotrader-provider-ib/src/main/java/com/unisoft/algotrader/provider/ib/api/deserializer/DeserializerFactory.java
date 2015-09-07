@@ -30,7 +30,7 @@ public class DeserializerFactory {
         register(new FinancialAdvisorConfigurationEventDeserializer());
         register(new FundamentalDataEventDeserializer());
         register(new HistoricalDataEventDeserializer());
-        register(new InstrumentSpecificationEventDeserializer());
+        register(new ContractSpecificationEventDeserializer());
         register(new ManagedAccountListEventDeserializer());
         register(new MarketDataTypeEventDeserializer());
         register(new MarketDepthL2UpdateDeserializer());
@@ -39,7 +39,7 @@ public class DeserializerFactory {
         register(new MarketScannerValidParametersEventDeserializer());
         register(new NewsBulletinUpdateDeserializer());
         register(new NextValidOrderIdEventDeserializer());
-        register(new OpenOrderEventDeserializer());
+        register(new RetrieveOpenOrderEventDeserializer());
         register(new OrderStatusDeserializer());
         register(new PortfolioUpdateEventDeserializer());
         register(new PositionEndEventDeserializer());

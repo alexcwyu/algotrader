@@ -22,11 +22,8 @@ public class BondInstrumentSpecificationEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
-        int requestId = -1;
-        if (version >= 3) {
-            requestId = readInt(inputStream);
-        }
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+        int requestId = (version >= 3) ? readInt(inputStream) : -1;
         final InstrumentSpecification instrumentSpecification = consumeInstrumentSpecification(version, inputStream, ibProvider);
 
         ibProvider.onInstrumentSpecificationEvent(requestId, instrumentSpecification);

@@ -3,15 +3,15 @@ package com.unisoft.algotrader.provider.ib.api.serializer;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
-import com.unisoft.algotrader.provider.ib.api.model.constants.OutgoingMessageId;
-import com.unisoft.algotrader.provider.ib.api.model.constants.RealTimeBarDataType;
+import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.model.constants.*;
 
 /**
  * Created by alex on 8/7/15.
  */
 public class RealTimeMarketDataSubscriptionRequestSerializer extends Serializer<SubscriptionKey> {
 
-    private static final int VERSION = 1;
+    private static final int VERSION = 3;
     private final RefDataStore refDataStore;
     private final static int size = 5;
     private final static RealTimeBarDataType type = RealTimeBarDataType.TRADES;
@@ -36,7 +36,41 @@ public class RealTimeMarketDataSubscriptionRequestSerializer extends Serializer<
         builder.append(size);
         builder.append(RealTimeBarDataType.from(subscriptionKey.type));
         builder.append(useRegularTradingHours);
-
+        if (Feature.LINKING.isSupportedByVersion(getServerCurrentVersion())) {
+            builder.appendEol(); // options
+        }
         return builder.toBytes();
+    }
+
+    protected void appendInstrument(ByteArrayBuilder builder, Instrument instrument) {
+
+        if (Feature.TRADING_CLASS.isSupportedByVersion(getServerCurrentVersion())) {
+            builder.append(0); //contract / instrument id
+        }
+
+        builder.append(instrument.getSymbol(IBProvider.PROVIDER_ID));
+        builder.append(SecType.convert(instrument.getType()));
+        if (instrument.getExpiryDate() != null) {
+            builder.append(IBModelUtils.convertDate(instrument.getExpiryDate().getTime()));
+        }
+        else {
+            builder.appendEol();
+        }
+        builder.append(instrument.getStrike());
+        builder.append(OptionRight.convert(instrument.getPutCall()));
+        if (instrument.getFactor() == 0.0 || instrument.getFactor() == 1.0){
+            builder.appendEol();
+        }
+        else {
+            builder.append(instrument.getFactor());
+        }
+        builder.append(instrument.getExchId(IBProvider.PROVIDER_ID));
+        builder.appendEol(); // primary exch
+        builder.append(instrument.getCcyId());
+        builder.appendEol(); //localsymbol
+
+        if (Feature.TRADING_CLASS.isSupportedByVersion(getServerCurrentVersion())) {
+            builder.append(0); //contract / instrument id
+        }
     }
 }

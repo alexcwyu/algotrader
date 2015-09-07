@@ -22,8 +22,8 @@ public class PortfolioUpdateEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeVersionLess(final int version, final InputStream inputStream, final IBProvider ibProvider) {
-        final Instrument instrument = parseInstrument(version, inputStream, ibProvider.getRefDataStore());
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+        final Instrument instrument = consumeInstrument(version, inputStream, ibProvider.getRefDataStore());
         final int position = readInt(inputStream);
         final double marketPrice = readDouble(inputStream);
         final double marketValue = readDouble(inputStream);
@@ -50,8 +50,8 @@ public class PortfolioUpdateEventDeserializer extends Deserializer {
     }
 
 
-    protected Instrument parseInstrument(final int version, final InputStream inputStream, final RefDataStore refDataStore) {
-        final int instId = InputStreamUtils.readInt(inputStream);
+    protected Instrument consumeInstrument(final int version, final InputStream inputStream, final RefDataStore refDataStore) {
+        final int instId = (version >= 6)? InputStreamUtils.readInt(inputStream) : 0;
         final String symbol = readString(inputStream);
         final Instrument.InstType instType = SecType.convert(readString(inputStream));
         final String expString = readString(inputStream);
