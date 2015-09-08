@@ -3,9 +3,9 @@ package com.unisoft.algotrader.provider.ib.api.deserializer;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
-import com.unisoft.algotrader.provider.ib.api.model.constants.IncomingMessageId;
-import com.unisoft.algotrader.provider.ib.api.model.constants.OptionRight;
-import com.unisoft.algotrader.provider.ib.api.model.constants.SecType;
+import com.unisoft.algotrader.provider.ib.api.model.contract.OptionRight;
+import com.unisoft.algotrader.provider.ib.api.model.contract.SecType;
+import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
 import java.io.InputStream;
 

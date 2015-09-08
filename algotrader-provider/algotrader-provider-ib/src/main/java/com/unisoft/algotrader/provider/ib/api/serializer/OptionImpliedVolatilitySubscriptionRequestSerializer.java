@@ -1,0 +1,84 @@
+package com.unisoft.algotrader.provider.ib.api.serializer;
+
+import com.unisoft.algotrader.model.refdata.Instrument;
+import com.unisoft.algotrader.persistence.RefDataStore;
+import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.exception.RequestException;
+import com.unisoft.algotrader.provider.ib.api.model.contract.OptionRight;
+import com.unisoft.algotrader.provider.ib.api.model.contract.SecType;
+import com.unisoft.algotrader.provider.ib.api.model.system.ClientMessageCode;
+import com.unisoft.algotrader.provider.ib.api.model.system.Feature;
+import com.unisoft.algotrader.provider.ib.api.model.system.IBModelUtils;
+import com.unisoft.algotrader.provider.ib.api.model.system.OutgoingMessageId;
+
+/**
+ * Created by alex on 8/7/15.
+ */
+public class OptionImpliedVolatilitySubscriptionRequestSerializer extends Serializer{
+
+    private static final int VERSION = 1;
+    private final RefDataStore refDataStore;
+
+    public OptionImpliedVolatilitySubscriptionRequestSerializer(
+            RefDataStore refDataStore, int serverCurrentVersion){
+        super(serverCurrentVersion);
+        this.refDataStore = refDataStore;
+    }
+
+    public byte [] serialize(final long requestId, final long instId, final double optionPrice, final double underlyingPrice){
+        Instrument instrument = refDataStore.getInstrument(instId);
+        return serialize(requestId, instrument, optionPrice, underlyingPrice);
+    }
+
+    public byte [] serialize(final long requestId, final Instrument instrument, final double optionPrice, final double underlyingPrice){
+        checkCalculateImpliedVolatility();
+        ByteArrayBuilder builder = new ByteArrayBuilder();
+        builder.append(OutgoingMessageId.OPTION_IMPLIED_VOLATILITY_SUBSCRIPTION_REQUEST.getId());
+        builder.append(VERSION);
+        builder.append(requestId);
+        appendInstrument(builder, instrument);
+        builder.append(optionPrice);
+        builder.append(underlyingPrice);
+        return builder.toBytes();
+    }
+
+
+    private void checkCalculateImpliedVolatility() {
+        if (!Feature.CALCULATE_IMPLIED_VOLATILITY.isSupportedByVersion(getServerCurrentVersion())) {
+            throw new RequestException(ClientMessageCode.UPDATE_TWS,
+                    "It does not support calculate implied volatility requests.");
+        }
+    }
+
+
+    protected void appendInstrument(ByteArrayBuilder builder, Instrument instrument) {
+//        if (Feature.MARKET_DATA_REQUEST_BY_CONTRACT_ID.isSupportedByVersion(getServerCurrentVersion())) {
+//            builder.append(0);
+//        }
+        builder.append(0);//id
+        builder.append(instrument.getSymbol(IBProvider.PROVIDER_ID));
+        builder.append(SecType.convert(instrument.getType()));
+        if (instrument.getExpiryDate() != null) {
+            builder.append(IBModelUtils.convertDate(instrument.getExpiryDate().getTime()));
+        }
+        else {
+            builder.appendEol();
+        }
+        builder.append(instrument.getStrike());
+        builder.append(OptionRight.convert(instrument.getPutCall()));
+        if (instrument.getFactor() == 0.0 || instrument.getFactor() == 1.0){
+            builder.appendEol();
+        }
+        else {
+            builder.append(instrument.getFactor());
+        }
+        builder.append(instrument.getExchId(IBProvider.PROVIDER_ID));
+        builder.appendEol(); // primary exch
+        builder.append(instrument.getCcyId());
+        builder.appendEol(); //localsymbol
+//
+//        if (Feature.TRADING_CLASS.isSupportedByVersion(getServerCurrentVersion())) {
+//            builder.appendEol(); // trading class
+//        }
+    }
+}

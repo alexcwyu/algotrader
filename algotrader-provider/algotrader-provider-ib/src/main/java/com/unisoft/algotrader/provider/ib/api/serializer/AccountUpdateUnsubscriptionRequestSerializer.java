@@ -1,11 +1,11 @@
 package com.unisoft.algotrader.provider.ib.api.serializer;
 
-import com.unisoft.algotrader.provider.ib.api.model.constants.OutgoingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.system.OutgoingMessageId;
 
 /**
  * Created by alex on 8/7/15.
  */
-public class AccountUpdateUnsubscriptionRequestSerializer extends Serializer<String> {
+public class AccountUpdateUnsubscriptionRequestSerializer extends Serializer{
 
     private static final int VERSION = 2;
 

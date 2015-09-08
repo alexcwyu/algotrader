@@ -1,12 +1,12 @@
 package com.unisoft.algotrader.provider.ib.api.serializer;
 
-import com.unisoft.algotrader.provider.ib.api.model.constants.FinancialAdvisorDataType;
-import com.unisoft.algotrader.provider.ib.api.model.constants.OutgoingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.fa.FinancialAdvisorDataType;
+import com.unisoft.algotrader.provider.ib.api.model.system.OutgoingMessageId;
 
 /**
  * Created by alex on 8/7/15.
  */
-public class FAConfigurationRequestSerializer extends Serializer<FinancialAdvisorDataType> {
+public class FAConfigurationRequestSerializer extends Serializer{
 
     private static final int VERSION = 1;
 

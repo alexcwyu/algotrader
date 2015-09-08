@@ -1,22 +1,22 @@
 package com.unisoft.algotrader.provider.ib.api.serializer;
 
-import ch.aonyx.broker.ib.api.*;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
 import com.unisoft.algotrader.provider.ib.IBProvider;
-import com.unisoft.algotrader.provider.ib.api.model.constants.*;
-import com.unisoft.algotrader.provider.ib.api.model.constants.Feature;
-import com.unisoft.algotrader.provider.ib.api.model.constants.OutgoingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.contract.OptionRight;
+import com.unisoft.algotrader.provider.ib.api.model.contract.SecType;
+import com.unisoft.algotrader.provider.ib.api.model.system.Feature;
+import com.unisoft.algotrader.provider.ib.api.model.system.IBModelUtils;
+import com.unisoft.algotrader.provider.ib.api.model.system.OutgoingMessageId;
 
 /**
  * Created by alex on 8/7/15.
  */
-public class MarketDataSubscriptionRequestSerializer extends Serializer<SubscriptionKey> {
+public class MarketDataSubscriptionRequestSerializer extends Serializer{
 
     private static final int VERSION = 11;
     private final RefDataStore refDataStore;
-    private final boolean snapshot = false;
 
     public MarketDataSubscriptionRequestSerializer(
             RefDataStore refDataStore, int serverCurrentVersion){
@@ -25,6 +25,10 @@ public class MarketDataSubscriptionRequestSerializer extends Serializer<Subscrip
     }
 
     public byte [] serialize(SubscriptionKey subscriptionKey){
+        return serialize(subscriptionKey, false);
+    }
+
+    public byte [] serialize(SubscriptionKey subscriptionKey, boolean snapshot){
         Instrument instrument = refDataStore.getInstrument(subscriptionKey.instId);
 
         ByteArrayBuilder builder = new ByteArrayBuilder();

@@ -2,7 +2,7 @@ package com.unisoft.algotrader.provider.ib;
 
 import com.unisoft.algotrader.provider.ib.api.deserializer.Deserializer;
 import com.unisoft.algotrader.provider.ib.api.deserializer.DeserializerFactory;
-import com.unisoft.algotrader.provider.ib.api.model.constants.IncomingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

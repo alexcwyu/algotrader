@@ -4,8 +4,14 @@ import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Instrument;
-import com.unisoft.algotrader.provider.ib.api.model.*;
-import com.unisoft.algotrader.provider.ib.api.model.constants.*;
+import com.unisoft.algotrader.provider.ib.api.model.bulletin.NewsBulletinType;
+import com.unisoft.algotrader.provider.ib.api.model.contract.InstrumentSpecification;
+import com.unisoft.algotrader.provider.ib.api.model.contract.UnderlyingCombo;
+import com.unisoft.algotrader.provider.ib.api.model.data.*;
+import com.unisoft.algotrader.provider.ib.api.model.execution.CommissionReport;
+import com.unisoft.algotrader.provider.ib.api.model.fa.FinancialAdvisorDataType;
+import com.unisoft.algotrader.provider.ib.api.model.order.OrderExecution;
+import com.unisoft.algotrader.provider.ib.api.model.order.OrderStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

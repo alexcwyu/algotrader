@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.event;
 
-import com.unisoft.algotrader.provider.ib.api.model.constants.FinancialAdvisorDataType;
+import com.unisoft.algotrader.provider.ib.api.model.fa.FinancialAdvisorDataType;
 
 /**
  * Created by alex on 8/26/15.

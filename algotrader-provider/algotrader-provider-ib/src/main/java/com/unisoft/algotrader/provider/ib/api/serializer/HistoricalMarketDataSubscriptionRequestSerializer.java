@@ -4,7 +4,14 @@ import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
 import com.unisoft.algotrader.provider.ib.IBProvider;
-import com.unisoft.algotrader.provider.ib.api.model.constants.*;
+import com.unisoft.algotrader.provider.ib.api.model.contract.OptionRight;
+import com.unisoft.algotrader.provider.ib.api.model.contract.SecType;
+import com.unisoft.algotrader.provider.ib.api.model.data.BarSize;
+import com.unisoft.algotrader.provider.ib.api.model.data.DateFormat;
+import com.unisoft.algotrader.provider.ib.api.model.data.HistoricalDataType;
+import com.unisoft.algotrader.provider.ib.api.model.system.Feature;
+import com.unisoft.algotrader.provider.ib.api.model.system.IBModelUtils;
+import com.unisoft.algotrader.provider.ib.api.model.system.OutgoingMessageId;
 import com.unisoft.algotrader.utils.DateHelper;
 
 import java.time.Period;
@@ -14,7 +21,7 @@ import java.util.Date;
 /**
  * Created by alex on 8/7/15.
  */
-public class HistoricalMarketDataSubscriptionRequestSerializer extends Serializer<HistoricalSubscriptionKey> {
+public class HistoricalMarketDataSubscriptionRequestSerializer extends Serializer{
 
     private static final int VERSION = 6;
     private final RefDataStore refDataStore;

@@ -2,7 +2,7 @@ package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.google.common.collect.Maps;
 import com.unisoft.algotrader.model.event.Event;
-import com.unisoft.algotrader.provider.ib.api.model.constants.IncomingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
 import java.util.Map;
 

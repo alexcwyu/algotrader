@@ -4,11 +4,11 @@ import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.provider.ib.IBProvider;
 import com.unisoft.algotrader.provider.ib.InputStreamUtils;
-import com.unisoft.algotrader.provider.ib.api.model.InstrumentSpecification;
-import com.unisoft.algotrader.provider.ib.api.model.MarketScannerData;
-import com.unisoft.algotrader.provider.ib.api.model.constants.IncomingMessageId;
-import com.unisoft.algotrader.provider.ib.api.model.constants.OptionRight;
-import com.unisoft.algotrader.provider.ib.api.model.constants.SecType;
+import com.unisoft.algotrader.provider.ib.api.model.contract.InstrumentSpecification;
+import com.unisoft.algotrader.provider.ib.api.model.contract.OptionRight;
+import com.unisoft.algotrader.provider.ib.api.model.contract.SecType;
+import com.unisoft.algotrader.provider.ib.api.model.data.MarketScannerData;
+import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
 import java.io.InputStream;
 import java.util.List;

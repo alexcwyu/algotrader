@@ -15,8 +15,7 @@ import com.unisoft.algotrader.provider.data.SubscriptionKey;
 import com.unisoft.algotrader.provider.execution.ExecutionProvider;
 import com.unisoft.algotrader.provider.ib.api.event.DefaultIBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
-import com.unisoft.algotrader.provider.ib.api.model.constants.FinancialAdvisorDataType;
-import com.unisoft.algotrader.trading.OrderManager;
+import com.unisoft.algotrader.provider.ib.api.model.fa.FinancialAdvisorDataType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

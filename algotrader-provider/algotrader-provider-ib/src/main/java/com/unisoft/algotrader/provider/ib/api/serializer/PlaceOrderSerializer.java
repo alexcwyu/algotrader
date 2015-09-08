@@ -4,13 +4,20 @@ import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
-import com.unisoft.algotrader.provider.ib.api.model.UnderlyingCombo;
-import com.unisoft.algotrader.provider.ib.api.model.constants.*;
+import com.unisoft.algotrader.provider.ib.api.model.contract.OptionRight;
+import com.unisoft.algotrader.provider.ib.api.model.contract.SecType;
+import com.unisoft.algotrader.provider.ib.api.model.contract.UnderlyingCombo;
+import com.unisoft.algotrader.provider.ib.api.model.order.OrderAction;
+import com.unisoft.algotrader.provider.ib.api.model.order.OrderType;
+import com.unisoft.algotrader.provider.ib.api.model.order.TIF;
+import com.unisoft.algotrader.provider.ib.api.model.system.Feature;
+import com.unisoft.algotrader.provider.ib.api.model.system.IBModelUtils;
+import com.unisoft.algotrader.provider.ib.api.model.system.OutgoingMessageId;
 
 /**
  * Created by alex on 8/3/15.
  */
-public class PlaceOrderSerializer extends Serializer<Order> {
+public class PlaceOrderSerializer extends Serializer{
 
     private RefDataStore refDataStore;
 
@@ -19,8 +26,6 @@ public class PlaceOrderSerializer extends Serializer<Order> {
         this.refDataStore = refDataStore;
     }
 
-
-    @Override
     public byte[] serialize(Order order) {
         ByteArrayBuilder builder = new ByteArrayBuilder();
 
@@ -66,7 +71,7 @@ public class PlaceOrderSerializer extends Serializer<Order> {
     }
 
     private void appendOrder(ByteArrayBuilder builder, Order order){
-        builder.append(Action.convert(order.getSide()));
+        builder.append(OrderAction.convert(order.getSide()));
         builder.append((int)order.getOrdQty());
         builder.append(OrderType.convert(order.getOrdType()));
 

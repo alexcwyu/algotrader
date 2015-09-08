@@ -3,7 +3,7 @@ package com.unisoft.algotrader.provider.ib.api.event;
 
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Instrument;
-import com.unisoft.algotrader.provider.ib.api.model.OrderExecution;
+import com.unisoft.algotrader.provider.ib.api.model.order.OrderExecution;
 
 /**
  * Created by alex on 8/26/15.

@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.exception;
 
-import com.unisoft.algotrader.provider.ib.api.model.constants.ClientMessageCode;
+import com.unisoft.algotrader.provider.ib.api.model.system.ClientMessageCode;
 
 /**
  * Created by alex on 8/26/15.

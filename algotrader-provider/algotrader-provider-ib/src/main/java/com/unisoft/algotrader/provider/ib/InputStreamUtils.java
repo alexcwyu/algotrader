@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static com.unisoft.algotrader.provider.ib.api.model.constants.ClientMessageCode.INPUT_OUTPUT_STREAM_EXCEPTION;
+import static com.unisoft.algotrader.provider.ib.api.model.system.ClientMessageCode.INPUT_OUTPUT_STREAM_EXCEPTION;
 
 /**
  * Created by alex on 8/2/15.

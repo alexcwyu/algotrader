@@ -4,12 +4,17 @@ import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
 import com.unisoft.algotrader.provider.ib.IBProvider;
-import com.unisoft.algotrader.provider.ib.api.model.constants.*;
+import com.unisoft.algotrader.provider.ib.api.model.contract.OptionRight;
+import com.unisoft.algotrader.provider.ib.api.model.contract.SecType;
+import com.unisoft.algotrader.provider.ib.api.model.data.RealTimeBarDataType;
+import com.unisoft.algotrader.provider.ib.api.model.system.Feature;
+import com.unisoft.algotrader.provider.ib.api.model.system.IBModelUtils;
+import com.unisoft.algotrader.provider.ib.api.model.system.OutgoingMessageId;
 
 /**
  * Created by alex on 8/7/15.
  */
-public class RealTimeMarketDataSubscriptionRequestSerializer extends Serializer<SubscriptionKey> {
+public class RealTimeMarketDataSubscriptionRequestSerializer extends Serializer{
 
     private static final int VERSION = 3;
     private final RefDataStore refDataStore;

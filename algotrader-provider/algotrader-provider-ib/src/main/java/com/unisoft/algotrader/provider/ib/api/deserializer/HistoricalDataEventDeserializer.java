@@ -2,7 +2,7 @@ package com.unisoft.algotrader.provider.ib.api.deserializer;
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.provider.ib.IBProvider;
-import com.unisoft.algotrader.provider.ib.api.model.constants.IncomingMessageId;
+import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
 import java.io.InputStream;
 import java.util.List;

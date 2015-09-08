@@ -7,8 +7,10 @@ import com.unisoft.algotrader.model.trading.Side;
 import com.unisoft.algotrader.model.trading.TimeInForce;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
-import com.unisoft.algotrader.provider.ib.api.model.OrderExecution;
-import com.unisoft.algotrader.provider.ib.api.model.constants.*;
+import com.unisoft.algotrader.provider.ib.api.model.contract.OptionRight;
+import com.unisoft.algotrader.provider.ib.api.model.contract.SecType;
+import com.unisoft.algotrader.provider.ib.api.model.order.*;
+import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.InputStream;
@@ -57,7 +59,7 @@ public class RetrieveOpenOrderEventDeserializer extends Deserializer {
 
     protected Order consumeOrder(final int version, final InputStream inputStream, final IBProvider ibProvider, final int extOrderId){
 
-        final Side side = Action.convert(readString(inputStream));
+        final Side side = OrderAction.convert(readString(inputStream));
         final int totalQty = readInt(inputStream);
         final OrdType orderType = OrderType.convert(readString(inputStream));
 
@@ -196,7 +198,7 @@ public class RetrieveOpenOrderEventDeserializer extends Deserializer {
                 //contract.addComboLeg(comboLeg);
                 int contractId = readInt(inputStream);
                 int ratio = readInt(inputStream);
-                final Side side1 = Action.convert(readString(inputStream));
+                final Side side1 = OrderAction.convert(readString(inputStream));
                 String exchange = readString(inputStream);
                 int openClose = readInt(inputStream);
                 int shortSaleSlotValue= readInt(inputStream);

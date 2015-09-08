@@ -1,7 +1,7 @@
 package com.unisoft.algotrader.provider.ib.api.event;
 
-import com.unisoft.algotrader.provider.ib.api.model.constants.BookSide;
-import com.unisoft.algotrader.provider.ib.api.model.constants.Operation;
+import com.unisoft.algotrader.provider.ib.api.model.data.BookSide;
+import com.unisoft.algotrader.provider.ib.api.model.data.Operation;
 
 /**
  * Created by alex on 8/26/15.

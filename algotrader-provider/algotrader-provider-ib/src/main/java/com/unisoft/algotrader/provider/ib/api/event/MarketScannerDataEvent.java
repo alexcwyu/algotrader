@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.event;
 
-import com.unisoft.algotrader.provider.ib.api.model.InstrumentSpecification;
+import com.unisoft.algotrader.provider.ib.api.model.contract.InstrumentSpecification;
 
 /**
  * Created by alex on 8/26/15.

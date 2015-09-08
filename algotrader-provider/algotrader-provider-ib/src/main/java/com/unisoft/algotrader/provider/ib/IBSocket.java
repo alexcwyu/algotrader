@@ -4,7 +4,7 @@ import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
-import com.unisoft.algotrader.provider.ib.api.model.constants.FinancialAdvisorDataType;
+import com.unisoft.algotrader.provider.ib.api.model.fa.FinancialAdvisorDataType;
 import com.unisoft.algotrader.provider.ib.api.serializer.*;
 import com.unisoft.algotrader.utils.threading.NamedThreadFactory;
 import org.apache.commons.io.IOUtils;
