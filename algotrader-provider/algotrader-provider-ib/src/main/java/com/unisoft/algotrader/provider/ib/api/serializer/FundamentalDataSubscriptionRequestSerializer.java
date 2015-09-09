@@ -15,7 +15,7 @@ import com.unisoft.algotrader.provider.ib.api.model.system.OutgoingMessageId;
  */
 public class FundamentalDataSubscriptionRequestSerializer extends Serializer{
 
-    private static final int VERSION = 11;
+    private static final int VERSION = 2;
     private final RefDataStore refDataStore;
 
     public FundamentalDataSubscriptionRequestSerializer(
@@ -32,7 +32,7 @@ public class FundamentalDataSubscriptionRequestSerializer extends Serializer{
     public byte [] serialize(long requestId, ReportType reportType, Instrument instrument){
         checkReutersFundamentalDataSupport();
 
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
         builder.append(OutgoingMessageId.FUNDAMENTAL_DATA_SUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);
         builder.append(requestId);
@@ -49,9 +49,9 @@ public class FundamentalDataSubscriptionRequestSerializer extends Serializer{
 
 
     protected void appendInstrument(ByteArrayBuilder builder, Instrument instrument) {
-//        if (Feature.MARKET_DATA_REQUEST_BY_CONTRACT_ID.isSupportedByVersion(getServerCurrentVersion())) {
-//            builder.append(0);
-//        }
+        if (Feature.TRADING_CLASS.isSupportedByVersion(getServerCurrentVersion())) {
+            builder.append(0);
+        }
         builder.append(instrument.getSymbol(IBProvider.PROVIDER_ID));
         builder.append(SecType.convert(instrument.getType()));
 //        if (instrument.getExpiryDate() != null) {

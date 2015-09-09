@@ -18,7 +18,7 @@ public class FundamentalDataUnsubscriptionRequestSerializer extends Serializer{
     public byte [] serialize(long id){
         checkReutersFundamentalDataSupport();
 
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
         builder.append(OutgoingMessageId.FUNDAMENTAL_DATA_UNSUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);
         builder.append(id);

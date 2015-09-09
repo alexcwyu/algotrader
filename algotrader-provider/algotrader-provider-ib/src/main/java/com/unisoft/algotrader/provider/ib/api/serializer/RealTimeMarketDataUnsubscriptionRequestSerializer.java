@@ -13,7 +13,7 @@ public class RealTimeMarketDataUnsubscriptionRequestSerializer extends Serialize
     }
 
     public byte [] serialize(long requestId){
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
 
         builder.append(OutgoingMessageId.REAL_TIME_BAR_UNSUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);

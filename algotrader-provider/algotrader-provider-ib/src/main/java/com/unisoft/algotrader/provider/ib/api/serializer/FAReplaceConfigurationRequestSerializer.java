@@ -16,7 +16,7 @@ public class FAReplaceConfigurationRequestSerializer extends Serializer{
 
     public byte [] serialize(FinancialAdvisorDataType type, String xml){
 
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
 
         builder.append(OutgoingMessageId.FINANCIAL_ADVISOR_REPLACE_CONFIGURATION_REQUEST.getId());
         builder.append(VERSION);

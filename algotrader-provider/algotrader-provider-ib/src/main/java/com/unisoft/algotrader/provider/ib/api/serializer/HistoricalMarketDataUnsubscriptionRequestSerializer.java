@@ -14,7 +14,7 @@ public class HistoricalMarketDataUnsubscriptionRequestSerializer extends Seriali
     }
 
     public byte [] serialize(long requestId){
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
 
         builder.append(OutgoingMessageId.HISTORICAL_DATA_UNSUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);

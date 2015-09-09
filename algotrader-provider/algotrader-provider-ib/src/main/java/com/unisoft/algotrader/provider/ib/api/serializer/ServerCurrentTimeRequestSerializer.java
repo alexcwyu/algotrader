@@ -14,7 +14,7 @@ public class ServerCurrentTimeRequestSerializer extends Serializer{
 
     public byte [] serialize(){
 
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
         builder.append(OutgoingMessageId.SERVER_CURRENT_TIME_REQUEST.getId());
         builder.append(VERSION);
         return builder.toBytes();

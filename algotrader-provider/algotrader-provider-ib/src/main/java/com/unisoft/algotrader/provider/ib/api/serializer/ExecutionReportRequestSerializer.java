@@ -16,7 +16,7 @@ public class ExecutionReportRequestSerializer extends Serializer{
     }
 
     public byte [] serialize(long requestId, ExecutionReportFilter filter){
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
 
         builder.append(OutgoingMessageId.EXECUTION_REPORT_REQUEST.getId());
         builder.append(VERSION);

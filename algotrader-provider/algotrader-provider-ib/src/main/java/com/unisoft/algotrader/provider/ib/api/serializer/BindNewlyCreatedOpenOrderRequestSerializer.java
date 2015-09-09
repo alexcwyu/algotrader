@@ -14,7 +14,7 @@ public class BindNewlyCreatedOpenOrderRequestSerializer extends Serializer{
     }
 
     public byte [] serialize(final boolean bindNewlyCreatedOrder){
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
         builder.append(OutgoingMessageId.BIND_NEWLY_CREATED_OPEN_ORDER_REQUEST.getId());
         builder.append(VERSION);
         builder.append(bindNewlyCreatedOrder);

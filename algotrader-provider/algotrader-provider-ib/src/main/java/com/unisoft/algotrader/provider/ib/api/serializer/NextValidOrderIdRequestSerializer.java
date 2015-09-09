@@ -18,7 +18,7 @@ public class NextValidOrderIdRequestSerializer extends Serializer{
 
     public byte [] serialize(long suggestId){
 
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
         builder.append(OutgoingMessageId.NEXT_VALID_ORDER_ID_REQUEST.getId());
         builder.append(VERSION);
         builder.append(suggestId);

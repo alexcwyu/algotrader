@@ -16,7 +16,7 @@ public class FAConfigurationRequestSerializer extends Serializer{
 
     public byte [] serialize(FinancialAdvisorDataType type){
 
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
 
         builder.append(OutgoingMessageId.FINANCIAL_ADVISOR_CONFIGURATION_REQUEST.getId());
         builder.append(VERSION);

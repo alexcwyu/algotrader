@@ -18,7 +18,7 @@ public class OptionPriceUnsubscriptionRequestSerializer extends Serializer{
     public byte [] serialize(long requestId){
         checkCancelCalculateOptionPrice();
 
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
 
         builder.append(OutgoingMessageId.OPTION_PRICE_UNSUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);

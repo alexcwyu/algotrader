@@ -18,7 +18,7 @@ public class OptionImpliedVolatilityUnsubscriptionRequestSerializer extends Seri
     public byte [] serialize(long requestId){
         checkCalculateImpliedVolatility();
 
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
 
         builder.append(OutgoingMessageId.OPTION_IMPLIED_VOLATILITY_UNSUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);

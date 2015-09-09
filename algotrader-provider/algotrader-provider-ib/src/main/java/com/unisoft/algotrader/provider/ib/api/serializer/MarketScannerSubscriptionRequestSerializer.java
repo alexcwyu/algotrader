@@ -1,22 +1,23 @@
 package com.unisoft.algotrader.provider.ib.api.serializer;
 
 import com.unisoft.algotrader.provider.ib.api.model.data.MarketScannerFilter;
+import com.unisoft.algotrader.provider.ib.api.model.system.Feature;
 import com.unisoft.algotrader.provider.ib.api.model.system.OutgoingMessageId;
+import com.unisoft.algotrader.utils.collection.Tuple2;
 
 /**
  * Created by alex on 8/7/15.
  */
 public class MarketScannerSubscriptionRequestSerializer extends Serializer{
 
-    private static final int VERSION = 3;
+    private static final int VERSION = 4;
 
     public MarketScannerSubscriptionRequestSerializer(int serverCurrentVersion){
         super(serverCurrentVersion);
     }
 
     public byte [] serialize(long requestId, MarketScannerFilter filter){
-        ByteArrayBuilder builder = new ByteArrayBuilder();
-
+        ByteArrayBuilder builder = getByteArrayBuilder();
         builder.append(OutgoingMessageId.MARKET_SCANNER_SUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);
         builder.append(requestId);
@@ -46,6 +47,14 @@ public class MarketScannerSubscriptionRequestSerializer extends Serializer{
         builder.append(marketScannerFilter.getAboveAverageVolumeOption());
         builder.append(marketScannerFilter.getScannerSettingPairs());
         builder.append(marketScannerFilter.getStockType().getLabel());
+
+        if (Feature.LINKING.isSupportedByVersion(getServerCurrentVersion())) {
+            StringBuilder sb = new StringBuilder();
+            for (Tuple2<String, String> option : marketScannerFilter.getScannerOptions()){
+                sb.append(option.getV1()).append("=").append(option.getV2()).append(";");
+            }
+            builder.append(sb.toString());
+        }
     }
 
 }

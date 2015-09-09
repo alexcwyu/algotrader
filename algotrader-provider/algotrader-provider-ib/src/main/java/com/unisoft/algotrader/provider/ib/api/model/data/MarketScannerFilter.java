@@ -2,6 +2,10 @@ package com.unisoft.algotrader.provider.ib.api.model.data;
 
 import ch.aonyx.broker.ib.api.data.scanner.StockType;
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
+import com.unisoft.algotrader.utils.collection.Tuple2;
+
+import java.util.List;
 
 /**
  * Created by alex on 9/9/15.
@@ -31,6 +35,7 @@ public class MarketScannerFilter {
     private String aboveSpRating = EMPTY;
     private String belowSpRating = EMPTY;
     private StockType stockType = StockType.EMPTY;
+    private List<Tuple2<String, String>> scannerOptions = Lists.newArrayList();
 
     public double getAbovePrice() {
         return abovePrice;
@@ -200,6 +205,18 @@ public class MarketScannerFilter {
         this.stockType = stockType;
     }
 
+    public List<Tuple2<String, String>> getScannerOptions() {
+        return scannerOptions;
+    }
+
+    public void setScannerOptions(List<Tuple2<String, String>> scannerOptions) {
+        this.scannerOptions = scannerOptions;
+    }
+
+    public void addScannerOptions(Tuple2<String, String> scannerOption) {
+        this.scannerOptions.add(scannerOption);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -225,12 +242,13 @@ public class MarketScannerFilter {
                 Objects.equal(scannerSettingPairs, that.scannerSettingPairs) &&
                 Objects.equal(aboveSpRating, that.aboveSpRating) &&
                 Objects.equal(belowSpRating, that.belowSpRating) &&
-                Objects.equal(stockType, that.stockType);
+                Objects.equal(stockType, that.stockType) &&
+                Objects.equal(scannerOptions, that.scannerOptions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(abovePrice, aboveVolume, aboveAverageVolumeOption, belowPrice, aboveCouponRate, belowCouponRate, excludeConvertible, instrument, locationCode, aboveMarketCapitalization, belowMarketCapitalization, aboveMaturityDate, belowMaturityDate, aboveMoodyRating, belowMoodyRating, numberOfRows, scannerCode, scannerSettingPairs, aboveSpRating, belowSpRating, stockType);
+        return Objects.hashCode(abovePrice, aboveVolume, aboveAverageVolumeOption, belowPrice, aboveCouponRate, belowCouponRate, excludeConvertible, instrument, locationCode, aboveMarketCapitalization, belowMarketCapitalization, aboveMaturityDate, belowMaturityDate, aboveMoodyRating, belowMoodyRating, numberOfRows, scannerCode, scannerSettingPairs, aboveSpRating, belowSpRating, stockType, scannerOptions);
     }
 
     @Override
@@ -257,6 +275,7 @@ public class MarketScannerFilter {
                 ", aboveSpRating='" + aboveSpRating + '\'' +
                 ", belowSpRating='" + belowSpRating + '\'' +
                 ", stockType=" + stockType +
+                ", scannerOptions=" + scannerOptions +
                 '}';
     }
 }

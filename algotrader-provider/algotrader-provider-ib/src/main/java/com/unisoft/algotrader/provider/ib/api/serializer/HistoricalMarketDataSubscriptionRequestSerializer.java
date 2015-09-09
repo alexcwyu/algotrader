@@ -34,12 +34,13 @@ public class HistoricalMarketDataSubscriptionRequestSerializer extends Serialize
     public byte [] serialize(HistoricalSubscriptionKey subscriptionKey){
         Instrument instrument = refDataStore.getInstrument(subscriptionKey.instId);
 
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
 
         builder.append(OutgoingMessageId.HISTORICAL_DATA_SUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);
         builder.append(subscriptionKey.getSubscriptionId());
         appendInstrument(builder, instrument);
+        builder.append(false); // include expiry
         builder.append(DateHelper.formatYYYYMMDDHHMMSS(subscriptionKey.toDate));
         builder.append(BarSize.getFormattedBarSize(subscriptionKey.barSize));
         Period period = Period.between(
@@ -54,8 +55,8 @@ public class HistoricalMarketDataSubscriptionRequestSerializer extends Serialize
         else {
             builder.append(period.getDays() + " D");
         }
-        builder.append(false);
-        builder.append(HistoricalDataType.from(subscriptionKey.type));
+        builder.append(false); //RTH
+        builder.append(HistoricalDataType.from(subscriptionKey.type)); //What to show
         builder.append(DateFormat.YYYYMMDD__HH_MM_SS.getValue());
         appendCombo(builder, instrument);
         if (Feature.LINKING.isSupportedByVersion(getServerCurrentVersion())) {
@@ -93,7 +94,6 @@ public class HistoricalMarketDataSubscriptionRequestSerializer extends Serialize
         if (Feature.TRADING_CLASS.isSupportedByVersion(getServerCurrentVersion())) {
             builder.appendEol(); // trading class
         }
-        builder.append(false); // include expiry
     }
 
     private void appendCombo(ByteArrayBuilder builder, Instrument instrument) {

@@ -18,7 +18,7 @@ public class CancelAllOrdersRequestSerializer extends Serializer{
     public byte [] serialize(){
         checkGlobalCancelOrderRequest();
 
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
         builder.append(OutgoingMessageId.CANCEL_ALL_ORDERS_REQUEST.getId());
         builder.append(VERSION);
         return builder.toBytes();

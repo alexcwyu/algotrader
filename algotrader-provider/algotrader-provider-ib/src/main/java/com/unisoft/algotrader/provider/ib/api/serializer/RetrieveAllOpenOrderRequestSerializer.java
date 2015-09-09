@@ -14,7 +14,7 @@ public class RetrieveAllOpenOrderRequestSerializer extends Serializer{
 
     public byte [] serialize(){
 
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
         builder.append(OutgoingMessageId.RETRIEVE_ALL_OPEN_ORDER_REQUEST.getId());
         builder.append(VERSION);
         return builder.toBytes();

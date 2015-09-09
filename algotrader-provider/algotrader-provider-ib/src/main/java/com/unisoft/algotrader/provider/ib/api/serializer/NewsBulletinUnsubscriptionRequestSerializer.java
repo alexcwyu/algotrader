@@ -13,7 +13,7 @@ public class NewsBulletinUnsubscriptionRequestSerializer extends Serializer{
     }
 
     public byte [] serialize(){
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
 
         builder.append(OutgoingMessageId.NEWS_BULLETIN_UNSUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);

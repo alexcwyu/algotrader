@@ -16,7 +16,7 @@ import com.unisoft.algotrader.provider.ib.api.model.system.OutgoingMessageId;
  */
 public class OptionPriceSubscriptionRequestSerializer extends Serializer{
 
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
     private final RefDataStore refDataStore;
 
     public OptionPriceSubscriptionRequestSerializer(
@@ -32,7 +32,7 @@ public class OptionPriceSubscriptionRequestSerializer extends Serializer{
 
     public byte [] serialize(final long requestId, final Instrument instrument, final double volatility, final double underlyingPrice){
         checkCancelCalculateOptionPrice();
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
         builder.append(OutgoingMessageId.OPTION_PRICE_SUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);
         builder.append(requestId);
@@ -52,9 +52,7 @@ public class OptionPriceSubscriptionRequestSerializer extends Serializer{
 
 
     protected void appendInstrument(ByteArrayBuilder builder, Instrument instrument) {
-//        if (Feature.MARKET_DATA_REQUEST_BY_CONTRACT_ID.isSupportedByVersion(getServerCurrentVersion())) {
-//            builder.append(0);
-//        }
+
         builder.append(0);//id
         builder.append(instrument.getSymbol(IBProvider.PROVIDER_ID));
         builder.append(SecType.convert(instrument.getType()));
@@ -76,9 +74,9 @@ public class OptionPriceSubscriptionRequestSerializer extends Serializer{
         builder.appendEol(); // primary exch
         builder.append(instrument.getCcyId());
         builder.appendEol(); //localsymbol
-//
-//        if (Feature.TRADING_CLASS.isSupportedByVersion(getServerCurrentVersion())) {
-//            builder.appendEol(); // trading class
-//        }
+
+        if (Feature.TRADING_CLASS.isSupportedByVersion(getServerCurrentVersion())) {
+            builder.appendEol(); // trading class
+        }
     }
 }

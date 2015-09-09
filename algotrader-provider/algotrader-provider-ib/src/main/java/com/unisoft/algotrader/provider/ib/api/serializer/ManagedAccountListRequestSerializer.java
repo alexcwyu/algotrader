@@ -13,7 +13,7 @@ public class ManagedAccountListRequestSerializer extends Serializer{
     }
 
     public byte [] serialize(){
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
         builder.append(OutgoingMessageId.MANAGED_ACCOUNT_LIST_REQUEST.getId());
         builder.append(VERSION);
         return builder.toBytes();

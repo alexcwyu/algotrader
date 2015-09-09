@@ -15,7 +15,7 @@ public class ServerLogLevelRequestSerializer extends Serializer{
 
     public byte [] serialize(LogLevel logLevel){
 
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
         builder.append(OutgoingMessageId.SERVER_LOG_LEVEL_REQUEST.getId());
         builder.append(VERSION);
         builder.append(logLevel.getValue());

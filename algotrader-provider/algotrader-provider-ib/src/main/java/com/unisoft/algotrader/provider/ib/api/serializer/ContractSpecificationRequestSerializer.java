@@ -14,7 +14,7 @@ import com.unisoft.algotrader.provider.ib.api.model.system.OutgoingMessageId;
  */
 public class ContractSpecificationRequestSerializer extends Serializer{
 
-    private static final int VERSION = 6;
+    private static final int VERSION = 7;
     private final RefDataStore refDataStore;
 
     public ContractSpecificationRequestSerializer(
@@ -30,7 +30,7 @@ public class ContractSpecificationRequestSerializer extends Serializer{
 
     public byte [] serialize(long requestId, Instrument instrument){
 
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
         builder.append(OutgoingMessageId.CONTRACT_SPECIFICATION_REQUEST.getId());
         builder.append(VERSION);
         if (Feature.CONTRACT_SPECIFICATION_MARKER.isSupportedByVersion(getServerCurrentVersion())) {
@@ -41,10 +41,9 @@ public class ContractSpecificationRequestSerializer extends Serializer{
     }
 
     protected void appendInstrument(ByteArrayBuilder builder, Instrument instrument) {
-//        if (Feature.MARKET_DATA_REQUEST_BY_CONTRACT_ID.isSupportedByVersion(getServerCurrentVersion())) {
-//            builder.append(0);
-//        }
-        builder.append(0); // instid
+        if (Feature.CONTRACT_CONID.isSupportedByVersion(getServerCurrentVersion())) {
+            builder.append(0);
+        }
         builder.append(instrument.getSymbol(IBProvider.PROVIDER_ID));
         builder.append(SecType.convert(instrument.getType()));
         if (instrument.getExpiryDate() != null) {

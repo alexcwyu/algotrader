@@ -32,15 +32,17 @@ public class RealTimeMarketDataSubscriptionRequestSerializer extends Serializer{
     public byte [] serialize(SubscriptionKey subscriptionKey){
         Instrument instrument = refDataStore.getInstrument(subscriptionKey.instId);
 
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
 
         builder.append(OutgoingMessageId.REAL_TIME_BAR_SUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);
         builder.append(subscriptionKey.getSubscriptionId());
         appendInstrument(builder, instrument);
         builder.append(size);
-        builder.append(RealTimeBarDataType.from(subscriptionKey.type));
-        builder.append(useRegularTradingHours);
+        builder.append(RealTimeBarDataType.from(subscriptionKey.type)); //what to show
+        builder.append(useRegularTradingHours); // RTH
+
+        //realTimeBarsOptions
         if (Feature.LINKING.isSupportedByVersion(getServerCurrentVersion())) {
             builder.appendEol(); // options
         }

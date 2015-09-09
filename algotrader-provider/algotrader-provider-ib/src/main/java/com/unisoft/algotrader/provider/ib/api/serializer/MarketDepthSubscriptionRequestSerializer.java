@@ -40,7 +40,7 @@ public class MarketDepthSubscriptionRequestSerializer extends Serializer{
     }
 
     protected void appendInstrument(ByteArrayBuilder builder, Instrument instrument) {
-        if (Feature.MARKET_DATA_REQUEST_BY_CONTRACT_ID.isSupportedByVersion(getServerCurrentVersion())) {
+        if (Feature.TRADING_CLASS.isSupportedByVersion(getServerCurrentVersion())) {
             builder.append(0);
         }
         builder.append(instrument.getSymbol(IBProvider.PROVIDER_ID));

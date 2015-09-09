@@ -1,26 +1,24 @@
 package com.unisoft.algotrader.provider.ib.api.serializer;
 
+
 import com.unisoft.algotrader.provider.ib.api.model.system.OutgoingMessageId;
 
 /**
- * Created by alex on 8/7/15.
+ * Created by alex on 8/11/15.
  */
-public class MarketDepthUnsubscriptionRequestSerializer extends Serializer{
+public class PositionsCancellationRequestSerializer extends Serializer{
 
     private static final int VERSION = 1;
 
-    public MarketDepthUnsubscriptionRequestSerializer(int serverCurrentVersion){
+    public PositionsCancellationRequestSerializer(int serverCurrentVersion) {
         super(serverCurrentVersion);
     }
 
-    public byte [] serialize(long requestId){
+    public byte[] serialize(long orderId) {
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.MARKET_DEPTH_UNSUBSCRIPTION_REQUEST.getId());
+        builder.append(OutgoingMessageId.CANCEL_POSITIONS_REQUEST.getId());
         builder.append(VERSION);
-        builder.append(requestId);
-
         return builder.toBytes();
     }
-
 }

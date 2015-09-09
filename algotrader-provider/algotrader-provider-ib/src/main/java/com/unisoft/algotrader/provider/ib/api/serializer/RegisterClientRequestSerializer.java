@@ -10,7 +10,7 @@ public class RegisterClientRequestSerializer extends Serializer{
     }
 
     public byte [] serialize(int clientId){
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
         builder.append(clientId);
         return builder.toBytes();
     }

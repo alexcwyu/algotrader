@@ -13,7 +13,7 @@ public class MarketScannerUnsubscriptionRequestSerializer extends Serializer{
     }
 
     public byte [] serialize(long requestId){
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
 
         builder.append(OutgoingMessageId.MARKET_SCANNER_UNSUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);

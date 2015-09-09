@@ -6,6 +6,7 @@ import com.unisoft.algotrader.provider.ib.IBProvider;
 import com.unisoft.algotrader.provider.ib.api.model.contract.OptionRight;
 import com.unisoft.algotrader.provider.ib.api.model.contract.SecType;
 import com.unisoft.algotrader.provider.ib.api.model.order.ExerciseAction;
+import com.unisoft.algotrader.provider.ib.api.model.system.Feature;
 import com.unisoft.algotrader.provider.ib.api.model.system.IBModelUtils;
 import com.unisoft.algotrader.provider.ib.api.model.system.OutgoingMessageId;
 
@@ -14,7 +15,7 @@ import com.unisoft.algotrader.provider.ib.api.model.system.OutgoingMessageId;
  */
 public class ExerciseOptionRequestSerializer extends Serializer{
 
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
     private final RefDataStore refDataStore;
 
     public ExerciseOptionRequestSerializer(
@@ -32,7 +33,7 @@ public class ExerciseOptionRequestSerializer extends Serializer{
     public byte [] serialize(final long requestId, final Instrument instrument, final ExerciseAction action,
                              final int quantity, final String accountName, final boolean override){
 
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
         builder.append(OutgoingMessageId.EXERCISE_OPTION_REQUEST.getId());
         builder.append(VERSION);
         builder.append(requestId);
@@ -45,9 +46,9 @@ public class ExerciseOptionRequestSerializer extends Serializer{
     }
 
     protected void appendInstrument(ByteArrayBuilder builder, Instrument instrument) {
-//        if (Feature.MARKET_DATA_REQUEST_BY_CONTRACT_ID.isSupportedByVersion(getServerCurrentVersion())) {
-//            builder.append(0);
-//        }
+        if (Feature.TRADING_CLASS.isSupportedByVersion(getServerCurrentVersion())) {
+            builder.append(0);
+        }
         builder.append(instrument.getSymbol(IBProvider.PROVIDER_ID));
         builder.append(SecType.convert(instrument.getType()));
         if (instrument.getExpiryDate() != null) {
@@ -68,9 +69,9 @@ public class ExerciseOptionRequestSerializer extends Serializer{
         //builder.appendEol(); // primary exch
         builder.append(instrument.getCcyId());
         builder.appendEol(); //localsymbol
-//
-//        if (Feature.TRADING_CLASS.isSupportedByVersion(getServerCurrentVersion())) {
-//            builder.appendEol(); // trading class
-//        }
+
+        if (Feature.TRADING_CLASS.isSupportedByVersion(getServerCurrentVersion())) {
+            builder.appendEol(); // trading class
+        }
     }
 }

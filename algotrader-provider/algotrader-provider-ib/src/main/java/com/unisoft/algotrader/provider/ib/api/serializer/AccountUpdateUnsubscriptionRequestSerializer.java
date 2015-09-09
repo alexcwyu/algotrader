@@ -15,7 +15,7 @@ public class AccountUpdateUnsubscriptionRequestSerializer extends Serializer{
 
     public byte [] serialize(String accountName){
 
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
 
         builder.append(OutgoingMessageId.ACCOUNT_UPDATE_SUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);

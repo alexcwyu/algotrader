@@ -19,7 +19,7 @@ public class MarketDataTypeRequestSerializer extends Serializer{
     public byte [] serialize(MarketDataType type){
         checkMarketDataTypeRequest();
 
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
         builder.append(OutgoingMessageId.MARKET_DATA_TYPE_REQUEST.getId());
         builder.append(VERSION);
         builder.append(type.getValue());

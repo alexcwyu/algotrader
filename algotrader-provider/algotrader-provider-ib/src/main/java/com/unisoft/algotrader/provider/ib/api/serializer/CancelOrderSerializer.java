@@ -15,7 +15,7 @@ public class CancelOrderSerializer extends Serializer{
     }
 
     public byte[] serialize(long orderId) {
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
 
         builder.append(OutgoingMessageId.CANCEL_ORDER_REQUEST.getId());
         builder.append(VERSION);

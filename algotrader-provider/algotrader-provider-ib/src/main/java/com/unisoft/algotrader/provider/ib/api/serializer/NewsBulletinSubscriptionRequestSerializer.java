@@ -13,7 +13,7 @@ public class NewsBulletinSubscriptionRequestSerializer extends Serializer{
     }
 
     public byte [] serialize(boolean includeExistingDailyNews){
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
 
         builder.append(OutgoingMessageId.NEWS_BULLETIN_SUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);

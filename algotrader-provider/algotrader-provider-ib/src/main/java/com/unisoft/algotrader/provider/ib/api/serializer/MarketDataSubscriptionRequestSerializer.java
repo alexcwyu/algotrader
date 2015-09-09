@@ -31,7 +31,7 @@ public class MarketDataSubscriptionRequestSerializer extends Serializer{
     public byte [] serialize(SubscriptionKey subscriptionKey, boolean snapshot){
         Instrument instrument = refDataStore.getInstrument(subscriptionKey.instId);
 
-        ByteArrayBuilder builder = new ByteArrayBuilder();
+        ByteArrayBuilder builder = getByteArrayBuilder();
 
         builder.append(OutgoingMessageId.MARKET_DATA_SUBSCRIPTION_REQUEST.getId());
         builder.append(VERSION);
@@ -76,15 +76,15 @@ public class MarketDataSubscriptionRequestSerializer extends Serializer{
     }
 
     private void appendCombo(final ByteArrayBuilder builder, final Instrument instrument) {
-//        if (SecurityType.COMBO.equals(contract.getSecurityType())) {
-//            builder.append(contract.getComboLegs().size());
+        if (instrument.getType() == Instrument.InstType.Combo) {
+            builder.append(0); //builder.append(contract.getComboLegs().size());
 //            for (final ComboLeg comboLeg : contract.getComboLegs()) {
 //                builder.append(comboLeg.getContractId());
 //                builder.append(comboLeg.getRatio());
 //                builder.append(comboLeg.getOrderAction().getAbbreviation());
 //                builder.append(comboLeg.getExchange());
 //            }
-//        }
+        }
     }
 
     private void appendUnderlyingCombo(final ByteArrayBuilder builder, final Instrument instrument) {
