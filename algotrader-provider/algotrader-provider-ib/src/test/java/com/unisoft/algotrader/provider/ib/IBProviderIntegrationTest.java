@@ -2,11 +2,9 @@ package com.unisoft.algotrader.provider.ib;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.unisoft.algotrader.config.AppConfigModule;
 import com.unisoft.algotrader.config.SampleAppConfigModule;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Instrument;
-import com.unisoft.algotrader.model.trading.OrdType;
 import com.unisoft.algotrader.model.trading.Side;
 import com.unisoft.algotrader.model.trading.TimeInForce;
 import com.unisoft.algotrader.persistence.RefDataStore;
@@ -19,12 +17,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.Calendar;
 import java.util.Date;
 
-import static com.unisoft.algotrader.model.refdata.Exchange.*;
+import static com.unisoft.algotrader.model.refdata.Exchange.HKEX;
+import static com.unisoft.algotrader.model.refdata.Exchange.IDEALPRO;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**

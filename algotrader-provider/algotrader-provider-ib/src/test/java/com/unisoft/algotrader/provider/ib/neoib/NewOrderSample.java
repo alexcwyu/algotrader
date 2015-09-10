@@ -1,14 +1,12 @@
 package com.unisoft.algotrader.provider.ib.neoib;
 
 import ch.aonyx.broker.ib.api.NeoIbApiClient;
+import ch.aonyx.broker.ib.api.account.PortfolioUpdateEventLoggingListener;
 import ch.aonyx.broker.ib.api.contract.Contract;
-import ch.aonyx.broker.ib.api.data.bar.RealTimeBarDataType;
-import ch.aonyx.broker.ib.api.data.bar.RealTimeBarSubscriptionRequest;
+import ch.aonyx.broker.ib.api.execution.ExecutionReportEndEventLoggingListener;
+import ch.aonyx.broker.ib.api.execution.ExecutionReportEventLoggingListener;
 import ch.aonyx.broker.ib.api.net.ConnectionParameters;
-import ch.aonyx.broker.ib.api.order.Order;
 import ch.aonyx.broker.ib.api.order.*;
-import ch.aonyx.broker.ib.api.account.*;
-import ch.aonyx.broker.ib.api.execution.*;
 /**
  * Created by alex on 6/24/15.
  */

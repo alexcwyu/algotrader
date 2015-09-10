@@ -5,10 +5,6 @@ import com.unisoft.algotrader.model.event.data.DataType;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
 
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
-
 /**
  * Created by alex on 6/16/15.
  */

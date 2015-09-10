@@ -2,7 +2,6 @@ package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
-import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
