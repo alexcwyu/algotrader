@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
-import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
 import java.io.InputStream;
@@ -18,13 +18,13 @@ public class AccountUpdateValueEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBEventHandler eventHandler) {
         final String key = readString(inputStream);
         final String value = readString(inputStream);
         final String currency = readString(inputStream);
         final String accountName = (version >= 2) ? readString(inputStream) : null;
 
-        ibProvider.onAccountUpdateValueEvent(key, value, currency, accountName);
+        eventHandler.onAccountUpdateValueEvent(key, value, currency, accountName);
 
     }
 }

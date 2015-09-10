@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
-import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.order.OrderStatus;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
@@ -19,7 +19,7 @@ public class OrderStatusDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBEventHandler eventHandler) {
         final int orderId = readInt(inputStream);
         final String orderStatus = readString(inputStream);
         final int filledQuantity = readInt(inputStream);
@@ -31,7 +31,7 @@ public class OrderStatusDeserializer extends Deserializer {
         final int clientId =  (version >= 5) ? readInt(inputStream) : 0;
         final String heldCause = (version >= 6) ? readString(inputStream) : null;
 
-        ibProvider.onOrderStatusUpdateEvent(orderId, OrderStatus.fromLabel(orderStatus), filledQuantity, remainingQuantity, averageFilledPrice, permanentId,
+        eventHandler.onOrderStatusUpdateEvent(orderId, OrderStatus.fromLabel(orderStatus), filledQuantity, remainingQuantity, averageFilledPrice, permanentId,
                 parentOrderId, lastFilledPrice, clientId, heldCause);
     }
 }

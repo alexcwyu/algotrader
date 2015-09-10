@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
-import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.data.TickType;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
@@ -20,7 +20,7 @@ public class TickEFPEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBEventHandler eventHandler) {
         final int requestId = readInt(inputStream);
         final int tickType = readInt(inputStream);
         final double basisPoints = readDouble(inputStream);
@@ -31,7 +31,7 @@ public class TickEFPEventDeserializer extends Deserializer {
         final double dividendImpact = readDouble(inputStream);
         final double dividendToExpiry = readDouble(inputStream);
 
-        ibProvider.onTickEfpEvent(requestId, TickType.fromValue(tickType),  basisPoints,
+        eventHandler.onTickEfpEvent(requestId, TickType.fromValue(tickType),  basisPoints,
         formattedBasisPoints, impliedFuturePrice, holdDays,futureExpiry, dividendImpact, dividendToExpiry);
     }
 }

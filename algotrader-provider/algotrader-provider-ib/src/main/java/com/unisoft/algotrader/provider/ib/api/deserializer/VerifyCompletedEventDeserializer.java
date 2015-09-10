@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
-import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
 import java.io.InputStream;
@@ -18,7 +18,7 @@ public class VerifyCompletedEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBEventHandler eventHandler) {
         final boolean isSuccessful = "true".equals(readString(inputStream));
 
         final String errorText = readString(inputStream);
@@ -27,6 +27,6 @@ public class VerifyCompletedEventDeserializer extends Deserializer {
         //if(isSuccessful) {
         // this.m_parent.startAPI();
         //}
-        ibProvider.onVerifyCompletedEvent(isSuccessful, errorText);
+        eventHandler.onVerifyCompletedEvent(isSuccessful, errorText);
     }
 }

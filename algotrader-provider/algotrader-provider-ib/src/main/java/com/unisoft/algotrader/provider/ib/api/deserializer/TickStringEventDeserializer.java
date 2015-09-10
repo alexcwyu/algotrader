@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
-import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.InputStreamUtils;
 import com.unisoft.algotrader.provider.ib.api.model.data.TickType;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
@@ -20,11 +20,11 @@ public class TickStringEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBEventHandler eventHandler) {
         final int requestId = InputStreamUtils.readInt(inputStream);
         final int tickType = InputStreamUtils.readInt(inputStream);
         final String value = readString(inputStream);
 
-        ibProvider.onTickStringEvent(requestId, TickType.fromValue(tickType), value);
+        eventHandler.onTickStringEvent(requestId, TickType.fromValue(tickType), value);
     }
 }

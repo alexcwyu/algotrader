@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
-import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.data.TickType;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
@@ -23,7 +23,7 @@ public class TickOptionComputationEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBEventHandler eventHandler) {
         final int requestId = readInt(inputStream);
         final int tickType = readInt(inputStream);
         final double impliedVolatility = getComputedValue0(inputStream);
@@ -45,7 +45,7 @@ public class TickOptionComputationEventDeserializer extends Deserializer {
             underlyingPrice = getComputedValue0(inputStream);
         }
 
-        ibProvider.onTickOptionComputationEvent(requestId, TickType.fromValue(tickType),
+        eventHandler.onTickOptionComputationEvent(requestId, TickType.fromValue(tickType),
         impliedVolatility, delta, price, presentValueDividend,
         gamma, vega, theta, underlyingPrice);
     }

@@ -7,6 +7,7 @@ import com.unisoft.algotrader.model.trading.Side;
 import com.unisoft.algotrader.model.trading.TimeInForce;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.contract.OptionRight;
 import com.unisoft.algotrader.provider.ib.api.model.contract.SecType;
 import com.unisoft.algotrader.provider.ib.api.model.order.*;
@@ -22,18 +23,20 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.*;
  */
 public class RetrieveOpenOrderEventDeserializer extends Deserializer {
 
+    private final RefDataStore refDataStore;
 
-    public RetrieveOpenOrderEventDeserializer(){
+    public RetrieveOpenOrderEventDeserializer(RefDataStore refDataStore){
         super(IncomingMessageId.RETRIEVE_OPEN_ORDER);
+        this.refDataStore = refDataStore;
     }
 
     @Override
-    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBEventHandler eventHandler) {
         final int orderId = readInt(inputStream);
-        final Instrument instrument = consumeInstrument(version, inputStream, ibProvider.getRefDataStore());
-        Order order = consumeOrder(version, inputStream, ibProvider, orderId);
+        final Instrument instrument = consumeInstrument(version, inputStream, refDataStore);
+        Order order = consumeOrder(version, inputStream, eventHandler, orderId);
         OrderExecution orderExecution = consumeOrderExecution(version, inputStream, order);
-        ibProvider.onRetrieveOpenOrderEvent(orderId, instrument, order, orderExecution);
+        eventHandler.onRetrieveOpenOrderEvent(orderId, instrument, order, orderExecution);
     }
 
     protected Instrument consumeInstrument(final int version, final InputStream inputStream, final RefDataStore refDataStore) {
@@ -57,7 +60,7 @@ public class RetrieveOpenOrderEventDeserializer extends Deserializer {
         return instrument;
     }
 
-    protected Order consumeOrder(final int version, final InputStream inputStream, final IBProvider ibProvider, final int extOrderId){
+    protected Order consumeOrder(final int version, final InputStream inputStream, final IBEventHandler eventHandler, final int extOrderId){
 
         final Side side = OrderAction.convert(readString(inputStream));
         final int totalQty = readInt(inputStream);
@@ -122,7 +125,7 @@ public class RetrieveOpenOrderEventDeserializer extends Deserializer {
             String settlingFirm = readString(inputStream);
             int shortSaleSlot = readInt(inputStream);
             String designatedLocation = readString(inputStream);
-            if (ibProvider.getIbSocket().getServerCurrentVersion() == 51) {
+            if (currentServerVersion == 51) {
                 readInt(inputStream);
             } else if (version >= 23) {
                 int exemptionCode = readInt(inputStream);
@@ -174,7 +177,7 @@ public class RetrieveOpenOrderEventDeserializer extends Deserializer {
                 }
             }
             int continuouslyUpdate = readInt(inputStream);
-            if (ibProvider.getIbSocket().getServerCurrentVersion() == 26) {
+            if (currentServerVersion == 26) {
                 double lowerStockPriceRange = readDouble(inputStream);
                 double upperStockPriceRange = readDouble(inputStream);
             }

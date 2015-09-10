@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
-import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.data.TickType;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
@@ -20,7 +20,7 @@ public class TickPriceDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBEventHandler eventHandler) {
 
         final int requestId = readInt(inputStream);
         final int tickType = readInt(inputStream);
@@ -30,7 +30,7 @@ public class TickPriceDeserializer extends Deserializer {
         final int autoExecute = (version >= VERSION_3) ? readInt(inputStream) : 0;
 
         TickType tickPriceType = TickType.fromValue(tickType);
-        ibProvider.onTickPriceEvent(requestId, tickPriceType, price, autoExecute);
+        eventHandler.onTickPriceEvent(requestId, tickPriceType, price, autoExecute);
 
         if (version >= VERSION_2) {
             int sizeTickType = TickType.UNKNOWN.getValue();
@@ -49,7 +49,7 @@ public class TickPriceDeserializer extends Deserializer {
                     break;
             }
             if (sizeTickType != TickType.UNKNOWN.getValue()) {
-                ibProvider.onTickSizeEvent(requestId, TickType.fromValue(sizeTickType), size);
+                eventHandler.onTickSizeEvent(requestId, TickType.fromValue(sizeTickType), size);
             }
         }
     }

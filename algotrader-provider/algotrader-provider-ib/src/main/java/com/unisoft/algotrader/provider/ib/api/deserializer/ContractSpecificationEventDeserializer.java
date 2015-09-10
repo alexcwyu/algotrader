@@ -1,7 +1,9 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.unisoft.algotrader.model.refdata.Instrument;
+import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.contract.InstrumentSpecification;
 import com.unisoft.algotrader.provider.ib.api.model.contract.OptionRight;
 import com.unisoft.algotrader.provider.ib.api.model.contract.SecType;
@@ -16,22 +18,23 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.*;
  */
 public class ContractSpecificationEventDeserializer extends Deserializer {
 
+    private final RefDataStore refDataStore;
 
-
-    public ContractSpecificationEventDeserializer(){
+    public ContractSpecificationEventDeserializer(RefDataStore refDataStore){
         super(IncomingMessageId.CONTRACT_SPECIFICATION);
+        this.refDataStore = refDataStore;
     }
 
     @Override
-    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBEventHandler eventHandler) {
         final int requestId = (version >= 3) ? readInt(inputStream) : -1;
-        final InstrumentSpecification instrumentSpecification = consumeInstrumentSpecification(version, inputStream, ibProvider);
+        final InstrumentSpecification instrumentSpecification = consumeInstrumentSpecification(version, inputStream, eventHandler);
 
-        ibProvider.onInstrumentSpecificationEvent(requestId, instrumentSpecification);
+        eventHandler.onInstrumentSpecificationEvent(requestId, instrumentSpecification);
     }
 
 
-    private InstrumentSpecification consumeInstrumentSpecification(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    private InstrumentSpecification consumeInstrumentSpecification(final int version, final InputStream inputStream, final IBEventHandler eventHandler) {
         final InstrumentSpecification instrumentSpecification = new InstrumentSpecification();
         final String symbol = readString(inputStream);
         final Instrument.InstType instType = SecType.convert(readString(inputStream));
@@ -63,7 +66,7 @@ public class ContractSpecificationEventDeserializer extends Deserializer {
             primaryExchange = readString(inputStream);
         }
 
-        Instrument instrument = ibProvider.getRefDataStore().getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
+        Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
         instrumentSpecification.setInstrument(instrument);
 
         if (version >= 6) {

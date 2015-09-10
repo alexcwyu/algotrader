@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
-import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.data.BookSide;
 import com.unisoft.algotrader.provider.ib.api.model.data.Operation;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
@@ -21,7 +21,7 @@ public class MarketDepthUpdateDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBEventHandler eventHandler) {
         final int requestId = readInt(inputStream);
         final int rowId = readInt(inputStream);
         final int operation = readInt(inputStream);
@@ -29,7 +29,7 @@ public class MarketDepthUpdateDeserializer extends Deserializer {
         final double price = readDouble(inputStream);
         final int size = readInt(inputStream);
 
-        ibProvider.onMarketDepthUpdateEvent(requestId, rowId, Operation.fromValue(operation),
+        eventHandler.onMarketDepthUpdateEvent(requestId, rowId, Operation.fromValue(operation),
                 BookSide.fromValue(bookSide), price, size);
     }
 }

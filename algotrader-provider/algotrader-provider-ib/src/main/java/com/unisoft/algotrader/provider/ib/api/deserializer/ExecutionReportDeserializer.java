@@ -2,7 +2,9 @@ package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.refdata.Instrument;
+import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.InputStreamUtils;
 import com.unisoft.algotrader.provider.ib.api.model.contract.OptionRight;
 import com.unisoft.algotrader.provider.ib.api.model.contract.SecType;
@@ -19,21 +21,23 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.*;
  */
 public class ExecutionReportDeserializer extends Deserializer {
 
+    private final RefDataStore refDataStore;
 
-    public ExecutionReportDeserializer(){
+    public ExecutionReportDeserializer(RefDataStore refDataStore){
         super(IncomingMessageId.EXECUTION_REPORT);
+        this.refDataStore = refDataStore;
     }
 
     @Override
-    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBEventHandler eventHandler) {
         int requestId = (version >= 7) ? readInt(inputStream) : -1;
         final int orderId = readInt(inputStream);
-        final Instrument instrument = consumeInstrument(version, inputStream, ibProvider);
+        final Instrument instrument = consumeInstrument(version, inputStream, eventHandler);
         final ExecutionReport executionReport = consumeExecutionReport(version, inputStream, orderId);
-        ibProvider.onExecutionReportEvent(requestId, instrument, executionReport);
+        eventHandler.onExecutionReportEvent(requestId, instrument, executionReport);
     }
 
-    protected Instrument consumeInstrument(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    protected Instrument consumeInstrument(final int version, final InputStream inputStream, final IBEventHandler eventHandler) {
         final int instId = (version >= 5)? InputStreamUtils.readInt(inputStream) : 0;
         final String symbol = readString(inputStream);
         final Instrument.InstType instType = SecType.convert(readString(inputStream));
@@ -46,7 +50,7 @@ public class ExecutionReportDeserializer extends Deserializer {
         final String localSymbol = readString(inputStream);
         final String tradingClass = (version >= 10)? readString(inputStream) : null;
 
-        Instrument instrument = ibProvider.getRefDataStore().getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
+        Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
         if (instrument == null){
             throw new RuntimeException("Cannot find instrumnet symbol=" + symbol +", primaryExchange="+exchange);
         }

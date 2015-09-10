@@ -3,6 +3,7 @@ package com.unisoft.algotrader.provider.ib.api.deserializer;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.contract.OptionRight;
 import com.unisoft.algotrader.provider.ib.api.model.contract.SecType;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
@@ -16,22 +17,24 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.*;
  */
 public class PositionEventDeserializer extends Deserializer {
 
+    private final RefDataStore refDataStore;
 
-    public PositionEventDeserializer(){
+    public PositionEventDeserializer(RefDataStore refDataStore){
         super(IncomingMessageId.POSITION);
+        this.refDataStore = refDataStore;
     }
 
     @Override
-    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBEventHandler eventHandler) {
 
         final String account = readString(inputStream);
 
-        Instrument instrument = consumeInstrument(version, inputStream, ibProvider.getRefDataStore());
+        Instrument instrument = consumeInstrument(version, inputStream, refDataStore);
 
         final int pos = readInt(inputStream);
         final double avgCost =(version >= 3)? readDouble(inputStream) : 0.0;
 
-        ibProvider.onPositionEvent(account, instrument, pos, avgCost);
+        eventHandler.onPositionEvent(account, instrument, pos, avgCost);
     }
 
 

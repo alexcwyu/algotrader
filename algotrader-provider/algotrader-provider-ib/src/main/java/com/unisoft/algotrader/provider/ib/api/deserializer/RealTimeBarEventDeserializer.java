@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
-import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
 import java.io.InputStream;
@@ -18,7 +18,7 @@ public class RealTimeBarEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBEventHandler eventHandler) {
         final int requestId = readInt(inputStream);
         final long timestamp = readLong(inputStream);
         final double open = readDouble(inputStream);
@@ -28,7 +28,7 @@ public class RealTimeBarEventDeserializer extends Deserializer {
         final long volume = readLong(inputStream);
         final double weightedAveragePrice = readDouble(inputStream);
         final int tradeNumber = readInt(inputStream);
-        ibProvider.onRealTimeBarEvent(requestId, timestamp, open,
+        eventHandler.onRealTimeBarEvent(requestId, timestamp, open,
         high, low, close, volume, weightedAveragePrice,  tradeNumber);
     }
 }

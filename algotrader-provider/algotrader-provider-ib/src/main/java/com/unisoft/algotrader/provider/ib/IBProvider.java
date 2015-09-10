@@ -59,7 +59,7 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
         providerManager.addExecutionProvider(this);
         providerManager.addHistoricalDataProvider(this);
         providerManager.addRealTimeDataProvider(this);
-        this.ibSocket = new IBSocket(this);
+        this.ibSocket = new IBSocket(config, this, refDataStore);
     }
 
     @Override

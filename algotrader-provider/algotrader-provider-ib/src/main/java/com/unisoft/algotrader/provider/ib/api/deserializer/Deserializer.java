@@ -1,7 +1,8 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.unisoft.algotrader.model.event.Event;
-import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
@@ -23,15 +24,17 @@ public abstract class Deserializer<M extends Event> {
 
     private final IncomingMessageId messageId;
 
+    protected int currentServerVersion;
+
     public Deserializer(IncomingMessageId messageId){
         this.messageId = messageId;
     }
 
     public void consume(final InputStream inputStream,
-                     final IBProvider ibProvider) {
+                     final IBEventHandler eventHandler) {
         Validate.notNull(inputStream);
         int version = readInt(inputStream);
-        consumeMessageContent(version, inputStream, ibProvider);
+        consumeMessageContent(version, inputStream, eventHandler);
     }
 
     public IncomingMessageId messageId(){
@@ -39,8 +42,11 @@ public abstract class Deserializer<M extends Event> {
     }
 
     public abstract void consumeMessageContent(final int version, final InputStream inputStream,
-                                               final IBProvider ibProvider);
+                                               final IBEventHandler eventHandler);
 
 
+    protected void setCurrentServerVersion(int currentServerVersion){
+        this.currentServerVersion = currentServerVersion;
+    }
 
 }

@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
-import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
 import java.io.InputStream;
@@ -19,15 +19,15 @@ public class ServerMessageDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBEventHandler eventHandler) {
         if (version < VERSION_2) {
             final String message = readString(inputStream);
-            ibProvider.onServerMessageEvent(-1, 0, message);
+            eventHandler.onServerMessageEvent(-1, 0, message);
         } else {
             final int requestId = readInt(inputStream);
             final int code = readInt(inputStream);
             final String message = readString(inputStream);
-            ibProvider.onServerMessageEvent(requestId, code, message);
+            eventHandler.onServerMessageEvent(requestId, code, message);
         }
     }
 }

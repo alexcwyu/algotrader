@@ -4,6 +4,7 @@ import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.fa.FinancialAdvisorDataType;
 import com.unisoft.algotrader.provider.ib.api.serializer.*;
 import com.unisoft.algotrader.utils.threading.NamedThreadFactory;
@@ -25,7 +26,9 @@ public class IBSocket {
 
     private static final Logger LOG = LogManager.getLogger(IBSocket.class);
 
-    private final IBProvider ibProvider;
+    private final IBConfig ibConfig;
+    private final IBEventHandler eventHandler;
+    private final RefDataStore refDataStore;
     private final ExecutorService executor = Executors.newFixedThreadPool(1, new NamedThreadFactory("IBConnection"));
 
     private int serverCurrentVersion;
@@ -45,8 +48,10 @@ public class IBSocket {
     private HistoricalMarketDataSubscriptionRequestSerializer historicalMarketDataRequestSerializer;
     private HistoricalMarketDataUnsubscriptionRequestSerializer historicalMarketDataUnsubscriptionRequestSerializer;
 
-    public IBSocket(IBProvider ibProvider){
-        this.ibProvider = ibProvider;
+    public IBSocket(IBConfig ibConfig, IBEventHandler eventHandler, RefDataStore refDataStore){
+        this.ibConfig = ibConfig;
+        this.eventHandler = eventHandler;
+        this.refDataStore = refDataStore;
     }
 
     public int getServerCurrentVersion() {
@@ -58,7 +63,6 @@ public class IBSocket {
 
     public void connect(){
         try {
-            IBConfig ibConfig = ibProvider.getConfig();
             this.socket = new Socket(ibConfig.host, ibConfig.port);
             this.outputStream = new DataOutputStream(socket.getOutputStream());
             this.inputStream = new DataInputStream(socket.getInputStream());
@@ -77,7 +81,6 @@ public class IBSocket {
     private void handShake() {
         try {
             ByteArrayBuilder builder = new ByteArrayBuilder();
-            IBConfig ibConfig = ibProvider.getConfig();
             //set client version
             LOG.info("writing client version {}", ibConfig.currentVersion);
             builder.append(ibConfig.currentVersion);
@@ -109,7 +112,6 @@ public class IBSocket {
     }
 
     private void initSerializer(){
-        RefDataStore refDataStore = ibProvider.getRefDataStore();
         accountUpdateSubscriptionRequestSerializer = new AccountUpdateSubscriptionRequestSerializer(serverCurrentVersion);
         faConfigurationRequestSerializer = new FAConfigurationRequestSerializer(serverCurrentVersion);
         placeOrderRequestSerializer = new PlaceOrderSerializer(refDataStore, serverCurrentVersion);
@@ -121,7 +123,7 @@ public class IBSocket {
     }
 
     private void initInputStreamConsumer(){
-        inputStreamConsumer = new EventInputStreamConsumer(ibProvider, this);
+        inputStreamConsumer = new EventInputStreamConsumer(eventHandler, this, serverCurrentVersion, refDataStore);
         executor.submit(this.inputStreamConsumer);
     }
 

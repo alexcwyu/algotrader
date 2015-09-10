@@ -3,6 +3,7 @@ package com.unisoft.algotrader.provider.ib.api.deserializer;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.InputStreamUtils;
 import com.unisoft.algotrader.provider.ib.api.model.contract.OptionRight;
 import com.unisoft.algotrader.provider.ib.api.model.contract.SecType;
@@ -17,13 +18,16 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.*;
  */
 public class PortfolioUpdateEventDeserializer extends Deserializer {
 
-    public PortfolioUpdateEventDeserializer(){
+    private final RefDataStore refDataStore;
+
+    public PortfolioUpdateEventDeserializer(RefDataStore refDataStore){
         super(IncomingMessageId.PORTFOLIO_UPDATE);
+        this.refDataStore = refDataStore;
     }
 
     @Override
-    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
-        final Instrument instrument = consumeInstrument(version, inputStream, ibProvider.getRefDataStore());
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBEventHandler eventHandler) {
+        final Instrument instrument = consumeInstrument(version, inputStream, refDataStore);
         final int position = readInt(inputStream);
         final double marketPrice = readDouble(inputStream);
         final double marketValue = readDouble(inputStream);
@@ -39,12 +43,12 @@ public class PortfolioUpdateEventDeserializer extends Deserializer {
         if (version >= 4) {
             accountName = readString(inputStream);
         }
-        if ((version == 6) && (ibProvider.getIbSocket().getServerCurrentVersion() == 39)) {
+        if ((version == 6) && (currentServerVersion == 39)) {
             final String primaryExchange = readString(inputStream);
             //instrument.setExchId(exchId);
         }
 
-        ibProvider.onPortfolioUpdateEvent(instrument, position, marketPrice, marketValue, averageCost, unrealizedProfitAndLoss,
+        eventHandler.onPortfolioUpdateEvent(instrument, position, marketPrice, marketValue, averageCost, unrealizedProfitAndLoss,
                 realizedProfitAndLoss, accountName);
 
     }

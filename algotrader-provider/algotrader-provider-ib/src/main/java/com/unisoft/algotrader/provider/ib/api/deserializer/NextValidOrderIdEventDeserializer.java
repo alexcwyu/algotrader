@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
-import com.unisoft.algotrader.provider.ib.IBProvider;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.InputStreamUtils;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
@@ -17,9 +17,9 @@ public class NextValidOrderIdEventDeserializer extends Deserializer {
     }
 
     @Override
-    public void consumeMessageContent(final int version, final InputStream inputStream, final IBProvider ibProvider) {
+    public void consumeMessageContent(final int version, final InputStream inputStream, final IBEventHandler eventHandler) {
         final int nextValidOrderId = InputStreamUtils.readInt(inputStream);
-        ibProvider.onNextValidOrderIdEvent(nextValidOrderId);
+        eventHandler.onNextValidOrderIdEvent(nextValidOrderId);
 
     }
 }

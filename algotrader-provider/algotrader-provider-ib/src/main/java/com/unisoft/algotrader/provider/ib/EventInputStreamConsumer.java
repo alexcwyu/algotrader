@@ -1,7 +1,9 @@
 package com.unisoft.algotrader.provider.ib;
 
+import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.api.deserializer.Deserializer;
 import com.unisoft.algotrader.provider.ib.api.deserializer.DeserializerFactory;
+import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
@@ -19,17 +21,19 @@ public class EventInputStreamConsumer implements Runnable {
     private static final Logger LOG = LogManager.getLogger(EventInputStreamConsumer.class);
     
     private final DeserializerFactory deserializerFactory;
-    private final IBProvider ibProvider;
+    private final IBEventHandler eventHandler;
     private final IBSocket ibSocket;
     private final InputStream inputStream;
     private boolean running = true;
 
     public EventInputStreamConsumer(
-            IBProvider ibProvider,
-            IBSocket ibSocket){
-        this.ibProvider = ibProvider;
+            IBEventHandler eventHandler,
+            IBSocket ibSocket,
+            int currentServerVersion,
+            RefDataStore refDataStore){
+        this.eventHandler = eventHandler;
         this.ibSocket = ibSocket;
-        this.deserializerFactory = new DeserializerFactory();
+        this.deserializerFactory = new DeserializerFactory(currentServerVersion, refDataStore);
         this.inputStream = ibSocket.getInputStream();
     }
 
@@ -54,7 +58,7 @@ public class EventInputStreamConsumer implements Runnable {
         final Deserializer serializer =
                 deserializerFactory.getDeserializer(incomingMessageId);
         LOG.info("consumeMessage, incomingMessageId {}", incomingMessageId);
-        serializer.consume(inputStream, ibProvider);
+        serializer.consume(inputStream, eventHandler);
     }
 
     public void stop(){
