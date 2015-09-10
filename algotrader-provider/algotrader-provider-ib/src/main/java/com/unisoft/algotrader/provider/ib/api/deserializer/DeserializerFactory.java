@@ -19,6 +19,7 @@ public class DeserializerFactory {
     public DeserializerFactory(int currentServerVersion, RefDataStore refDataStore){
         this.currentServerVersion = currentServerVersion;
         this.refDataStore = refDataStore;
+        init();
     }
 
     private void init(){

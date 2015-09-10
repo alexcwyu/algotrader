@@ -39,6 +39,7 @@ public class IBSocket {
 
     private Lock lock = new ReentrantLock();
 
+    private StartAPISerializer startAPISerializer;
     private AccountUpdateSubscriptionRequestSerializer accountUpdateSubscriptionRequestSerializer;
     private FAConfigurationRequestSerializer faConfigurationRequestSerializer;
     private RealTimeMarketDataSubscriptionRequestSerializer realTimeMarketDataRequestSerializer;
@@ -68,7 +69,6 @@ public class IBSocket {
             this.inputStream = new DataInputStream(socket.getInputStream());
 
             handShake();
-            initSerializer();
             initInputStreamConsumer();
             //requestAccountUpdate(null);
         }
@@ -95,15 +95,23 @@ public class IBSocket {
             String serverTime = InputStreamUtils.readString(inputStream);
             LOG.info("server time: {}", serverTime);
 
+            //start Serializer
+            initSerializer();
+
             if (serverCurrentVersion < ibConfig.minVersion) {
                 final String detailedMessage = "Minimum server version required '" + ibConfig.minVersion
                         + "', current server version '" + serverCurrentVersion + "'";
                 throw new Exception(detailedMessage);
             } else {
                 //set client id
-                builder.append(ibConfig.clientId);
-                send(builder.toBytes());
-                builder.clear();
+                if (serverCurrentVersion < 70) {
+                    builder.append(ibConfig.clientId);
+                    send(builder.toBytes());
+                    builder.clear();
+                }
+                else{
+                    send(startAPISerializer.serialize(ibConfig.clientId));
+                }
             }
         } catch (final Exception e) {
             LOG.error(e);
@@ -112,6 +120,7 @@ public class IBSocket {
     }
 
     private void initSerializer(){
+        startAPISerializer = new StartAPISerializer(serverCurrentVersion);
         accountUpdateSubscriptionRequestSerializer = new AccountUpdateSubscriptionRequestSerializer(serverCurrentVersion);
         faConfigurationRequestSerializer = new FAConfigurationRequestSerializer(serverCurrentVersion);
         placeOrderRequestSerializer = new PlaceOrderSerializer(refDataStore, serverCurrentVersion);

@@ -90,7 +90,7 @@ public class IBProviderIntegrationTest {
     public void testSubmitOrder()throws Exception{
         Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange("EURUSD", IDEALPRO.getExchId());
         Order order = orderManager.newLimitOrder(instrument.getInstId(), "Test", IBProvider.PROVIDER_ID, Side.Buy, 1.1, 1000000, TimeInForce.Day);
-        order.orderId = 8;
+        order.orderId = 12;
         provider.onNewOrderRequest(order);
         Thread.sleep(5000);
 

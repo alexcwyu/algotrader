@@ -69,8 +69,8 @@ public class RetrieveOpenOrderEventDeserializer extends Deserializer {
 //        final double limitPrice = (version < 29)? readDouble(inputStream) : readDoubleMax(inputStream);
 //        final double stopPrice = (version < 30) ? readDouble(inputStream) : readDoubleMax(inputStream);
 
-        final double limitPrice = (version < 29)? readDouble(inputStream) : 0.0;
-        final double stopPrice = (version < 30) ? readDouble(inputStream) : 0.0;
+        final double limitPrice = (version < 29)? readDouble(inputStream) : readDoubleMax(inputStream);
+        final double stopPrice = (version < 30) ? readDouble(inputStream) : readDoubleMax(inputStream);
 
         final TimeInForce tif = TIF.convert(readString(inputStream));
 

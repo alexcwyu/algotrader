@@ -129,7 +129,7 @@ public class PlaceOrderSerializer extends Serializer{
         builder.append(false); //ElectronicTradeOnly
         builder.append(false); //FirmQuoteOnly
         builder.appendEol(); //NbboPriceCap
-        builder.append(0); //AuctionStrategy
+        builder.appendEol(); //AuctionStrategy
         builder.appendEol(); //StartingPrice
         builder.appendEol(); //StockReferencePrice
         builder.appendEol(); //Delta
@@ -221,7 +221,7 @@ public class PlaceOrderSerializer extends Serializer{
     }
 
     protected void appendDeltaNeutralComboOrderByContractId(ByteArrayBuilder builder, Order order) {
-               if (Feature.DELTA_NEUTRAL_COMBO_ORDER_BY_CONTRACT_ID.isSupportedByVersion(getServerCurrentVersion())) {
+        if (Feature.DELTA_NEUTRAL_COMBO_ORDER_BY_CONTRACT_ID.isSupportedByVersion(getServerCurrentVersion())) {
 //            if (StringUtils.isNotEmpty(order.getDeltaNeutralOrderType())) {
 //                builder.append(order.getDeltaNeutralContractId());
 //                builder.append(order.getDeltaNeutralSettlingFirm());
@@ -265,9 +265,9 @@ public class PlaceOrderSerializer extends Serializer{
         }
 
         if (Feature.SCALE_TABLE.isSupportedByVersion(serverCurrentVersion)) {
-//            builder.append(order.getScaleTable());
-//            builder.append(order.getActiveStartTime());
-//            builder.append(order.getActiveStopTime());
+            builder.appendEol(); //ScaleTable
+            builder.appendEol(); //ActiveStartTime
+            builder.appendEol(); //ActiveStopTime
         }
     }
 
@@ -283,15 +283,15 @@ public class PlaceOrderSerializer extends Serializer{
 
     protected void appendDeltaNeutralComboOrder(ByteArrayBuilder builder, Order order) {
         if (Feature.DELTA_NEUTRAL_COMBO_ORDER.isSupportedByVersion(serverCurrentVersion)) {
-            final UnderlyingCombo underlyingCombo = null;
-            if (underlyingCombo != null) {
-                builder.append(true);
-                builder.append(underlyingCombo.getInstId());
-                builder.append(underlyingCombo.getDelta());
-                builder.append(underlyingCombo.getPrice());
-            } else {
+//            final UnderlyingCombo underlyingCombo = null;
+//            if (underlyingCombo != null) {
+//                builder.append(true);
+//                builder.append(underlyingCombo.getInstId());
+//                builder.append(underlyingCombo.getDelta());
+//                builder.append(underlyingCombo.getPrice());
+//            } else {
                 builder.append(false);
-            }
+//            }
         }
     }
 

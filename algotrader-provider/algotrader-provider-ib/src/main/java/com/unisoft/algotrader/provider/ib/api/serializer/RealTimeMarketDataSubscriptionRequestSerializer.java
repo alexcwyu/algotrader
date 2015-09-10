@@ -77,7 +77,7 @@ public class RealTimeMarketDataSubscriptionRequestSerializer extends Serializer{
         builder.appendEol(); //localsymbol
 
         if (Feature.TRADING_CLASS.isSupportedByVersion(getServerCurrentVersion())) {
-            builder.append(0); //contract / instrument id
+            builder.appendEol(); //contract / instrument id
         }
     }
 }
