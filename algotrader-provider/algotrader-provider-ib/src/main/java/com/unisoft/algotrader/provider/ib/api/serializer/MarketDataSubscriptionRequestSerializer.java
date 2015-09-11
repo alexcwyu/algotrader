@@ -24,18 +24,18 @@ public class MarketDataSubscriptionRequestSerializer extends Serializer{
         this.refDataStore = refDataStore;
     }
 
-    public byte [] serialize(SubscriptionKey subscriptionKey){
-        return serialize(subscriptionKey, false);
+    public byte [] serialize(long requestId, SubscriptionKey subscriptionKey){
+        return serialize(requestId, subscriptionKey, false);
     }
 
-    public byte [] serialize(SubscriptionKey subscriptionKey, boolean snapshot){
+    public byte [] serialize(long requestId, SubscriptionKey subscriptionKey, boolean snapshot){
         Instrument instrument = refDataStore.getInstrument(subscriptionKey.instId);
 
         ByteArrayBuilder builder = getByteArrayBuilder();
 
         builder.append(messageId.getId());
         builder.append(VERSION);
-        builder.append(subscriptionKey.getSubscriptionId());
+        builder.append(requestId);
         appendInstrument(builder, instrument);
         appendCombo(builder, instrument);
         appendUnderlyingCombo(builder, instrument);

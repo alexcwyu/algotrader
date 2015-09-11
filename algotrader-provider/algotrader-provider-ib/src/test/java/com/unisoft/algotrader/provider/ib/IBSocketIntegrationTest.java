@@ -45,7 +45,7 @@ public class IBSocketIntegrationTest {
     public static IBConfig ibConfig;
     public static RefDataStore refDataStore;
     public static OrderManager orderManager;
-
+    public static long nextRequestId = 1;
     @BeforeClass
     public static void init(){
         Injector injector = Guice.createInjector(new SampleAppConfigModule());
@@ -81,12 +81,13 @@ public class IBSocketIntegrationTest {
         Date toDate = DateHelper.fromYYYYMMDD(20150901);
         HistoricalSubscriptionKey subscriptionKey = HistoricalSubscriptionKey.createDailySubscriptionKey(IBProvider.PROVIDER_ID, instrument.getInstId(), fromDate, toDate);
 
-        socket.subscribeHistoricalData(subscriptionKey);
+        long requestId = nextRequestId ++;
+        socket.subscribeHistoricalData(requestId, subscriptionKey);
         ArgumentCaptor<List<Bar>> captor = ArgumentCaptor.forClass(List.class);
         verify(eventHandler, timeout(2000).atLeastOnce()).onHistoricalDataListEvent(anyInt(), captor.capture());
         assertTrue(captor.getValue().size() > 0);
 
-        socket.unsubscribeHistoricalData(subscriptionKey.getSubscriptionId());
+        socket.unsubscribeHistoricalData(requestId);
     }
 
     @Test
@@ -94,12 +95,12 @@ public class IBSocketIntegrationTest {
         Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange("EURUSD", IDEALPRO.getExchId());
         SubscriptionKey subscriptionKey = SubscriptionKey.createQuoteSubscriptionKey(IBProvider.PROVIDER_ID, instrument.getInstId());
 
-        socket.subscribeRealTimeData(subscriptionKey);
+        long requestId = nextRequestId ++;
+        socket.subscribeRealTimeData(requestId, subscriptionKey);
         verify(eventHandler, timeout(10000).atLeastOnce()).onRealTimeBarEvent(anyInt(), anyLong(), anyDouble(), anyDouble(), anyDouble(), anyDouble(), anyLong(), anyDouble(), anyInt());
 
-        socket.unsubscribeRealTimeData(subscriptionKey);
+        socket.unsubscribeRealTimeData(requestId);
     }
-
 
     @Test
     public void testOrderSubmission(){
@@ -112,7 +113,7 @@ public class IBSocketIntegrationTest {
         Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange("EURUSD", IDEALPRO.getExchId());
         Order order = orderManager.newLimitOrder(instrument.getInstId(), "Test", IBProvider.PROVIDER_ID, Side.Buy, 1.1, 1000000, TimeInForce.Day);
         order.extOrderId = orderId;
-        socket.sendOrder(order);
+        socket.placeOrder(order);
         ArgumentCaptor<Long> captor2 = ArgumentCaptor.forClass(Long.class);
         verify(eventHandler, timeout(5000).atLeastOnce()).onRetrieveOpenOrderEvent(
                 captor2.capture(), any(), any(), any());

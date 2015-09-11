@@ -31,14 +31,14 @@ public class HistoricalMarketDataSubscriptionRequestSerializer extends Serialize
         this.refDataStore = refDataStore;
     }
 
-    public byte [] serialize(HistoricalSubscriptionKey subscriptionKey){
+    public byte [] serialize(long requestId, HistoricalSubscriptionKey subscriptionKey){
         Instrument instrument = refDataStore.getInstrument(subscriptionKey.instId);
 
         ByteArrayBuilder builder = getByteArrayBuilder();
 
         builder.append(messageId.getId());
         builder.append(VERSION);
-        builder.append(subscriptionKey.getSubscriptionId());
+        builder.append(requestId);
         appendInstrument(builder, instrument);
         builder.append(false); // include expiry
         builder.append(DateHelper.formatYYYYMMDDHHMMSS(subscriptionKey.toDate));

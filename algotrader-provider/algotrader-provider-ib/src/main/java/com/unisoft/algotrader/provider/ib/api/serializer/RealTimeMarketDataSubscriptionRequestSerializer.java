@@ -29,14 +29,14 @@ public class RealTimeMarketDataSubscriptionRequestSerializer extends Serializer{
         this.refDataStore = refDataStore;
     }
 
-    public byte [] serialize(SubscriptionKey subscriptionKey){
+    public byte [] serialize(long requestId, SubscriptionKey subscriptionKey){
         Instrument instrument = refDataStore.getInstrument(subscriptionKey.instId);
 
         ByteArrayBuilder builder = getByteArrayBuilder();
 
         builder.append(messageId.getId());
         builder.append(VERSION);
-        builder.append(subscriptionKey.getSubscriptionId());
+        builder.append(requestId);
         appendInstrument(builder, instrument);
         builder.append(size);
         builder.append(RealTimeBarDataType.from(subscriptionKey.type)); //what to show

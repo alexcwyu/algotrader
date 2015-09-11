@@ -18,8 +18,6 @@ public class SubscriptionKey {
 
     public final static int DAILY_SIZE = 60*60*24;
 
-    private long subscriptionId;
-
     public final String providerId;
     
     public final DataType type;
@@ -40,21 +38,12 @@ public class SubscriptionKey {
         this.barSize = barSize;
     }
 
-    public long getSubscriptionId() {
-        return subscriptionId;
-    }
-
-    public void setSubscriptionId(long subscriptionId) {
-        this.subscriptionId = subscriptionId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof SubscriptionKey)) return false;
         SubscriptionKey that = (SubscriptionKey) o;
-        return com.google.common.base.Objects.equal(subscriptionId, that.subscriptionId) &&
-                com.google.common.base.Objects.equal(instId, that.instId) &&
+        return com.google.common.base.Objects.equal(instId, that.instId) &&
                 com.google.common.base.Objects.equal(barSize, that.barSize) &&
                 com.google.common.base.Objects.equal(providerId, that.providerId) &&
                 com.google.common.base.Objects.equal(type, that.type);
@@ -62,14 +51,13 @@ public class SubscriptionKey {
 
     @Override
     public int hashCode() {
-        return com.google.common.base.Objects.hashCode(subscriptionId, providerId, type, instId, barSize);
+        return com.google.common.base.Objects.hashCode( providerId, type, instId, barSize);
     }
 
     @Override
     public String toString() {
         return "SubscriptionKey{" +
-                "subscriptionId=" + subscriptionId +
-                ", providerId='" + providerId + '\'' +
+                "providerId='" + providerId + '\'' +
                 ", type=" + type +
                 ", instId=" + instId +
                 ", barSize=" + barSize +

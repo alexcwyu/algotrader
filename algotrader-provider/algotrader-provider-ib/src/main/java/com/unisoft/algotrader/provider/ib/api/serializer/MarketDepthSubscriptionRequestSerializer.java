@@ -23,14 +23,14 @@ public class MarketDepthSubscriptionRequestSerializer extends Serializer{
         this.refDataStore = refDataStore;
     }
 
-    public byte [] serialize(MarketDepthSubscriptionKey subscriptionKey){
+    public byte [] serialize(long requestId, MarketDepthSubscriptionKey subscriptionKey){
         Instrument instrument = refDataStore.getInstrument(subscriptionKey.instId);
 
         ByteArrayBuilder builder = new ByteArrayBuilder();
 
         builder.append(messageId.getId());
         builder.append(VERSION);
-        builder.append(subscriptionKey.getSubscriptionId());
+        builder.append(requestId);
         appendInstrument(builder, instrument);
         builder.append(subscriptionKey.numRows);
         if (Feature.LINKING.isSupportedByVersion(getServerCurrentVersion())) {

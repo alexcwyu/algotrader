@@ -1,12 +1,20 @@
 package com.unisoft.algotrader.provider.ib;
 
 import com.unisoft.algotrader.model.event.execution.Order;
+import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
+import com.unisoft.algotrader.provider.data.MarketDepthSubscriptionKey;
 import com.unisoft.algotrader.provider.data.SubscriptionKey;
 import com.unisoft.algotrader.provider.ib.api.deserializer.Deserializers;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
+import com.unisoft.algotrader.provider.ib.api.model.data.MarketDataType;
+import com.unisoft.algotrader.provider.ib.api.model.data.MarketScannerFilter;
+import com.unisoft.algotrader.provider.ib.api.model.data.ReportType;
+import com.unisoft.algotrader.provider.ib.api.model.execution.ExecutionReportFilter;
 import com.unisoft.algotrader.provider.ib.api.model.fa.FinancialAdvisorDataType;
+import com.unisoft.algotrader.provider.ib.api.model.order.ExerciseAction;
+import com.unisoft.algotrader.provider.ib.api.model.system.LogLevel;
 import com.unisoft.algotrader.provider.ib.api.serializer.ByteArrayBuilder;
 import com.unisoft.algotrader.provider.ib.api.serializer.Serializers;
 import com.unisoft.algotrader.utils.threading.NamedThreadFactory;
@@ -64,8 +72,9 @@ public class IBSocket {
             this.inputStream = new DataInputStream(socket.getInputStream());
 
             handShake();
+            startApi(); //set client id
             startStream();
-            //requestAccountUpdate(null);
+            requestAccountUpdates(null);
         }
         catch (IOException e){
             LOG.error(e);
@@ -97,9 +106,6 @@ public class IBSocket {
                 final String detailedMessage = "Minimum server version required '" + ibConfig.minVersion
                         + "', current server version '" + serverCurrentVersion + "'";
                 throw new Exception(detailedMessage);
-            } else {
-                //set client id
-                send(serializers.startAPISerializer().serialize(ibConfig.clientId));
             }
         } catch (final Exception e) {
             LOG.error(e);
@@ -117,95 +123,350 @@ public class IBSocket {
         executor.submit(this.inputStreamConsumer);
     }
 
+    protected void startApi(){
+        byte [] bytes = serializers.startAPISerializer().serialize(ibConfig.clientId);
+        if (LOG.isDebugEnabled())
+            LOG.debug("startApi, {}", new String(bytes));
+        send(bytes);
+    }
+    public void subscribeNewsBulletin(boolean includeExistingDailyNews){
+        byte [] bytes = serializers.newsBulletinSubscriptionRequestSerializer().serialize(includeExistingDailyNews);
+        if (LOG.isDebugEnabled())
+            LOG.debug("subscribeNewsBulletin, {}", new String(bytes));
+        send(bytes);
+    }
 
-    public void subscribeRealTimeData(SubscriptionKey subscriptionKey) {
-        try {
-            byte [] bytes = serializers.realTimeMarketDataSubscriptionRequestSerializer().serialize(subscriptionKey);
+    public void unsubscribeNewsBulletin(){
+        byte [] bytes = serializers.newsBulletinUnsubscriptionRequestSerializer().serialize();
+        if (LOG.isDebugEnabled())
+            LOG.debug("unsubscribeNewsBulletin, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void subscribeScanner(long requestId, MarketScannerFilter filter){
+        byte [] bytes = serializers.marketScannerSubscriptionRequestSerializer().serialize(requestId, filter);
+        if (LOG.isDebugEnabled())
+            LOG.debug("subscribeScanner, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void unsubscribeScanner(long requestId){
+        byte [] bytes = serializers.marketScannerUnsubscriptionRequestSerializer().serialize(requestId);
+        if (LOG.isDebugEnabled())
+            LOG.debug("unsubscribeScanner, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void subscribeMarketData(long requestId, SubscriptionKey subscriptionKey, boolean snapshot){
+        byte [] bytes = serializers.marketDataSubscriptionRequestSerializer().serialize(requestId, subscriptionKey, snapshot);
+        if (LOG.isDebugEnabled())
+            LOG.debug("subscribeMarketData, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void unsubscribeMarketData(long requestId) {
+        byte [] bytes = serializers.marketDataUnsubscriptionRequestSerializer().serialize(requestId);
+        if (LOG.isDebugEnabled())
+            LOG.debug("unsubscribeMarketData, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void subscribeRealTimeData(long requestId, SubscriptionKey subscriptionKey) {
+        byte [] bytes = serializers.realTimeMarketDataSubscriptionRequestSerializer().serialize(requestId, subscriptionKey);
+        if (LOG.isDebugEnabled())
             LOG.debug("subscribeRealTimeData, {}", new String(bytes));
-            send(bytes);
-        } catch (IOException e) {
-            LOG.error(e);
-        }
+        send(bytes);
     }
 
-    public void unsubscribeRealTimeData(SubscriptionKey subscriptionKey) {
-        try {
-            byte [] bytes = serializers.realTimeMarketDataUnsubscriptionRequestSerializer().serialize(subscriptionKey.getSubscriptionId());
+    public void unsubscribeRealTimeData(long requestId) {
+        byte [] bytes = serializers.realTimeMarketDataUnsubscriptionRequestSerializer().serialize(requestId);
+        if (LOG.isDebugEnabled())
             LOG.debug("unsubscribeRealTimeData, {}", new String(bytes));
-            send(bytes);
-        } catch (IOException e) {
-            LOG.error(e);
-        }
+        send(bytes);
     }
 
-    public void subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
-        try {
-
-            byte [] bytes = serializers.historicalMarketDataSubscriptionRequestSerializer().serialize(subscriptionKey);
+    public void subscribeHistoricalData(long requestId, HistoricalSubscriptionKey subscriptionKey) {
+        byte [] bytes = serializers.historicalMarketDataSubscriptionRequestSerializer().serialize(requestId, subscriptionKey);
+        if (LOG.isDebugEnabled())
             LOG.debug("subscribeHistoricalData, {}", new String(bytes));
-            send(bytes);
-        } catch (IOException e) {
-            LOG.error(e);
-        }
+        send(bytes);
     }
 
-    public void unsubscribeHistoricalData(long subscriptionId) {
-        try {
-
-            byte [] bytes = serializers.historicalMarketDataUnsubscriptionRequestSerializer().serialize(subscriptionId);
+    public void unsubscribeHistoricalData(long requestId) {
+        byte [] bytes = serializers.historicalMarketDataUnsubscriptionRequestSerializer().serialize(requestId);
+        if (LOG.isDebugEnabled())
             LOG.debug("unsubscribeHistoricalData, {}", new String(bytes));
-            send(bytes);
-        } catch (IOException e) {
-            LOG.error(e);
-        }
+        send(bytes);
     }
 
-    public void requestAccountUpdate(String accountName) {
-        try {
-            byte [] bytes = serializers.accountUpdateSubscriptionRequestSerializer().serialize(accountName);
+    public void subscribeFundamentalData(long requestId, ReportType reportType, Instrument instrument) {
+        byte [] bytes = serializers.fundamentalDataSubscriptionRequestSerializer().serialize(requestId, reportType, instrument);
+        if (LOG.isDebugEnabled())
+            LOG.debug("subscribeFundamentalData, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void unsubscribeFundamentalData(long requestId) {
+        byte [] bytes = serializers.fundamentalDataUnsubscriptionRequestSerializer().serialize(requestId);
+        if (LOG.isDebugEnabled())
+            LOG.debug("unsubscribeFundamentalData, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void subscribeMarketDepth(long requestId, MarketDepthSubscriptionKey subscriptionKey) {
+        byte [] bytes = serializers.marketDepthSubscriptionRequestSerializer().serialize(requestId, subscriptionKey);
+        if (LOG.isDebugEnabled())
+            LOG.debug("subscribeMarketDepth, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void unsubscribeMarketDepth(long requestId) {
+        byte [] bytes = serializers.marketDepthUnsubscriptionRequestSerializer().serialize(requestId);
+        if (LOG.isDebugEnabled())
+            LOG.debug("unsubscribeMarketDepth, {}", new String(bytes));
+        send(bytes);
+    }
+
+
+    public void subscribeOptionImpliedVolatility(final long requestId, final Instrument instrument, final double optionPrice, final double underlyingPrice) {
+        byte [] bytes = serializers.optionImpliedVolatilitySubscriptionRequestSerializer().serialize(requestId, instrument, optionPrice, underlyingPrice);
+        if (LOG.isDebugEnabled())
+            LOG.debug("subscribeOptionImpliedVolatility, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void unsubscribeOptionImpliedVolatility(final long requestId) {
+        byte [] bytes = serializers.optionImpliedVolatilityUnsubscriptionRequestSerializer().serialize(requestId);
+        if (LOG.isDebugEnabled())
+            LOG.debug("unsubscribeOptionImpliedVolatility, {}", new String(bytes));
+        send(bytes);
+    }
+
+
+    public void subscribeOptionPrice(final long requestId, final Instrument instrument, final double volatility, final double underlyingPrice) {
+        byte [] bytes = serializers.optionPriceSubscriptionRequestSerializer().serialize(requestId, instrument, volatility, underlyingPrice);
+        if (LOG.isDebugEnabled())
+            LOG.debug("subscribeOptionPrice, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void unsubscribeOptionPrice(final long requestId) {
+        byte [] bytes = serializers.optionPriceUnsubscriptionRequestSerializer().serialize(requestId);
+        if (LOG.isDebugEnabled())
+            LOG.debug("unsubscribeOptionPrice, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void subscribeAccountSummary(long requestId, String group, String tags) {
+        byte [] bytes = serializers.accountSummarySubscriptionRequestSerializer().serialize(requestId, group, tags);
+        if (LOG.isDebugEnabled())
+            LOG.debug("subscribeAccountSummary, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void unsubscribeAccountSummary(long requestId) {
+        byte [] bytes = serializers.accountSummaryUnsubscriptionRequestSerializer().serialize(requestId);
+        if (LOG.isDebugEnabled())
+            LOG.debug("unsubscribeAccountSummary, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void subscribeGroupEvents(long requestId, int groupId) {
+        byte [] bytes = serializers.groupEventsSubscriptionRequestSerializer().serialize(requestId, groupId);
+        if (LOG.isDebugEnabled())
+            LOG.debug("subscribeGroupEvents, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void unsubscribeGroupEvents(long requestId) {
+        byte [] bytes = serializers.groupEventsUnsubscriptionRequestSerializer().serialize(requestId);
+        if (LOG.isDebugEnabled())
+            LOG.debug("unsubscribeGroupEvents, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void requestPositions(long orderId) {
+        byte [] bytes = serializers.positionsRequestSerializer().serialize(orderId);
+        if (LOG.isDebugEnabled())
+            LOG.debug("requestPositions, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void cancelPositions(long orderId) {
+        byte [] bytes = serializers.positionsCancellationRequestSerializer().serialize(orderId);
+        if (LOG.isDebugEnabled())
+            LOG.debug("cancelPositions, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void exerciseOptions(final long requestId, final Instrument instrument, final ExerciseAction action,
+                                final int quantity, final String accountName, final boolean override) {
+        byte [] bytes = serializers.exerciseOptionRequestSerializer().serialize(requestId, instrument, action, quantity, accountName, override);
+        if (LOG.isDebugEnabled())
+            LOG.debug("exerciseOptions, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void requestAutoOpenOrders(boolean bindNewlyCreatedOrder){
+        byte [] bytes = serializers.bindNewlyCreatedOpenOrderRequestSerializer().serialize(bindNewlyCreatedOrder);
+        if (LOG.isDebugEnabled())
+            LOG.debug("requestAutoOpenOrders, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void requestMarketDataType(MarketDataType type){
+        byte [] bytes = serializers.marketDataTypeRequestSerializer().serialize(type);
+        if (LOG.isDebugEnabled())
+            LOG.debug("requestMarketDataType, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void requestScannerParameters(){
+        byte [] bytes = serializers.marketScannerValidParametersRequestSerializer().serialize();
+        if (LOG.isDebugEnabled())
+            LOG.debug("requestScannerParameters, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void requestManagedAccounts() {
+        byte [] bytes = serializers.managedAccountListRequestSerializer().serialize();
+        if (LOG.isDebugEnabled())
+            LOG.debug("requestManagedAccounts, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void requestAccountUpdates(String accountName) {
+        byte [] bytes = serializers.accountUpdateSubscriptionRequestSerializer().serialize(accountName);
+        if (LOG.isDebugEnabled())
             LOG.debug("requestAccountUpdate, {}", new String(bytes));
-            send(bytes);
-        } catch (IOException e) {
-            LOG.error(e);
-        }
+        send(bytes);
+    }
+
+    public void requestExecutions(long requestId, ExecutionReportFilter filter) {
+        byte [] bytes = serializers.executionReportRequestSerializer().serialize(requestId, filter);
+        if (LOG.isDebugEnabled())
+            LOG.debug("requestExecutions, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void requestAllOpenOrders() {
+        byte [] bytes = serializers.retrieveAllOpenOrderRequestSerializer().serialize();
+        if (LOG.isDebugEnabled())
+            LOG.debug("requestOpenOrders, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void requestOpenOrders() {
+        byte [] bytes = serializers.retrieveOpenOrderRequestSerializer().serialize();
+        if (LOG.isDebugEnabled())
+            LOG.debug("requestOpenOrders, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void requestContractSpecification(long requestId, Instrument instrument) {
+        byte [] bytes = serializers.contractSpecificationRequestSerializer().serialize(requestId, instrument);
+        if (LOG.isDebugEnabled())
+            LOG.debug("requestContractSpecification, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void requestNextValidOrderId(){
+        byte [] bytes = serializers.nextValidOrderIdRequestSerializer().serialize();
+        if (LOG.isDebugEnabled())
+            LOG.debug("requestNextValidOrderId, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void requestNextValidOrderId(long suggestId){
+        byte [] bytes = serializers.nextValidOrderIdRequestSerializer().serialize(suggestId);
+        if (LOG.isDebugEnabled())
+            LOG.debug("requestNextValidOrderId, {}", new String(bytes));
+        send(bytes);
     }
 
     public void requestFA(FinancialAdvisorDataType dataType){
-        try {
-            byte [] bytes = serializers.faConfigurationRequestSerializer().serialize(dataType);
+        byte [] bytes = serializers.faConfigurationRequestSerializer().serialize(dataType);
+        if (LOG.isDebugEnabled())
             LOG.debug("requestFA, {}", new String(bytes));
-            send(bytes);
-        } catch (IOException e) {
-            LOG.error(e);
-        }
+        send(bytes);
     }
 
-    public void sendOrder(Order order){
-        try {
-            byte [] bytes = serializers.placeOrderSerializer().serialize(order);
-            LOG.debug("sendOrder, {}", new String(bytes));
-            send(bytes);
-        } catch (IOException e) {
-            LOG.error(e);
-        }
+    public void requestCurrentTime(){
+        byte [] bytes = serializers.serverCurrentTimeRequestSerializer().serialize();
+        if (LOG.isDebugEnabled())
+            LOG.debug("requestCurrentTime, {}", new String(bytes));
+        send(bytes);
     }
 
-    public void cancelOrder(long orderId){
-        try {
-            byte [] bytes = serializers.cancelOrderSerializer().serialize(orderId);
+    public void replaceFA(FinancialAdvisorDataType dataType, String xml){
+        byte [] bytes = serializers.faReplaceConfigurationRequestSerializer().serialize(dataType, xml);
+        if (LOG.isDebugEnabled())
+            LOG.debug("replaceFA, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void placeOrder(Order order) {
+        byte[] bytes = serializers.placeOrderSerializer().serialize(order);
+        if (LOG.isDebugEnabled())
+            LOG.debug("placeOrder, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void cancelOrder(long orderId) {
+        byte[] bytes = serializers.cancelOrderSerializer().serialize(orderId);
+        if (LOG.isDebugEnabled())
             LOG.debug("cancelOrder, {}", new String(bytes));
-            send(bytes);
-        } catch (IOException e) {
-            LOG.error(e);
-        }
+        send(bytes);
+    }
+    public void cancelAllOrders() {
+        byte[] bytes = serializers.cancelAllOrdersRequestSerializer().serialize();
+        if (LOG.isDebugEnabled())
+            LOG.debug("cancelAllOrders, {}", new String(bytes));
+        send(bytes);
     }
 
-    private void send(final byte[] bytes) throws IOException {
+    public void setServerLogLevel(LogLevel logLevel) {
+        byte[] bytes = serializers.serverLogLevelRequestSerializer().serialize(logLevel);
+        if (LOG.isDebugEnabled())
+            LOG.debug("setServerLogLevel, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void verifyRequest(String apiName, String apiVersion) {
+        byte [] bytes = serializers.verifyRequestSerializer().serialize(apiName, apiVersion);
+        if (LOG.isDebugEnabled())
+            LOG.debug("verifyRequest, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void verifyMessage(String apiData) {
+        byte [] bytes = serializers.verifyMessageRequestSerializer().serialize(apiData);
+        if (LOG.isDebugEnabled())
+            LOG.debug("verifyMessage, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void queryDisplayGroups(long requestId) {
+        byte [] bytes = serializers.displayGroupsQueryRequestSerializer().serialize(requestId);
+        if (LOG.isDebugEnabled())
+            LOG.debug("queryDisplayGroups, {}", new String(bytes));
+        send(bytes);
+    }
+
+    public void updateDisplayGroups(long requestId, String contractInfo) {
+        byte [] bytes = serializers.displayGroupUpdateRequestSerializer().serialize(requestId, contractInfo);
+        if (LOG.isDebugEnabled())
+            LOG.debug("updateDisplayGroups, {}", new String(bytes));
+        send(bytes);
+    }
+
+    private void send(final byte[] bytes){
         lock.lock();
         try {
             outputStream.write(bytes);
-        }
-        finally {
+        } catch (IOException e) {
+            LOG.error(e);
+        } finally {
             lock.unlock();
         }
     }

@@ -1,6 +1,8 @@
 package com.unisoft.algotrader.provider.ib;
 
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.unisoft.algotrader.model.event.EventBusManager;
@@ -42,7 +44,7 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
 
     private final IBSocket ibSocket;
     private Set<SubscriptionKey> subscriptionKeys = Sets.newHashSet();
-    private Map<Long, SubscriptionKey> idSubscriptionMap = Maps.newHashMap();
+    private BiMap<Long, SubscriptionKey> idSubscriptionMap = HashBiMap.create();
 
     private Map<Long, Order> extOrderIdOrderMap = Maps.newHashMap();
     private Map<Long, Order> orderIdOrderMap = Maps.newHashMap();
@@ -64,18 +66,23 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
 
     @Override
     public boolean subscribeRealTimeData(SubscriptionKey subscriptionKey){
-        subscriptionKey.setSubscriptionId(nextRequestId());
+        long requestId = nextRequestId();
         subscriptionKeys.add(subscriptionKey);
-        idSubscriptionMap.put(subscriptionKey.getSubscriptionId(), subscriptionKey);
-        ibSocket.subscribeRealTimeData(subscriptionKey);
+        idSubscriptionMap.put(requestId, subscriptionKey);
+        ibSocket.subscribeRealTimeData(requestId, subscriptionKey);
         return true;
     }
 
     @Override
     public boolean unSubscribeRealTimeData(SubscriptionKey subscriptionKey){
-        subscriptionKeys.remove(subscriptionKey);
-        ibSocket.unsubscribeRealTimeData(subscriptionKey);
-        return true;
+        Long requestId = idSubscriptionMap.inverse().get(subscriptionKey);
+        if (requestId != null) {
+            subscriptionKeys.remove(subscriptionKey);
+            idSubscriptionMap.remove(requestId);
+            ibSocket.unsubscribeRealTimeData(requestId);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -85,20 +92,23 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
 
     @Override
     public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
-        subscriptionKey.setSubscriptionId(nextRequestId());
+        long requestId = nextRequestId();
         subscriptionKeys.add(subscriptionKey);
-        idSubscriptionMap.put(subscriptionKey.getSubscriptionId(), subscriptionKey);
-        ibSocket.subscribeHistoricalData(subscriptionKey);
+        idSubscriptionMap.put(requestId, subscriptionKey);
+        ibSocket.subscribeHistoricalData(requestId, subscriptionKey);
         return true;
     }
 
-    public boolean unSubscribeHistoricalData(long subscriptionId){
-        if (idSubscriptionMap.containsKey(subscriptionId)){
-            idSubscriptionMap.remove(subscriptionId);
-            ibSocket.unsubscribeHistoricalData(subscriptionId);
+    public boolean unSubscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey){
+        Long requestId = idSubscriptionMap.inverse().get(subscriptionKey);
+        if (requestId != null) {
+            subscriptionKeys.remove(subscriptionKey);
+            idSubscriptionMap.remove(requestId);
+            ibSocket.unsubscribeHistoricalData(requestId);
             return true;
         }
         return false;
+
     }
 
     private void requestFA(){
@@ -114,7 +124,7 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
         }
         extOrderIdOrderMap.put(order.extOrderId, order);
         orderIdOrderMap.put(order.orderId, order);
-        ibSocket.sendOrder(order);
+        ibSocket.placeOrder(order);
     }
 
     @Override
@@ -125,7 +135,7 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
         }
         extOrderIdOrderMap.put(order.extOrderId, order);
         orderIdOrderMap.put(order.orderId, order);
-        ibSocket.sendOrder(order);
+        ibSocket.placeOrder(order);
     }
 
     @Override
