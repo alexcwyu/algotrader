@@ -27,7 +27,7 @@ public class HistoricalMarketDataSubscriptionRequestSerializer extends Serialize
     private final RefDataStore refDataStore;
 
     public HistoricalMarketDataSubscriptionRequestSerializer(RefDataStore refDataStore, int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.HISTORICAL_DATA_SUBSCRIPTION_REQUEST);
         this.refDataStore = refDataStore;
     }
 
@@ -36,7 +36,7 @@ public class HistoricalMarketDataSubscriptionRequestSerializer extends Serialize
 
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.HISTORICAL_DATA_SUBSCRIPTION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(subscriptionKey.getSubscriptionId());
         appendInstrument(builder, instrument);

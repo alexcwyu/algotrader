@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.event.data.Bar;
+import com.unisoft.algotrader.provider.ib.api.event.HistoricalDataEvent;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
@@ -12,10 +13,10 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.*;
 /**
  * Created by alex on 8/13/15.
  */
-public class HistoricalDataEventDeserializer extends Deserializer {
+public class HistoricalDataEventDeserializer extends Deserializer<HistoricalDataEvent> {
 
-    public HistoricalDataEventDeserializer(){
-        super(IncomingMessageId.HISTORICAL_DATA);
+    public HistoricalDataEventDeserializer(int serverCurrentVersion){
+        super(IncomingMessageId.HISTORICAL_DATA, serverCurrentVersion);
     }
 
     @Override

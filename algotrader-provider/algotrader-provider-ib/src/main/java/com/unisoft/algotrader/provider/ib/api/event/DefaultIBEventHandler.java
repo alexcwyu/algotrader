@@ -5,7 +5,7 @@ import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.provider.ib.api.model.bulletin.NewsBulletinType;
-import com.unisoft.algotrader.provider.ib.api.model.contract.InstrumentSpecification;
+import com.unisoft.algotrader.provider.ib.api.model.contract.ContractSpecification;
 import com.unisoft.algotrader.provider.ib.api.model.contract.UnderlyingCombo;
 import com.unisoft.algotrader.provider.ib.api.model.data.*;
 import com.unisoft.algotrader.provider.ib.api.model.execution.CommissionReport;
@@ -81,8 +81,8 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onBondInstrumentSpecificationEvent(int requestId, InstrumentSpecification instrumentSpecification) {
-        LOG.debug("onBondInstrumentSpecificationEvent requestId {}, contractSpecification {}", requestId, instrumentSpecification);
+    public void onBondInstrumentSpecificationEvent(int requestId, ContractSpecification contractSpecification) {
+        LOG.debug("onBondInstrumentSpecificationEvent requestId {}, contractSpecification {}", requestId, contractSpecification);
     }
 
     @Override
@@ -202,8 +202,8 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onInstrumentSpecificationEndEvent(InstrumentSpecificationEndEvent instrumentSpecificationEndEvent) {
-        LOG.debug(instrumentSpecificationEndEvent);
+    public void onInstrumentSpecificationEndEvent(ContractSpecificationEndEvent contractSpecificationEndEvent) {
+        LOG.debug(contractSpecificationEndEvent);
     }
 
     @Override
@@ -212,13 +212,13 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onInstrumentSpecificationEvent(InstrumentSpecificationEvent instrumentSpecificationEvent) {
-        LOG.debug(instrumentSpecificationEvent);
+    public void onInstrumentSpecificationEvent(ContractSpecificationEvent contractSpecificationEvent) {
+        LOG.debug(contractSpecificationEvent);
     }
 
     @Override
-    public void onInstrumentSpecificationEvent(int requestId, InstrumentSpecification instrumentSpecification) {
-        LOG.debug("onInstrumentSpecificationEvent requestId {}, instrumentSpecification {}", requestId, instrumentSpecification);
+    public void onInstrumentSpecificationEvent(int requestId, ContractSpecification contractSpecification) {
+        LOG.debug("onInstrumentSpecificationEvent requestId {}, instrumentSpecification {}", requestId, contractSpecification);
     }
 
     @Override
@@ -274,9 +274,9 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onMarketScannerDataEvent(int requestId, int ranking, InstrumentSpecification instrumentSpecification, String distance, String benchmark, String projection, String comboLegDescription) {
+    public void onMarketScannerDataEvent(int requestId, int ranking, ContractSpecification contractSpecification, String distance, String benchmark, String projection, String comboLegDescription) {
         LOG.debug("onMarketScannerDataEvent requestId {}, ranking {}, instrumentSpecification {}, distance {}, benchmark {}, projection {}, comboLegDescription {}",
-                requestId, ranking, instrumentSpecification, distance, benchmark, projection, comboLegDescription);
+                requestId, ranking, contractSpecification, distance, benchmark, projection, comboLegDescription);
     }
 
     @Override

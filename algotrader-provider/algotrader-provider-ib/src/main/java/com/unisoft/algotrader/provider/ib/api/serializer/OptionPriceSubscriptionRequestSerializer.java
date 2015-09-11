@@ -21,7 +21,7 @@ public class OptionPriceSubscriptionRequestSerializer extends Serializer{
 
     public OptionPriceSubscriptionRequestSerializer(
             RefDataStore refDataStore, int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.OPTION_PRICE_SUBSCRIPTION_REQUEST);
         this.refDataStore = refDataStore;
     }
 
@@ -33,7 +33,7 @@ public class OptionPriceSubscriptionRequestSerializer extends Serializer{
     public byte [] serialize(final long requestId, final Instrument instrument, final double volatility, final double underlyingPrice){
         checkCancelCalculateOptionPrice();
         ByteArrayBuilder builder = getByteArrayBuilder();
-        builder.append(OutgoingMessageId.OPTION_PRICE_SUBSCRIPTION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(requestId);
         appendInstrument(builder, instrument);

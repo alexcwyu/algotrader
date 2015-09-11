@@ -20,7 +20,7 @@ public class FundamentalDataSubscriptionRequestSerializer extends Serializer{
 
     public FundamentalDataSubscriptionRequestSerializer(
             RefDataStore refDataStore, int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.FUNDAMENTAL_DATA_SUBSCRIPTION_REQUEST);
         this.refDataStore = refDataStore;
     }
 
@@ -33,7 +33,7 @@ public class FundamentalDataSubscriptionRequestSerializer extends Serializer{
         checkReutersFundamentalDataSupport();
 
         ByteArrayBuilder builder = getByteArrayBuilder();
-        builder.append(OutgoingMessageId.FUNDAMENTAL_DATA_SUBSCRIPTION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(requestId);
         appendInstrument(builder, instrument);

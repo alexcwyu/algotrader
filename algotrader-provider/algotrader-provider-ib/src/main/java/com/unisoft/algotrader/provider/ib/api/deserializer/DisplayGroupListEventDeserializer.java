@@ -1,5 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
+import com.unisoft.algotrader.provider.ib.api.event.DisplayGroupListEvent;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
@@ -11,11 +12,11 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.readString;
 /**
  * Created by alex on 8/13/15.
  */
-public class DisplayGroupListEventDeserializer extends Deserializer {
+public class DisplayGroupListEventDeserializer extends Deserializer<DisplayGroupListEvent> {
 
 
-    public DisplayGroupListEventDeserializer(){
-        super(IncomingMessageId.DISPLAY_GROUP_LIST);
+    public DisplayGroupListEventDeserializer(int serverCurrentVersion){
+        super(IncomingMessageId.DISPLAY_GROUP_LIST, serverCurrentVersion);
     }
 
     @Override

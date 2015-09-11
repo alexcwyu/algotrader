@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
+import com.unisoft.algotrader.provider.ib.api.event.RealTimeBarEvent;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
 import java.io.InputStream;
@@ -10,11 +11,11 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.*;
 /**
  * Created by alex on 8/13/15.
  */
-public class RealTimeBarEventDeserializer extends Deserializer {
+public class RealTimeBarEventDeserializer extends Deserializer<RealTimeBarEvent> {
 
 
-    public RealTimeBarEventDeserializer(){
-        super(IncomingMessageId.REAL_TIME_BAR);
+    public RealTimeBarEventDeserializer(int serverCurrentVersion){
+        super(IncomingMessageId.REAL_TIME_BAR, serverCurrentVersion);
     }
 
     @Override

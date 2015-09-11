@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
+import com.unisoft.algotrader.provider.ib.api.event.MarketDataTypeEvent;
 import com.unisoft.algotrader.provider.ib.api.model.data.MarketDataType;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
@@ -11,11 +12,11 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.readInt;
 /**
  * Created by alex on 8/13/15.
  */
-public class MarketDataTypeEventDeserializer extends Deserializer {
+public class MarketDataTypeEventDeserializer extends Deserializer<MarketDataTypeEvent> {
 
 
-    public MarketDataTypeEventDeserializer(){
-        super(IncomingMessageId.MARKET_DATA_TYPE);
+    public MarketDataTypeEventDeserializer(int serverCurrentVersion){
+        super(IncomingMessageId.MARKET_DATA_TYPE, serverCurrentVersion);
     }
 
     @Override

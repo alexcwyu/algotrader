@@ -10,14 +10,14 @@ public class AccountSummaryUnsubscriptionRequestSerializer extends Serializer{
     private static final int VERSION = 1;
 
     public AccountSummaryUnsubscriptionRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.ACCOUNT_SUMMARY_UNSUBSCRIPTION_REQUEST);
     }
 
     public byte [] serialize(long requestId){
 
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.ACCOUNT_SUMMARY_UNSUBSCRIPTION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(requestId);
 

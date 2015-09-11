@@ -19,7 +19,7 @@ public class MarketDepthSubscriptionRequestSerializer extends Serializer{
     private final RefDataStore refDataStore;
 
     public MarketDepthSubscriptionRequestSerializer(RefDataStore refDataStore, int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.MARKET_DEPTH_SUBSCRIPTION_REQUEST);
         this.refDataStore = refDataStore;
     }
 
@@ -28,7 +28,7 @@ public class MarketDepthSubscriptionRequestSerializer extends Serializer{
 
         ByteArrayBuilder builder = new ByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.MARKET_DEPTH_SUBSCRIPTION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(subscriptionKey.getSubscriptionId());
         appendInstrument(builder, instrument);

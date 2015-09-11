@@ -5,6 +5,7 @@ import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
 import com.unisoft.algotrader.provider.ib.InputStreamUtils;
+import com.unisoft.algotrader.provider.ib.api.event.ExecutionReportEvent;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.contract.OptionRight;
 import com.unisoft.algotrader.provider.ib.api.model.contract.SecType;
@@ -19,12 +20,12 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.*;
 /**
  * Created by alex on 8/13/15.
  */
-public class ExecutionReportDeserializer extends Deserializer {
+public class ExecutionReportEventDeserializer extends Deserializer<ExecutionReportEvent> {
 
     private final RefDataStore refDataStore;
 
-    public ExecutionReportDeserializer(RefDataStore refDataStore){
-        super(IncomingMessageId.EXECUTION_REPORT);
+    public ExecutionReportEventDeserializer(RefDataStore refDataStore, int serverCurrentVersion){
+        super(IncomingMessageId.EXECUTION_REPORT, serverCurrentVersion);
         this.refDataStore = refDataStore;
     }
 

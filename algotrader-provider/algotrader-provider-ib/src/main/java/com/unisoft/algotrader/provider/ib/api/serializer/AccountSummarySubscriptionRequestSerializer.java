@@ -10,14 +10,14 @@ public class AccountSummarySubscriptionRequestSerializer extends Serializer{
     private static final int VERSION = 1;
 
     public AccountSummarySubscriptionRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.ACCOUNT_SUMMARY_SUBSCRIPTION_REQUEST);
     }
 
     public byte [] serialize(long requestId, String group, String tags){
 
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.ACCOUNT_SUMMARY_SUBSCRIPTION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(requestId);
         builder.append(group);

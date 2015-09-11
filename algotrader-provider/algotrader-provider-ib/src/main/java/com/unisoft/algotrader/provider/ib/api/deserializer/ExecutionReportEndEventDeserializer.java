@@ -1,5 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
+import com.unisoft.algotrader.provider.ib.api.event.ExecutionReportEndEvent;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
@@ -11,11 +12,11 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.readInt;
 /**
  * Created by alex on 8/13/15.
  */
-public class ExecutionReportEndEventDeserializer extends Deserializer {
+public class ExecutionReportEndEventDeserializer extends Deserializer<ExecutionReportEndEvent> {
 
 
-    public ExecutionReportEndEventDeserializer(){
-        super(IncomingMessageId.EXECUTION_REPORT_END);
+    public ExecutionReportEndEventDeserializer(int serverCurrentVersion){
+        super(IncomingMessageId.EXECUTION_REPORT_END, serverCurrentVersion);
     }
 
     @Override

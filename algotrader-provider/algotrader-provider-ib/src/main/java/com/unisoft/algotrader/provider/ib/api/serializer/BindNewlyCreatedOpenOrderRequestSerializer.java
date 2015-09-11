@@ -10,12 +10,12 @@ public class BindNewlyCreatedOpenOrderRequestSerializer extends Serializer{
     private static final int VERSION = 1;
 
     public BindNewlyCreatedOpenOrderRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.BIND_NEWLY_CREATED_OPEN_ORDER_REQUEST);
     }
 
     public byte [] serialize(final boolean bindNewlyCreatedOrder){
         ByteArrayBuilder builder = getByteArrayBuilder();
-        builder.append(OutgoingMessageId.BIND_NEWLY_CREATED_OPEN_ORDER_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(bindNewlyCreatedOrder);
         return builder.toBytes();

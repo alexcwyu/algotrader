@@ -12,7 +12,7 @@ public class OptionPriceUnsubscriptionRequestSerializer extends Serializer{
 
     private static final int VERSION = 1;
     public OptionPriceUnsubscriptionRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.OPTION_PRICE_UNSUBSCRIPTION_REQUEST);
     }
 
     public byte [] serialize(long requestId){
@@ -20,7 +20,7 @@ public class OptionPriceUnsubscriptionRequestSerializer extends Serializer{
 
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.OPTION_PRICE_UNSUBSCRIPTION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(requestId);
 

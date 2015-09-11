@@ -3,10 +3,10 @@ package com.unisoft.algotrader.provider.ib.api.event;
 /**
  * Created by alex on 8/26/15.
  */
-public class InstrumentSpecificationEndEvent extends IBEvent<InstrumentSpecificationEndEvent>  {
+public class ContractSpecificationEndEvent extends IBEvent<ContractSpecificationEndEvent>  {
 
 
-    public InstrumentSpecificationEndEvent(final long requestId){
+    public ContractSpecificationEndEvent(final long requestId){
         super(requestId);
     }
 
@@ -17,6 +17,6 @@ public class InstrumentSpecificationEndEvent extends IBEvent<InstrumentSpecifica
 
     @Override
     public String toString() {
-        return "InstrumentSpecificationEndEvent{}";
+        return "ContractSpecificationEndEvent{}";
     }
 }

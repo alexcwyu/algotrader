@@ -5,23 +5,23 @@ import com.unisoft.algotrader.provider.ib.api.model.contract.ContractSpecificati
 /**
  * Created by alex on 8/26/15.
  */
-public class BondInstrumentSpecificationEvent extends IBEvent<BondInstrumentSpecificationEvent>  {
+public class ContractSpecificationEvent extends IBEvent<ContractSpecificationEvent>  {
 
     public final ContractSpecification contractSpecification;
 
-    public BondInstrumentSpecificationEvent(final long requestId, final ContractSpecification contractSpecification){
+    public ContractSpecificationEvent(final long requestId, final ContractSpecification contractSpecification){
         super(requestId);
         this.contractSpecification = contractSpecification;
     }
 
     @Override
     public void on(IBEventHandler handler) {
-        handler.onBondInstrumentSpecificationEvent(this);
+        handler.onInstrumentSpecificationEvent(this);
     }
 
     @Override
     public String toString() {
-        return "BondInstrumentSpecificationEvent{" +
+        return "ContractSpecificationEvent{" +
                 "contractSpecification=" + contractSpecification +
                 "} " + super.toString();
     }

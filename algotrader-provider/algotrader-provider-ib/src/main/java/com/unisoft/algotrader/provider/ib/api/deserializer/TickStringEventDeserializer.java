@@ -2,6 +2,7 @@ package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.unisoft.algotrader.provider.ib.InputStreamUtils;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
+import com.unisoft.algotrader.provider.ib.api.event.TickStringEvent;
 import com.unisoft.algotrader.provider.ib.api.model.data.TickType;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
@@ -12,11 +13,11 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.readString;
 /**
  * Created by alex on 8/13/15.
  */
-public class TickStringEventDeserializer extends Deserializer {
+public class TickStringEventDeserializer extends Deserializer<TickStringEvent> {
 
 
-    public TickStringEventDeserializer(){
-        super(IncomingMessageId.TICK_STRING);
+    public TickStringEventDeserializer(int serverCurrentVersion){
+        super(IncomingMessageId.TICK_STRING, serverCurrentVersion);
     }
 
     @Override

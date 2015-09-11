@@ -11,13 +11,13 @@ public class PositionsRequestSerializer extends Serializer{
     private static final int VERSION = 1;
 
     public PositionsRequestSerializer(int serverCurrentVersion) {
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.POSITIONS_REQUEST);
     }
 
     public byte[] serialize(long orderId) {
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.POSITIONS_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         return builder.toBytes();
     }

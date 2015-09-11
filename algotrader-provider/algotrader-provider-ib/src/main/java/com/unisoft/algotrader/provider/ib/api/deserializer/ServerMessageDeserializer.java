@@ -14,8 +14,8 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.readString;
 public class ServerMessageDeserializer extends Deserializer {
 
 
-    public ServerMessageDeserializer(){
-        super(IncomingMessageId.SERVER_MESSAGE);
+    public ServerMessageDeserializer(int serverCurrentVersion){
+        super(IncomingMessageId.SERVER_MESSAGE, serverCurrentVersion);
     }
 
     @Override

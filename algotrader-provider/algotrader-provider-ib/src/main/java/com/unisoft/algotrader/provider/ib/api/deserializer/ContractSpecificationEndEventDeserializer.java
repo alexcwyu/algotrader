@@ -1,5 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
+import com.unisoft.algotrader.provider.ib.api.event.ContractSpecificationEndEvent;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
@@ -11,11 +12,11 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.readInt;
 /**
  * Created by alex on 8/13/15.
  */
-public class ContractSpecificationEndEventDeserializer extends Deserializer {
+public class ContractSpecificationEndEventDeserializer extends Deserializer<ContractSpecificationEndEvent> {
 
 
-    public ContractSpecificationEndEventDeserializer(){
-        super(IncomingMessageId.CONTRACT_SPECIFICATION_END);
+    public ContractSpecificationEndEventDeserializer(int serverCurrentVersion){
+        super(IncomingMessageId.CONTRACT_SPECIFICATION_END, serverCurrentVersion);
     }
 
     @Override

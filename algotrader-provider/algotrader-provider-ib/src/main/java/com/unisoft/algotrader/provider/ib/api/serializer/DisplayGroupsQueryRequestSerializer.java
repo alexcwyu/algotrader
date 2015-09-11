@@ -10,14 +10,14 @@ public class DisplayGroupsQueryRequestSerializer extends Serializer{
     private static final int VERSION = 1;
 
     public DisplayGroupsQueryRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.DISPLAY_GROUP_QUERY_REQUEST);
     }
 
     public byte [] serialize(long requestId){
 
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.DISPLAY_GROUP_QUERY_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(requestId);
 

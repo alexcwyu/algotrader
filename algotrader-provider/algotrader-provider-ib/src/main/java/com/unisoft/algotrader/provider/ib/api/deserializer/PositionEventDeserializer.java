@@ -4,6 +4,7 @@ import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
+import com.unisoft.algotrader.provider.ib.api.event.PositionEvent;
 import com.unisoft.algotrader.provider.ib.api.model.contract.OptionRight;
 import com.unisoft.algotrader.provider.ib.api.model.contract.SecType;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
@@ -15,12 +16,12 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.*;
 /**
  * Created by alex on 8/13/15.
  */
-public class PositionEventDeserializer extends Deserializer {
+public class PositionEventDeserializer extends Deserializer<PositionEvent> {
 
     private final RefDataStore refDataStore;
 
-    public PositionEventDeserializer(RefDataStore refDataStore){
-        super(IncomingMessageId.POSITION);
+    public PositionEventDeserializer(RefDataStore refDataStore, int serverCurrentVersion){
+        super(IncomingMessageId.POSITION, serverCurrentVersion);
         this.refDataStore = refDataStore;
     }
 

@@ -9,13 +9,13 @@ public class ServerCurrentTimeRequestSerializer extends Serializer{
 
     private static final int VERSION = 1;
     public ServerCurrentTimeRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.SERVER_CURRENT_TIME_REQUEST);
     }
 
     public byte [] serialize(){
 
         ByteArrayBuilder builder = getByteArrayBuilder();
-        builder.append(OutgoingMessageId.SERVER_CURRENT_TIME_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         return builder.toBytes();
     }

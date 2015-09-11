@@ -1,5 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
+import com.unisoft.algotrader.provider.ib.api.event.AccountSummaryEvent;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
@@ -11,11 +12,11 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.readString;
 /**
  * Created by alex on 8/13/15.
  */
-public class AccountSummaryEventDeserializer extends Deserializer {
+public class AccountSummaryEventDeserializer extends Deserializer<AccountSummaryEvent> {
 
 
-    public AccountSummaryEventDeserializer(){
-        super(IncomingMessageId.ACCOUNT_SUMMARY);
+    public AccountSummaryEventDeserializer(int serverCurrentVersion){
+        super(IncomingMessageId.ACCOUNT_SUMMARY, serverCurrentVersion);
     }
 
     @Override

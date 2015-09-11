@@ -11,13 +11,13 @@ public class CancelOrderSerializer extends Serializer{
     private static final int VERSION = 1;
 
     public CancelOrderSerializer(int serverCurrentVersion) {
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.CANCEL_ORDER_REQUEST);
     }
 
     public byte[] serialize(long orderId) {
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.CANCEL_ORDER_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(orderId);
         return builder.toBytes();

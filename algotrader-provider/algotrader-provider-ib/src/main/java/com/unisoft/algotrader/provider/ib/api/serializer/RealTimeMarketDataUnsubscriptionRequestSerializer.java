@@ -9,13 +9,13 @@ public class RealTimeMarketDataUnsubscriptionRequestSerializer extends Serialize
 
     private static final int VERSION = 1;
     public RealTimeMarketDataUnsubscriptionRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.REAL_TIME_BAR_UNSUBSCRIPTION_REQUEST);
     }
 
     public byte [] serialize(long requestId){
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.REAL_TIME_BAR_UNSUBSCRIPTION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(requestId);
 

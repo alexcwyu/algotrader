@@ -25,7 +25,7 @@ public class RealTimeMarketDataSubscriptionRequestSerializer extends Serializer{
 
     public RealTimeMarketDataSubscriptionRequestSerializer(
             RefDataStore refDataStore, int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.REAL_TIME_BAR_SUBSCRIPTION_REQUEST);
         this.refDataStore = refDataStore;
     }
 
@@ -34,7 +34,7 @@ public class RealTimeMarketDataSubscriptionRequestSerializer extends Serializer{
 
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.REAL_TIME_BAR_SUBSCRIPTION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(subscriptionKey.getSubscriptionId());
         appendInstrument(builder, instrument);

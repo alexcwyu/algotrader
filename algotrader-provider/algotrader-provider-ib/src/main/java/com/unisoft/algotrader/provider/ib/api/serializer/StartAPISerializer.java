@@ -11,15 +11,19 @@ public class StartAPISerializer extends Serializer{
     private static final int VERSION = 1;
 
     public StartAPISerializer(int serverCurrentVersion) {
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.START_API_REQUEST);
     }
 
     public byte[] serialize(int clientId) {
         ByteArrayBuilder builder = getByteArrayBuilder();
-
-        builder.append(OutgoingMessageId.START_API_REQUEST.getId());
-        builder.append(VERSION);
-        builder.append(clientId);
+        if (serverCurrentVersion < 70) {
+            builder.append(clientId);
+        }
+        else {
+            builder.append(messageId.getId());
+            builder.append(VERSION);
+            builder.append(clientId);
+        }
         return builder.toBytes();
     }
 }

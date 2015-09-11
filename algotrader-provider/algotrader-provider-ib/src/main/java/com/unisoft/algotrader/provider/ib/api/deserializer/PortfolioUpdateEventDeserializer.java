@@ -20,8 +20,8 @@ public class PortfolioUpdateEventDeserializer extends Deserializer {
 
     private final RefDataStore refDataStore;
 
-    public PortfolioUpdateEventDeserializer(RefDataStore refDataStore){
-        super(IncomingMessageId.PORTFOLIO_UPDATE);
+    public PortfolioUpdateEventDeserializer(RefDataStore refDataStore, int serverCurrentVersion){
+        super(IncomingMessageId.PORTFOLIO_UPDATE, serverCurrentVersion);
         this.refDataStore = refDataStore;
     }
 
@@ -43,7 +43,7 @@ public class PortfolioUpdateEventDeserializer extends Deserializer {
         if (version >= 4) {
             accountName = readString(inputStream);
         }
-        if ((version == 6) && (currentServerVersion == 39)) {
+        if ((version == 6) && (serverCurrentVersion == 39)) {
             final String primaryExchange = readString(inputStream);
             //instrument.setExchId(exchId);
         }

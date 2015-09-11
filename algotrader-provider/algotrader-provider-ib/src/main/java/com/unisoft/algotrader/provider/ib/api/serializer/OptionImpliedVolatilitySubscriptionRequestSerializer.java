@@ -21,7 +21,7 @@ public class OptionImpliedVolatilitySubscriptionRequestSerializer extends Serial
 
     public OptionImpliedVolatilitySubscriptionRequestSerializer(
             RefDataStore refDataStore, int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.OPTION_IMPLIED_VOLATILITY_SUBSCRIPTION_REQUEST);
         this.refDataStore = refDataStore;
     }
 
@@ -33,7 +33,7 @@ public class OptionImpliedVolatilitySubscriptionRequestSerializer extends Serial
     public byte [] serialize(final long requestId, final Instrument instrument, final double optionPrice, final double underlyingPrice){
         checkCalculateImpliedVolatility();
         ByteArrayBuilder builder = getByteArrayBuilder();
-        builder.append(OutgoingMessageId.OPTION_IMPLIED_VOLATILITY_SUBSCRIPTION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(requestId);
         appendInstrument(builder, instrument);

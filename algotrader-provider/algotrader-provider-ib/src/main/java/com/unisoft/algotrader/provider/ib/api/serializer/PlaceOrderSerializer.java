@@ -6,7 +6,6 @@ import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
 import com.unisoft.algotrader.provider.ib.api.model.contract.OptionRight;
 import com.unisoft.algotrader.provider.ib.api.model.contract.SecType;
-import com.unisoft.algotrader.provider.ib.api.model.contract.UnderlyingCombo;
 import com.unisoft.algotrader.provider.ib.api.model.order.OrderAction;
 import com.unisoft.algotrader.provider.ib.api.model.order.OrderType;
 import com.unisoft.algotrader.provider.ib.api.model.order.TIF;
@@ -22,14 +21,14 @@ public class PlaceOrderSerializer extends Serializer{
     private RefDataStore refDataStore;
 
     public PlaceOrderSerializer(RefDataStore refDataStore, int serverCurrentVersion) {
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.PLACE_ORDER_REQUEST);
         this.refDataStore = refDataStore;
     }
 
     public byte[] serialize(Order order) {
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.PLACE_ORDER_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(getVersion());
         builder.append(order.getExtOrderId());
         Instrument instrument = refDataStore.getInstrument(order.getInstId());

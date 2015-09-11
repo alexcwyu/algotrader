@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
+import com.unisoft.algotrader.provider.ib.api.event.OrderStatusUpdateEvent;
 import com.unisoft.algotrader.provider.ib.api.model.order.OrderStatus;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
@@ -11,11 +12,11 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.*;
 /**
  * Created by alex on 8/13/15.
  */
-public class OrderStatusDeserializer extends Deserializer {
+public class OrderStatusUpdateEventDeserializer extends Deserializer<OrderStatusUpdateEvent> {
 
 
-    public OrderStatusDeserializer(){
-        super(IncomingMessageId.ORDER_STATE_UPDATE);
+    public OrderStatusUpdateEventDeserializer(int serverCurrentVersion){
+        super(IncomingMessageId.ORDER_STATE_UPDATE, serverCurrentVersion);
     }
 
     @Override

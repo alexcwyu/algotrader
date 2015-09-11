@@ -1,5 +1,7 @@
 package com.unisoft.algotrader.provider.ib.api.serializer;
 
+import com.unisoft.algotrader.provider.ib.api.model.system.OutgoingMessageId;
+
 /**
  * Created by alex on 8/2/15.
  */
@@ -13,10 +15,18 @@ public abstract class Serializer{
         return builder;
     }
 
-    protected int serverCurrentVersion;
+    protected final int serverCurrentVersion;
 
-    protected Serializer(int serverCurrentVersion) {
+    protected final OutgoingMessageId messageId;
+
+    protected Serializer(final int serverCurrentVersion, final OutgoingMessageId messageId) {
         this.serverCurrentVersion = serverCurrentVersion;
+        this.messageId = messageId;
+    }
+
+
+    public OutgoingMessageId messageId(){
+        return messageId;
     }
 
     protected int getServerCurrentVersion(){

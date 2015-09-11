@@ -1,5 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
+import com.unisoft.algotrader.provider.ib.api.event.FinancialAdvisorConfigurationEvent;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.fa.FinancialAdvisorDataType;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
@@ -12,11 +13,11 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.readString;
 /**
  * Created by alex on 8/13/15.
  */
-public class FinancialAdvisorConfigurationEventDeserializer extends Deserializer {
+public class FinancialAdvisorConfigurationEventDeserializer extends Deserializer<FinancialAdvisorConfigurationEvent> {
 
 
-    public FinancialAdvisorConfigurationEventDeserializer(){
-        super(IncomingMessageId.FINANCIAL_ADVISOR_CONFIGURATION);
+    public FinancialAdvisorConfigurationEventDeserializer(int serverCurrentVersion){
+        super(IncomingMessageId.FINANCIAL_ADVISOR_CONFIGURATION, serverCurrentVersion);
     }
 
     @Override

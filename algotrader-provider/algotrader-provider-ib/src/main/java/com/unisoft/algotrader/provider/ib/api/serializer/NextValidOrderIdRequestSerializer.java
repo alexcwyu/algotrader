@@ -9,7 +9,7 @@ public class NextValidOrderIdRequestSerializer extends Serializer{
 
     private static final int VERSION = 1;
     public NextValidOrderIdRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.NEXT_VALID_ORDER_ID_REQUEST);
     }
 
     public byte [] serialize(){
@@ -19,7 +19,7 @@ public class NextValidOrderIdRequestSerializer extends Serializer{
     public byte [] serialize(long suggestId){
 
         ByteArrayBuilder builder = getByteArrayBuilder();
-        builder.append(OutgoingMessageId.NEXT_VALID_ORDER_ID_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(suggestId);
         return builder.toBytes();

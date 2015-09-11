@@ -9,13 +9,13 @@ public class NewsBulletinSubscriptionRequestSerializer extends Serializer{
 
     private static final int VERSION = 1;
     public NewsBulletinSubscriptionRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.NEWS_BULLETIN_SUBSCRIPTION_REQUEST);
     }
 
     public byte [] serialize(boolean includeExistingDailyNews){
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.NEWS_BULLETIN_SUBSCRIPTION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(includeExistingDailyNews);
 

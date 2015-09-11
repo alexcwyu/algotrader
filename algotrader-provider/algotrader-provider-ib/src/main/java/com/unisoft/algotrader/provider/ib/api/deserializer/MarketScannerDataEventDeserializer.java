@@ -6,7 +6,7 @@ import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
 import com.unisoft.algotrader.provider.ib.InputStreamUtils;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
-import com.unisoft.algotrader.provider.ib.api.model.contract.InstrumentSpecification;
+import com.unisoft.algotrader.provider.ib.api.model.contract.ContractSpecification;
 import com.unisoft.algotrader.provider.ib.api.model.contract.OptionRight;
 import com.unisoft.algotrader.provider.ib.api.model.contract.SecType;
 import com.unisoft.algotrader.provider.ib.api.model.data.MarketScannerData;
@@ -25,8 +25,8 @@ public class MarketScannerDataEventDeserializer extends Deserializer {
 
     private final RefDataStore refDataStore;
 
-    public MarketScannerDataEventDeserializer(RefDataStore refDataStore){
-        super(IncomingMessageId.MARKET_SCANNER_DATA);
+    public MarketScannerDataEventDeserializer(RefDataStore refDataStore, int serverCurrentVersion){
+        super(IncomingMessageId.MARKET_SCANNER_DATA, serverCurrentVersion);
         this.refDataStore = refDataStore;
 
     }
@@ -45,7 +45,7 @@ public class MarketScannerDataEventDeserializer extends Deserializer {
 
     private MarketScannerData consumeMarketScannerDataEvent(final int version, final InputStream inputStream, final IBEventHandler eventHandler, final int requestId) {
 
-        final InstrumentSpecification contractSpecification = new InstrumentSpecification();
+        final ContractSpecification contractSpecification = new ContractSpecification();
         final int ranking = readInt(inputStream);
         int instid = (version >= 3) ? readInt(inputStream) : 0;
 

@@ -12,7 +12,7 @@ public class OptionImpliedVolatilityUnsubscriptionRequestSerializer extends Seri
 
     private static final int VERSION = 1;
     public OptionImpliedVolatilityUnsubscriptionRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.OPTION_IMPLIED_VOLATILITY_UNSUBSCRIPTION_REQUEST);
     }
 
     public byte [] serialize(long requestId){
@@ -20,7 +20,7 @@ public class OptionImpliedVolatilityUnsubscriptionRequestSerializer extends Seri
 
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.OPTION_IMPLIED_VOLATILITY_UNSUBSCRIPTION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(requestId);
 

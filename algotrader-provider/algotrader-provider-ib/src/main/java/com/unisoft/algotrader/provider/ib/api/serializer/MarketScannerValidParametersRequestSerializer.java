@@ -10,13 +10,13 @@ public class MarketScannerValidParametersRequestSerializer extends Serializer{
     private static final int VERSION = 1;
 
     public MarketScannerValidParametersRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.MARKET_SCANNER_VALID_PARAMETERS_REQUEST);
     }
 
     public byte [] serialize(){
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.MARKET_SCANNER_VALID_PARAMETERS_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         return builder.toBytes();
     }

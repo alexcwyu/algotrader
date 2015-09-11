@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
+import com.unisoft.algotrader.provider.ib.api.event.TickOptionComputationEvent;
 import com.unisoft.algotrader.provider.ib.api.model.data.TickType;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
@@ -12,14 +13,14 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.readInt;
 /**
  * Created by alex on 8/13/15.
  */
-public class TickOptionComputationEventDeserializer extends Deserializer {
+public class TickOptionComputationEventDeserializer extends Deserializer<TickOptionComputationEvent> {
 
     private static final int NOT_YET_COMPUTED_0 = 0;
     private static final int NOT_YET_COMPUTED_1 = 1;
     private static final int VERSION = 6;
 
-    public TickOptionComputationEventDeserializer(){
-        super(IncomingMessageId.TICK_OPTION_COMPUTATION);
+    public TickOptionComputationEventDeserializer(int serverCurrentVersion){
+        super(IncomingMessageId.TICK_OPTION_COMPUTATION, serverCurrentVersion);
     }
 
     @Override

@@ -12,8 +12,8 @@ import java.io.InputStream;
 public class NextValidOrderIdEventDeserializer extends Deserializer {
 
 
-    public NextValidOrderIdEventDeserializer(){
-        super(IncomingMessageId.NEXT_VALID_ORDER_ID);
+    public NextValidOrderIdEventDeserializer(int serverCurrentVersion){
+        super(IncomingMessageId.NEXT_VALID_ORDER_ID, serverCurrentVersion);
     }
 
     @Override

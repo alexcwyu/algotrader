@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.ib.api.model.data;
 
-import com.unisoft.algotrader.provider.ib.api.model.contract.InstrumentSpecification;
+import com.unisoft.algotrader.provider.ib.api.model.contract.ContractSpecification;
 
 /**
  * Created by alex on 8/19/15.
@@ -8,16 +8,16 @@ import com.unisoft.algotrader.provider.ib.api.model.contract.InstrumentSpecifica
 public class MarketScannerData {
 
     private final int ranking;
-    private final InstrumentSpecification instrumentSpecification;
+    private final ContractSpecification contractSpecification;
     private final String distance;
     private final String benchmark;
     private final String projection;
     private final String comboLegDescription;
 
-    public MarketScannerData(int ranking, InstrumentSpecification instrumentSpecification, String distance, String benchmark, String projection, String comboLegDescription) {
+    public MarketScannerData(int ranking, ContractSpecification contractSpecification, String distance, String benchmark, String projection, String comboLegDescription) {
 
         this.ranking = ranking;
-        this.instrumentSpecification = instrumentSpecification;
+        this.contractSpecification = contractSpecification;
         this.distance = distance;
         this.benchmark = benchmark;
         this.projection = projection;
@@ -28,8 +28,8 @@ public class MarketScannerData {
         return ranking;
     }
 
-    public InstrumentSpecification getInstrumentSpecification() {
-        return instrumentSpecification;
+    public ContractSpecification getContractSpecification() {
+        return contractSpecification;
     }
 
     public String getDistance() {
@@ -52,7 +52,7 @@ public class MarketScannerData {
     public String toString() {
         return "MarketScannerData{" +
                 "ranking=" + ranking +
-                ", instrumentSpecification=" + instrumentSpecification +
+                ", instrumentSpecification=" + contractSpecification +
                 ", distance='" + distance + '\'' +
                 ", benchmark='" + benchmark + '\'' +
                 ", projection='" + projection + '\'' +

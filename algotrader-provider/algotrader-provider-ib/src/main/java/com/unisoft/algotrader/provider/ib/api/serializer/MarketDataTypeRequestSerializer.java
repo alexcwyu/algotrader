@@ -13,14 +13,14 @@ public class MarketDataTypeRequestSerializer extends Serializer{
 
     private static final int VERSION = 1;
     public MarketDataTypeRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.MARKET_DATA_TYPE_REQUEST);
     }
 
     public byte [] serialize(MarketDataType type){
         checkMarketDataTypeRequest();
 
         ByteArrayBuilder builder = getByteArrayBuilder();
-        builder.append(OutgoingMessageId.MARKET_DATA_TYPE_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(type.getValue());
 

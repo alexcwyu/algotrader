@@ -11,14 +11,14 @@ public class FAReplaceConfigurationRequestSerializer extends Serializer{
     private static final int VERSION = 1;
 
     public FAReplaceConfigurationRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.FINANCIAL_ADVISOR_REPLACE_CONFIGURATION_REQUEST);
     }
 
     public byte [] serialize(FinancialAdvisorDataType type, String xml){
 
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.FINANCIAL_ADVISOR_REPLACE_CONFIGURATION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(type.getValue());
         builder.append(xml);

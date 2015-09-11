@@ -6,7 +6,7 @@ import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.provider.ib.api.model.bulletin.NewsBulletinType;
-import com.unisoft.algotrader.provider.ib.api.model.contract.InstrumentSpecification;
+import com.unisoft.algotrader.provider.ib.api.model.contract.ContractSpecification;
 import com.unisoft.algotrader.provider.ib.api.model.contract.UnderlyingCombo;
 import com.unisoft.algotrader.provider.ib.api.model.data.*;
 import com.unisoft.algotrader.provider.ib.api.model.execution.CommissionReport;
@@ -47,7 +47,7 @@ public interface IBEventHandler extends EventHandler {
 
     default void onBondInstrumentSpecificationEvent(final BondInstrumentSpecificationEvent bondInstrumentSpecificationEvent){}
 
-    default void onBondInstrumentSpecificationEvent(final int requestId, final InstrumentSpecification contractSpecification){}
+    default void onBondInstrumentSpecificationEvent(final int requestId, final ContractSpecification contractSpecification){}
 
     default void onCommissionReportEvent(final CommissionReportEvent commissionReportEvent){}
 
@@ -97,13 +97,13 @@ public interface IBEventHandler extends EventHandler {
 
     default void onHistoricalDataListEvent(int requestId, List<Bar> bar){}
 
-    default void onInstrumentSpecificationEndEvent(final InstrumentSpecificationEndEvent instrumentSpecificationEndEvent){}
+    default void onInstrumentSpecificationEndEvent(final ContractSpecificationEndEvent contractSpecificationEndEvent){}
 
     default void onInstrumentSpecificationEndEvent(final int requestId){}
 
-    default void onInstrumentSpecificationEvent(final InstrumentSpecificationEvent instrumentSpecificationEvent){}
+    default void onInstrumentSpecificationEvent(final ContractSpecificationEvent contractSpecificationEvent){}
 
-    default void onInstrumentSpecificationEvent(final int requestId, final InstrumentSpecification instrumentSpecification){}
+    default void onInstrumentSpecificationEvent(final int requestId, final ContractSpecification contractSpecification){}
 
     default void onManagedAccountListEvent(final ManagedAccountListEvent managedAccountListEvent){}
 
@@ -128,7 +128,7 @@ public interface IBEventHandler extends EventHandler {
     default void onMarketScannerDataEvent(final int requestId, final MarketScannerData marketScannerData){}
 
     default void onMarketScannerDataEvent(final int requestId, final int ranking,
-                                         final InstrumentSpecification instrumentSpecification, final String distance, final String benchmark,
+                                         final ContractSpecification contractSpecification, final String distance, final String benchmark,
                                          final String projection, final String comboLegDescription){}
 
     default void onMarketScannerDataListEvent(final MarketScannerDataListEvent marketScannerDataListEvent){}

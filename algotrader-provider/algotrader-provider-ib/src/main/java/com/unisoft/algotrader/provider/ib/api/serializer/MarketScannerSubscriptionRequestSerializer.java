@@ -13,12 +13,12 @@ public class MarketScannerSubscriptionRequestSerializer extends Serializer{
     private static final int VERSION = 4;
 
     public MarketScannerSubscriptionRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.MARKET_SCANNER_SUBSCRIPTION_REQUEST);
     }
 
     public byte [] serialize(long requestId, MarketScannerFilter filter){
         ByteArrayBuilder builder = getByteArrayBuilder();
-        builder.append(OutgoingMessageId.MARKET_SCANNER_SUBSCRIPTION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(requestId);
         appendMarketScannerFilter(builder, filter);

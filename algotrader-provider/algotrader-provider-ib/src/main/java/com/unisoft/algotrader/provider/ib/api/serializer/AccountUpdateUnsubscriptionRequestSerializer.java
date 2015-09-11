@@ -10,14 +10,14 @@ public class AccountUpdateUnsubscriptionRequestSerializer extends Serializer{
     private static final int VERSION = 2;
 
     public AccountUpdateUnsubscriptionRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.ACCOUNT_UPDATE_SUBSCRIPTION_REQUEST);
     }
 
     public byte [] serialize(String accountName){
 
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.ACCOUNT_UPDATE_SUBSCRIPTION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(false);
         builder.append(accountName);

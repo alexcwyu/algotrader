@@ -1,8 +1,7 @@
 package com.unisoft.algotrader.provider.ib;
 
-import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.api.deserializer.Deserializer;
-import com.unisoft.algotrader.provider.ib.api.deserializer.DeserializerFactory;
+import com.unisoft.algotrader.provider.ib.api.deserializer.Deserializers;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 import org.apache.commons.io.IOUtils;
@@ -20,7 +19,7 @@ public class EventInputStreamConsumer implements Runnable {
 
     private static final Logger LOG = LogManager.getLogger(EventInputStreamConsumer.class);
     
-    private final DeserializerFactory deserializerFactory;
+    private final Deserializers deserializers;
     private final IBEventHandler eventHandler;
     private final IBSocket ibSocket;
     private final InputStream inputStream;
@@ -29,11 +28,10 @@ public class EventInputStreamConsumer implements Runnable {
     public EventInputStreamConsumer(
             IBEventHandler eventHandler,
             IBSocket ibSocket,
-            int currentServerVersion,
-            RefDataStore refDataStore){
+            Deserializers deserializers){
         this.eventHandler = eventHandler;
         this.ibSocket = ibSocket;
-        this.deserializerFactory = new DeserializerFactory(currentServerVersion, refDataStore);
+        this.deserializers = deserializers;
         this.inputStream = ibSocket.getInputStream();
     }
 
@@ -56,7 +54,7 @@ public class EventInputStreamConsumer implements Runnable {
         final int messageId = readInt(inputStream);
         final IncomingMessageId incomingMessageId = IncomingMessageId.fromId(messageId);
         final Deserializer serializer =
-                deserializerFactory.getDeserializer(incomingMessageId);
+                deserializers.getDeserializer(incomingMessageId);
         LOG.info("consumeMessage, incomingMessageId {}", incomingMessageId);
         serializer.consume(inputStream, eventHandler);
     }

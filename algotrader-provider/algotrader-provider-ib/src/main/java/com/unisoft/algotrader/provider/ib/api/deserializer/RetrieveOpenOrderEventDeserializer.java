@@ -8,6 +8,7 @@ import com.unisoft.algotrader.model.trading.TimeInForce;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ib.IBProvider;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
+import com.unisoft.algotrader.provider.ib.api.event.RetrieveOpenOrderEvent;
 import com.unisoft.algotrader.provider.ib.api.model.contract.OptionRight;
 import com.unisoft.algotrader.provider.ib.api.model.contract.SecType;
 import com.unisoft.algotrader.provider.ib.api.model.order.*;
@@ -21,12 +22,12 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.*;
 /**
  * Created by alex on 8/13/15.
  */
-public class RetrieveOpenOrderEventDeserializer extends Deserializer {
+public class RetrieveOpenOrderEventDeserializer extends Deserializer<RetrieveOpenOrderEvent> {
 
     private final RefDataStore refDataStore;
 
-    public RetrieveOpenOrderEventDeserializer(RefDataStore refDataStore){
-        super(IncomingMessageId.RETRIEVE_OPEN_ORDER);
+    public RetrieveOpenOrderEventDeserializer(RefDataStore refDataStore, int serverCurrentVersion){
+        super(IncomingMessageId.RETRIEVE_OPEN_ORDER, serverCurrentVersion);
         this.refDataStore = refDataStore;
     }
 
@@ -125,7 +126,7 @@ public class RetrieveOpenOrderEventDeserializer extends Deserializer {
             String settlingFirm = readString(inputStream);
             int shortSaleSlot = readInt(inputStream);
             String designatedLocation = readString(inputStream);
-            if (currentServerVersion == 51) {
+            if (serverCurrentVersion == 51) {
                 readInt(inputStream);
             } else if (version >= 23) {
                 int exemptionCode = readInt(inputStream);
@@ -177,7 +178,7 @@ public class RetrieveOpenOrderEventDeserializer extends Deserializer {
                 }
             }
             int continuouslyUpdate = readInt(inputStream);
-            if (currentServerVersion == 26) {
+            if (serverCurrentVersion == 26) {
                 double lowerStockPriceRange = readDouble(inputStream);
                 double upperStockPriceRange = readDouble(inputStream);
             }

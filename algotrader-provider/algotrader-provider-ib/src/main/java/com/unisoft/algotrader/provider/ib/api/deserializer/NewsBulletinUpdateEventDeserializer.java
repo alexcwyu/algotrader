@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
+import com.unisoft.algotrader.provider.ib.api.event.NewsBulletinUpdateEvent;
 import com.unisoft.algotrader.provider.ib.api.model.bulletin.NewsBulletinType;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
@@ -12,11 +13,11 @@ import static com.unisoft.algotrader.provider.ib.InputStreamUtils.readString;
 /**
  * Created by alex on 8/13/15.
  */
-public class NewsBulletinUpdateDeserializer extends Deserializer {
+public class NewsBulletinUpdateEventDeserializer extends Deserializer<NewsBulletinUpdateEvent> {
 
 
-    public NewsBulletinUpdateDeserializer(){
-        super(IncomingMessageId.NEWS_BULLETIN_UPDATE);
+    public NewsBulletinUpdateEventDeserializer(int serverCurrentVersion){
+        super(IncomingMessageId.NEWS_BULLETIN_UPDATE, serverCurrentVersion);
     }
 
     @Override

@@ -20,7 +20,7 @@ public class ExerciseOptionRequestSerializer extends Serializer{
 
     public ExerciseOptionRequestSerializer(
             RefDataStore refDataStore, int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.EXERCISE_OPTION_REQUEST);
         this.refDataStore = refDataStore;
     }
 
@@ -34,7 +34,7 @@ public class ExerciseOptionRequestSerializer extends Serializer{
                              final int quantity, final String accountName, final boolean override){
 
         ByteArrayBuilder builder = getByteArrayBuilder();
-        builder.append(OutgoingMessageId.EXERCISE_OPTION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(requestId);
         appendInstrument(builder, instrument);

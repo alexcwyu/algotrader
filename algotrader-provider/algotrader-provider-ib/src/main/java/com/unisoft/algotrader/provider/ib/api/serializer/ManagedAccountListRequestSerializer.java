@@ -9,12 +9,12 @@ public class ManagedAccountListRequestSerializer extends Serializer{
 
     private static final int VERSION = 1;
     public ManagedAccountListRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.MANAGED_ACCOUNT_LIST_REQUEST);
     }
 
     public byte [] serialize(){
         ByteArrayBuilder builder = getByteArrayBuilder();
-        builder.append(OutgoingMessageId.MANAGED_ACCOUNT_LIST_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         return builder.toBytes();
     }

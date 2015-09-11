@@ -19,7 +19,7 @@ public class ContractSpecificationRequestSerializer extends Serializer{
 
     public ContractSpecificationRequestSerializer(
             RefDataStore refDataStore, int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.CONTRACT_SPECIFICATION_REQUEST);
         this.refDataStore = refDataStore;
     }
 
@@ -31,7 +31,7 @@ public class ContractSpecificationRequestSerializer extends Serializer{
     public byte [] serialize(long requestId, Instrument instrument){
 
         ByteArrayBuilder builder = getByteArrayBuilder();
-        builder.append(OutgoingMessageId.CONTRACT_SPECIFICATION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         if (Feature.CONTRACT_SPECIFICATION_MARKER.isSupportedByVersion(getServerCurrentVersion())) {
             builder.append(requestId);

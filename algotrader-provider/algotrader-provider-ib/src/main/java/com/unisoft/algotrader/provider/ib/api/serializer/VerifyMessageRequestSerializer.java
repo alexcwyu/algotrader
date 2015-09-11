@@ -10,14 +10,14 @@ public class VerifyMessageRequestSerializer extends Serializer{
     private static final int VERSION = 1;
 
     public VerifyMessageRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.VERIFY_MESSAGE_REQUEST);
     }
 
     public byte [] serialize(String apiData){
 
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.VERIFY_MESSAGE_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(apiData);
 

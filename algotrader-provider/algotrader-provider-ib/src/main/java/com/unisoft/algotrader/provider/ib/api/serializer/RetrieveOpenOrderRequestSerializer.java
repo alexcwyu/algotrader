@@ -9,13 +9,13 @@ public class RetrieveOpenOrderRequestSerializer extends Serializer{
 
     private static final int VERSION = 1;
     public RetrieveOpenOrderRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.RETRIEVE_OPEN_ORDER_REQUEST);
     }
 
     public byte [] serialize(){
 
         ByteArrayBuilder builder = getByteArrayBuilder();
-        builder.append(OutgoingMessageId.RETRIEVE_OPEN_ORDER_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         return builder.toBytes();
     }

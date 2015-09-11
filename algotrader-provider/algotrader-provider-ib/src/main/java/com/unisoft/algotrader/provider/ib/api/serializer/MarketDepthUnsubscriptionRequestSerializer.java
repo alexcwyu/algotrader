@@ -10,13 +10,13 @@ public class MarketDepthUnsubscriptionRequestSerializer extends Serializer{
     private static final int VERSION = 1;
 
     public MarketDepthUnsubscriptionRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.MARKET_DEPTH_UNSUBSCRIPTION_REQUEST);
     }
 
     public byte [] serialize(long requestId){
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.MARKET_DEPTH_UNSUBSCRIPTION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(requestId);
 

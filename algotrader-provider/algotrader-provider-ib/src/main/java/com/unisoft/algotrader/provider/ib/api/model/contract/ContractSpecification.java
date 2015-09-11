@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by alex on 8/19/15.
  */
-public class InstrumentSpecification {
+public class ContractSpecification {
 
 
     private static final String EMPTY = "";

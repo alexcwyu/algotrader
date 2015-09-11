@@ -10,14 +10,14 @@ public class GroupEventsUnsubscriptionRequestSerializer extends Serializer{
     private static final int VERSION = 1;
 
     public GroupEventsUnsubscriptionRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.GROUP_EVENTS_UNSUBSCRIPTION_REQUEST);
     }
 
     public byte [] serialize(long requestId){
 
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.GROUP_EVENTS_UNSUBSCRIPTION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(requestId);
 

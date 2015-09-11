@@ -12,13 +12,13 @@ public class ExecutionReportRequestSerializer extends Serializer{
     private static final int VERSION = 3;
 
     public ExecutionReportRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.EXECUTION_REPORT_REQUEST);
     }
 
     public byte [] serialize(long requestId, ExecutionReportFilter filter){
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.EXECUTION_REPORT_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         if (Feature.EXECUTION_MARKER.isSupportedByVersion(getServerCurrentVersion())) {
             builder.append(requestId);

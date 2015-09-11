@@ -20,7 +20,7 @@ public class MarketDataSubscriptionRequestSerializer extends Serializer{
 
     public MarketDataSubscriptionRequestSerializer(
             RefDataStore refDataStore, int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.MARKET_DATA_SUBSCRIPTION_REQUEST);
         this.refDataStore = refDataStore;
     }
 
@@ -33,7 +33,7 @@ public class MarketDataSubscriptionRequestSerializer extends Serializer{
 
         ByteArrayBuilder builder = getByteArrayBuilder();
 
-        builder.append(OutgoingMessageId.MARKET_DATA_SUBSCRIPTION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(subscriptionKey.getSubscriptionId());
         appendInstrument(builder, instrument);

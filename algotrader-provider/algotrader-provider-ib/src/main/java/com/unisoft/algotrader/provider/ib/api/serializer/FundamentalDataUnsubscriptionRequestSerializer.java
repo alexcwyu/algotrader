@@ -12,14 +12,14 @@ public class FundamentalDataUnsubscriptionRequestSerializer extends Serializer{
 
     private static final int VERSION = 1;
     public FundamentalDataUnsubscriptionRequestSerializer(int serverCurrentVersion){
-        super(serverCurrentVersion);
+        super(serverCurrentVersion, OutgoingMessageId.FUNDAMENTAL_DATA_UNSUBSCRIPTION_REQUEST);
     }
 
     public byte [] serialize(long id){
         checkReutersFundamentalDataSupport();
 
         ByteArrayBuilder builder = getByteArrayBuilder();
-        builder.append(OutgoingMessageId.FUNDAMENTAL_DATA_UNSUBSCRIPTION_REQUEST.getId());
+        builder.append(messageId.getId());
         builder.append(VERSION);
         builder.append(id);
 
