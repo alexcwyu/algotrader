@@ -6,18 +6,18 @@ import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.unisoft.algotrader.model.event.EventBusManager;
+import com.unisoft.algotrader.model.event.data.DataType;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ProviderManager;
-import com.unisoft.algotrader.provider.data.HistoricalDataProvider;
-import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
-import com.unisoft.algotrader.provider.data.RealTimeDataProvider;
-import com.unisoft.algotrader.provider.data.SubscriptionKey;
+import com.unisoft.algotrader.provider.data.*;
 import com.unisoft.algotrader.provider.execution.ExecutionProvider;
 import com.unisoft.algotrader.provider.ib.api.event.DefaultIBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
 import com.unisoft.algotrader.provider.ib.api.model.fa.FinancialAdvisorDataType;
+import gnu.trove.map.TLongObjectMap;
+import gnu.trove.map.hash.TLongObjectHashMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -43,12 +43,16 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
     public final EventBusManager eventBusManager;
 
     private final IBSocket ibSocket;
+
     private Set<SubscriptionKey> subscriptionKeys = Sets.newHashSet();
     private BiMap<Long, SubscriptionKey> idSubscriptionMap = HashBiMap.create();
 
     private Map<Long, Order> extOrderIdOrderMap = Maps.newHashMap();
     private Map<Long, Order> orderIdOrderMap = Maps.newHashMap();
+    private Map<Long, Long> orderIdMap  = Maps.newHashMap();
 
+    private TLongObjectMap<DataRecord> dataRecords = new TLongObjectHashMap<>();
+    private TLongObjectMap<DataRecord> historicalDataRecords = new TLongObjectHashMap<>();
 
     private AtomicInteger requestId = new AtomicInteger(1);
     private AtomicInteger orderId = null;
@@ -65,21 +69,36 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
     }
 
     @Override
-    public boolean subscribeRealTimeData(SubscriptionKey subscriptionKey){
-        long requestId = nextRequestId();
-        subscriptionKeys.add(subscriptionKey);
-        idSubscriptionMap.put(requestId, subscriptionKey);
-        ibSocket.subscribeRealTimeData(requestId, subscriptionKey);
-        return true;
+    //TODO thread safe, lock
+    public boolean subscribeMarketData(SubscriptionKey subscriptionKey){
+        if (!subscriptionKeys.contains(subscriptionKey)) {
+            long requestId = nextRequestId();
+            subscriptionKeys.add(subscriptionKey);
+            idSubscriptionMap.put(requestId, subscriptionKey);
+            dataRecords.put(requestId, new DataRecord(subscriptionKey.instId));
+            if (subscriptionKey instanceof MarketDepthSubscriptionKey) {
+                ibSocket.subscribeMarketDepth(requestId, (MarketDepthSubscriptionKey) subscriptionKey);
+            } else if (subscriptionKey.type == DataType.Quote || subscriptionKey.type == DataType.Trade) {
+                ibSocket.subscribeMarketData(requestId, subscriptionKey, false);
+            } else if (subscriptionKey.type == DataType.Bar) {
+                ibSocket.subscribeRealTimeData(requestId, subscriptionKey);
+            } else {
+                LOG.warn("unsupported type {}", subscriptionKey);
+                throw new IllegalArgumentException("unsupported type " + subscriptionKey);
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public boolean unSubscribeRealTimeData(SubscriptionKey subscriptionKey){
+    public boolean unSubscribeMarketData(SubscriptionKey subscriptionKey){
         Long requestId = idSubscriptionMap.inverse().get(subscriptionKey);
         if (requestId != null) {
+            ibSocket.unsubscribeRealTimeData(requestId);
             subscriptionKeys.remove(subscriptionKey);
             idSubscriptionMap.remove(requestId);
-            ibSocket.unsubscribeRealTimeData(requestId);
+            dataRecords.remove(requestId);
             return true;
         }
         return false;
@@ -95,6 +114,7 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
         long requestId = nextRequestId();
         subscriptionKeys.add(subscriptionKey);
         idSubscriptionMap.put(requestId, subscriptionKey);
+        historicalDataRecords.put(requestId, new DataRecord(subscriptionKey.instId));
         ibSocket.subscribeHistoricalData(requestId, subscriptionKey);
         return true;
     }
@@ -102,9 +122,10 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
     public boolean unSubscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey){
         Long requestId = idSubscriptionMap.inverse().get(subscriptionKey);
         if (requestId != null) {
+            ibSocket.unsubscribeHistoricalData(requestId);
             subscriptionKeys.remove(subscriptionKey);
             idSubscriptionMap.remove(requestId);
-            ibSocket.unsubscribeHistoricalData(requestId);
+            historicalDataRecords.remove(requestId);
             return true;
         }
         return false;
@@ -124,6 +145,7 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
         }
         extOrderIdOrderMap.put(order.extOrderId, order);
         orderIdOrderMap.put(order.orderId, order);
+        orderIdMap.put(order.orderId, order.extOrderId);
         ibSocket.placeOrder(order);
     }
 
@@ -154,8 +176,7 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
             while (this.orderId == null) {
                 try {
                     this.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                } catch (InterruptedException ignored) {
                 }
             }
         }
@@ -175,6 +196,8 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
     public String providerId() {
         return PROVIDER_ID;
     }
+
+
 
     public RefDataStore getRefDataStore() {
         return refDataStore;
@@ -202,7 +225,6 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
 
     public void onNextValidOrderIdEvent(final int nextValidOrderId){
         this.orderId = new AtomicInteger(nextValidOrderId);
-
         synchronized (this) {
             this.notify();
         }

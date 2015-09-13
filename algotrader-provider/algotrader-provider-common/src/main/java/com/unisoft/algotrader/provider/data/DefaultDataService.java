@@ -48,12 +48,12 @@ public class DefaultDataService implements DataService {
     }
 
     @Override
-    public boolean subscribeRealTimeData(SubscriptionKey subscriptionKey) {
+    public boolean subscribeMarketData(SubscriptionKey subscriptionKey) {
         lock.lock();
         try {
             RealTimeDataProvider provider = providerManager.getRealTimeDataProvider(subscriptionKey.providerId);
             if (provider != null) {
-                provider.subscribeRealTimeData(subscriptionKey);
+                provider.subscribeMarketData(subscriptionKey);
                 return true;
             }
 
@@ -65,13 +65,13 @@ public class DefaultDataService implements DataService {
     }
 
     @Override
-    public boolean unSubscribeRealTimeData(SubscriptionKey subscriptionKey) {
+    public boolean unSubscribeMarketData(SubscriptionKey subscriptionKey) {
         lock.lock();
         try {
 
             RealTimeDataProvider provider = providerManager.getRealTimeDataProvider(subscriptionKey.providerId);
             if (provider != null) {
-                provider.unSubscribeRealTimeData(subscriptionKey);
+                provider.unSubscribeMarketData(subscriptionKey);
                 return true;
             }
 
@@ -80,4 +80,5 @@ public class DefaultDataService implements DataService {
         }
         return false;
     }
+
 }
