@@ -66,6 +66,10 @@ public class IBSocket {
     }
 
     public void connect(){
+        connect(true);
+    }
+
+    public void connect(boolean requestAccountUpdate){
         try {
             this.socket = new Socket(ibConfig.host, ibConfig.port);
             this.outputStream = new DataOutputStream(socket.getOutputStream());
@@ -74,7 +78,8 @@ public class IBSocket {
             handShake();
             startApi(); //set client id
             startStream();
-            requestAccountUpdates(null);
+            if(requestAccountUpdate)
+                requestAccountUpdates(null);
         }
         catch (IOException e){
             LOG.error(e);
@@ -285,15 +290,15 @@ public class IBSocket {
         send(bytes);
     }
 
-    public void requestPositions(long orderId) {
-        byte [] bytes = serializers.positionsRequestSerializer().serialize(orderId);
+    public void requestPositions() {
+        byte [] bytes = serializers.positionsRequestSerializer().serialize();
         if (LOG.isDebugEnabled())
             LOG.debug("requestPositions, {}", new String(bytes));
         send(bytes);
     }
 
-    public void cancelPositions(long orderId) {
-        byte [] bytes = serializers.positionsCancellationRequestSerializer().serialize(orderId);
+    public void cancelPositions() {
+        byte [] bytes = serializers.positionsCancellationRequestSerializer().serialize();
         if (LOG.isDebugEnabled())
             LOG.debug("cancelPositions, {}", new String(bytes));
         send(bytes);

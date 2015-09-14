@@ -1,8 +1,8 @@
 package com.unisoft.algotrader.provider.ib.api.model.execution;
 
-import ch.aonyx.broker.ib.api.contract.SecurityType;
-import ch.aonyx.broker.ib.api.order.OrderAction;
 import com.google.common.base.Objects;
+import com.unisoft.algotrader.provider.ib.api.model.contract.SecType;
+import com.unisoft.algotrader.provider.ib.api.model.order.OrderAction;
 
 /**
  * Created by alex on 9/9/15.
@@ -13,8 +13,8 @@ public class ExecutionReportFilter {
     private String accountNumber = EMPTY;
     private int clientId;
     private String exchange = EMPTY;
-    private SecurityType securityType = SecurityType.EMPTY;
-    private OrderAction orderAction = OrderAction.EMPTY;
+    private SecType securityType = null;
+    private OrderAction orderAction = null;
     private String symbol = EMPTY;
     private String time = EMPTY;
 
@@ -42,11 +42,11 @@ public class ExecutionReportFilter {
         this.exchange = exchange;
     }
 
-    public SecurityType getSecurityType() {
+    public SecType getSecurityType() {
         return securityType;
     }
 
-    public void setSecurityType(SecurityType securityType) {
+    public void setSecurityType(SecType securityType) {
         this.securityType = securityType;
     }
 

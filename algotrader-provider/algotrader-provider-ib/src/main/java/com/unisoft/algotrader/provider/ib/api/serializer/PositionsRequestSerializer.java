@@ -14,7 +14,7 @@ public class PositionsRequestSerializer extends Serializer{
         super(serverCurrentVersion, OutgoingMessageId.POSITIONS_REQUEST);
     }
 
-    public byte[] serialize(long orderId) {
+    public byte[] serialize() {
         ByteArrayBuilder builder = getByteArrayBuilder();
 
         builder.append(messageId.getId());

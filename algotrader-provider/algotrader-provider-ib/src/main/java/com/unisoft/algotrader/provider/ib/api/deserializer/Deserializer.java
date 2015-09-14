@@ -32,9 +32,15 @@ public abstract class Deserializer<M extends IBEvent>{
 
     public void consume(final InputStream inputStream,
                      final IBEventHandler eventHandler) {
-        Validate.notNull(inputStream);
-        int version = readInt(inputStream);
-        consumeMessageContent(version, inputStream, eventHandler);
+        try {
+            Validate.notNull(inputStream);
+            int version = readInt(inputStream);
+            consumeMessageContent(version, inputStream, eventHandler);
+        }
+        catch(Exception e){
+            LOG.error("fail to consume message", e);
+            throw new RuntimeException(e);
+        }
     }
 
     public IncomingMessageId messageId(){

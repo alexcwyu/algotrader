@@ -14,7 +14,7 @@ public class PositionsCancellationRequestSerializer extends Serializer{
         super(serverCurrentVersion, OutgoingMessageId.CANCEL_POSITIONS_REQUEST);
     }
 
-    public byte[] serialize(long orderId) {
+    public byte[] serialize() {
         ByteArrayBuilder builder = getByteArrayBuilder();
 
         builder.append(messageId.getId());

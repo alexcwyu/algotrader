@@ -124,7 +124,7 @@ public class InMemoryRefDataStore implements RefDataStore {
 
     @Override
     public Instrument getInstrumentBySymbolAndExchange(String providerId, String symbol, String exchId) {
-        return instrumentCache.asMap().values().stream().filter(i -> symbol != null && symbol.equals(i.getSymbol(providerId)) && exchId != null && exchId.equals(i.getExchId(providerId))).findAny().orElse(null);
+        return instrumentCache.asMap().values().stream().filter(i -> symbol != null && (symbol.equals(i.getSymbol(providerId)) || symbol.equals(i.getSymbol())) && exchId != null && (exchId.equals(i.getExchId(providerId)) || exchId.equals(i.getExchId()))).findAny().orElse(null);
     }
 
     @Override

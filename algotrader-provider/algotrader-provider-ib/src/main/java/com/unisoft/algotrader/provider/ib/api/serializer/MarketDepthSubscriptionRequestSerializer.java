@@ -46,7 +46,7 @@ public class MarketDepthSubscriptionRequestSerializer extends Serializer{
         builder.append(instrument.getSymbol(IBProvider.PROVIDER_ID));
         builder.append(SecType.convert(instrument.getType()));
         if (instrument.getExpiryDate() != null) {
-            builder.append(IBModelUtils.convertDate(instrument.getExpiryDate().getTime()));
+            builder.append(IBModelUtils.convertDateTime(instrument.getExpiryDate().getTime()));
         }
         else {
             builder.appendEol();

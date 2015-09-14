@@ -53,6 +53,9 @@ public class Exchange{
 
     public static Exchange TSE = new Exchange("TSE", "Toronto Stock Exchange");
 
+
+    public static Exchange SMART = new Exchange("SMART", "Smart Order Routing");
+
     public Exchange(){
     }
 

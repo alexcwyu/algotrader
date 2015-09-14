@@ -43,7 +43,7 @@ public class InputStreamUtils {
             return c;
         } catch (final IOException e) {
             final String detailedMessage = "problem reading byte";
-            LOG.error("{}: ", detailedMessage, e);
+            //LOG.error("{}: ", detailedMessage, e);
             throw new IOStreamException(INPUT_OUTPUT_STREAM_EXCEPTION, detailedMessage, e);
         }
     }

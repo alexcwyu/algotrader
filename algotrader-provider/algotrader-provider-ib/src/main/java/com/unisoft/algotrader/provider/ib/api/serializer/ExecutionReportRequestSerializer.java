@@ -32,9 +32,17 @@ public class ExecutionReportRequestSerializer extends Serializer{
         builder.append(filter.getAccountNumber());
         builder.append(filter.getTime());
         builder.append(filter.getSymbol());
-        builder.append(filter.getSecurityType().getAbbreviation());
+        if (filter.getSecurityType() != null) {
+            builder.append(filter.getSecurityType().bytes());
+        } else {
+            builder.appendEol();
+        }
         builder.append(filter.getExchange());
-        builder.append(filter.getOrderAction().getAbbreviation());
+        if (filter.getOrderAction() != null) {
+            builder.append(filter.getOrderAction().getBytes());
+        } else {
+            builder.appendEol();
+        }
     }
 
 }

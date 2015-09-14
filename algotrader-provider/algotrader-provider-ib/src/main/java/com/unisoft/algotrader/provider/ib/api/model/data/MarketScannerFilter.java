@@ -1,6 +1,5 @@
 package com.unisoft.algotrader.provider.ib.api.model.data;
 
-import ch.aonyx.broker.ib.api.data.scanner.StockType;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.utils.collection.Tuple2;

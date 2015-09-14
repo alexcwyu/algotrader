@@ -47,7 +47,7 @@ public class ContractSpecificationRequestSerializer extends Serializer{
         builder.append(instrument.getSymbol(IBProvider.PROVIDER_ID));
         builder.append(SecType.convert(instrument.getType()));
         if (instrument.getExpiryDate() != null) {
-            builder.append(IBModelUtils.convertDate(instrument.getExpiryDate().getTime()));
+            builder.append(IBModelUtils.convertDateTime(instrument.getExpiryDate().getTime()));
         }
         else {
             builder.appendEol();
@@ -64,6 +64,10 @@ public class ContractSpecificationRequestSerializer extends Serializer{
         //builder.appendEol(); // primary exch
         builder.append(instrument.getCcyId());
         builder.appendEol(); //localsymbol
+
+        if (Feature.TRADING_CLASS.isSupportedByVersion(serverCurrentVersion)) {
+            builder.appendEol(); // trading class
+        }
         builder.append(false); //includeExpired
         if (Feature.SECURITY_ID_TYPE.isSupportedByVersion(getServerCurrentVersion())) {
             builder.appendEol(); //getSecurityIdentifierCode().getAcronym()

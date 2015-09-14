@@ -63,6 +63,7 @@ public class SampleInMemoryRefDataStore extends InMemoryRefDataStore {
         this.saveExchange(NYMEX);
         this.saveExchange(NYSE);
         this.saveExchange(TSE);
+        this.saveExchange(SMART);
 
         InstrumentFactory instrumentFactory = new InstrumentFactory(this);
         instrumentFactory.createIndex("HSI", "HSI Index", HKEX.getExchId(), Currency.HKD.getCcyId());
@@ -78,8 +79,10 @@ public class SampleInMemoryRefDataStore extends InMemoryRefDataStore {
         instrumentFactory.createStock("FB", "Facebook, Inc.", NASDAQ.getExchId(), Currency.USD.getCcyId());
         instrumentFactory.createStock("TSLA", "Tesla Motors, Inc.", NASDAQ.getExchId(), Currency.USD.getCcyId());
 
-        instrumentFactory.createStock("IBM", "International Business Machines Corporation", NYSE.getExchId(), Currency.USD.getCcyId());
+        instrumentFactory.createStock("IBM", "International Business Machines Corporation", NYSE.getExchId(), Currency.USD.getCcyId(), Collections.EMPTY_MAP, Collections.singletonMap("IB", "SMART"));
 
-        instrumentFactory.createFX("EURUSD", "EURUSD", IDEALPRO.getExchId(), Currency.USD.getCcyId() , Collections.singletonMap("IB", "EUR"), Collections.EMPTY_MAP);
+        instrumentFactory.createFX("EURUSD", "EURUSD", IDEALPRO.getExchId(), Currency.USD.getCcyId(), Collections.singletonMap("IB", "EUR"), Collections.EMPTY_MAP);
+
+        instrumentFactory.createOption("EUR", "EUR", GLOBEX.getExchId(), Currency.USD.getCcyId(), Collections.singletonMap("IB", "EUR"), Collections.EMPTY_MAP);
     }
 }

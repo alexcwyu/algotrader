@@ -3,6 +3,7 @@ package com.unisoft.algotrader.provider.ib;
 import com.unisoft.algotrader.provider.ib.api.deserializer.Deserializer;
 import com.unisoft.algotrader.provider.ib.api.deserializer.Deserializers;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
+import com.unisoft.algotrader.provider.ib.api.exception.IOStreamException;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
@@ -41,9 +42,8 @@ public class EventInputStreamConsumer implements Runnable {
                 consumeMessage();
             }
         }
-        catch(Exception e){
+        catch(IOStreamException e){
             LOG.error("fail to consume message", e);
-            throw new RuntimeException(e);
         }
         finally {
             IOUtils.closeQuietly(inputStream);
@@ -53,9 +53,9 @@ public class EventInputStreamConsumer implements Runnable {
     private void consumeMessage() {
         final int messageId = readInt(inputStream);
         final IncomingMessageId incomingMessageId = IncomingMessageId.fromId(messageId);
+        LOG.info("consumeMessage, incomingMessageId {}", incomingMessageId);
         final Deserializer serializer =
                 deserializers.getDeserializer(incomingMessageId);
-        LOG.info("consumeMessage, incomingMessageId {}", incomingMessageId);
         serializer.consume(inputStream, eventHandler);
     }
 
