@@ -13,14 +13,14 @@ public class OrderStatusUpdateEvent extends IBEvent<OrderStatusUpdateEvent>  {
     public final int remainingQuantity;
     public final double averageFilledPrice;
     public final int permanentId;
-    public final String parentOrderId;
+    public final int parentOrderId;
     public final double lastFilledPrice;
     public final int clientId;
     public final String heldCause;
 
     public OrderStatusUpdateEvent(final long requestId, final OrderStatus orderStatus, final int filledQuantity,
                                   final int remainingQuantity, final double averageFilledPrice, final int permanentId,
-                                  final String parentOrderId, final double lastFilledPrice, final int clientId, final String heldCause){
+                                  final int parentOrderId, final double lastFilledPrice, final int clientId, final String heldCause){
         super(requestId);
         this.orderStatus = orderStatus;
         this.filledQuantity = filledQuantity;

@@ -53,8 +53,8 @@ public class InMemoryTradingDataStore implements TradingDataStore {
     private LoadingCache<Long, Order> orderCache = CacheBuilder.newBuilder()
             .build(
                     new CacheLoader<Long, Order>() {
-                        public Order load(Long orderId) {
-                            return delegateDataStore.getOrder(orderId);
+                        public Order load(Long clOrderId) {
+                            return delegateDataStore.getOrder(clOrderId);
                         }
                     });
 
@@ -74,7 +74,7 @@ public class InMemoryTradingDataStore implements TradingDataStore {
             delegateDataStore.connect();
             delegateDataStore.getAllAccounts().forEach(a -> accountCache.put(a.getAccountId(), a));
             delegateDataStore.getAllPortfolios().forEach(p -> portfolioCache.put(p.getPortfolioId(), p));
-            delegateDataStore.getAllOrders().forEach(o -> orderCache.put(o.getOrderId(), o));
+            delegateDataStore.getAllOrders().forEach(o -> orderCache.put(o.getClOrderId(), o));
             delegateDataStore.getAllExecutionReports().forEach(er -> executionReportCache.put(er.getExecId(), er));
         }
     }
@@ -139,8 +139,8 @@ public class InMemoryTradingDataStore implements TradingDataStore {
     }
 
     @Override
-    public List<ExecutionReport> getExecutionReportsByOrderId(long orderId) {
-        return executionReportCache.asMap().values().stream().filter(er -> er.getOrderId() == orderId).collect(toList());
+    public List<ExecutionReport> getExecutionReportsByOrderId(long clOrderId) {
+        return executionReportCache.asMap().values().stream().filter(er -> er.getClOrderId() == clOrderId).collect(toList());
     }
 
     @Override
@@ -148,12 +148,12 @@ public class InMemoryTradingDataStore implements TradingDataStore {
         if(delegateDataStore != null) {
             delegateDataStore.saveOrder(order);
         }
-        orderCache.put(order.getOrderId(), order);
+        orderCache.put(order.getClOrderId(), order);
     }
 
     @Override
-    public Order getOrder(long orderId) {
-        return orderCache.getUnchecked(orderId);
+    public Order getOrder(long clOrderId) {
+        return orderCache.getUnchecked(clOrderId);
     }
 
     @Override

@@ -27,7 +27,7 @@ class CountDownStrategy extends Strategy {
     private int exp;
     private int count = 0;
     private final OrderManager orderManager;
-    public long orderId = 0;
+    public long clOrderId = 0;
     public CountDownStrategy(OrderManager orderManager, String strategyId, TradingDataStore tradingDataStore, CountDownLatch latch, int exp, RingBuffer... providers) {
         super(strategyId, tradingDataStore, providers);
         this.orderManager = orderManager;
@@ -45,7 +45,7 @@ class CountDownStrategy extends Strategy {
             ordered = true;
             Order order = new Order();
             order.dateTime = bar.dateTime;
-            order.orderId = orderId++;
+            order.clOrderId = clOrderId++;
             order.instId = bar.instId;
             //order.limitPrice = bar.close;
             order.strategyId = this.strategyId;
@@ -65,7 +65,7 @@ class CountDownStrategy extends Strategy {
         if (!ordered) {
             Order order = new Order();
             order.dateTime = data.dateTime;
-            order.orderId = orderId++;
+            order.clOrderId = clOrderId++;
             order.instId = data.instId;
             order.limitPrice = data.bar.close;
             order.strategyId = this.strategyId;

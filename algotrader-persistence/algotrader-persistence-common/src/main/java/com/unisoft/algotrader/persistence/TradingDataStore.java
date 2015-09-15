@@ -37,11 +37,11 @@ public interface TradingDataStore {
 
     List<ExecutionReport> getExecutionReportsByInstId(long instId);
 
-    List<ExecutionReport> getExecutionReportsByOrderId(long orderId);
+    List<ExecutionReport> getExecutionReportsByOrderId(long clOrderId);
 
     void saveOrder(Order order);
 
-    Order getOrder(long orderId);
+    Order getOrder(long clOrderId);
 
     List<Order> getAllOrders();
 

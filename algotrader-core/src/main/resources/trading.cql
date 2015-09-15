@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS counters (
 
 
 CREATE TYPE account_transaction (
-   order_id bigint,
+   cl_order_id bigint,
    datetime bigint,
    ccy_id text,
    value double,
@@ -73,8 +73,8 @@ CREATE TABLE IF NOT EXISTS portfolios (
 
 
 CREATE TABLE IF NOT EXISTS orders (
+    cl_order_id bigint,
     order_id bigint,
-    ext_order_id bigint,
     inst_id bigint,
     date_time bigint,
     ord_type text,
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS orders (
     commissions list<double>,
     pnl double,
     realized_pnl double,
-    PRIMARY KEY (order_id)
+    PRIMARY KEY (cl_order_id)
 );
 
 CREATE INDEX order_inst_id ON trading.orders (inst_id);
@@ -106,7 +106,7 @@ CREATE INDEX order_strategy_id ON trading.orders (strategy_id);
 
 CREATE TABLE IF NOT EXISTS execution_reports (
     exec_id bigint,
-    order_id bigint,
+    cl_order_id bigint,
     inst_id bigint,
     transaction_time bigint,
     ord_type text,
@@ -125,6 +125,6 @@ CREATE TABLE IF NOT EXISTS execution_reports (
 );
 
 CREATE INDEX er_inst_id ON trading.execution_reports (inst_id);
-CREATE INDEX er_order_id ON trading.execution_reports (order_id);
+CREATE INDEX er_cl_order_id ON trading.execution_reports (cl_order_id);
 
 

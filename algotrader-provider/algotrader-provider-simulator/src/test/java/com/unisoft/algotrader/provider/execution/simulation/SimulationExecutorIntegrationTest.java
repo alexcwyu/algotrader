@@ -330,7 +330,7 @@ public class SimulationExecutorIntegrationTest {
 
     private Order createOrder(Side side, OrdType type, double qty, double price){
         Order order = new Order();
-        order.orderId = ordId++;
+        order.clOrderId = ordId++;
         order.instId = testInstrument.getInstId();
         order.strategyId = mockStrategyId;
         order.execProviderId = simulationExecutor.providerId();

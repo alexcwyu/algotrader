@@ -22,11 +22,11 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
     @Column(name="exec_id")
     public long execId;
 
-    @Column(name="order_id")
-    public long orderId;
+    @Column(name="cl_order_id")
+    public long clOrderId;
 
-    @Column(name="ext_order_id")
-    public long extOrderId;
+    @Column(name="provider_order_id")
+    public long providerOrderId;
 
     @Column(name="inst_id")
     public long instId;
@@ -78,8 +78,8 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
     public String toString() {
         return "ExecutionReport{" +
                 "execId=" + execId +
-                ", orderId=" + orderId +
-                ", extOrderId=" + extOrderId +
+                ", clOrderId=" + clOrderId +
+                ", providerOrderId=" + providerOrderId +
                 ", instId='" + instId + '\'' +
                 ", transactionTime=" + transactionTime +
                 ", ordType=" + ordType +
@@ -103,8 +103,8 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
         if (!(o instanceof ExecutionReport)) return false;
         ExecutionReport<?> that = (ExecutionReport<?>) o;
         return Objects.equal(execId, that.execId) &&
-                Objects.equal(orderId, that.orderId) &&
-                Objects.equal(extOrderId, that.extOrderId) &&
+                Objects.equal(clOrderId, that.clOrderId) &&
+                Objects.equal(providerOrderId, that.providerOrderId) &&
                 Objects.equal(instId, that.instId) &&
                 Objects.equal(transactionTime, that.transactionTime) &&
                 Objects.equal(limitPrice, that.limitPrice) &&
@@ -123,7 +123,7 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(execId, orderId, extOrderId, instId, transactionTime, ordType, ordStatus, limitPrice, stopPrice, ordQty, lastQty, lastPrice, filledQty, avgPrice, tif, side, text);
+        return Objects.hashCode(execId, clOrderId, providerOrderId, instId, transactionTime, ordType, ordStatus, limitPrice, stopPrice, ordQty, lastQty, lastPrice, filledQty, avgPrice, tif, side, text);
     }
 
     @Override
@@ -146,12 +146,12 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
         return execId;
     }
 
-    public long getOrderId() {
-        return orderId;
+    public long getClOrderId() {
+        return clOrderId;
     }
 
     public long geExtOrderId() {
-        return extOrderId;
+        return providerOrderId;
     }
 
     public long getInstId() {
@@ -214,12 +214,12 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
         this.execId = execId;
     }
 
-    public void setOrderId(long orderId) {
-        this.orderId = orderId;
+    public void setClOrderId(long clOrderId) {
+        this.clOrderId = clOrderId;
     }
 
-    public void setExtOrderId(long extOrderId) {
-        this.extOrderId = extOrderId;
+    public void setProviderOrderId(long providerOrderId) {
+        this.providerOrderId = providerOrderId;
     }
 
     public void setInstId(long instId) {

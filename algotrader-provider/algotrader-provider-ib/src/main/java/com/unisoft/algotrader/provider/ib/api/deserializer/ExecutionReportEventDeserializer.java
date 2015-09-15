@@ -59,9 +59,9 @@ public class ExecutionReportEventDeserializer extends Deserializer<ExecutionRepo
         return instrument;
     }
 
-    protected ExecutionReport consumeExecutionReport(final int version, final InputStream inputStream, final int extOrderId){
+    protected ExecutionReport consumeExecutionReport(final int version, final InputStream inputStream, final int providerOrderId){
         ExecutionReport executionReport = new ExecutionReport();
-        executionReport.setExtOrderId(extOrderId);
+        executionReport.setProviderOrderId(providerOrderId);
         //TODO string to execID mapping?
         executionReport.setExecId(Long.parseLong(readString(inputStream)));
         String time = readString(inputStream);

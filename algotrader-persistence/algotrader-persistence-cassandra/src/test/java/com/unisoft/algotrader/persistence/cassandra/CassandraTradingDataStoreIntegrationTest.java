@@ -59,7 +59,7 @@ public class CassandraTradingDataStoreIntegrationTest {
         Order order = SampleEventFactory.createOrder(1001, Side.Buy, OrdType.Limit, 9000, 98, 0.0, TimeInForce.Day, "Provider1", "Portfolio1", "Strategy1");
 
         store.saveOrder(order);
-        Order order1 = store.getOrder(order.getOrderId());
+        Order order1 = store.getOrder(order.getClOrderId());
         assertEquals(order, order1);
 
         assertTrue(store.getAllOrders().contains(order));
@@ -78,7 +78,7 @@ public class CassandraTradingDataStoreIntegrationTest {
 
         assertTrue(store.getAllExecutionReports().contains(executionReport));
         assertTrue(store.getExecutionReportsByInstId(executionReport.getInstId()).contains(executionReport));
-        assertTrue(store.getExecutionReportsByOrderId(executionReport.getOrderId()).contains(executionReport));
+        assertTrue(store.getExecutionReportsByOrderId(executionReport.getClOrderId()).contains(executionReport));
     }
 
     @Test
@@ -119,11 +119,11 @@ public class CassandraTradingDataStoreIntegrationTest {
         store.saveAccount(account);
 
 
-        Order loadedOrder = store.getOrder(order.getOrderId());
+        Order loadedOrder = store.getOrder(order.getClOrderId());
         assertNotNull(loadedOrder);
-        Order loadedOrder2 = store.getOrder(order2.getOrderId());
+        Order loadedOrder2 = store.getOrder(order2.getClOrderId());
         assertNotNull(loadedOrder2);
-        Order loadedOrder3 = store.getOrder(order3.getOrderId());
+        Order loadedOrder3 = store.getOrder(order3.getClOrderId());
         assertNotNull(loadedOrder2);
 
         ExecutionReport loadedER = store.getExecutionReport(executionReport.getExecId());

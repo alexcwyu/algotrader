@@ -27,11 +27,11 @@ public interface IBEventHandler extends EventHandler {
 
     default void onAccountSummaryEvent(final AccountSummaryEvent accountSummaryEvent){}
 
-    default void onAccountSummaryEvent(final int reqId, final String account, final String tag, final String value, final String currency){}
+    default void onAccountSummaryEvent(final long requestId, final String account, final String tag, final String value, final String currency){}
 
     default void onAccountSummaryEndEvent(final AccountSummaryEndEvent accountSummaryEndEvent){}
 
-    default void onAccountSummaryEndEvent(final int reqId){}
+    default void onAccountSummaryEndEvent(final long requestId){}
 
     default void onAccountUpdateTimeEvent(final AccountUpdateTimeEvent accountUpdateTimeEvent){}
 
@@ -47,7 +47,7 @@ public interface IBEventHandler extends EventHandler {
 
     default void onBondInstrumentSpecificationEvent(final BondInstrumentSpecificationEvent bondInstrumentSpecificationEvent){}
 
-    default void onBondInstrumentSpecificationEvent(final int requestId, final ContractSpecification contractSpecification){}
+    default void onBondInstrumentSpecificationEvent(final long requestId, final ContractSpecification contractSpecification){}
 
     default void onCommissionReportEvent(final CommissionReportEvent commissionReportEvent){}
 
@@ -57,25 +57,25 @@ public interface IBEventHandler extends EventHandler {
 
     default void onDeltaNeutralValidationEvent(final DeltaNeutralValidationEvent deltaNeutralValidationEvent){}
 
-    default void onDeltaNeutralValidationEvent(final int requestId, final UnderlyingCombo underlyingCombo){}
+    default void onDeltaNeutralValidationEvent(final long requestId, final UnderlyingCombo underlyingCombo){}
 
-    default void onDeltaNeutralValidationEvent(final int requestId, final int instId, final double delta, final double price){}
+    default void onDeltaNeutralValidationEvent(final long requestId, final int instId, final double delta, final double price){}
 
     default void onDisplayGroupListEvent(final DisplayGroupListEvent displayGroupListEvent){}
 
-    default void onDisplayGroupListEvent(final int requestId, final String groups){}
+    default void onDisplayGroupListEvent(final long requestId, final String groups){}
 
     default void onDisplayGroupUpdatedEvent(final DisplayGroupUpdatedEvent displayGroupUpdatedEvent){}
 
-    default void onDisplayGroupUpdatedEvent(final int requestId, final String contractInfo){}
+    default void onDisplayGroupUpdatedEvent(final long requestId, final String contractInfo){}
 
     default void onExecutionReportEvent(final ExecutionReportEvent executionReportEvent){}
 
-    default void onExecutionReportEvent(final int requestId, final Instrument instrument, final ExecutionReport executionReport){}
+    default void onExecutionReportEvent(final long requestId, final Instrument instrument, final ExecutionReport executionReport){}
 
     default void onExecutionReportEndEvent(final ExecutionReportEndEvent executionReportEndEvent){}
 
-    default void onExecutionReportEndEvent(final int requestId){}
+    default void onExecutionReportEndEvent(final long requestId){}
 
     default void onFinancialAdvisorConfigurationEvent(final FinancialAdvisorConfigurationEvent financialAdvisorConfigurationEvent){}
 
@@ -83,27 +83,27 @@ public interface IBEventHandler extends EventHandler {
 
     default void onFundamentalDataEvent(final FundamentalDataEvent fundamentalDataEvent){}
 
-    default void onFundamentalDataEvent(final int requestId, final String xml){}
+    default void onFundamentalDataEvent(final long requestId, final String xml){}
 
     default void onHistoricalDataEvent(final HistoricalDataEvent historicalDataEvent){}
 
-    default void onHistoricalDataEvent(final int requestId, final Bar bar){}
+    default void onHistoricalDataEvent(final long requestId, final Bar bar){}
 
-    default void onHistoricalDataEvent(final int requestId, final String dateTime, final double open, final double high,
+    default void onHistoricalDataEvent(final long requestId, final String dateTime, final double open, final double high,
                                final double low, final double close, final int volume, final int tradeNumber,
                                final double weightedAveragePrice, final boolean hasGap){}
 
     default void onHistoricalDataListEvent(final HistoricalDataListEvent historicalDataListEvent){}
 
-    default void onHistoricalDataListEvent(int requestId, List<Bar> bar){}
+    default void onHistoricalDataListEvent(long requestId, List<Bar> bar){}
 
     default void onInstrumentSpecificationEndEvent(final ContractSpecificationEndEvent contractSpecificationEndEvent){}
 
-    default void onInstrumentSpecificationEndEvent(final int requestId){}
+    default void onInstrumentSpecificationEndEvent(final long requestId){}
 
     default void onInstrumentSpecificationEvent(final ContractSpecificationEvent contractSpecificationEvent){}
 
-    default void onInstrumentSpecificationEvent(final int requestId, final ContractSpecification contractSpecification){}
+    default void onInstrumentSpecificationEvent(final long requestId, final ContractSpecification contractSpecification){}
 
     default void onManagedAccountListEvent(final ManagedAccountListEvent managedAccountListEvent){}
 
@@ -111,29 +111,29 @@ public interface IBEventHandler extends EventHandler {
 
     default void onMarketDataTypeEvent(final MarketDataTypeEvent marketDataTypeEvent){}
 
-    default void onMarketDataTypeEvent(final int requestId, MarketDataType marketDataType){}
+    default void onMarketDataTypeEvent(final long requestId, MarketDataType marketDataType){}
 
     default void onMarketDepthLevelTwoUpdateEvent(final MarketDepthLevelTwoUpdateEvent marketDepthLevelTwoUpdateEvent){}
 
-    default void onMarketDepthLevelTwoUpdateEvent(final int requestId, final int rowId,
+    default void onMarketDepthLevelTwoUpdateEvent(final long requestId, final int rowId,
                                       final String marketMakerName, final Operation operation, final BookSide bookSide, final double price, final int size){}
 
     default void onMarketDepthUpdateEvent(final MarketDepthUpdateEvent marketDepthUpdateEvent){}
 
-    default void onMarketDepthUpdateEvent(final int requestId, final int rowId, final Operation operation,
+    default void onMarketDepthUpdateEvent(final long requestId, final int rowId, final Operation operation,
                                     final BookSide bookSide, final double price, final int size){}
 
     default void onMarketScannerDataEvent(final MarketScannerDataEvent marketScannerDataEvent){}
 
-    default void onMarketScannerDataEvent(final int requestId, final MarketScannerData marketScannerData){}
+    default void onMarketScannerDataEvent(final long requestId, final MarketScannerData marketScannerData){}
 
-    default void onMarketScannerDataEvent(final int requestId, final int ranking,
+    default void onMarketScannerDataEvent(final long requestId, final int ranking,
                                          final ContractSpecification contractSpecification, final String distance, final String benchmark,
                                          final String projection, final String comboLegDescription){}
 
     default void onMarketScannerDataListEvent(final MarketScannerDataListEvent marketScannerDataListEvent){}
 
-    default void onMarketScannerDataListEvent(int requestId, List<MarketScannerData> marketScannerData){}
+    default void onMarketScannerDataListEvent(long requestId, List<MarketScannerData> marketScannerData){}
 
     default void onMarketScannerValidParametersEvent(final MarketScannerValidParametersEvent marketScannerValidParametersEvent){}
 
@@ -150,7 +150,7 @@ public interface IBEventHandler extends EventHandler {
 
     default void onOrderStatusUpdateEvent(final OrderStatusUpdateEvent orderStatusUpdateEvent){}
 
-    default void onOrderStatusUpdateEvent(final int orderId, final OrderStatus orderStatus, final int filledQuantity,
+    default void onOrderStatusUpdateEvent(final long orderId, final OrderStatus orderStatus, final int filledQuantity,
                               final int remainingQuantity, final double averageFilledPrice, final int permanentId,
                               final int parentOrderId, final double lastFilledPrice, final int clientId, final String heldCause){}
 
@@ -171,7 +171,7 @@ public interface IBEventHandler extends EventHandler {
 
     default void onRealTimeBarEvent(final RealTimeBarEvent realTimeBarEvent){}
 
-    default void onRealTimeBarEvent(final int requestId, final long timestamp, final double open, final double high,
+    default void onRealTimeBarEvent(final long requestId, final long timestamp, final double open, final double high,
                                    final double low, final double close, final long volume, final double weightedAveragePrice,
                                    final int tradeNumber){}
 
@@ -190,39 +190,39 @@ public interface IBEventHandler extends EventHandler {
 
     default void onServerMessageEvent(final ServerMessageEvent serverMessageEvent){}
 
-    default void onServerMessageEvent(final int requestId, final int code, final String message){}
+    default void onServerMessageEvent(final long requestId, final int code, final String message){}
 
     default void onTickEfpEvent(final TickEfpEvent tickEfpEvent){}
 
-    default void onTickEfpEvent(final int requestId, final TickType tickType, final double basisPoints,
+    default void onTickEfpEvent(final long requestId, final TickType tickType, final double basisPoints,
                                final String formattedBasisPoints, final double impliedFuturePrice, final int holdDays,
                                final String futureExpiry, final double dividendImpact, final double dividendToExpiry){}
 
     default void onTickGenericEvent(final TickGenericEvent tickGenericEvent){}
 
-    default void onTickGenericEvent(final int requestId, final TickType tickType, final double value){}
+    default void onTickGenericEvent(final long requestId, final TickType tickType, final double value){}
 
     default void onTickOptionComputationEvent(final TickOptionComputationEvent tickOptionComputationEvent){}
 
-    default void onTickOptionComputationEvent(final int requestId, final TickType tickType,
+    default void onTickOptionComputationEvent(final long requestId, final TickType tickType,
                                              final double impliedVolatility, final double delta, final double price, final double presentValueDividend,
                                              final double gamma, final double vega, final double theta, final double underlyingPrice){}
 
     default void onTickPriceEvent(final TickPriceEvent tickPriceEvent){}
 
-    default void onTickPriceEvent(final int requestId, final TickType tickType, final double price, final int autoExecute){}
+    default void onTickPriceEvent(final long requestId, final TickType tickType, final double price, final boolean autoExecute){}
 
     default void onTickSizeEvent(final TickSizeEvent tickSizeEvent){}
 
-    default void onTickSizeEvent(final int requestId, final TickType tickType, final int size){}
+    default void onTickSizeEvent(final long requestId, final TickType tickType, final int size){}
 
     default void onTickSnapshotEndEvent(final TickSnapshotEndEvent tickSnapshotEndEvent){}
 
-    default void onTickSnapshotEndEvent(final int requestId){}
+    default void onTickSnapshotEndEvent(final long requestId){}
 
     default void onTickStringEvent(final TickStringEvent tickStringEvent){}
 
-    default void onTickStringEvent(final int requestId, final TickType tickType, final String value){}
+    default void onTickStringEvent(final long requestId, final TickType tickType, final String value){}
 
     default void onVerifyMessageAPIEvent(final VerifyMessageAPIEvent verifyMessageAPIEvent){}
 

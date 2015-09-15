@@ -25,6 +25,6 @@ public interface ExecutionReportAccessor {
     @Query("SELECT * FROM trading.execution_reports WHERE inst_id = :inst_id")
     Result<ExecutionReport> getByInstId(@Param("inst_id") long inst_id);
 
-    @Query("SELECT * FROM trading.execution_reports WHERE order_id = :order_id")
-    Result<ExecutionReport> getByOrderId(@Param("order_id") long order_id);
+    @Query("SELECT * FROM trading.execution_reports WHERE cl_order_id = :cl_order_id")
+    Result<ExecutionReport> getByOrderId(@Param("cl_order_id") long cl_order_id);
 }

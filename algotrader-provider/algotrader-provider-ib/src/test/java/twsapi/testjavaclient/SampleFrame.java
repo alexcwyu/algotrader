@@ -896,7 +896,7 @@ class SampleFrame extends JFrame implements EWrapper {
     	        avgFillPrice, permId, parentId, lastFillPrice, clientId, whyHeld);
         m_TWS.add(  msg);
 
-        // make sure instId for next order is at least orderId+1
+        // make sure instId for next order is at least clOrderId+1
         m_orderDlg.setIdAtLeast( orderId + 1);
     }
 

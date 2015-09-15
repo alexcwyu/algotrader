@@ -356,7 +356,7 @@ public class PortfolioProcessorTest {
     private Order limitOrder(long instId, double limitPrice, double qty, Side side){
 
         Order order = new Order();
-        order.orderId = ordId ++ ;
+        order.clOrderId = ordId ++ ;
         order.instId = instId;
         order.dateTime = System.currentTimeMillis();
         order.ordType = OrdType.Limit;
@@ -376,7 +376,7 @@ public class PortfolioProcessorTest {
     private ExecutionReport executionReport(Order order, double fillPrice, double filledQty){
 
         ExecutionReport er = new ExecutionReport();
-        er.orderId = order.orderId;
+        er.clOrderId = order.clOrderId;
         er.instId = order.instId;
         er.execId = execId++;
         er.transactionTime = System.currentTimeMillis();

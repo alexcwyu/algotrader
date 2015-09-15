@@ -13,8 +13,8 @@ import com.unisoft.algotrader.model.event.execution.Order;
 @Accessor
 public interface OrderAccessor {
 
-    @Query("SELECT * FROM trading.orders WHERE order_id = :order_id")
-    Order get(@Param("order_id") String order_id);
+    @Query("SELECT * FROM trading.orders WHERE cl_order_id = :cl_order_id")
+    Order get(@Param("cl_order_id") String cl_order_id);
 
     @Query("SELECT * FROM trading.orders")
     Result<Order> getAll();

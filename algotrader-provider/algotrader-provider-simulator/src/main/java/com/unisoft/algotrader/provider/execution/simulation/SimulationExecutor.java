@@ -87,7 +87,7 @@ public class SimulationExecutor extends MultiEventProcessor implements Execution
 
         ExecutionReport report = new ExecutionReport();
         report.execId = execId.getAndIncrement();
-        report.orderId = order.orderId;
+        report.clOrderId = order.clOrderId;
         report.instId = order.instId;
         report.ordType = order.ordType;
         report.side = order.side;
@@ -129,13 +129,13 @@ public class SimulationExecutor extends MultiEventProcessor implements Execution
             orders = Maps.newConcurrentMap();
             orderMap.put(order.instId, orders);
         }
-        orders.put(order.orderId, order);
+        orders.put(order.clOrderId, order);
     }
 
     private void removeOrder(Order order){
         Map<Long, Order> orders = orderMap.get(order.instId);
         if (orders != null){
-            orders.remove(order.orderId);
+            orders.remove(order.clOrderId);
         }
 //        else
 //        {

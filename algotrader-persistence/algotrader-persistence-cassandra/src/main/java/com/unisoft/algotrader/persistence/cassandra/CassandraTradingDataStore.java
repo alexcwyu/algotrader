@@ -101,9 +101,9 @@ public class CassandraTradingDataStore implements TradingDataStore {
     }
 
     @Override
-    public Order getOrder(long orderId) {
+    public Order getOrder(long clOrderId) {
         Mapper<Order> mapper = mappingManager.mapper(Order.class);
-        return mapper.get(orderId);
+        return mapper.get(clOrderId);
     }
 
     @Override
@@ -127,8 +127,8 @@ public class CassandraTradingDataStore implements TradingDataStore {
     }
 
     @Override
-    public List<ExecutionReport> getExecutionReportsByOrderId(long orderId) {
-        return executionReportAccessor.getByOrderId(orderId).all();
+    public List<ExecutionReport> getExecutionReportsByOrderId(long clOrderId) {
+        return executionReportAccessor.getByOrderId(clOrderId).all();
     }
 
     @Override

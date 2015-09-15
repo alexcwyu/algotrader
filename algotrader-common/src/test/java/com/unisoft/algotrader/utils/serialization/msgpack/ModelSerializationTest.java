@@ -105,7 +105,7 @@ public class ModelSerializationTest {
     @Test
     public void testSerializeOrder()throws Exception{
         Order order = new Order();
-        order.orderId = 1;
+        order.clOrderId = 1;
         order.instId = 2;
         order.strategyId = "test";
         order.execProviderId = "IB";
@@ -126,7 +126,7 @@ public class ModelSerializationTest {
     public void testSerializeExecutionReport()throws Exception{
         ExecutionReport er = new ExecutionReport();
         er.execId = 100;
-        er.orderId = 1;
+        er.clOrderId = 1;
         er.instId = 2;
         er.side= Side.Buy;
         er.ordType = OrdType.Limit;

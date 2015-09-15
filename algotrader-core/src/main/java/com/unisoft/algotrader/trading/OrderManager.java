@@ -31,7 +31,7 @@ public class OrderManager extends MultiEventProcessor implements OrderHandler, E
     private final StrategyManager strategyManager;
     private final EventBusManager eventBusManager;
 
-    private AtomicLong ordId = new AtomicLong();
+    private AtomicLong clOrderId = new AtomicLong();
     private Map<Long, Map<Long, Order>> orderMap = Maps.newConcurrentMap();
 
     @Inject
@@ -43,7 +43,7 @@ public class OrderManager extends MultiEventProcessor implements OrderHandler, E
     }
 
     public long nextOrdId(){
-        return ordId.getAndIncrement();
+        return clOrderId.getAndIncrement();
     }
 
     public Map<Long, Order> getOrders(long instId){
@@ -53,14 +53,14 @@ public class OrderManager extends MultiEventProcessor implements OrderHandler, E
     }
 
 
-    public Order getOrder(long instId, long orderId){
+    public Order getOrder(long instId, long clOrderId){
         if (orderMap.containsKey(instId))
-            return orderMap.get(instId).get(orderId);
+            return orderMap.get(instId).get(clOrderId);
         return null;
     }
 
     private void addOrder(Order order){
-        getOrders(order.instId).put(order.orderId, order);
+        getOrders(order.instId).put(order.clOrderId, order);
 
         //TODO persist
     }
@@ -87,7 +87,7 @@ public class OrderManager extends MultiEventProcessor implements OrderHandler, E
     public void onExecutionReport(ExecutionReport executionReport) {
         LOG.info("onExecutionReport {}", executionReport);
 
-        Order order = getOrder(executionReport.instId, executionReport.orderId);
+        Order order = getOrder(executionReport.instId, executionReport.clOrderId);
         if (order != null){
             Strategy strategy = strategyManager.get(order.strategyId);
             if (strategy != null)
@@ -126,7 +126,7 @@ public class OrderManager extends MultiEventProcessor implements OrderHandler, E
 
     public Order newLimitOrder(long instId, String strategyId, String providerId, Side side, double price, double qty, TimeInForce tif){
         Order order = new Order();
-        order.orderId = nextOrdId();
+        order.clOrderId = nextOrdId();
         order.instId = instId;
         order.strategyId = strategyId;
         order.execProviderId = providerId;
@@ -140,7 +140,7 @@ public class OrderManager extends MultiEventProcessor implements OrderHandler, E
 
     public Order newMarketOrder(long instId, String strategyId, String providerId, Side side, double qty, TimeInForce tif){
         Order order = new Order();
-        order.orderId = nextOrdId();
+        order.clOrderId = nextOrdId();
         order.instId = instId;
         order.strategyId = strategyId;
         order.execProviderId = providerId;

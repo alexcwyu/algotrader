@@ -22,11 +22,11 @@ import java.util.List;
 public class Order<E extends Order<? super E>> implements Event<OrderHandler, E> {
 
     @PartitionKey
-    @Column(name="order_id")
-    public long orderId;
+    @Column(name="cl_order_id")
+    public long clOrderId;
 
-    @Column(name="ext_order_id")
-    public long extOrderId = -1;
+    @Column(name="provider_order_id")
+    public long providerOrderId = -1;
 
     @Column(name="inst_id")
     public long instId;
@@ -109,8 +109,8 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
     @Override
     public String toString() {
         return "Order{" +
-                "orderId=" + orderId +
-                "extOrderId=" + extOrderId +
+                "clOrderId=" + clOrderId +
+                "providerOrderId=" + providerOrderId +
                 ", instId='" + instId + '\'' +
                 ", dateTime=" + dateTime +
                 ", ordType=" + ordType +
@@ -136,8 +136,8 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
         if (this == o) return true;
         if (!(o instanceof Order)) return false;
         Order<?> order = (Order<?>) o;
-        return Objects.equal(orderId, order.orderId) &&
-                Objects.equal(extOrderId, order.extOrderId) &&
+        return Objects.equal(clOrderId, order.clOrderId) &&
+                Objects.equal(providerOrderId, order.providerOrderId) &&
                 Objects.equal(instId, order.instId) &&
                 Objects.equal(dateTime, order.dateTime) &&
                 Objects.equal(limitPrice, order.limitPrice) &&
@@ -165,7 +165,7 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(orderId, extOrderId, instId, dateTime, ordType, ordStatus, limitPrice, stopPrice, ordQty, filledQty, avgPrice, lastQty, lastPrice, stopLimitReady, trailingStopExecPrice, tif, side, execProviderId, portfolioId, strategyId, text, executionReports, commissions, pnl, realizedPnl);
+        return Objects.hashCode(clOrderId, providerOrderId, instId, dateTime, ordType, ordStatus, limitPrice, stopPrice, ordQty, filledQty, avgPrice, lastQty, lastPrice, stopLimitReady, trailingStopExecPrice, tif, side, execProviderId, portfolioId, strategyId, text, executionReports, commissions, pnl, realizedPnl);
     }
 
     public static final EventFactory<Order> FACTORY = new EventFactory(){
@@ -256,19 +256,19 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
 //    }
 
 
-    public long getOrderId() {
-        return orderId;
+    public long getClOrderId() {
+        return clOrderId;
     }
 
-    public void setOrderId(long orderId) {
-        this.orderId = orderId;
+    public void setClOrderId(long clOrderId) {
+        this.clOrderId = clOrderId;
     }
-    public long getExtOrderId() {
-        return extOrderId;
+    public long getProviderOrderId() {
+        return providerOrderId;
     }
 
-    public void setExtOrderId(long extOrderId) {
-        this.extOrderId = extOrderId;
+    public void setProviderOrderId(long providerOrderId) {
+        this.providerOrderId = providerOrderId;
     }
 
     public long getInstId() {

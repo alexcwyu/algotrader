@@ -11,6 +11,8 @@ public class DataRecord {
     protected double bid = 0.0;
     protected double ask = 0.0;
     protected double last = 0.0;
+
+    protected double open = 0.0;
     protected double high = 0.0;
     protected double low = 0.0;
     protected double close = 0.0;
@@ -48,6 +50,7 @@ public class DataRecord {
                 ", bid=" + bid +
                 ", ask=" + ask +
                 ", last=" + last +
+                ", open=" + open +
                 ", high=" + high +
                 ", low=" + low +
                 ", close=" + close +

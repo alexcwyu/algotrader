@@ -31,8 +31,8 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onAccountSummaryEvent(int reqId, String account, String tag, String value, String currency) {
-        LOG.debug("onAccountSummaryEvent reqId {}, account {}, tag {}, value {}, currency {}", reqId, account, tag, value, currency);
+    public void onAccountSummaryEvent(long requestId, String account, String tag, String value, String currency) {
+        LOG.debug("onAccountSummaryEvent reqId {}, account {}, tag {}, value {}, currency {}", requestId, account, tag, value, currency);
     }
 
     @Override
@@ -41,8 +41,8 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onAccountSummaryEndEvent(int reqId) {
-        LOG.debug("onAccountSummaryEndEvent reqId {}", reqId);
+    public void onAccountSummaryEndEvent(long requestId) {
+        LOG.debug("onAccountSummaryEndEvent reqId {}", requestId);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onBondInstrumentSpecificationEvent(int requestId, ContractSpecification contractSpecification) {
+    public void onBondInstrumentSpecificationEvent(long requestId, ContractSpecification contractSpecification) {
         LOG.debug("onBondInstrumentSpecificationEvent requestId {}, contractSpecification {}", requestId, contractSpecification);
     }
 
@@ -106,12 +106,12 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onDeltaNeutralValidationEvent(int requestId, UnderlyingCombo underlyingCombo) {
+    public void onDeltaNeutralValidationEvent(long requestId, UnderlyingCombo underlyingCombo) {
         LOG.debug("onDeltaNeutralValidationEvent requestId {}, underlyingCombo {}", requestId, underlyingCombo);
     }
 
     @Override
-    public void onDeltaNeutralValidationEvent(int requestId, int instId, double delta, double price) {
+    public void onDeltaNeutralValidationEvent(long requestId, int instId, double delta, double price) {
         LOG.debug("onDeltaNeutralValidationEvent requestId {}, instId {}, delta {}, price {}", requestId, instId, delta, price);
     }
 
@@ -121,7 +121,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onDisplayGroupListEvent(int requestId, String groups) {
+    public void onDisplayGroupListEvent(long requestId, String groups) {
         LOG.debug("onDisplayGroupListEvent requestId {}, groups {}", requestId, groups);
     }
 
@@ -131,7 +131,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onDisplayGroupUpdatedEvent(int requestId, String contractInfo) {
+    public void onDisplayGroupUpdatedEvent(long requestId, String contractInfo) {
         LOG.debug("onDisplayGroupUpdatedEvent requestId {}, contractInfo {}", requestId, contractInfo);
     }
 
@@ -141,7 +141,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onExecutionReportEvent(int requestId, Instrument instrument, ExecutionReport executionReport) {
+    public void onExecutionReportEvent(long requestId, Instrument instrument, ExecutionReport executionReport) {
         LOG.debug("onExecutionReportEvent requestId {}, instrument {}, executionReport {}", requestId, instrument, executionReport);
     }
 
@@ -151,7 +151,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onExecutionReportEndEvent(int requestId) {
+    public void onExecutionReportEndEvent(long requestId) {
         LOG.debug("onExecutionReportEndEvent requestId {}", requestId);
     }
 
@@ -171,7 +171,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onFundamentalDataEvent(int requestId, String xml) {
+    public void onFundamentalDataEvent(long requestId, String xml) {
         LOG.debug("onFundamentalDataEvent requestId {}, xml {}", requestId, xml);
     }
 
@@ -181,12 +181,12 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onHistoricalDataEvent(int requestId, Bar bar) {
+    public void onHistoricalDataEvent(long requestId, Bar bar) {
         LOG.debug("onHistoricalDataEvent requestId {}, bar {}", requestId, bar);
     }
 
     @Override
-    public void onHistoricalDataEvent(int requestId, String dateTime, double open, double high, double low, double close, int volume, int tradeNumber, double weightedAveragePrice, boolean hasGap) {
+    public void onHistoricalDataEvent(long requestId, String dateTime, double open, double high, double low, double close, int volume, int tradeNumber, double weightedAveragePrice, boolean hasGap) {
         LOG.debug("onHistoricalDataEvent requestId {}, dateTime {}, open {}, high {}, low {}, close {}, volume {}, tradeNumber {}, weightedAveragePrice {}, hasGap {}",
                 requestId, dateTime, open, high, low, close, volume, tradeNumber, weightedAveragePrice, hasGap);
     }
@@ -197,7 +197,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onHistoricalDataListEvent(int requestId, List<Bar> bars) {
+    public void onHistoricalDataListEvent(long requestId, List<Bar> bars) {
         LOG.debug("onHistoricalDataListEvent requestId {}, bars {}", requestId, bars);
     }
 
@@ -207,7 +207,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onInstrumentSpecificationEndEvent(int requestId) {
+    public void onInstrumentSpecificationEndEvent(long requestId) {
         LOG.debug("onInstrumentSpecificationEndEvent requestId {}", requestId);
     }
 
@@ -217,7 +217,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onInstrumentSpecificationEvent(int requestId, ContractSpecification contractSpecification) {
+    public void onInstrumentSpecificationEvent(long requestId, ContractSpecification contractSpecification) {
         LOG.debug("onInstrumentSpecificationEvent requestId {}, instrumentSpecification {}", requestId, contractSpecification);
     }
 
@@ -237,7 +237,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onMarketDataTypeEvent(int requestId, MarketDataType marketDataType) {
+    public void onMarketDataTypeEvent(long requestId, MarketDataType marketDataType) {
         LOG.debug("onMarketDataTypeEvent requestId {}, marketDataType {}", requestId, marketDataType);
     }
 
@@ -247,7 +247,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onMarketDepthLevelTwoUpdateEvent(int requestId, int rowId, String marketMakerName, Operation operation, BookSide bookSide, double price, int size) {
+    public void onMarketDepthLevelTwoUpdateEvent(long requestId, int rowId, String marketMakerName, Operation operation, BookSide bookSide, double price, int size) {
         LOG.debug("onMarketDepthLevelTwoUpdateEvent requestId {}, rowId {}, marketMakerName {}, operation {}, bookSide {}, price {}, size {}",
                 requestId, rowId, marketMakerName, operation, bookSide, price, size);
     }
@@ -258,7 +258,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onMarketDepthUpdateEvent(int requestId, int rowId, Operation operation, BookSide bookSide, double price, int size) {
+    public void onMarketDepthUpdateEvent(long requestId, int rowId, Operation operation, BookSide bookSide, double price, int size) {
         LOG.debug("onMarketDepthUpdateEvent requestId {}, rowId {}, operation {}, bookSide {}, price {}, size {}",
                 requestId, rowId, operation, bookSide, price, size);
     }
@@ -269,12 +269,12 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onMarketScannerDataEvent(int requestId, MarketScannerData marketScannerData) {
+    public void onMarketScannerDataEvent(long requestId, MarketScannerData marketScannerData) {
         LOG.debug("onMarketScannerDataEvent requestId {}, marketScannerData {}", requestId, marketScannerData);
     }
 
     @Override
-    public void onMarketScannerDataEvent(int requestId, int ranking, ContractSpecification contractSpecification, String distance, String benchmark, String projection, String comboLegDescription) {
+    public void onMarketScannerDataEvent(long requestId, int ranking, ContractSpecification contractSpecification, String distance, String benchmark, String projection, String comboLegDescription) {
         LOG.debug("onMarketScannerDataEvent requestId {}, ranking {}, instrumentSpecification {}, distance {}, benchmark {}, projection {}, comboLegDescription {}",
                 requestId, ranking, contractSpecification, distance, benchmark, projection, comboLegDescription);
     }
@@ -285,7 +285,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onMarketScannerDataListEvent(int requestId, List<MarketScannerData> marketScannerData) {
+    public void onMarketScannerDataListEvent(long requestId, List<MarketScannerData> marketScannerData) {
         LOG.debug("onMarketScannerDataListEvent requestId {}, marketScannerData {}", requestId, marketScannerData);
     }
 
@@ -326,7 +326,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onOrderStatusUpdateEvent(int orderId, OrderStatus orderStatus, int filledQuantity, int remainingQuantity, double averageFilledPrice, int permanentId, int parentOrderId, double lastFilledPrice, int clientId, String heldCause) {
+    public void onOrderStatusUpdateEvent(long orderId, OrderStatus orderStatus, int filledQuantity, int remainingQuantity, double averageFilledPrice, int permanentId, int parentOrderId, double lastFilledPrice, int clientId, String heldCause) {
         LOG.debug("onOrderStatusUpdateEvent orderId {}, orderStatus {}, filledQuantity {}, remainingQuantity {}, averageFilledPrice {}, permanentId {}, parentOrderId {}, lastFilledPrice {}, clientId {}, heldCause {}",
                 orderId, orderStatus, filledQuantity, remainingQuantity, averageFilledPrice, permanentId, parentOrderId, lastFilledPrice, clientId, heldCause);
     }
@@ -368,7 +368,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onRealTimeBarEvent(int requestId, long timestamp, double open, double high, double low, double close, long volume, double weightedAveragePrice, int tradeNumber) {
+    public void onRealTimeBarEvent(long requestId, long timestamp, double open, double high, double low, double close, long volume, double weightedAveragePrice, int tradeNumber) {
         LOG.debug("onRealTimeBarEvent requestId {}, timestamp {}, open {}, high {}, low {}, close {}, volume {}, weightedAveragePrice {}, tradeNumber {}",
                 requestId, timestamp, open, high, low, close, volume, weightedAveragePrice, tradeNumber);
     }
@@ -409,7 +409,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onServerMessageEvent(int requestId, int code, String message) {
+    public void onServerMessageEvent(long requestId, int code, String message) {
         LOG.debug("onServerMessageEvent requestId {}, code {}, message {}", requestId, code, message);
     }
 
@@ -419,7 +419,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onTickEfpEvent(int requestId, TickType tickType, double basisPoints, String formattedBasisPoints, double impliedFuturePrice, int holdDays, String futureExpiry, double dividendImpact, double dividendToExpiry) {
+    public void onTickEfpEvent(long requestId, TickType tickType, double basisPoints, String formattedBasisPoints, double impliedFuturePrice, int holdDays, String futureExpiry, double dividendImpact, double dividendToExpiry) {
         LOG.debug("onTickEfpEvent requestId {}, tickType {}, basisPoints {}, formattedBasisPoints {}, impliedFuturePrice {}, holdDays {}, futureExpiry {}, dividendImpact {}, dividendToExpiry {}",
                 requestId, tickType, basisPoints, formattedBasisPoints, impliedFuturePrice, holdDays, futureExpiry, dividendImpact, dividendToExpiry);
     }
@@ -430,7 +430,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onTickGenericEvent(int requestId, TickType tickType, double value) {
+    public void onTickGenericEvent(long requestId, TickType tickType, double value) {
         LOG.debug("onTickGenericEvent requestId {}, tickType {}, value {}", requestId, tickType, value);
     }
 
@@ -440,7 +440,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onTickOptionComputationEvent(int requestId, TickType tickType, double impliedVolatility, double delta, double price, double presentValueDividend, double gamma, double vega, double theta, double underlyingPrice) {
+    public void onTickOptionComputationEvent(long requestId, TickType tickType, double impliedVolatility, double delta, double price, double presentValueDividend, double gamma, double vega, double theta, double underlyingPrice) {
         LOG.debug("onTickOptionComputationEvent requestId {}, tickType {}, impliedVolatility {}, delta {}, price {}, presentValueDividend {}, gamma {}, vega {}, theta {}, underlyingPrice {}",
                 requestId, tickType, impliedVolatility, delta, price, presentValueDividend, gamma, vega, theta, underlyingPrice);
     }
@@ -451,7 +451,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onTickPriceEvent(int requestId, TickType tickType, double price, int autoExecute) {
+    public void onTickPriceEvent(long requestId, TickType tickType, double price, boolean autoExecute) {
         LOG.debug("onTickPriceEvent requestId {}, tickType {}, price {}, autoExecute {}", requestId, tickType, price, autoExecute);
     }
 
@@ -461,7 +461,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onTickSizeEvent(int requestId, TickType tickType, int size) {
+    public void onTickSizeEvent(long requestId, TickType tickType, int size) {
         LOG.debug("onTickSizeEvent requestId {}, tickType {}, size {}", requestId, tickType, size);
     }
 
@@ -471,7 +471,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onTickSnapshotEndEvent(int requestId) {
+    public void onTickSnapshotEndEvent(long requestId) {
         LOG.debug("onTickSnapshotEndEvent requestId {}", requestId);
     }
 
@@ -481,7 +481,7 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onTickStringEvent(int requestId, TickType tickType, String value) {
+    public void onTickStringEvent(long requestId, TickType tickType, String value) {
         LOG.debug("onTickStringEvent requestId {}, tickType {}, value {}", requestId, tickType, value);
     }
 

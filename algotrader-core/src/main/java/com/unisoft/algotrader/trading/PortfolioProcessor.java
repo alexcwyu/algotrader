@@ -96,7 +96,7 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
         double newDebt = addOrderToPosition(order);
 
         Currency currency = refDataStore.getCurrency(refDataStore.getInstrument(order.getInstId()).getCcyId());
-        AccountTransaction accountTransaction = new AccountTransaction(order.getOrderId(), order.getDateTime(),
+        AccountTransaction accountTransaction = new AccountTransaction(order.getClOrderId(), order.getDateTime(),
                 currency, order.cashFlow() + newDebt, order.getText());
         account.add(accountTransaction);
 

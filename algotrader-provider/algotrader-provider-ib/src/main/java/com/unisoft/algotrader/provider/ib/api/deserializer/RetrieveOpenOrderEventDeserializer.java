@@ -61,7 +61,7 @@ public class RetrieveOpenOrderEventDeserializer extends Deserializer<RetrieveOpe
         return instrument;
     }
 
-    protected Order consumeOrder(final int version, final InputStream inputStream, final IBEventHandler eventHandler, final int extOrderId){
+    protected Order consumeOrder(final int version, final InputStream inputStream, final IBEventHandler eventHandler, final int providerOrderId){
 
         final Side side = OrderAction.convert(readString(inputStream));
         final int totalQty = readInt(inputStream);

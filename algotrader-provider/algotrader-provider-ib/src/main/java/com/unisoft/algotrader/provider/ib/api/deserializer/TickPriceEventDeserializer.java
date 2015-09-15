@@ -28,7 +28,7 @@ public class TickPriceEventDeserializer extends Deserializer<TickPriceEvent> {
         final double price = readDouble(inputStream);
 
         final int size = (version >= VERSION_2) ? readInt(inputStream): 0;
-        final int autoExecute = (version >= VERSION_3) ? readInt(inputStream) : 0;
+        final boolean autoExecute = ((version >= VERSION_3) ? readInt(inputStream) : 0) != 0;
 
         TickType tickPriceType = TickType.fromValue(tickType);
         eventHandler.onTickPriceEvent(requestId, tickPriceType, price, autoExecute);

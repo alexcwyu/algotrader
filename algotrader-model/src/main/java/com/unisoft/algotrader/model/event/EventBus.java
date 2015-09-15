@@ -3,6 +3,8 @@ package com.unisoft.algotrader.model.event;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
+import com.unisoft.algotrader.model.event.execution.ExecutionReport;
+import com.unisoft.algotrader.model.event.execution.Order;
 
 /**
  * Created by alex on 6/18/15.
@@ -89,7 +91,9 @@ public interface EventBus {
     }
 
     interface ExecutionEventBus{
+        void publishExecutionReport(ExecutionReport executionReport);
 
+        void publishOrder(Order order);
     }
 
     interface GeneralEventBus{

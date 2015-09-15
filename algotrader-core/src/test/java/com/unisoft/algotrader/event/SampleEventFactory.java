@@ -38,7 +38,7 @@ public class SampleEventFactory {
 
     public static Order createOrder(long instId, Side side, OrdType type, double qty, double price, double stopPrice, TimeInForce tif, String providerId, String portfolioId, String strategyId){
         Order order = new Order();
-        order.orderId = ++ordId;
+        order.clOrderId = ++ordId;
         order.instId = instId;
         order.execProviderId = providerId;
         order.portfolioId = portfolioId;
@@ -60,10 +60,10 @@ public class SampleEventFactory {
         return createExecutionReport(order, OrdStatus.Filled, order.ordQty, filledPrice, order.ordQty, filledPrice);
     }
 
-    public static ExecutionReport createExecutionReport(long orderId, long instId, Side side, OrdType type, double qty, double price, double stopPrice, TimeInForce tif, OrdStatus ordStatus, double lastQty, double lastPrice, double filledQty, double avgPrice){
+    public static ExecutionReport createExecutionReport(long clOrderId, long instId, Side side, OrdType type, double qty, double price, double stopPrice, TimeInForce tif, OrdStatus ordStatus, double lastQty, double lastPrice, double filledQty, double avgPrice){
         ExecutionReport er = new ExecutionReport();
         er.execId = ++execId;
-        er.orderId = orderId;
+        er.clOrderId = clOrderId;
         er.instId = instId;
         er.side= side;
         er.ordType = type;
@@ -85,7 +85,7 @@ public class SampleEventFactory {
     public static ExecutionReport createExecutionReport(Order order, OrdStatus ordStatus, double lastQty, double lastPrice, double filledQty, double avgPrice){
         ExecutionReport er = new ExecutionReport();
         er.execId = ++execId;
-        er.orderId = order.orderId;
+        er.clOrderId = order.clOrderId;
         er.instId = order.instId;
         er.side= order.side;
         er.ordType = order.ordType;

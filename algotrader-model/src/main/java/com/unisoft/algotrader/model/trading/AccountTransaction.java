@@ -12,8 +12,8 @@ import com.unisoft.algotrader.model.refdata.Currency;
 @UDT(name = "account_transaction", keyspace = "trading")
 public class AccountTransaction {
 
-    @Field(name = "order_id")
-    private long orderId;
+    @Field(name = "cl_order_id")
+    private long clOrderId;
 
     private long datetime;
 
@@ -32,12 +32,12 @@ public class AccountTransaction {
         this(System.currentTimeMillis(), currency.getCcyId(), value, "");
     }
 
-    public AccountTransaction(long orderId, long datetime, Currency currency, double value, String text){
-        this(orderId, datetime, currency.getCcyId(), value, text);
+    public AccountTransaction(long clOrderId, long datetime, Currency currency, double value, String text){
+        this(clOrderId, datetime, currency.getCcyId(), value, text);
     }
 
-    public AccountTransaction(long orderId, long datetime, String ccyId, double value, String text){
-        this.orderId = orderId;
+    public AccountTransaction(long clOrderId, long datetime, String ccyId, double value, String text){
+        this.clOrderId = clOrderId;
         this.datetime = datetime;
         this.ccyId = ccyId;
         this.value = value;
@@ -61,7 +61,7 @@ public class AccountTransaction {
                 ", getDatetime=" + datetime +
                 ", currency=" + ccyId +
                 ", getValue=" + value +
-                ", getOrderId=" + orderId +
+                ", getClOrderId=" + clOrderId +
                 ", getText='" + text + '\'' +
                 "} " + super.toString();
     }
@@ -71,7 +71,7 @@ public class AccountTransaction {
         if (this == o) return true;
         if (!(o instanceof AccountTransaction)) return false;
         AccountTransaction that = (AccountTransaction) o;
-        return Objects.equal(orderId, that.orderId) &&
+        return Objects.equal(clOrderId, that.clOrderId) &&
                 Objects.equal(datetime, that.datetime) &&
                 Objects.equal(value, that.value) &&
                 Objects.equal(ccyId, that.ccyId) &&
@@ -80,11 +80,11 @@ public class AccountTransaction {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(orderId, datetime, ccyId, value, text);
+        return Objects.hashCode(clOrderId, datetime, ccyId, value, text);
     }
 
-    public long getOrderId() {
-        return orderId;
+    public long getClOrderId() {
+        return clOrderId;
     }
 
     public long getDatetime() {
@@ -103,8 +103,8 @@ public class AccountTransaction {
         return text;
     }
 
-    public void setOrderId(long orderId) {
-        this.orderId = orderId;
+    public void setClOrderId(long clOrderId) {
+        this.clOrderId = clOrderId;
     }
 
     public void setDatetime(long datetime) {

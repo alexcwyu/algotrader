@@ -30,7 +30,7 @@ public class PlaceOrderSerializer extends Serializer{
 
         builder.append(messageId.getId());
         builder.append(getVersion());
-        builder.append(order.getExtOrderId());
+        builder.append(order.getProviderOrderId());
         Instrument instrument = refDataStore.getInstrument(order.getInstId());
         appendInstrument(builder, instrument);
         appendOrder(builder, instrument, order);
