@@ -1,8 +1,6 @@
 package com.unisoft.algotrader.model.event;
 
-import com.unisoft.algotrader.model.event.data.Bar;
-import com.unisoft.algotrader.model.event.data.Quote;
-import com.unisoft.algotrader.model.event.data.Trade;
+import com.unisoft.algotrader.model.event.data.*;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 
@@ -86,10 +84,35 @@ public interface EventBus {
         }
     }
 
+
     interface MarketDataEventBus extends TradeEventBus, BarEventBus, QuoteEventBus{
 
     }
 
+
+    interface MarketDepthEventBus extends EventBus{
+        void publishMarketDepth(long instId, long dateTime,
+                                int providerId, int position,
+                                MDOperation operation, MDSide side,
+                                double price, int size);
+
+        default void setMarketDepth(MarketDepth trade, long instId, long dateTime,
+                                    int providerId, int position,
+                                    MDOperation operation, MDSide side,
+                                    double price, int size){
+            trade.reset();
+            trade.instId = instId;
+            trade.dateTime = dateTime;
+            trade.providerId = providerId;
+            trade.position = position;
+            trade.operation = operation;
+            trade.side = side;
+            trade.price = price;
+            trade.size = size;
+        }
+    }
+
+    //TODO
     interface ExecutionEventBus{
         void publishExecutionReport(ExecutionReport executionReport);
 

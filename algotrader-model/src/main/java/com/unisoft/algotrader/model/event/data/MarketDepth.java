@@ -1,12 +1,14 @@
 package com.unisoft.algotrader.model.event.data;
 
 import com.google.common.base.Objects;
+import com.unisoft.algotrader.model.event.Event;
 
 /**
  * Created by alex on 9/16/15.
  */
-public class MarketDepth extends MarketData<MarketDepth>{
-
+public class MarketDepth implements Event<MarketDepthHandler, MarketDepth> {
+    public long instId = -1;
+    public long dateTime = -1;
     public int providerId = 0;
     public int position = 0;
     public MDOperation operation = null;
@@ -22,7 +24,8 @@ public class MarketDepth extends MarketData<MarketDepth>{
                        int providerId, int position,
                        MDOperation operation, MDSide side,
                        double price, int size) {
-        super(instId, dateTime);
+        this.instId = instId;
+        this.dateTime = dateTime;
         this.providerId = providerId;
         this.position = position;
         this.operation = operation;
@@ -57,14 +60,13 @@ public class MarketDepth extends MarketData<MarketDepth>{
     }
 
     @Override
-    public void on(MarketDataHandler handler) {
-
+    public void on(MarketDepthHandler handler) {
+        handler.onMarketDepth(this);
     }
 
 
     @Override
     public void reset(){
-        super.reset();
         providerId = 0;
         position = 0;
         operation = null;
@@ -73,7 +75,6 @@ public class MarketDepth extends MarketData<MarketDepth>{
         size = 0;
     }
 
-    @Override
     public void copy(MarketDepth marketDepth) {
         this.instId = marketDepth.instId;
         this.dateTime = marketDepth.dateTime;

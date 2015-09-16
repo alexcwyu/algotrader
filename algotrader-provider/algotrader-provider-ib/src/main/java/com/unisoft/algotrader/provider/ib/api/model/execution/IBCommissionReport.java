@@ -11,7 +11,7 @@ import java.util.Currency;
 /**
  * Created by alex on 8/21/15.
  */
-public class CommissionReport {
+public class IBCommissionReport {
 
     private static final String DATE_PATTERN = "yyyyMMdd";
     private double commission;
@@ -88,8 +88,8 @@ public class CommissionReport {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CommissionReport)) return false;
-        CommissionReport that = (CommissionReport) o;
+        if (!(o instanceof IBCommissionReport)) return false;
+        IBCommissionReport that = (IBCommissionReport) o;
         return Objects.equal(commission, that.commission) &&
                 Objects.equal(realizedProfitAndLoss, that.realizedProfitAndLoss) &&
                 Objects.equal(yield, that.yield) &&

@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.provider.ib.api.model.data;
 
 import com.google.common.collect.Maps;
+import com.unisoft.algotrader.model.event.data.MDSide;
 
 import java.util.Map;
 
@@ -9,10 +10,11 @@ import java.util.Map;
  */
 public enum BookSide {
 
-    UNKNOWN(-1),
-    ASK(0),
-    BID(1);
+    UNKNOWN(MDSide.Unknown, -1),
+    ASK(MDSide.Ask, 0),
+    BID(MDSide.Bid, 1);
 
+    public final MDSide mdSide;
     private final int value;
     private static final Map<Integer, BookSide> MAP;
 
@@ -23,7 +25,8 @@ public enum BookSide {
         }
     }
 
-    private BookSide(final int value) {
+    private BookSide(final MDSide mdSide, final int value) {
+        this.mdSide = mdSide;
         this.value = value;
     }
 

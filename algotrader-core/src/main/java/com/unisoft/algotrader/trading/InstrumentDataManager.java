@@ -16,7 +16,7 @@ import java.util.Map;
  * Created by alex on 5/21/15.
  */
 @Singleton
-public class InstrumentDataManager extends MultiEventProcessor implements MarketDataHandler {
+public class InstrumentDataManager extends MultiEventProcessor implements MarketDataHandler, MarketDepthHandler {
 
     @Override
     public void onMarketDataContainer(MarketDataContainer data) {

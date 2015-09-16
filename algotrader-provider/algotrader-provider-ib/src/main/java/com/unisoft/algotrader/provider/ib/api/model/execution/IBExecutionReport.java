@@ -6,7 +6,7 @@ import com.unisoft.algotrader.model.trading.Side;
 /**
  * Created by alex on 9/9/15.
  */
-public class ExecutionReport {
+public class IBExecutionReport {
 
 
     private static final String EMPTY = "";
@@ -158,8 +158,8 @@ public class ExecutionReport {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ExecutionReport)) return false;
-        ExecutionReport that = (ExecutionReport) o;
+        if (!(o instanceof IBExecutionReport)) return false;
+        IBExecutionReport that = (IBExecutionReport) o;
         return Objects.equal(averageFilledPrice, that.averageFilledPrice) &&
                 Objects.equal(clientId, that.clientId) &&
                 Objects.equal(cumulativeQuantity, that.cumulativeQuantity) &&

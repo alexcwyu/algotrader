@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by alex on 9/9/15.
  */
-public class Contract {
+public class IBContract {
 
     private static final String EMPTY = "";
     private int id;
@@ -165,25 +165,25 @@ public class Contract {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Contract)) return false;
-        Contract contract = (Contract) o;
-        return Objects.equal(id, contract.id) &&
-                Objects.equal(includeExpired, contract.includeExpired) &&
-                Objects.equal(strike, contract.strike) &&
-                Objects.equal(comboLegs, contract.comboLegs) &&
-                Objects.equal(comboLegsDescription, contract.comboLegsDescription) &&
-                Objects.equal(currencyCode, contract.currencyCode) &&
-                Objects.equal(exchange, contract.exchange) &&
-                Objects.equal(expiry, contract.expiry) &&
-                Objects.equal(localSymbol, contract.localSymbol) &&
-                Objects.equal(multiplier, contract.multiplier) &&
-                Objects.equal(primaryExchange, contract.primaryExchange) &&
-                Objects.equal(optionRight, contract.optionRight) &&
-                Objects.equal(securityIdentifierCode, contract.securityIdentifierCode) &&
-                Objects.equal(securityId, contract.securityId) &&
-                Objects.equal(securityType, contract.securityType) &&
-                Objects.equal(symbol, contract.symbol) &&
-                Objects.equal(underlyingCombo, contract.underlyingCombo);
+        if (!(o instanceof IBContract)) return false;
+        IBContract IBContract = (IBContract) o;
+        return Objects.equal(id, IBContract.id) &&
+                Objects.equal(includeExpired, IBContract.includeExpired) &&
+                Objects.equal(strike, IBContract.strike) &&
+                Objects.equal(comboLegs, IBContract.comboLegs) &&
+                Objects.equal(comboLegsDescription, IBContract.comboLegsDescription) &&
+                Objects.equal(currencyCode, IBContract.currencyCode) &&
+                Objects.equal(exchange, IBContract.exchange) &&
+                Objects.equal(expiry, IBContract.expiry) &&
+                Objects.equal(localSymbol, IBContract.localSymbol) &&
+                Objects.equal(multiplier, IBContract.multiplier) &&
+                Objects.equal(primaryExchange, IBContract.primaryExchange) &&
+                Objects.equal(optionRight, IBContract.optionRight) &&
+                Objects.equal(securityIdentifierCode, IBContract.securityIdentifierCode) &&
+                Objects.equal(securityId, IBContract.securityId) &&
+                Objects.equal(securityType, IBContract.securityType) &&
+                Objects.equal(symbol, IBContract.symbol) &&
+                Objects.equal(underlyingCombo, IBContract.underlyingCombo);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.provider.ib.api.model.data;
 
 import com.google.common.collect.Maps;
+import com.unisoft.algotrader.model.event.data.MDOperation;
 
 import java.util.Map;
 
@@ -9,12 +10,13 @@ import java.util.Map;
  */
 public enum Operation {
 
-    UNKNOWN(-1),
-    INSERT(0),
-    UPDATE(1),
-    DELETE(2);
+    UNKNOWN(MDOperation.Undefined, -1),
+    INSERT(MDOperation.Insert, 0),
+    UPDATE(MDOperation.Update, 1),
+    DELETE(MDOperation.Delete, 2);
 
     private final int value;
+    public final MDOperation mdOperation;
     private static final Map<Integer, Operation> MAP;
 
     static {
@@ -24,7 +26,8 @@ public enum Operation {
         }
     }
 
-    private Operation(final int value) {
+    private Operation(final MDOperation mdOperation, final int value) {
+        this.mdOperation = mdOperation;
         this.value = value;
     }
 

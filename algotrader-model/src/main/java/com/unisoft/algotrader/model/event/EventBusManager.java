@@ -37,6 +37,8 @@ public class EventBusManager {
 
     private MarketDataEventBus marketDataEventBus = null;
 
+    private MarketDepthEventBus marketDepthEventBus = null;
+
     private ExecutionEventBus executionEventBus = null;
 
     private GeneralEventBus generalEventBus = null;
@@ -47,6 +49,10 @@ public class EventBusManager {
 
     public MarketDataEventBus getMarketDataEventBus(){
         return marketDataEventBus;
+    }
+
+    public MarketDepthEventBus getMarketDepthEventBus(){
+        return marketDepthEventBus;
     }
 
     public ExecutionEventBus getExecutionEventBus(){

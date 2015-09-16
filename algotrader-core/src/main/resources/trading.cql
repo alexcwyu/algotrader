@@ -111,6 +111,7 @@ CREATE TABLE IF NOT EXISTS execution_reports (
     transaction_time bigint,
     ord_type text,
     ord_status text,
+    exec_type text,
     limit_price double,
     stop_price double,
     ord_qty double,

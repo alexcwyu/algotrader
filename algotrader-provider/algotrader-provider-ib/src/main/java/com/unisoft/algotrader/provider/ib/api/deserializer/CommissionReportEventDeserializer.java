@@ -2,7 +2,7 @@ package com.unisoft.algotrader.provider.ib.api.deserializer;
 
 import com.unisoft.algotrader.provider.ib.api.event.CommissionReportEvent;
 import com.unisoft.algotrader.provider.ib.api.event.IBEventHandler;
-import com.unisoft.algotrader.provider.ib.api.model.execution.CommissionReport;
+import com.unisoft.algotrader.provider.ib.api.model.execution.IBCommissionReport;
 import com.unisoft.algotrader.provider.ib.api.model.system.IncomingMessageId;
 
 import java.io.InputStream;
@@ -20,13 +20,13 @@ public class CommissionReportEventDeserializer extends Deserializer<CommissionRe
 
     @Override
     public void consumeMessageContent(final int version, final InputStream inputStream, final IBEventHandler eventHandler) {
-        final CommissionReport commissionReport = new CommissionReport();
-        commissionReport.setExecutionId(readString(inputStream));
-        commissionReport.setCommission(readDouble(inputStream));
-        commissionReport.setCurrencyCode(readString(inputStream));
-        commissionReport.setRealizedProfitAndLoss(readDouble(inputStream));
-        commissionReport.setYield(readDouble(inputStream));
-        commissionReport.setYieldRedemptionDate(readInt(inputStream));
-        eventHandler.onCommissionReportEvent(commissionReport);
+        final IBCommissionReport IBCommissionReport = new IBCommissionReport();
+        IBCommissionReport.setExecutionId(readString(inputStream));
+        IBCommissionReport.setCommission(readDouble(inputStream));
+        IBCommissionReport.setCurrencyCode(readString(inputStream));
+        IBCommissionReport.setRealizedProfitAndLoss(readDouble(inputStream));
+        IBCommissionReport.setYield(readDouble(inputStream));
+        IBCommissionReport.setYieldRedemptionDate(readInt(inputStream));
+        eventHandler.onCommissionReportEvent(IBCommissionReport);
     }
 }

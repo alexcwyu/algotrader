@@ -8,7 +8,7 @@ import com.unisoft.algotrader.provider.ib.api.model.bulletin.NewsBulletinType;
 import com.unisoft.algotrader.provider.ib.api.model.contract.ContractSpecification;
 import com.unisoft.algotrader.provider.ib.api.model.contract.UnderlyingCombo;
 import com.unisoft.algotrader.provider.ib.api.model.data.*;
-import com.unisoft.algotrader.provider.ib.api.model.execution.CommissionReport;
+import com.unisoft.algotrader.provider.ib.api.model.execution.IBCommissionReport;
 import com.unisoft.algotrader.provider.ib.api.model.fa.FinancialAdvisorDataType;
 import com.unisoft.algotrader.provider.ib.api.model.order.OrderExecution;
 import com.unisoft.algotrader.provider.ib.api.model.order.OrderStatus;
@@ -91,8 +91,8 @@ public class DefaultIBEventHandler implements IBEventHandler{
     }
 
     @Override
-    public void onCommissionReportEvent(CommissionReport commissionReport) {
-        LOG.debug("onCommissionReportEvent commissionReport {}", commissionReport);
+    public void onCommissionReportEvent(IBCommissionReport IBCommissionReport) {
+        LOG.debug("onCommissionReportEvent commissionReport {}", IBCommissionReport);
     }
 
     @Override

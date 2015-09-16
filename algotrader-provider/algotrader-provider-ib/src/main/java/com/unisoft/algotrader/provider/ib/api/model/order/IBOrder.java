@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by alex on 9/9/15.
  */
-public class Order {
+public class IBOrder {
 
 
     private static final String EMPTY = "";
@@ -765,91 +765,91 @@ public class Order {
     public boolean equals(Object o) {
 
         if (this == o) return true;
-        if (!(o instanceof Order)) return false;
-        Order order = (Order) o;
-        return Objects.equal(allOrNone, order.allOrNone) &&
-                Objects.equal(stopPrice, order.stopPrice) &&
-                Objects.equal(basisPoint, order.basisPoint) &&
-                Objects.equal(basisPointType, order.basisPointType) &&
-                Objects.equal(blockOrder, order.blockOrder) &&
-                Objects.equal(clientId, order.clientId) &&
-                Objects.equal(continuouslyUpdate, order.continuouslyUpdate) &&
-                Objects.equal(delta, order.delta) &&
-                Objects.equal(deltaNeutralAuxPrice, order.deltaNeutralAuxPrice) &&
-                Objects.equal(deltaNeutralContractId, order.deltaNeutralContractId) &&
-                Objects.equal(discretionaryAmount, order.discretionaryAmount) &&
-                Objects.equal(displaySize, order.displaySize) &&
-                Objects.equal(electronicTradeOnly, order.electronicTradeOnly) &&
-                Objects.equal(exemptionCode, order.exemptionCode) &&
-                Objects.equal(firmQuoteOnly, order.firmQuoteOnly) &&
-                Objects.equal(hidden, order.hidden) &&
-                Objects.equal(limitPrice, order.limitPrice) &&
-                Objects.equal(minimumQuantity, order.minimumQuantity) &&
-                Objects.equal(nbboPriceCap, order.nbboPriceCap) &&
-                Objects.equal(notHeld, order.notHeld) &&
-                Objects.equal(optOutSmartRouting, order.optOutSmartRouting) &&
-                Objects.equal(id, order.id) &&
-                Objects.equal(outsideRegularTradingHours, order.outsideRegularTradingHours) &&
-                Objects.equal(overridePercentageConstraints, order.overridePercentageConstraints) &&
-                Objects.equal(parentId, order.parentId) &&
-                Objects.equal(percentageOffset, order.percentageOffset) &&
-                Objects.equal(permanentId, order.permanentId) &&
-                Objects.equal(scaleInitialLevelSize, order.scaleInitialLevelSize) &&
-                Objects.equal(scalePriceIncrement, order.scalePriceIncrement) &&
-                Objects.equal(scaleSubsequentLevelSize, order.scaleSubsequentLevelSize) &&
-                Objects.equal(startingPrice, order.startingPrice) &&
-                Objects.equal(lowerStockPriceRange, order.lowerStockPriceRange) &&
-                Objects.equal(upperStockPriceRange, order.upperStockPriceRange) &&
-                Objects.equal(stockReferencePrice, order.stockReferencePrice) &&
-                Objects.equal(sweepToFill, order.sweepToFill) &&
-                Objects.equal(totalQuantity, order.totalQuantity) &&
-                Objects.equal(trailingStopPrice, order.trailingStopPrice) &&
-                Objects.equal(trailingPercent, order.trailingPercent) &&
-                Objects.equal(transmit, order.transmit) &&
-                Objects.equal(volatility, order.volatility) &&
-                Objects.equal(requestPreTradeInformation, order.requestPreTradeInformation) &&
-                Objects.equal(scalePriceAdjustValue, order.scalePriceAdjustValue) &&
-                Objects.equal(scalePriceAdjustInterval, order.scalePriceAdjustInterval) &&
-                Objects.equal(scaleProfitOffset, order.scaleProfitOffset) &&
-                Objects.equal(scaleAutoReset, order.scaleAutoReset) &&
-                Objects.equal(scaleInitPosition, order.scaleInitPosition) &&
-                Objects.equal(scaleInitFillQuantity, order.scaleInitFillQuantity) &&
-                Objects.equal(scaleRandomPercent, order.scaleRandomPercent) &&
-                Objects.equal(accountName, order.accountName) &&
-                Objects.equal(orderAction, order.orderAction) &&
-                Objects.equal(algorithmParameters, order.algorithmParameters) &&
-                Objects.equal(algorithmStrategy, order.algorithmStrategy) &&
-                Objects.equal(auctionStrategy, order.auctionStrategy) &&
-                Objects.equal(clearingAccount, order.clearingAccount) &&
-                Objects.equal(clearingIntent, order.clearingIntent) &&
-                Objects.equal(deltaNeutralClearingAccount, order.deltaNeutralClearingAccount) &&
-                Objects.equal(deltaNeutralClearingIntent, order.deltaNeutralClearingIntent) &&
-                Objects.equal(deltaNeutralOrderType, order.deltaNeutralOrderType) &&
-                Objects.equal(deltaNeutralSettlingFirm, order.deltaNeutralSettlingFirm) &&
-                Objects.equal(designatedLocation, order.designatedLocation) &&
-                Objects.equal(financialAdvisorGroup, order.financialAdvisorGroup) &&
-                Objects.equal(financialAdvisorMethod, order.financialAdvisorMethod) &&
-                Objects.equal(financialAdvisorPercentage, order.financialAdvisorPercentage) &&
-                Objects.equal(financialAdvisorProfile, order.financialAdvisorProfile) &&
-                Objects.equal(goodAfterDateTime, order.goodAfterDateTime) &&
-                Objects.equal(goodTillDateTime, order.goodTillDateTime) &&
-                Objects.equal(hedgeParameter, order.hedgeParameter) &&
-                Objects.equal(hedgeType, order.hedgeType) &&
-                Objects.equal(ocaGroupName, order.ocaGroupName) &&
-                Objects.equal(ocaType, order.ocaType) &&
-                Objects.equal(openClose, order.openClose) &&
-                Objects.equal(orderReference, order.orderReference) &&
-                Objects.equal(orderType, order.orderType) &&
-                Objects.equal(origin, order.origin) &&
-                Objects.equal(referencePriceType, order.referencePriceType) &&
-                Objects.equal(rule80A, order.rule80A) &&
-                Objects.equal(settlingFirm, order.settlingFirm) &&
-                Objects.equal(shortSaleSlot, order.shortSaleSlot) &&
-                Objects.equal(smartComboRoutingParameters, order.smartComboRoutingParameters) &&
-                Objects.equal(timeInForce, order.timeInForce) &&
-                Objects.equal(stopTriggerMethod, order.stopTriggerMethod) &&
-                Objects.equal(volatilityType, order.volatilityType) &&
-                Objects.equal(orderComboLegs, order.orderComboLegs);
+        if (!(o instanceof IBOrder)) return false;
+        IBOrder IBOrder = (IBOrder) o;
+        return Objects.equal(allOrNone, IBOrder.allOrNone) &&
+                Objects.equal(stopPrice, IBOrder.stopPrice) &&
+                Objects.equal(basisPoint, IBOrder.basisPoint) &&
+                Objects.equal(basisPointType, IBOrder.basisPointType) &&
+                Objects.equal(blockOrder, IBOrder.blockOrder) &&
+                Objects.equal(clientId, IBOrder.clientId) &&
+                Objects.equal(continuouslyUpdate, IBOrder.continuouslyUpdate) &&
+                Objects.equal(delta, IBOrder.delta) &&
+                Objects.equal(deltaNeutralAuxPrice, IBOrder.deltaNeutralAuxPrice) &&
+                Objects.equal(deltaNeutralContractId, IBOrder.deltaNeutralContractId) &&
+                Objects.equal(discretionaryAmount, IBOrder.discretionaryAmount) &&
+                Objects.equal(displaySize, IBOrder.displaySize) &&
+                Objects.equal(electronicTradeOnly, IBOrder.electronicTradeOnly) &&
+                Objects.equal(exemptionCode, IBOrder.exemptionCode) &&
+                Objects.equal(firmQuoteOnly, IBOrder.firmQuoteOnly) &&
+                Objects.equal(hidden, IBOrder.hidden) &&
+                Objects.equal(limitPrice, IBOrder.limitPrice) &&
+                Objects.equal(minimumQuantity, IBOrder.minimumQuantity) &&
+                Objects.equal(nbboPriceCap, IBOrder.nbboPriceCap) &&
+                Objects.equal(notHeld, IBOrder.notHeld) &&
+                Objects.equal(optOutSmartRouting, IBOrder.optOutSmartRouting) &&
+                Objects.equal(id, IBOrder.id) &&
+                Objects.equal(outsideRegularTradingHours, IBOrder.outsideRegularTradingHours) &&
+                Objects.equal(overridePercentageConstraints, IBOrder.overridePercentageConstraints) &&
+                Objects.equal(parentId, IBOrder.parentId) &&
+                Objects.equal(percentageOffset, IBOrder.percentageOffset) &&
+                Objects.equal(permanentId, IBOrder.permanentId) &&
+                Objects.equal(scaleInitialLevelSize, IBOrder.scaleInitialLevelSize) &&
+                Objects.equal(scalePriceIncrement, IBOrder.scalePriceIncrement) &&
+                Objects.equal(scaleSubsequentLevelSize, IBOrder.scaleSubsequentLevelSize) &&
+                Objects.equal(startingPrice, IBOrder.startingPrice) &&
+                Objects.equal(lowerStockPriceRange, IBOrder.lowerStockPriceRange) &&
+                Objects.equal(upperStockPriceRange, IBOrder.upperStockPriceRange) &&
+                Objects.equal(stockReferencePrice, IBOrder.stockReferencePrice) &&
+                Objects.equal(sweepToFill, IBOrder.sweepToFill) &&
+                Objects.equal(totalQuantity, IBOrder.totalQuantity) &&
+                Objects.equal(trailingStopPrice, IBOrder.trailingStopPrice) &&
+                Objects.equal(trailingPercent, IBOrder.trailingPercent) &&
+                Objects.equal(transmit, IBOrder.transmit) &&
+                Objects.equal(volatility, IBOrder.volatility) &&
+                Objects.equal(requestPreTradeInformation, IBOrder.requestPreTradeInformation) &&
+                Objects.equal(scalePriceAdjustValue, IBOrder.scalePriceAdjustValue) &&
+                Objects.equal(scalePriceAdjustInterval, IBOrder.scalePriceAdjustInterval) &&
+                Objects.equal(scaleProfitOffset, IBOrder.scaleProfitOffset) &&
+                Objects.equal(scaleAutoReset, IBOrder.scaleAutoReset) &&
+                Objects.equal(scaleInitPosition, IBOrder.scaleInitPosition) &&
+                Objects.equal(scaleInitFillQuantity, IBOrder.scaleInitFillQuantity) &&
+                Objects.equal(scaleRandomPercent, IBOrder.scaleRandomPercent) &&
+                Objects.equal(accountName, IBOrder.accountName) &&
+                Objects.equal(orderAction, IBOrder.orderAction) &&
+                Objects.equal(algorithmParameters, IBOrder.algorithmParameters) &&
+                Objects.equal(algorithmStrategy, IBOrder.algorithmStrategy) &&
+                Objects.equal(auctionStrategy, IBOrder.auctionStrategy) &&
+                Objects.equal(clearingAccount, IBOrder.clearingAccount) &&
+                Objects.equal(clearingIntent, IBOrder.clearingIntent) &&
+                Objects.equal(deltaNeutralClearingAccount, IBOrder.deltaNeutralClearingAccount) &&
+                Objects.equal(deltaNeutralClearingIntent, IBOrder.deltaNeutralClearingIntent) &&
+                Objects.equal(deltaNeutralOrderType, IBOrder.deltaNeutralOrderType) &&
+                Objects.equal(deltaNeutralSettlingFirm, IBOrder.deltaNeutralSettlingFirm) &&
+                Objects.equal(designatedLocation, IBOrder.designatedLocation) &&
+                Objects.equal(financialAdvisorGroup, IBOrder.financialAdvisorGroup) &&
+                Objects.equal(financialAdvisorMethod, IBOrder.financialAdvisorMethod) &&
+                Objects.equal(financialAdvisorPercentage, IBOrder.financialAdvisorPercentage) &&
+                Objects.equal(financialAdvisorProfile, IBOrder.financialAdvisorProfile) &&
+                Objects.equal(goodAfterDateTime, IBOrder.goodAfterDateTime) &&
+                Objects.equal(goodTillDateTime, IBOrder.goodTillDateTime) &&
+                Objects.equal(hedgeParameter, IBOrder.hedgeParameter) &&
+                Objects.equal(hedgeType, IBOrder.hedgeType) &&
+                Objects.equal(ocaGroupName, IBOrder.ocaGroupName) &&
+                Objects.equal(ocaType, IBOrder.ocaType) &&
+                Objects.equal(openClose, IBOrder.openClose) &&
+                Objects.equal(orderReference, IBOrder.orderReference) &&
+                Objects.equal(orderType, IBOrder.orderType) &&
+                Objects.equal(origin, IBOrder.origin) &&
+                Objects.equal(referencePriceType, IBOrder.referencePriceType) &&
+                Objects.equal(rule80A, IBOrder.rule80A) &&
+                Objects.equal(settlingFirm, IBOrder.settlingFirm) &&
+                Objects.equal(shortSaleSlot, IBOrder.shortSaleSlot) &&
+                Objects.equal(smartComboRoutingParameters, IBOrder.smartComboRoutingParameters) &&
+                Objects.equal(timeInForce, IBOrder.timeInForce) &&
+                Objects.equal(stopTriggerMethod, IBOrder.stopTriggerMethod) &&
+                Objects.equal(volatilityType, IBOrder.volatilityType) &&
+                Objects.equal(orderComboLegs, IBOrder.orderComboLegs);
     }
 
     @Override

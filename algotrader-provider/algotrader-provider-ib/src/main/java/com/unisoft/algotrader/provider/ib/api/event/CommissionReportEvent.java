@@ -1,16 +1,16 @@
 package com.unisoft.algotrader.provider.ib.api.event;
 
-import com.unisoft.algotrader.provider.ib.api.model.execution.CommissionReport;
+import com.unisoft.algotrader.provider.ib.api.model.execution.IBCommissionReport;
 
 /**
  * Created by alex on 8/26/15.
  */
 public class CommissionReportEvent extends IBEvent<CommissionReportEvent>  {
 
-    public final CommissionReport commissionReport;
+    public final IBCommissionReport IBCommissionReport;
 
-    public CommissionReportEvent(final CommissionReport commissionReport){
-        this.commissionReport = commissionReport;
+    public CommissionReportEvent(final IBCommissionReport IBCommissionReport){
+        this.IBCommissionReport = IBCommissionReport;
     }
 
     @Override
@@ -21,7 +21,7 @@ public class CommissionReportEvent extends IBEvent<CommissionReportEvent>  {
     @Override
     public String toString() {
         return "CommissionReportEvent{" +
-                "commissionReport=" + commissionReport +
+                "commissionReport=" + IBCommissionReport +
                 "} " + super.toString();
     }
 }

@@ -1,6 +1,9 @@
-package com.unisoft.algotrader.model.event.data;
+package com.unisoft.algotrader.trading;
 
 import com.google.common.collect.Lists;
+import com.unisoft.algotrader.model.event.data.MDSide;
+import com.unisoft.algotrader.model.event.data.MarketDepth;
+import com.unisoft.algotrader.model.event.data.Quote;
 
 import java.util.List;
 

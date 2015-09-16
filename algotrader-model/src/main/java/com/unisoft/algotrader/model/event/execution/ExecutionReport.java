@@ -6,10 +6,7 @@ import com.datastax.driver.mapping.annotations.Table;
 import com.google.common.base.Objects;
 import com.lmax.disruptor.EventFactory;
 import com.unisoft.algotrader.model.event.Event;
-import com.unisoft.algotrader.model.trading.OrdStatus;
-import com.unisoft.algotrader.model.trading.OrdType;
-import com.unisoft.algotrader.model.trading.Side;
-import com.unisoft.algotrader.model.trading.TimeInForce;
+import com.unisoft.algotrader.model.trading.*;
 
 /**
  * Created by alex on 5/17/15.
@@ -39,6 +36,9 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
 
     @Column(name="ord_status")
     public OrdStatus ordStatus;
+
+    @Column(name="exec_type")
+    public ExecType execType;
 
     @Column(name="limit_price")
     public double limitPrice;
@@ -84,6 +84,7 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
                 ", transactionTime=" + transactionTime +
                 ", ordType=" + ordType +
                 ", ordStatus=" + ordStatus +
+                ", execType=" + execType +
                 ", limitPrice=" + limitPrice +
                 ", stopPrice=" + stopPrice +
                 ", ordQty=" + ordQty +
@@ -116,6 +117,7 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
                 Objects.equal(avgPrice, that.avgPrice) &&
                 Objects.equal(ordType, that.ordType) &&
                 Objects.equal(ordStatus, that.ordStatus) &&
+                Objects.equal(execType, that.execType) &&
                 Objects.equal(tif, that.tif) &&
                 Objects.equal(side, that.side) &&
                 Objects.equal(text, that.text);
@@ -123,7 +125,7 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(execId, clOrderId, providerOrderId, instId, transactionTime, ordType, ordStatus, limitPrice, stopPrice, ordQty, lastQty, lastPrice, filledQty, avgPrice, tif, side, text);
+        return Objects.hashCode(execId, clOrderId, providerOrderId, instId, transactionTime, ordType, ordStatus, execType, limitPrice, stopPrice, ordQty, lastQty, lastPrice, filledQty, avgPrice, tif, side, text);
     }
 
     @Override

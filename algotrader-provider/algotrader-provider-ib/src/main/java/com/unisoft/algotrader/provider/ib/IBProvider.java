@@ -8,6 +8,8 @@ import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Instrument;
+import com.unisoft.algotrader.model.trading.ExecType;
+import com.unisoft.algotrader.model.trading.OrdStatus;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.*;
@@ -350,17 +352,26 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
 
     @Override
     public void onMarketDepthLevelTwoUpdateEvent(long requestId, int rowId, String marketMakerName, Operation operation, BookSide bookSide, double price, int size) {
-        //TODO
+        SubscriptionKey key = subscriptionRegistry.getSubscriptionKey(requestId);
+        if (key != null) {
+            //TODO fix providerID
+            eventBusManager.getMarketDepthEventBus().publishMarketDepth(key.instId, System.currentTimeMillis(), 0, rowId, operation.mdOperation, bookSide.mdSide, price, size);
+        }
     }
 
     @Override
     public void onMarketDepthUpdateEvent(MarketDepthUpdateEvent e) {
         super.onMarketDepthUpdateEvent(e.requestId, e.rowId, e.operation, e.bookSide, e.price, e.size);
+
     }
 
     @Override
     public void onMarketDepthUpdateEvent(long requestId, int rowId, Operation operation, BookSide bookSide, double price, int size) {
-        //TODO
+        SubscriptionKey key = subscriptionRegistry.getSubscriptionKey(requestId);
+        if (key != null) {
+            //TODO fix providerID
+            eventBusManager.getMarketDepthEventBus().publishMarketDepth(key.instId, System.currentTimeMillis(), 0, rowId, operation.mdOperation, bookSide.mdSide, price, size);
+        }
     }
 
     @Override
@@ -423,7 +434,42 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
     public void onExecutionReportEvent(long orderId, Instrument instrument, ExecutionReport executionReport) {
         Optional<Order> optional = orderRegistry.getByProviderOrderId(orderId);
         if(optional.isPresent()){
-            //TODO implement it
+            Order order = optional.get();
+            if (order.ordStatus == OrdStatus.PendingNew){
+                ExecutionReport er = new ExecutionReport();
+                er.transactionTime = System.currentTimeMillis();
+                er.clOrderId = order.clOrderId;
+                er.providerOrderId = order.providerOrderId;
+                er.execId = order.providerOrderId; //TODO fix it
+                er.instId = order.instId;
+                er.ordType = order.ordType;
+                er.side = order.side;
+                er.tif = order.tif;
+                er.limitPrice = order.limitPrice;
+                er.stopPrice = order.stopPrice;
+                er.ordQty = order.ordQty;
+                er.lastPrice = 0;
+                er.lastQty = 0;
+                er.filledQty = order.filledQty;
+                er.avgPrice = order.avgPrice;
+                er.ordStatus = OrdStatus.New;
+                er.execType = ExecType.New;
+
+                eventBusManager.getExecutionEventBus().publishExecutionReport(er);
+            }
+
+            order.add(executionReport);
+
+            //TODO update order with executionReport, calc avgPrice, cumQty, leaveQty
+
+            if (order.leaveQty() > 0 ){
+                executionReport.execType = ExecType.PartialFill;
+                executionReport.ordStatus = OrdStatus.PartiallyFilled;
+            }
+            else {
+                executionReport.execType = ExecType.Fill;
+                executionReport.ordStatus = OrdStatus.Filled;
+            }
             eventBusManager.getExecutionEventBus().publishExecutionReport(executionReport);
         }
     }
@@ -438,6 +484,60 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
         Optional<Order> optional = orderRegistry.getByProviderOrderId(orderId);
         if(optional.isPresent()){
             //todo create exec report
+
+            boolean createReport = false;
+            ExecType execType = ExecType.Undefined;
+            OrdStatus ordStatus = OrdStatus.Undefined;
+
+            Order order = optional.get();
+            switch (orderStatus){
+                case SUBMITTED:
+                    if (order.filledQty ==0){
+                        execType = ExecType.New;
+                        ordStatus = OrdStatus.New;
+                        createReport = true;
+                    }
+                    break;
+                case PENDING_CANCEL:
+                    execType = ExecType.PendingCancel;
+                    ordStatus = OrdStatus.PendingCancel;
+                    createReport = true;
+                    break;
+                case CANCELLED:
+                    execType = ExecType.Cancelled;
+                    ordStatus = OrdStatus.Cancelled;
+                    createReport = true;
+                    break;
+                case INACTIVE:
+                    execType = ExecType.Rejected;
+                    ordStatus = OrdStatus.Rejected;
+                    createReport =order.ordStatus != OrdStatus.Rejected;
+                    break;
+                default:
+                    break;
+            }
+
+            if(createReport){
+                ExecutionReport er = new ExecutionReport();
+                er.transactionTime = System.currentTimeMillis();
+                er.clOrderId = order.clOrderId;
+                er.providerOrderId = order.providerOrderId;
+                er.execId = order.providerOrderId; //TODO fix it
+                er.instId = order.instId;
+                er.ordType = order.ordType;
+                er.side = order.side;
+                er.tif = order.tif;
+                er.limitPrice = order.limitPrice;
+                er.stopPrice = order.stopPrice;
+                er.ordQty = order.ordQty;
+                er.lastPrice = order.lastPrice;
+                er.lastQty = order.lastQty;
+                er.filledQty = order.filledQty;
+                er.avgPrice = order.avgPrice;
+                er.ordStatus = ordStatus;
+                er.execType = execType;
+                eventBusManager.getExecutionEventBus().publishExecutionReport(er);
+            }
         }
     }
 
