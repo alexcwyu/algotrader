@@ -55,14 +55,23 @@ public class InstrumentDataManager extends MultiEventProcessor implements Market
         data.trade = trade;
     }
 
+
+    @Override
+    public void onMarketDepth(MarketDepth marketDepth) {
+        InstrumentData data = getInstrumentData(marketDepth.instId);
+        data.orderBook.add(marketDepth);
+    }
+
     public static class InstrumentData {
         public final long instId;
         public Bar bar;
         public Quote quote;
         public Trade trade;
+        public OrderBook orderBook;
 
         public InstrumentData(long instId){
             this.instId = instId;
+            this.orderBook = new OrderBook(instId);
         }
     }
 

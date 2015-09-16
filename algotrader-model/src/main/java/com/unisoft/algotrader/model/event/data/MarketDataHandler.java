@@ -25,5 +25,9 @@ public interface MarketDataHandler extends EventHandler {
 
     void onTrade(Trade trade);
 
+    default void onMarketDepth(MarketDepth marketDepth){
+
+    }
+
 }
 
