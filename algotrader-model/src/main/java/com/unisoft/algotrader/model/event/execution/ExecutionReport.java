@@ -19,6 +19,9 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
     @Column(name="exec_id")
     public long execId;
 
+    @Column(name="exec_provider_id")
+    public String execProviderId;
+
     @Column(name="cl_order_id")
     public long clOrderId;
 
@@ -291,5 +294,13 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public void setExecProviderId(String execProviderId){
+        this.execProviderId = execProviderId;
+    }
+
+    public String getExecProviderId(){
+        return execProviderId;
     }
 }

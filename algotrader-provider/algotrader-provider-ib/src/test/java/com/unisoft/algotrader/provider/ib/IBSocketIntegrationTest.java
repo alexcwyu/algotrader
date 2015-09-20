@@ -366,7 +366,7 @@ public class IBSocketIntegrationTest {
 
         Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange("EURUSD", IDEALPRO.getExchId());
         Order order = orderManager.newLimitOrder(instrument.getInstId(), "Test", IBProvider.PROVIDER_ID, Side.Buy, 1.1, 1000000, TimeInForce.Day);
-        order.providerOrderId = orderId;
+        order.orderId = orderId;
         socket.placeOrder(order);
         ArgumentCaptor<Long> captor2 = ArgumentCaptor.forClass(Long.class);
         verify(eventHandler, timeout(5000).atLeastOnce()).onRetrieveOpenOrderEvent(
@@ -385,7 +385,7 @@ public class IBSocketIntegrationTest {
         reset(eventHandler);
 
         Thread.sleep(1000);
-        order.setLimitPrice(1.0);
+        order.limitPrice(1.0);
         socket.placeOrder(order);
 
         Thread.sleep(1000);
@@ -402,7 +402,7 @@ public class IBSocketIntegrationTest {
         reset(eventHandler);
 
 
-        socket.cancelOrder(order.providerOrderId);
+        socket.cancelOrder(order.orderId);
         ArgumentCaptor<Integer> captor5 = ArgumentCaptor.forClass(Integer.class);
         ArgumentCaptor<OrderStatus> captor6 = ArgumentCaptor.forClass(OrderStatus.class);
         verify(eventHandler, timeout(2000).atLeastOnce()).onOrderStatusUpdateEvent(
@@ -434,7 +434,7 @@ public class IBSocketIntegrationTest {
 
         Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange("EURUSD", IDEALPRO.getExchId());
         Order order = orderManager.newLimitOrder(instrument.getInstId(), "Test", IBProvider.PROVIDER_ID, Side.Buy, 1.1, 1000000, TimeInForce.Day);
-        order.providerOrderId = orderId;
+        order.orderId = orderId;
         socket.placeOrder(order);
         ArgumentCaptor<Long> captor2 = ArgumentCaptor.forClass(Long.class);
         verify(eventHandler, timeout(5000).atLeastOnce()).onRetrieveOpenOrderEvent(

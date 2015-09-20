@@ -10,10 +10,11 @@ import java.util.Map;
  */
 public class OrderTable {
 
-    private Map<Long, Order> orderMap = Maps.newConcurrentMap();
-    private Map<Long, Map<Long, Order>> instOrderMap = Maps.newConcurrentMap();
+    private Map<Long, Order> orderMap = Maps.newHashMap();
+    private Map<Long, Map<Long, Order>> providerOrderMap = Maps.newHashMap();
+    private Map<Long, Map<Long, Order>> instOrderMap = Maps.newHashMap();
 
-    public Map<Long, Order> getOrders(long instId){
+    public Map<Long, Order> getOrdersByInstId(long instId){
         if (!instOrderMap.containsKey(instId))
             instOrderMap.putIfAbsent(instId, Maps.newHashMap());
         return instOrderMap.get(instId);
@@ -28,13 +29,13 @@ public class OrderTable {
 
 
     public void addOrUpdateOrder(Order order){
-        getOrders(order.instId).put(order.clOrderId, order);
+        getOrdersByInstId(order.instId).put(order.clOrderId, order);
         orderMap.put(order.clOrderId, order);
     }
 
     public void removeOrder(Order order) {
-        if (getOrders(order.instId) != null) {
-            getOrders(order.instId).remove(order.clOrderId);
+        if (getOrdersByInstId(order.instId) != null) {
+            getOrdersByInstId(order.instId).remove(order.clOrderId);
         }
         orderMap.remove(order.clOrderId);
     }

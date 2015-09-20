@@ -74,7 +74,7 @@ public class InMemoryTradingDataStore implements TradingDataStore {
             delegateDataStore.connect();
             delegateDataStore.getAllAccounts().forEach(a -> accountCache.put(a.getAccountId(), a));
             delegateDataStore.getAllPortfolios().forEach(p -> portfolioCache.put(p.getPortfolioId(), p));
-            delegateDataStore.getAllOrders().forEach(o -> orderCache.put(o.getClOrderId(), o));
+            delegateDataStore.getAllOrders().forEach(o -> orderCache.put(o.clOrderId(), o));
             delegateDataStore.getAllExecutionReports().forEach(er -> executionReportCache.put(er.getExecId(), er));
         }
     }
@@ -148,7 +148,7 @@ public class InMemoryTradingDataStore implements TradingDataStore {
         if(delegateDataStore != null) {
             delegateDataStore.saveOrder(order);
         }
-        orderCache.put(order.getClOrderId(), order);
+        orderCache.put(order.clOrderId(), order);
     }
 
     @Override
@@ -163,7 +163,7 @@ public class InMemoryTradingDataStore implements TradingDataStore {
 
     @Override
     public List<Order> getOrdersByInstId(long instId) {
-        return orderCache.asMap().values().stream().filter(order -> order.getInstId() == instId).collect(toList());
+        return orderCache.asMap().values().stream().filter(order -> order.instId() == instId).collect(toList());
     }
 
     @Override
@@ -171,7 +171,7 @@ public class InMemoryTradingDataStore implements TradingDataStore {
         if (portfolioId == null){
             return Lists.newArrayList();
         }
-        return orderCache.asMap().values().stream().filter(order -> portfolioId.equals(order.getPortfolioId())).collect(toList());
+        return orderCache.asMap().values().stream().filter(order -> portfolioId.equals(order.portfolioId())).collect(toList());
     }
 
     @Override
@@ -179,7 +179,7 @@ public class InMemoryTradingDataStore implements TradingDataStore {
         if (strategyId == null){
             return Lists.newArrayList();
         }
-        return orderCache.asMap().values().stream().filter(order -> strategyId.equals(order.getStrategyId())).collect(toList());
+        return orderCache.asMap().values().stream().filter(order -> strategyId.equals(order.strategyId())).collect(toList());
     }
 
     @Override

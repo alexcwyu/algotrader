@@ -82,7 +82,7 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
         add(order);
     }
     @Override
-    public void onOrderReplaceRequest(Order order) {
+    public void onOrderUpdateRequest(Order order) {
         //TODO
     }
 
@@ -95,9 +95,9 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
 
         double newDebt = addOrderToPosition(order);
 
-        Currency currency = refDataStore.getCurrency(refDataStore.getInstrument(order.getInstId()).getCcyId());
-        AccountTransaction accountTransaction = new AccountTransaction(order.getClOrderId(), order.getDateTime(),
-                currency, order.cashFlow() + newDebt, order.getText());
+        Currency currency = refDataStore.getCurrency(refDataStore.getInstrument(order.instId()).getCcyId());
+        AccountTransaction accountTransaction = new AccountTransaction(order.clOrderId(), order.dateTime(),
+                currency, order.cashFlow() + newDebt, order.text());
         account.add(accountTransaction);
 
         portfolio.getPerformance().valueChanged(clock.now(), coreEquity(), totalEquity());
@@ -120,7 +120,7 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
 
 
     protected double calcOrderMargin(Order order, Instrument instrument){
-        double margin = instrument.getMargin() * order.getFilledQty();
+        double margin = instrument.getMargin() * order.filledQty();
         return margin;
     }
 
@@ -133,7 +133,7 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
     }
 
     private double addOrderToPosition(Order order){
-        Position position = portfolio.getPosition(order.getInstId());
+        Position position = portfolio.getPosition(order.instId());
 
         boolean positionOpened = false;
         boolean positionChanged = false;
@@ -145,17 +145,17 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
         double openDebt = 0;
         double closeDebt = 0;
 
-        Instrument instrument = refDataStore.getInstrument(order.getInstId());
+        Instrument instrument = refDataStore.getInstrument(order.instId());
 
         double orderMargin = calcOrderMargin(order, instrument);
         double orderDebt = calcOrderDebt(order, instrument);
 
         if (position == null){
             // open position
-            position = new Position(order.getInstId(), portfolio.getPortfolioId(), instrument.getFactor());
+            position = new Position(order.instId(), portfolio.getPortfolioId(), instrument.getFactor());
             position.add(order);
 
-            position = portfolio.addPosition(order.getInstId(), position);
+            position = portfolio.addPosition(order.instId(), position);
 
             // TODO handle margin
             if (orderMargin != 0)
@@ -193,7 +193,7 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
                 // close or close / open position
                 if ((position.getSide() == PositionSide.Short && order.side == Side.Buy)||
                         (position.getSide() == PositionSide.Long && (order.side == Side.Sell || order.side == Side.SellShort))){
-                    if(position.getQty() == order.getFilledQty()){
+                    if(position.getQty() == order.filledQty()){
                         //fully close
                         closeMargin = position.getMargin();
                         openMargin = 0;
@@ -204,12 +204,12 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
                         position.setMargin(0);
                         position.setDebt(0);
                     }
-                    else if (position.getQty() > order.getFilledQty()){
+                    else if (position.getQty() > order.filledQty()){
                         // partially close
                         closeMargin = orderMargin;
                         openMargin = 0;
 
-                        closeDebt = position.getDebt() * order.getFilledQty() / position.getQty();
+                        closeDebt = position.getDebt() * order.filledQty() / position.getQty();
                         openDebt = 0;
 
                         position.setMargin(position.getMargin() - orderMargin);
@@ -217,8 +217,8 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
                     }
                     else {
                         // close and open
-                        double qty = order.getFilledQty() - position.getQty();
-                        double value = qty * order.getAvgPrice();
+                        double qty = order.filledQty() - position.getQty();
+                        double value = qty * order.avgPrice();
 
                         if (instrument.getFactor() != 0)
                             value *= instrument.getFactor();
@@ -240,7 +240,7 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
             if (position.getQty() == 0){
 
                 //close position
-                portfolio.removePosition(order.getInstId());
+                portfolio.removePosition(order.instId());
 
                 positionClosed = true;
             }

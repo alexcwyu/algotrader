@@ -117,7 +117,6 @@ public class OrderBook {
         return bidList.stream().mapToInt(e -> e.size).sum();
     }
 
-
     public double getAskVolume() {
         return askList.stream().mapToInt(e -> e.size).sum();
     }

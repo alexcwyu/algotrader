@@ -93,18 +93,18 @@ public class Position implements MarketDataHandler {
         double realizedCost = 0;
 
         double amount = order.amount();
-        this.marketPrice = order.getLastPrice();
+        this.marketPrice = order.lastPrice();
 
         int sign = getSign(order);
 
         if (orderList.size() == 0) {
             fPnLTransactionIndex = 0;
-            qtyLeft = order.getFilledQty();
+            qtyLeft = order.filledQty();
         } else {
             if ((getSide() == PositionSide.Long && sign < 0) ||
                     (getSide() == PositionSide.Short && sign > 0)) {
                 int index = fPnLTransactionIndex + 1;
-                double qty = order.getFilledQty();
+                double qty = order.filledQty();
 
                 double totalFilled = 0;
 
@@ -114,23 +114,23 @@ public class Position implements MarketDataHandler {
 
                 Order firstOrder = orderList.get(fPnLTransactionIndex);
 
-                realizedCost += qtyFilled * (order.transactionCost() / order.getFilledQty()
-                        + firstOrder.transactionCost() / firstOrder.getFilledQty());
+                realizedCost += qtyFilled * (order.transactionCost() / order.filledQty()
+                        + firstOrder.transactionCost() / firstOrder.filledQty());
 
-                pnl += (order.getAvgPrice() - firstOrder.getAvgPrice()) * qtyFilled * -sign;
+                pnl += (order.avgPrice() - firstOrder.avgPrice()) * qtyFilled * -sign;
 
                 while (qty > totalFilled && index < orderList.size()) {
                     Order nextOrder = orderList.get(index);
 
                     if (getSign(nextOrder) != sign) {
 
-                        qtyFilled = Math.min(qty - totalFilled, nextOrder.getFilledQty());
+                        qtyFilled = Math.min(qty - totalFilled, nextOrder.filledQty());
 
-                        realizedCost += qtyFilled * (order.transactionCost() / order.getFilledQty() + nextOrder.transactionCost() / nextOrder.getFilledQty());
+                        realizedCost += qtyFilled * (order.transactionCost() / order.filledQty() + nextOrder.transactionCost() / nextOrder.filledQty());
 
-                        pnl += (order.getAvgPrice() - nextOrder.getAvgPrice()) * qtyFilled * -sign;
+                        pnl += (order.avgPrice() - nextOrder.avgPrice()) * qtyFilled * -sign;
 
-                        totalFilled += nextOrder.getFilledQty();
+                        totalFilled += nextOrder.filledQty();
                     }
                     index++;
                 }
@@ -148,23 +148,23 @@ public class Position implements MarketDataHandler {
         if (factor != 0)
             pnl *= factor;
 
-        order.setPnl(pnl - order.transactionCost());
-        order.setRealizedPnl((pnl - realizedCost));
+        order.pnl(pnl - order.transactionCost());
+        order.realizedPnl((pnl - realizedCost));
 
         switch (order.side) {
             case Buy:
             //case BuyMinus:
-                qtyBought += order.getFilledQty();
+                qtyBought += order.filledQty();
                 break;
 
             case Sell:
             //case SellPlus:
-                qtySold += order.getFilledQty();
+                qtySold += order.filledQty();
                 break;
 
             case SellShort:
             //case SellShortExempt:
-                qtySoldShort += order.getFilledQty();
+                qtySoldShort += order.filledQty();
                 break;
             default:
                 throw new UnsupportedOperationException("Transaction Side is not supported : " + order.side);
@@ -216,7 +216,7 @@ public class Position implements MarketDataHandler {
 
         double qtyFilled = qtyLeft;
 
-        pnl += (price - orderList.get(fPnLTransactionIndex).getAvgPrice()) - qtyFilled * -sign;
+        pnl += (price - orderList.get(fPnLTransactionIndex).avgPrice()) - qtyFilled * -sign;
 
         int index = fPnLTransactionIndex +1;
 
@@ -224,7 +224,7 @@ public class Position implements MarketDataHandler {
 
             Order order = orderList.get(index);
 
-            pnl += (price - order.getAvgPrice()) * qtyFilled * -sign;
+            pnl += (price - order.avgPrice()) * qtyFilled * -sign;
 
             index++;
         }

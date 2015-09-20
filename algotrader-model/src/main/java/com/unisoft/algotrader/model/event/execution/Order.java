@@ -80,10 +80,17 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
     @Column(name="portfolio_id")
     public String portfolioId;
 
+    @Column(name="account")
+    public String account;
+
     @Column(name="strategy_id")
     public String strategyId;
 
+    @Column(name="text")
     public String text;
+
+    @Column(name="oca_group")
+    public String ocaGroup;
 
     @Transient
     public List<ExecutionReport> executionReports = Lists.newArrayList();
@@ -121,16 +128,21 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
     @Override
     public String toString() {
         return "Order{" +
-                "clOrderId=" + clOrderId +
+                "account='" + account + '\'' +
+                ", clOrderId=" + clOrderId +
                 ", orderId=" + orderId +
-                ", instId='" + instId + '\'' +
+                ", origClOrderId=" + origClOrderId +
+                ", instId=" + instId +
                 ", dateTime=" + dateTime +
                 ", ordType=" + ordType +
+                ", ordStatus=" + ordStatus +
                 ", limitPrice=" + limitPrice +
+                ", stopPrice=" + stopPrice +
                 ", ordQty=" + ordQty +
                 ", filledQty=" + filledQty +
-                ", stopPrice=" + stopPrice +
                 ", avgPrice=" + avgPrice +
+                ", lastQty=" + lastQty +
+                ", lastPrice=" + lastPrice +
                 ", stopLimitReady=" + stopLimitReady +
                 ", trailingStopExecPrice=" + trailingStopExecPrice +
                 ", tif=" + tif +
@@ -138,9 +150,14 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
                 ", execProviderId='" + execProviderId + '\'' +
                 ", portfolioId='" + portfolioId + '\'' +
                 ", strategyId='" + strategyId + '\'' +
-                ", getText='" + text + '\'' +
-                ", ordStatus=" + ordStatus +
-                "} " + super.toString();
+                ", text='" + text + '\'' +
+                ", ocaGroup='" + ocaGroup + '\'' +
+                ", executionReports=" + executionReports +
+                ", orderCancelRejects=" + orderCancelRejects +
+                ", commissions=" + commissions +
+                ", pnl=" + pnl +
+                ", realizedPnl=" + realizedPnl +
+                '}';
     }
 
     @Override
@@ -170,15 +187,18 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
                 Objects.equal(side, order.side) &&
                 Objects.equal(execProviderId, order.execProviderId) &&
                 Objects.equal(portfolioId, order.portfolioId) &&
+                Objects.equal(account, order.account) &&
                 Objects.equal(strategyId, order.strategyId) &&
                 Objects.equal(text, order.text) &&
+                Objects.equal(ocaGroup, order.ocaGroup) &&
                 Objects.equal(executionReports, order.executionReports) &&
+                Objects.equal(orderCancelRejects, order.orderCancelRejects) &&
                 Objects.equal(commissions, order.commissions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(clOrderId, orderId, origClOrderId, instId, dateTime, ordType, ordStatus, limitPrice, stopPrice, ordQty, filledQty, avgPrice, lastQty, lastPrice, stopLimitReady, trailingStopExecPrice, tif, side, execProviderId, portfolioId, strategyId, text, executionReports, commissions, pnl, realizedPnl);
+        return Objects.hashCode(clOrderId, orderId, origClOrderId, instId, dateTime, ordType, ordStatus, limitPrice, stopPrice, ordQty, filledQty, avgPrice, lastQty, lastPrice, stopLimitReady, trailingStopExecPrice, tif, side, execProviderId, portfolioId, account, strategyId, text, ocaGroup, executionReports, orderCancelRejects, commissions, pnl, realizedPnl);
     }
 
     public static final EventFactory<Order> FACTORY = new EventFactory(){
@@ -269,210 +289,271 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
 //    }
 
 
-    public long getClOrderId() {
-        return clOrderId;
+    public String account() {
+        return account;
     }
 
-    public void setClOrderId(long clOrderId) {
-        this.clOrderId = clOrderId;
-    }
-    public long getOrigClOrderId() {
-        return origClOrderId;
+    public void account(String account) {
+        this.account = account;
     }
 
-    public void setOrigClOrderId(long origClOrderId) {
-        this.origClOrderId = origClOrderId;
-    }
-
-    public long getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(long orderId) {
-        this.orderId = orderId;
-    }
-
-    public long getInstId() {
-        return instId;
-    }
-
-    public void setInstId(long instId) {
-        this.instId = instId;
-    }
-
-    public long getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(long dateTime) {
-        this.dateTime = dateTime;
-    }
-
-    public OrdType getOrdType() {
-        return ordType;
-    }
-
-    public void setOrdType(OrdType ordType) {
-        this.ordType = ordType;
-    }
-
-    public OrdStatus getOrdStatus() {
-        return ordStatus;
-    }
-
-    public void setOrdStatus(OrdStatus ordStatus) {
-        this.ordStatus = ordStatus;
-    }
-
-    public double getLimitPrice() {
-        return limitPrice;
-    }
-
-    public void setLimitPrice(double limitPrice) {
-        this.limitPrice = limitPrice;
-    }
-
-    public double getStopPrice() {
-        return stopPrice;
-    }
-
-    public void setStopPrice(double stopPrice) {
-        this.stopPrice = stopPrice;
-    }
-
-    public double getOrdQty() {
-        return ordQty;
-    }
-
-    public void setOrdQty(double ordQty) {
-        this.ordQty = ordQty;
-    }
-
-    public double getFilledQty() {
-        return filledQty;
-    }
-
-    public void setFilledQty(double filledQty) {
-        this.filledQty = filledQty;
-    }
-
-    public double getAvgPrice() {
+    public double avgPrice() {
         return avgPrice;
     }
 
-    public void setAvgPrice(double avgPrice) {
+    public void avgPrice(double avgPrice) {
         this.avgPrice = avgPrice;
     }
 
-    public double getLastQty() {
-        return lastQty;
+    public long clOrderId() {
+        return clOrderId;
     }
 
-    public void setLastQty(double lastQty) {
-        this.lastQty = lastQty;
+    public void clOrderId(long clOrderId) {
+        this.clOrderId = clOrderId;
     }
 
-    public double getLastPrice() {
-        return lastPrice;
-    }
-
-    public void setLastPrice(double lastPrice) {
-        this.lastPrice = lastPrice;
-    }
-
-    public boolean isStopLimitReady() {
-        return stopLimitReady;
-    }
-
-    public void setStopLimitReady(boolean stopLimitReady) {
-        this.stopLimitReady = stopLimitReady;
-    }
-
-    public double getTrailingStopExecPrice() {
-        return trailingStopExecPrice;
-    }
-
-    public void setTrailingStopExecPrice(double trailingStopExecPrice) {
-        this.trailingStopExecPrice = trailingStopExecPrice;
-    }
-
-    public TimeInForce getTif() {
-        return tif;
-    }
-
-    public void setTif(TimeInForce tif) {
-        this.tif = tif;
-    }
-
-    public Side getSide() {
-        return side;
-    }
-
-    public void setSide(Side side) {
-        this.side = side;
-    }
-
-    public String getExecProviderId() {
-        return execProviderId;
-    }
-
-    public void setExecProviderId(String execProviderId) {
-        this.execProviderId = execProviderId;
-    }
-
-    public String getPortfolioId() {
-        return portfolioId;
-    }
-
-    public void setPortfolioId(String portfolioId) {
-        this.portfolioId = portfolioId;
-    }
-
-    public String getStrategyId() {
-        return strategyId;
-    }
-
-    public void setStrategyId(String strategyId) {
-        this.strategyId = strategyId;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public List<ExecutionReport> getExecutionReports() {
-        return executionReports;
-    }
-
-    public void setExecutionReports(List<ExecutionReport> executionReports) {
-        this.executionReports = executionReports;
-    }
-
-    public List<Double> getCommissions() {
+    public List<Double> commissions() {
         return commissions;
     }
 
-    public void setCommissions(List<Double> commissions) {
+    public void commissions(List<Double> commissions) {
         this.commissions = commissions;
     }
 
-    public double getPnl() {
+    public long dateTime() {
+        return dateTime;
+    }
+
+    public void dateTime(long dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public String execProviderId() {
+        return execProviderId;
+    }
+
+    public void execProviderId(String execProviderId) {
+        this.execProviderId = execProviderId;
+    }
+
+    public List<ExecutionReport> executionReports() {
+        return executionReports;
+    }
+
+    public void executionReports(List<ExecutionReport> executionReports) {
+        this.executionReports = executionReports;
+    }
+
+    public double filledQty() {
+        return filledQty;
+    }
+
+    public void filledQty(double filledQty) {
+        this.filledQty = filledQty;
+    }
+
+    public long instId() {
+        return instId;
+    }
+
+    public void instId(long instId) {
+        this.instId = instId;
+    }
+
+    public double lastPrice() {
+        return lastPrice;
+    }
+
+    public void lastPrice(double lastPrice) {
+        this.lastPrice = lastPrice;
+    }
+
+    public double lastQty() {
+        return lastQty;
+    }
+
+    public void lastQty(double lastQty) {
+        this.lastQty = lastQty;
+    }
+
+    public double limitPrice() {
+        return limitPrice;
+    }
+
+    public void limitPrice(double limitPrice) {
+        this.limitPrice = limitPrice;
+    }
+
+    public List<OrderCancelReject> orderCancelRejects() {
+        return orderCancelRejects;
+    }
+
+    public void orderCancelRejects(List<OrderCancelReject> orderCancelRejects) {
+        this.orderCancelRejects = orderCancelRejects;
+    }
+
+    public long orderId() {
+        return orderId;
+    }
+
+    public void orderId(long orderId) {
+        this.orderId = orderId;
+    }
+
+    public double ordQty() {
+        return ordQty;
+    }
+
+    public void ordQty(double ordQty) {
+        this.ordQty = ordQty;
+    }
+
+    public OrdStatus ordStatus() {
+        return ordStatus;
+    }
+
+    public void ordStatus(OrdStatus ordStatus) {
+        this.ordStatus = ordStatus;
+    }
+
+    public OrdType ordType() {
+        return ordType;
+    }
+
+    public void ordType(OrdType ordType) {
+        this.ordType = ordType;
+    }
+
+    public long origClOrderId() {
+        return origClOrderId;
+    }
+
+    public void origClOrderId(long origClOrderId) {
+        this.origClOrderId = origClOrderId;
+    }
+
+    public double pnl() {
         return pnl;
     }
 
-    public void setPnl(double pnl) {
+    public void pnl(double pnl) {
         this.pnl = pnl;
     }
 
-    public double getRealizedPnl() {
+    public String portfolioId() {
+        return portfolioId;
+    }
+
+    public void portfolioId(String portfolioId) {
+        this.portfolioId = portfolioId;
+    }
+
+    public double realizedPnl() {
         return realizedPnl;
     }
 
-    public void setRealizedPnl(double realizedPnl) {
+    public void realizedPnl(double realizedPnl) {
         this.realizedPnl = realizedPnl;
+    }
+
+    public Side side() {
+        return side;
+    }
+
+    public void side(Side side) {
+        this.side = side;
+    }
+
+    public boolean stopLimitReady() {
+        return stopLimitReady;
+    }
+
+    public void stopLimitReady(boolean stopLimitReady) {
+        this.stopLimitReady = stopLimitReady;
+    }
+
+    public double stopPrice() {
+        return stopPrice;
+    }
+
+    public void stopPrice(double stopPrice) {
+        this.stopPrice = stopPrice;
+    }
+
+    public String strategyId() {
+        return strategyId;
+    }
+
+    public void strategyId(String strategyId) {
+        this.strategyId = strategyId;
+    }
+
+    public String text() {
+        return text;
+    }
+
+    public void text(String text) {
+        this.text = text;
+    }
+
+    public TimeInForce tif() {
+        return tif;
+    }
+
+    public void tif(TimeInForce tif) {
+        this.tif = tif;
+    }
+
+    public double trailingStopExecPrice() {
+        return trailingStopExecPrice;
+    }
+
+    public void trailingStopExecPrice(double trailingStopExecPrice) {
+        this.trailingStopExecPrice = trailingStopExecPrice;
+    }
+
+    public String ocaGroup() {
+        return ocaGroup;
+    }
+
+    public void ocaGroup(String ocaGroup) {
+        this.ocaGroup = ocaGroup;
+    }
+
+    public void replaceOrder(OrderCancelReplaceRequest req){
+        this.origClOrderId = this.clOrderId;
+
+        if (req.clOrderId > 0){
+            this.clOrderId = clOrderId;
+        }
+
+        if (req.instId >0)
+            this.instId = instId;
+
+        if (req.dateTime >0)
+            this.dateTime = dateTime;
+
+        if (req.ordType != null)
+            this.ordType = req.ordType;
+
+        if(req.limitPrice >0)
+            this.limitPrice = req.limitPrice;
+
+        if(req.stopPrice >0)
+            this.stopPrice = req.stopPrice;
+
+        if(req.ordQty > 0)
+            this.ordQty = req.ordQty;
+
+        if(req.tif != null)
+            this.tif = req.tif;
+
+        if(req.side != null)
+            this.side = req.side;
+
+        if(req.account != null)
+            this.account = req.account;
+
     }
 }

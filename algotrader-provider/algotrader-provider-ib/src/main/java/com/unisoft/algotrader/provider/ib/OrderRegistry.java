@@ -13,12 +13,12 @@ import java.util.Optional;
  */
 public class OrderRegistry {
 
-    protected Map<Long, Order> providerOrderIdMap = Maps.newHashMap();
+    protected Map<Long, Order> orderIdMap = Maps.newHashMap();
     protected Map<Long, Order> clOrderIdOrderMap = Maps.newHashMap();
-    protected BiMap<Long, Long> clOrderId2providerOrderIdMap  = HashBiMap.create();
+    protected BiMap<Long, Long> clOrderId2OrderIdMap  = HashBiMap.create();
 
-    public Optional<Order> getByProviderOrderId(long providerOrderId){
-        return Optional.ofNullable(providerOrderIdMap.get(providerOrderId));
+    public Optional<Order> getByOrderId(long orderId){
+        return Optional.ofNullable(orderIdMap.get(orderId));
     }
 
     public Optional<Order> getByClOrderId(long clOrderId){
@@ -26,14 +26,14 @@ public class OrderRegistry {
     }
 
     public void addOrder(Order order){
-        providerOrderIdMap.put(order.getProviderOrderId(), order);
-        clOrderIdOrderMap.put(order.getClOrderId(), order);
-        clOrderId2providerOrderIdMap.put(order.getClOrderId(), order.getProviderOrderId());
+        orderIdMap.put(order.orderId(), order);
+        clOrderIdOrderMap.put(order.clOrderId(), order);
+        clOrderId2OrderIdMap.put(order.clOrderId(), order.orderId());
     }
 
     public void removeOrder(Order order){
-        providerOrderIdMap.remove(order.getProviderOrderId());
-        clOrderIdOrderMap.remove(order.getClOrderId());
-        clOrderId2providerOrderIdMap.remove(order.getClOrderId());
+        orderIdMap.remove(order.orderId());
+        clOrderIdOrderMap.remove(order.clOrderId());
+        clOrderId2OrderIdMap.remove(order.clOrderId());
     }
 }

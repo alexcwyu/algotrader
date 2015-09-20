@@ -50,26 +50,20 @@ public class OrderManager extends MultiEventProcessor implements OrderHandler, E
     @Override
     public void onNewOrderRequest(Order order) {
         LOG.info("onNewOrderRequest {}" , order);
-
         addOrder(order);
         providerManager.getExecutionProvider(order.execProviderId).onNewOrderRequest(order);
     }
 
     @Override
-    public void onOrderReplaceRequest(Order order){
-        LOG.info("onOrderReplaceRequest {}" , order);
-        order.origClOrderId = order.clOrderId;
+    public void onOrderUpdateRequest(Order order){
+        LOG.info("updateOrder {}" , order);
         order.clOrderId = nextOrdId();
-        providerManager.getExecutionProvider(order.execProviderId).onOrderReplaceRequest(order);
+        providerManager.getExecutionProvider(order.execProviderId).onOrderUpdateRequest(order);
     }
 
     @Override
     public void onOrderCancelRequest(Order order){
-        LOG.info("onOrderCancelRequest {}" , order);
-
-        order.origClOrderId = order.clOrderId;
-        order.clOrderId = nextOrdId();
-
+        LOG.info("cancelOrder {}" , order);
         providerManager.getExecutionProvider(order.execProviderId).onOrderCancelRequest(order);
 
     }

@@ -1,12 +1,15 @@
 package com.unisoft.algotrader.provider.ib;
 
 
+import com.google.common.base.Strings;
 import com.unisoft.algotrader.model.event.EventBusManager;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.DataType;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
+import com.unisoft.algotrader.model.event.execution.OrderCancelReplaceRequest;
+import com.unisoft.algotrader.model.event.execution.OrderCancelRequest;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.ExecType;
 import com.unisoft.algotrader.model.trading.OrdStatus;
@@ -189,16 +192,16 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
 
     @Override
     public void onNewOrderRequest(Order order) {
-        order.setProviderOrderId(nextOrderId());
+        order.orderId(nextOrderId());
         orderRegistry.addOrder(order);
         ibSocket.placeOrder(order);
     }
 
     @Override
-    public void onOrderReplaceRequest(Order updatedOrder){
+    public void onOrderUpdateRequest(Order updatedOrder){
         Optional<Order> optional = orderRegistry.getByClOrderId(updatedOrder.clOrderId);
         if(optional.isPresent()) {
-            updatedOrder.setProviderOrderId(optional.get().getProviderOrderId());
+            updatedOrder.orderId(optional.get().orderId());
             orderRegistry.addOrder(updatedOrder);
             ibSocket.placeOrder(updatedOrder);
         }
@@ -211,7 +214,7 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
     public void onOrderCancelRequest(Order order){
         Optional<Order> optional = orderRegistry.getByClOrderId(order.clOrderId);
         if (optional.isPresent()) {
-            ibSocket.cancelOrder(optional.get().getProviderOrderId());
+            ibSocket.cancelOrder(optional.get().orderId());
         }
         else{
             throw new RequestException(ClientMessageCode.INTERNAL_ERROR, "Fail to cancel order, exisitng order not found, clOrderId="+order.clOrderId);
@@ -432,15 +435,15 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
 
     @Override
     public void onExecutionReportEvent(long orderId, Instrument instrument, ExecutionReport executionReport) {
-        Optional<Order> optional = orderRegistry.getByProviderOrderId(orderId);
+        Optional<Order> optional = orderRegistry.getByOrderId(orderId);
         if(optional.isPresent()){
             Order order = optional.get();
             if (order.ordStatus == OrdStatus.PendingNew){
                 ExecutionReport er = new ExecutionReport();
                 er.transactionTime = System.currentTimeMillis();
                 er.clOrderId = order.clOrderId;
-                er.providerOrderId = order.providerOrderId;
-                er.execId = order.providerOrderId; //TODO fix it
+                er.orderId = order.orderId;
+                er.execId = order.orderId; //TODO fix it
                 er.instId = order.instId;
                 er.ordType = order.ordType;
                 er.side = order.side;
@@ -481,7 +484,7 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
 
     @Override
     public void onOrderStatusUpdateEvent(long orderId, OrderStatus orderStatus, int filledQuantity, int remainingQuantity, double averageFilledPrice, int permanentId, int parentOrderId, double lastFilledPrice, int clientId, String heldCause) {
-        Optional<Order> optional = orderRegistry.getByProviderOrderId(orderId);
+        Optional<Order> optional = orderRegistry.getByOrderId(orderId);
         if(optional.isPresent()){
             //todo create exec report
 
@@ -521,8 +524,8 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
                 ExecutionReport er = new ExecutionReport();
                 er.transactionTime = System.currentTimeMillis();
                 er.clOrderId = order.clOrderId;
-                er.providerOrderId = order.providerOrderId;
-                er.execId = order.providerOrderId; //TODO fix it
+                er.orderId = order.orderId;
+                er.execId = order.orderId; //TODO fix it
                 er.instId = order.instId;
                 er.ordType = order.ordType;
                 er.side = order.side;

@@ -15,22 +15,16 @@ public class OrderCancelReject<E extends OrderCancelReject<? super E>> implement
 //    @PartitionKey
     @Column(name="cl_order_id")
     public long clOrderId;
-//
+
     @Column(name="order_id")
     public long orderId = -1;
 
     @Column(name="orig_cl_order_id")
     public long origClOrderId = -1;
-//
-//    @Column(name="inst_id")
-//    public long instId;
-//
+
     @Column(name="date_time")
     public long dateTime;
-//
-//    @Column(name="ord_type")
-//    public OrdType ordType;
-//
+
     @Column(name="ord_status")
     public OrdStatus ordStatus = OrdStatus.New;
 
@@ -39,48 +33,6 @@ public class OrderCancelReject<E extends OrderCancelReject<? super E>> implement
 
     @Column(name="cxl_rej_response_to")
     public CxlRejResponseTo cxlRejResponseTo;
-//
-//    @Column(name="limit_price")
-//    public double limitPrice;
-//
-//    @Column(name="stop_price")
-//    public double stopPrice;
-//
-//    @Column(name="ord_qty")
-//    public double ordQty;
-//
-//    @Column(name="filled_qty")
-//    public double filledQty = 0;
-//
-//    @Column(name="avg_price")
-//    public double avgPrice;
-//
-//    @Column(name="last_qty")
-//    public double lastQty;
-//
-//    @Column(name="last_price")
-//    public double lastPrice;
-//
-//    @Column(name="stop_limit_ready")
-//    public boolean stopLimitReady = false;
-//
-//    @Column(name="trailing_stop_exec_price")
-//    public double trailingStopExecPrice;
-//
-//    public TimeInForce tif;
-//
-//    public Side side;
-//
-//    @Column(name="exec_provider_id")
-//    public String execProviderId;
-//
-//    @Column(name="portfolio_id")
-//    public String portfolioId;
-//
-//    @Column(name="strategy_id")
-//    public String strategyId;
-//
-//    public String text;
 
 
     public static final EventFactory<OrderCancelReject> FACTORY = new EventFactory(){
@@ -103,5 +55,61 @@ public class OrderCancelReject<E extends OrderCancelReject<? super E>> implement
     @Override
     public void copy(E event) {
 
+    }
+
+    public long clOrderId() {
+        return clOrderId;
+    }
+
+    public void clOrderId(long clOrderId) {
+        this.clOrderId = clOrderId;
+    }
+
+    public CxlRejReason cxlRejReason() {
+        return cxlRejReason;
+    }
+
+    public void cxlRejReason(CxlRejReason cxlRejReason) {
+        this.cxlRejReason = cxlRejReason;
+    }
+
+    public CxlRejResponseTo cxlRejResponseTo() {
+        return cxlRejResponseTo;
+    }
+
+    public void cxlRejResponseTo(CxlRejResponseTo cxlRejResponseTo) {
+        this.cxlRejResponseTo = cxlRejResponseTo;
+    }
+
+    public long dateTime() {
+        return dateTime;
+    }
+
+    public void dateTime(long dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public long orderId() {
+        return orderId;
+    }
+
+    public void orderId(long orderId) {
+        this.orderId = orderId;
+    }
+
+    public OrdStatus ordStatus() {
+        return ordStatus;
+    }
+
+    public void ordStatus(OrdStatus ordStatus) {
+        this.ordStatus = ordStatus;
+    }
+
+    public long origClOrderId() {
+        return origClOrderId;
+    }
+
+    public void origClOrderId(long origClOrderId) {
+        this.origClOrderId = origClOrderId;
     }
 }

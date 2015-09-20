@@ -30,8 +30,8 @@ public class PlaceOrderSerializer extends Serializer{
 
         builder.append(messageId.getId());
         builder.append(getVersion());
-        builder.append(order.getProviderOrderId());
-        Instrument instrument = refDataStore.getInstrument(order.getInstId());
+        builder.append(order.orderId());
+        Instrument instrument = refDataStore.getInstrument(order.instId());
         appendInstrument(builder, instrument);
         appendOrder(builder, instrument, order);
         return builder.toBytes();
@@ -74,16 +74,16 @@ public class PlaceOrderSerializer extends Serializer{
     }
 
     private void appendOrder(ByteArrayBuilder builder, Instrument instrument, Order order){
-        builder.append(OrderAction.convert(order.getSide()));
-        builder.append((int)order.getOrdQty());
-        builder.append(OrderType.convert(order.getOrdType()));
+        builder.append(OrderAction.convert(order.side()));
+        builder.append((int)order.ordQty());
+        builder.append(OrderType.convert(order.ordType()));
 
-        builder.append(order.getLimitPrice());
-        if (order.getStopPrice() != 0.0)
-            builder.append(order.getStopPrice());
+        builder.append(order.limitPrice());
+        if (order.stopPrice() != 0.0)
+            builder.append(order.stopPrice());
         else
             builder.appendEol();
-        builder.append(TIF.convert(order.getTif()));
+        builder.append(TIF.convert(order.tif()));
 
         builder.appendEol(); //OCA Group
         builder.appendEol(); //Account

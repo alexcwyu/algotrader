@@ -2,6 +2,7 @@ package com.unisoft.algotrader.utils.serialization.msgpack;
 
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
+import com.unisoft.algotrader.model.event.execution.OrderCancelReject;
 import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Exchange;
 import com.unisoft.algotrader.model.refdata.Instrument;
@@ -41,6 +42,9 @@ public class ModelSerializationTest {
         serializer.register(TimeInForce.class);
         serializer.register(Side.class);
         serializer.register(ExecutionReport.class);
+        serializer.register(OrderCancelReject.class);
+        serializer.register(CxlRejResponseTo.class);
+        serializer.register(CxlRejReason.class);
         serializer.register(Order.class);
 
         serializer.register(TLongArrayList.class);

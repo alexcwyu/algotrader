@@ -2,12 +2,14 @@ package com.unisoft.algotrader.model.event.execution;
 
 import com.datastax.driver.mapping.annotations.Column;
 import com.datastax.driver.mapping.annotations.PartitionKey;
+import com.google.common.base.Objects;
+import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.model.trading.Side;
 
 /**
  * Created by alex on 5/24/15.
  */
-public class OrderCancelRequest {
+public class OrderCancelRequest <E extends OrderCancelRequest<? super E>> implements Event<OrderHandler, E> {
 
     @PartitionKey
     @Column(name="cl_order_id")
@@ -33,15 +35,116 @@ public class OrderCancelRequest {
     @Column(name="exec_provider_id")
     public String execProviderId;
 
-    @Column(name="portfolio_id")
-    public String portfolioId;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OrderCancelRequest)) return false;
+        OrderCancelRequest<?> that = (OrderCancelRequest<?>) o;
+        return Objects.equal(clOrderId, that.clOrderId) &&
+                Objects.equal(orderId, that.orderId) &&
+                Objects.equal(origClOrderId, that.origClOrderId) &&
+                Objects.equal(instId, that.instId) &&
+                Objects.equal(dateTime, that.dateTime) &&
+                Objects.equal(ordQty, that.ordQty) &&
+                Objects.equal(side, that.side) &&
+                Objects.equal(execProviderId, that.execProviderId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(clOrderId, orderId, origClOrderId, instId, dateTime, side, ordQty, execProviderId);
+    }
+
+    @Override
+    public String toString() {
+        return "OrderCancelRequest{" +
+                "clOrderId=" + clOrderId +
+                ", orderId=" + orderId +
+                ", origClOrderId=" + origClOrderId +
+                ", instId=" + instId +
+                ", dateTime=" + dateTime +
+                ", side=" + side +
+                ", ordQty=" + ordQty +
+                ", execProviderId=" + execProviderId +
+                '}';
+    }
+
+    @Override
+    public void copy(E event) {
+
+    }
+
+    @Override
+    public void on(OrderHandler handler) {
+
+    }
+
+    @Override
+    public void reset() {
+
+    }
 
     public long clOrderId() {
         return clOrderId;
     }
 
-    public OrderCancelRequest setClOrderId(long clOrderId) {
+    public void clOrderId(long clOrderId) {
         this.clOrderId = clOrderId;
-        return this;
+    }
+
+    public long dateTime() {
+        return dateTime;
+    }
+
+    public void dateTime(long dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public String execProviderId() {
+        return execProviderId;
+    }
+
+    public void execProviderId(String execProviderId) {
+        this.execProviderId = execProviderId;
+    }
+
+    public long instId() {
+        return instId;
+    }
+
+    public void instId(long instId) {
+        this.instId = instId;
+    }
+
+    public long orderId() {
+        return orderId;
+    }
+
+    public void orderId(long orderId) {
+        this.orderId = orderId;
+    }
+
+    public double ordQty() {
+        return ordQty;
+    }
+
+    public void ordQty(double ordQty) {
+        this.ordQty = ordQty;
+    }
+
+    public long origClOrderId() {
+        return origClOrderId;
+    }
+
+    public void origClOrderId(long origClOrderId) {
+        this.origClOrderId = origClOrderId;
+    }
+
+    public Side side() {
+        return side;
+    }
+
+    public void side(Side side) {
+        this.side = side;
     }
 }

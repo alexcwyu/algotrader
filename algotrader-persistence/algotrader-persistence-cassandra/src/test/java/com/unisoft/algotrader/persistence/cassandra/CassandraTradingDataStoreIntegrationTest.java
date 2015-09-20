@@ -59,13 +59,13 @@ public class CassandraTradingDataStoreIntegrationTest {
         Order order = SampleEventFactory.createOrder(1001, Side.Buy, OrdType.Limit, 9000, 98, 0.0, TimeInForce.Day, "Provider1", "Portfolio1", "Strategy1");
 
         store.saveOrder(order);
-        Order order1 = store.getOrder(order.getClOrderId());
+        Order order1 = store.getOrder(order.clOrderId());
         assertEquals(order, order1);
 
         assertTrue(store.getAllOrders().contains(order));
-        assertTrue(store.getOrdersByInstId(order.getInstId()).contains(order));
-        assertTrue(store.getOrdersByPortfolioId(order.getPortfolioId()).contains(order));
-        assertTrue(store.getOrdersByStrategyId(order.getStrategyId()).contains(order));
+        assertTrue(store.getOrdersByInstId(order.instId()).contains(order));
+        assertTrue(store.getOrdersByPortfolioId(order.portfolioId()).contains(order));
+        assertTrue(store.getOrdersByStrategyId(order.strategyId()).contains(order));
     }
 
     @Test
@@ -119,11 +119,11 @@ public class CassandraTradingDataStoreIntegrationTest {
         store.saveAccount(account);
 
 
-        Order loadedOrder = store.getOrder(order.getClOrderId());
+        Order loadedOrder = store.getOrder(order.clOrderId());
         assertNotNull(loadedOrder);
-        Order loadedOrder2 = store.getOrder(order2.getClOrderId());
+        Order loadedOrder2 = store.getOrder(order2.clOrderId());
         assertNotNull(loadedOrder2);
-        Order loadedOrder3 = store.getOrder(order3.getClOrderId());
+        Order loadedOrder3 = store.getOrder(order3.clOrderId());
         assertNotNull(loadedOrder2);
 
         ExecutionReport loadedER = store.getExecutionReport(executionReport.getExecId());
@@ -133,9 +133,9 @@ public class CassandraTradingDataStoreIntegrationTest {
         ExecutionReport loadedER3 = store.getExecutionReport(executionReport3.getExecId());
         assertNotNull(loadedER3);
 
-        loadedOrder.setExecutionReports(Lists.newArrayList(loadedER));
-        loadedOrder2.setExecutionReports(Lists.newArrayList(loadedER2));
-        loadedOrder3.setExecutionReports(Lists.newArrayList(loadedER3));
+        loadedOrder.executionReports(Lists.newArrayList(loadedER));
+        loadedOrder2.executionReports(Lists.newArrayList(loadedER2));
+        loadedOrder3.executionReports(Lists.newArrayList(loadedER3));
 
         Portfolio loadedPortfolio = store.getPortfolio(portfolio.getPortfolioId());
         assertNotNull(loadedPortfolio);
