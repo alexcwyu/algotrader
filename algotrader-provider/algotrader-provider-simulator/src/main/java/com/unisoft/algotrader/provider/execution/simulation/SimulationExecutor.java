@@ -57,7 +57,7 @@ public class SimulationExecutor extends MultiEventProcessor implements Execution
 
     @Inject
     public SimulationExecutor(AppConfig config, @Nullable RingBuffer ... rbs){
-        this(config.getProviderManager(), config.getOrderManager(), config.getInstrumentDataManager(), config.getClock(), (rbs == null || rbs.length ==0) ? new RingBuffer[]{config.getEventBusManager().marketDataRB} : rbs);
+        this(config.getProviderManager(), config.getOrderManager(), config.getInstrumentDataManager(), config.getClock(), (rbs == null || rbs.length ==0) ? new RingBuffer[]{config.getEventBusManager().getMarketDataRB()} : rbs);
     }
 
     public SimulationExecutor(ProviderManager providerManager, OrderManager orderManager, InstrumentDataManager instrumentDataManager, Clock clock, @Nullable RingBuffer... rbs) {

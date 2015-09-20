@@ -26,16 +26,6 @@ public final class TestEvent implements Event
     }
 
     @Override
-    public void reset() {
-
-    }
-
-    @Override
-    public void copy(Event event) {
-
-    }
-
-    @Override
     public String toString()
     {
         return "Test Event";

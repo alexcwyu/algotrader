@@ -2,8 +2,9 @@ package com.unisoft.algotrader.provider.execution.simulation;
 
 import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.event.SampleEventFactory;
+import com.unisoft.algotrader.event.bus.BackTestEventBusManager;
 import com.unisoft.algotrader.model.clock.SimulationClock;
-import com.unisoft.algotrader.model.event.EventBusManager;
+import com.unisoft.algotrader.model.event.bus.EventBusManager;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
@@ -45,9 +46,9 @@ public class SimulationExecutorTest {
 
         providerManager = new ProviderManager();
         strategyManager = new StrategyManager();
-        eventBusManager = new EventBusManager();
+        eventBusManager = new BackTestEventBusManager();
         orderManager = spy(new OrderManager(providerManager, strategyManager, eventBusManager));
-        instrumentDataManager = new InstrumentDataManager(eventBusManager.marketDataRB);
+        instrumentDataManager = new InstrumentDataManager(eventBusManager.getMarketDataRB());
         simulationExecutor = new SimulationExecutor(providerManager, orderManager, instrumentDataManager, new SimulationClock(), rb);
         simulationExecutor.config.fillOnBar = true;
         simulationExecutor.config.fillOnQuote = true;

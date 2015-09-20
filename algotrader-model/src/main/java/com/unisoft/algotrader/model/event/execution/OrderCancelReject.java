@@ -1,15 +1,14 @@
 package com.unisoft.algotrader.model.event.execution;
 
 import com.datastax.driver.mapping.annotations.Column;
-import com.datastax.driver.mapping.annotations.PartitionKey;
-import com.lmax.disruptor.EventFactory;
-import com.unisoft.algotrader.model.event.Event;
-import com.unisoft.algotrader.model.trading.*;
+import com.unisoft.algotrader.model.trading.CxlRejReason;
+import com.unisoft.algotrader.model.trading.CxlRejResponseTo;
+import com.unisoft.algotrader.model.trading.OrdStatus;
 
 /**
  * Created by alex on 5/24/15.
  */
-public class OrderCancelReject<E extends OrderCancelReject<? super E>> implements Event<ExecutionHandler, E> {
+public class OrderCancelReject<E extends OrderCancelReject<? super E>> extends ExecutionEvent<E> {
     //TODO
 
 //    @PartitionKey
@@ -35,26 +34,9 @@ public class OrderCancelReject<E extends OrderCancelReject<? super E>> implement
     public CxlRejResponseTo cxlRejResponseTo;
 
 
-    public static final EventFactory<OrderCancelReject> FACTORY = new EventFactory(){
     @Override
-    public OrderCancelReject newInstance() {
-        return new OrderCancelReject();
-        }
-    };
-
-    @Override
-    public void on(ExecutionHandler handler) {
+    public void on(ExecutionEventHandler handler) {
         handler.onOrderCancelReject(this);
-    }
-
-    @Override
-    public void reset() {
-
-    }
-
-    @Override
-    public void copy(E event) {
-
     }
 
     public long clOrderId() {

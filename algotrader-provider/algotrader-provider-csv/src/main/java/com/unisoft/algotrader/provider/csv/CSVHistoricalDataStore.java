@@ -4,7 +4,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
-import com.unisoft.algotrader.model.event.EventBus;
+import com.unisoft.algotrader.model.event.bus.MarketDataEventBus;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
@@ -39,7 +39,7 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
     private final CSVConfig config;
     private final Writer writer;
     private final RefDataStore refDataStore;
-    private final EventBus.MarketDataEventBus marketDataEventBus;
+    private final MarketDataEventBus marketDataEventBus;
 
     public static final String PROVIDER_ID = "CSV";
     private CsvParserSettings settings = new CsvParserSettings();
@@ -53,7 +53,7 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
                     });
 
     @Inject
-    public CSVHistoricalDataStore(ProviderManager providerManager, CSVConfig csvConfig, RefDataStore refDataStore, EventBus.MarketDataEventBus marketDataEventBus){
+    public CSVHistoricalDataStore(ProviderManager providerManager, CSVConfig csvConfig, RefDataStore refDataStore, MarketDataEventBus marketDataEventBus){
         super(providerManager);
         this.config = csvConfig;
         this.writer = null;
@@ -64,7 +64,7 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
 
     }
 
-    protected CSVHistoricalDataStore(ProviderManager providerManager, Writer writer, RefDataStore refDataStore, EventBus.MarketDataEventBus marketDataEventBus){
+    protected CSVHistoricalDataStore(ProviderManager providerManager, Writer writer, RefDataStore refDataStore, MarketDataEventBus marketDataEventBus){
         super(providerManager);
         this.writer = writer;
         this.config = null;

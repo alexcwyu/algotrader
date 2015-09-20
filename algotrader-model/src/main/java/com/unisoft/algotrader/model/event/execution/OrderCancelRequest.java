@@ -9,7 +9,8 @@ import com.unisoft.algotrader.model.trading.Side;
 /**
  * Created by alex on 5/24/15.
  */
-public class OrderCancelRequest <E extends OrderCancelRequest<? super E>> implements Event<OrderHandler, E> {
+@Deprecated
+public class OrderCancelRequest <E extends OrderCancelRequest<? super E>> implements Event<OrderEventHandler, E> {
 
     @PartitionKey
     @Column(name="cl_order_id")
@@ -70,17 +71,7 @@ public class OrderCancelRequest <E extends OrderCancelRequest<? super E>> implem
     }
 
     @Override
-    public void copy(E event) {
-
-    }
-
-    @Override
-    public void on(OrderHandler handler) {
-
-    }
-
-    @Override
-    public void reset() {
+    public void on(OrderEventHandler handler) {
 
     }
 

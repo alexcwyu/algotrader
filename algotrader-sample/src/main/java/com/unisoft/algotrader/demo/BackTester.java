@@ -1,9 +1,11 @@
 package com.unisoft.algotrader.demo;
 
+import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import com.unisoft.algotrader.config.AppConfig;
 import com.unisoft.algotrader.model.clock.SimulationClock;
-import com.unisoft.algotrader.model.event.EventBusManager;
+import com.unisoft.algotrader.model.event.bus.EventBusManager;
+import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.Performance;
 import com.unisoft.algotrader.model.trading.Portfolio;
@@ -19,6 +21,7 @@ import com.unisoft.algotrader.trading.InstrumentDataManager;
 import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.trading.Strategy;
 import com.unisoft.algotrader.trading.StrategyManager;
+import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -81,11 +84,14 @@ public class BackTester {
         this.strategy.setPortfolio(portfolio);
         strategyManager.register(strategy);
 
-        this.simulationExecutor = new SimulationExecutor(providerManager, orderManager, new InstrumentDataManager(eventBusManager.marketDataRB), new SimulationClock(), eventBusManager.marketDataRB);
+        this.simulationExecutor = new SimulationExecutor(providerManager, orderManager, new InstrumentDataManager(eventBusManager.getMarketDataRB()), new SimulationClock(), eventBusManager.getMarketDataRB());
         providerManager.addExecutionProvider(simulationExecutor);
 
-        this.barFactory = new BarFactory(eventBusManager.rawMarketDataRB, eventBusManager.marketDataRB);
-        this.simulator = new Simulator(simulationExecutor, eventBusManager.marketDataRB, strategy);
+        RingBuffer<MarketDataContainer> rawMarketDataRB
+            = RingBuffer.createSingleProducer(MarketDataContainer.FACTORY, 1024, new NoWaitStrategy());
+
+        this.barFactory = new BarFactory(rawMarketDataRB, eventBusManager.getMarketDataRB());
+        this.simulator = new Simulator(simulationExecutor, eventBusManager.getMarketDataRB(), strategy);
 
         this.dataProvider = provider;
 

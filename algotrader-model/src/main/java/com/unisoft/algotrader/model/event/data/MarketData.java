@@ -1,11 +1,11 @@
 package com.unisoft.algotrader.model.event.data;
 
-import com.unisoft.algotrader.model.event.Event;
+import com.unisoft.algotrader.model.event.ReuseableEvent;
 
 /**
  * Created by alex on 4/12/15.
  */
-public abstract class MarketData<E extends MarketData<? super E>> implements Event<MarketDataHandler, E> {
+public abstract class MarketData<E extends MarketData<? super E>> implements ReuseableEvent<MarketDataHandler, E> {
     public long instId = -1;
     public long dateTime = -1;
     protected MarketData(){

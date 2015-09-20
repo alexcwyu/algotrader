@@ -1,12 +1,13 @@
 package com.unisoft.algotrader.model.event.data;
 
 import com.google.common.base.Objects;
-import com.unisoft.algotrader.model.event.Event;
+import com.lmax.disruptor.EventFactory;
+import com.unisoft.algotrader.model.event.ReuseableEvent;
 
 /**
  * Created by alex on 9/16/15.
  */
-public class MarketDepth implements Event<MarketDepthHandler, MarketDepth> {
+public class MarketDepth implements ReuseableEvent<MarketDepthHandler, MarketDepth> {
     public long instId = -1;
     public long dateTime = -1;
     public int providerId = 0;
@@ -64,6 +65,13 @@ public class MarketDepth implements Event<MarketDepthHandler, MarketDepth> {
         handler.onMarketDepth(this);
     }
 
+
+    public static final EventFactory<MarketDepth> FACTORY = new EventFactory(){
+        @Override
+        public MarketDepth newInstance() {
+            return new MarketDepth();
+        }
+    };
 
     @Override
     public void reset(){

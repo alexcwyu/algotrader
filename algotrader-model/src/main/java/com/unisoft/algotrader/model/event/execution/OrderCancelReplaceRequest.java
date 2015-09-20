@@ -11,7 +11,9 @@ import com.unisoft.algotrader.model.trading.TimeInForce;
 /**
  * Created by alex on 5/24/15.
  */
-public class OrderCancelReplaceRequest<E extends OrderCancelReplaceRequest<? super E>> implements Event<OrderHandler, E> {
+
+@Deprecated
+public class OrderCancelReplaceRequest<E extends OrderCancelReplaceRequest<? super E>> implements Event<OrderEventHandler, E> {
 
     @PartitionKey
     @Column(name="cl_order_id")
@@ -54,19 +56,10 @@ public class OrderCancelReplaceRequest<E extends OrderCancelReplaceRequest<? sup
     public String execProviderId;
 
     @Override
-    public void copy(E event) {
+    public void on(OrderEventHandler handler) {
 
     }
 
-    @Override
-    public void on(OrderHandler handler) {
-
-    }
-
-    @Override
-    public void reset() {
-
-    }
 
     public String account() {
         return account;

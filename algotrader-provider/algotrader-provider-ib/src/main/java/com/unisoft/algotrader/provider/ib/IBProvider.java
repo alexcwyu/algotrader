@@ -1,15 +1,12 @@
 package com.unisoft.algotrader.provider.ib;
 
 
-import com.google.common.base.Strings;
-import com.unisoft.algotrader.model.event.EventBusManager;
+import com.unisoft.algotrader.model.event.bus.EventBusManager;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.DataType;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
-import com.unisoft.algotrader.model.event.execution.OrderCancelReplaceRequest;
-import com.unisoft.algotrader.model.event.execution.OrderCancelRequest;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.ExecType;
 import com.unisoft.algotrader.model.trading.OrdStatus;

@@ -6,8 +6,6 @@ import com.datastax.driver.mapping.annotations.Table;
 import com.datastax.driver.mapping.annotations.Transient;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
-import com.lmax.disruptor.EventFactory;
-import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.model.trading.OrdStatus;
 import com.unisoft.algotrader.model.trading.OrdType;
 import com.unisoft.algotrader.model.trading.Side;
@@ -19,7 +17,7 @@ import java.util.List;
  * Created by alex on 5/17/15.
  */
 @Table(keyspace = "trading", name = "orders")
-public class Order<E extends Order<? super E>> implements Event<OrderHandler, E> {
+public class Order<E extends Order<? super E>> extends OrderEvent<E>{
 
     @PartitionKey
     @Column(name="cl_order_id")
@@ -201,26 +199,9 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
         return Objects.hashCode(clOrderId, orderId, origClOrderId, instId, dateTime, ordType, ordStatus, limitPrice, stopPrice, ordQty, filledQty, avgPrice, lastQty, lastPrice, stopLimitReady, trailingStopExecPrice, tif, side, execProviderId, portfolioId, account, strategyId, text, ocaGroup, executionReports, orderCancelRejects, commissions, pnl, realizedPnl);
     }
 
-    public static final EventFactory<Order> FACTORY = new EventFactory(){
-        @Override
-        public Order newInstance() {
-            return new Order();
-        }
-    };
-
     @Override
-    public void on(OrderHandler handler) {
+    public void on(OrderEventHandler handler) {
         handler.onNewOrderRequest(this);
-    }
-
-    @Override
-    public void reset() {
-
-    }
-
-    @Override
-    public void copy(E event) {
-
     }
 
     public boolean isDone(){
@@ -521,7 +502,7 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
         this.ocaGroup = ocaGroup;
     }
 
-    public void replaceOrder(OrderCancelReplaceRequest req){
+    /*public void replaceOrder(OrderCancelReplaceRequest req){
         this.origClOrderId = this.clOrderId;
 
         if (req.clOrderId > 0){
@@ -554,6 +535,5 @@ public class Order<E extends Order<? super E>> implements Event<OrderHandler, E>
 
         if(req.account != null)
             this.account = req.account;
-
-    }
+    }*/
 }

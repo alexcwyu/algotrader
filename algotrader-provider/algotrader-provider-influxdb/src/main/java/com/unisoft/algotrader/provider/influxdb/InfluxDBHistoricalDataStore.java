@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.influxdb;
 
-import com.unisoft.algotrader.model.event.EventBus;
+import com.unisoft.algotrader.model.event.bus.MarketDataEventBus;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
@@ -27,12 +27,12 @@ public class InfluxDBHistoricalDataStore extends AbstractDataStoreProvider{
     private AtomicBoolean connected = new AtomicBoolean(false);
 
     private final InfluxDBConfig config;
-    private final EventBus.MarketDataEventBus marketDataEventBus;
+    private final MarketDataEventBus marketDataEventBus;
 
     public static final String PROVIDER_ID = "InfluxDB";
 
     @Inject
-    public InfluxDBHistoricalDataStore(ProviderManager providerManager, InfluxDBConfig config, EventBus.MarketDataEventBus marketDataEventBus){
+    public InfluxDBHistoricalDataStore(ProviderManager providerManager, InfluxDBConfig config, MarketDataEventBus marketDataEventBus){
         super(providerManager);
         this.config = config;
         this.marketDataEventBus = marketDataEventBus;

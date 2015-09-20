@@ -1,13 +1,13 @@
-package com.unisoft.algotrader.event;
+package com.unisoft.algotrader.event.bus;
 
-import com.unisoft.algotrader.model.event.EventBus;
+import com.unisoft.algotrader.model.event.bus.MarketDataEventBus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
  * Created by alex on 6/18/15.
  */
-public class LogMarketDataEventBus implements EventBus.MarketDataEventBus {
+public class LogMarketDataEventBus implements MarketDataEventBus {
 
     private static final Logger LOG = LogManager.getLogger(LogMarketDataEventBus.class);
 

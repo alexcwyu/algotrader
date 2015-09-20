@@ -3,7 +3,7 @@ package com.unisoft.algotrader.provider.cassandra;
 import com.datastax.driver.core.*;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.google.common.collect.Lists;
-import com.unisoft.algotrader.model.event.EventBus;
+import com.unisoft.algotrader.model.event.bus.MarketDataEventBus;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
@@ -46,13 +46,13 @@ public class CassandraHistoricalDataStore extends AbstractDataStoreProvider {
     public static final String PROVIDER_ID = "Cassandra";
 
     private final AtomicBoolean connected = new AtomicBoolean(false);
-    private final EventBus.MarketDataEventBus marketDataEventBus;
+    private final MarketDataEventBus marketDataEventBus;
     private final CassandraHistoricalDataStoreConfig config;
     private Cluster cluster;
     private Session session;
 
     @Inject
-    public CassandraHistoricalDataStore(ProviderManager providerManager, CassandraHistoricalDataStoreConfig config, EventBus.MarketDataEventBus marketDataEventBus){
+    public CassandraHistoricalDataStore(ProviderManager providerManager, CassandraHistoricalDataStoreConfig config, MarketDataEventBus marketDataEventBus){
         super(providerManager);
         this.config = config;
         this.cluster = Cluster.builder().addContactPoint(config.host).build();

@@ -3,7 +3,7 @@ package com.unisoft.algotrader.trading;
 import com.google.common.collect.Maps;
 import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.model.event.Event;
-import com.unisoft.algotrader.model.event.EventBusManager;
+import com.unisoft.algotrader.model.event.bus.EventBusManager;
 import com.unisoft.algotrader.model.event.data.*;
 import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
@@ -79,7 +79,7 @@ public class InstrumentDataManager extends MultiEventProcessor implements Market
 
     @Inject
     public InstrumentDataManager(EventBusManager eventBusManager){
-        this(eventBusManager.marketDataRB);
+        this(eventBusManager.getMarketDataRB());
     }
 
     public InstrumentDataManager(RingBuffer ringBuffer){

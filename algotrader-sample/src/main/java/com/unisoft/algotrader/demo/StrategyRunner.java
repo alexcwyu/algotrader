@@ -44,7 +44,7 @@ public class StrategyRunner {
 
         SimulationExecutor simulationExecutor = new SimulationExecutor(appConfig);
         appConfig.getProviderManager().addExecutionProvider(simulationExecutor);
-        DataPublisher dataPublisher = new DataPublisher(appConfig.getEventBusManager().marketDataRB);
+        DataPublisher dataPublisher = new DataPublisher(appConfig.getEventBusManager().getMarketDataRB());
 
         executor.submit(strategy);
         executor.submit(portfolioProcessor);

@@ -4,8 +4,6 @@ import com.datastax.driver.mapping.annotations.Column;
 import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
 import com.google.common.base.Objects;
-import com.lmax.disruptor.EventFactory;
-import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.model.trading.*;
 
 /**
@@ -13,7 +11,7 @@ import com.unisoft.algotrader.model.trading.*;
  */
 
 @Table(keyspace = "trading", name = "execution_reports")
-public class ExecutionReport <E extends ExecutionReport<? super E>> implements Event<ExecutionHandler, E> {
+public class ExecutionReport <E extends ExecutionReport<? super E>> extends ExecutionEvent<E> {
 
     @PartitionKey
     @Column(name="exec_id")
@@ -73,13 +71,6 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
 
     public String text;
 
-    public static final EventFactory<ExecutionReport> FACTORY = new EventFactory(){
-        @Override
-        public ExecutionReport newInstance() {
-            return new ExecutionReport();
-        }
-    };
-
     @Override
     public String toString() {
         return "ExecutionReport{" +
@@ -137,19 +128,10 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> implements E
     }
 
     @Override
-    public void on(ExecutionHandler handler) {
+    public void on(ExecutionEventHandler handler) {
         handler.onExecutionReport(this);
     }
 
-    @Override
-    public void reset() {
-
-    }
-
-    @Override
-    public void copy(E event) {
-
-    }
 
 
     public long getExecId() {

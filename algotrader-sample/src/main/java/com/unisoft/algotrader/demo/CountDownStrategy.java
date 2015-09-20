@@ -29,7 +29,7 @@ class CountDownStrategy extends Strategy {
     private final OrderManager orderManager;
     public long clOrderId = 0;
     public CountDownStrategy(OrderManager orderManager, String strategyId, TradingDataStore tradingDataStore, CountDownLatch latch, int exp, RingBuffer... providers) {
-        super(strategyId, tradingDataStore, providers);
+        super(strategyId, tradingDataStore, "test", providers);
         this.orderManager = orderManager;
         this.latch = latch;
         this.exp = exp;

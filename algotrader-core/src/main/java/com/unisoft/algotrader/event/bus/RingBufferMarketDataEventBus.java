@@ -1,13 +1,13 @@
-package com.unisoft.algotrader.event;
+package com.unisoft.algotrader.event.bus;
 
 import com.lmax.disruptor.RingBuffer;
-import com.unisoft.algotrader.model.event.EventBus;
+import com.unisoft.algotrader.model.event.bus.MarketDataEventBus;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 
 /**
  * Created by alex on 6/18/15.
  */
-public class RingBufferMarketDataEventBus implements EventBus.MarketDataEventBus {
+public class RingBufferMarketDataEventBus implements MarketDataEventBus {
 
     private final RingBuffer<MarketDataContainer> marketDataRB;
 
@@ -15,47 +15,55 @@ public class RingBufferMarketDataEventBus implements EventBus.MarketDataEventBus
         this.marketDataRB = marketDataRB;
     }
 
+    private long getNextSeq(){
+        long seq = marketDataRB.next();
+        return seq;
+    }
+
+    private MarketDataContainer getNextEventContainer(long seq){
+        MarketDataContainer container = marketDataRB.get(seq);
+        container.reset();
+        return container;
+    }
+
+
     @Override
     public void publishBar(long instId, int size, long dateTime, double open, double high, double low, double close, long volume, long openInt) {
-
-        long sequence = marketDataRB.next();
-        MarketDataContainer event = marketDataRB.get(sequence);
-        event.reset();
+        long seq = getNextSeq();
+        MarketDataContainer event = getNextEventContainer(seq);
         event.dateTime = dateTime;
         event.instId = instId;
         event.bitset.set(MarketDataContainer.BAR_BIT);
 
         setBar(event.bar, instId, size, dateTime, open, high, low, close, volume, openInt);
 
-        marketDataRB.publish(sequence);
+        marketDataRB.publish(seq);
 
     }
 
     @Override
     public void publishQuote(long instId, long dateTime, double bid, double ask, int bidSize, int askSize) {
-        long sequence = marketDataRB.next();
-        MarketDataContainer event = marketDataRB.get(sequence);
-        event.reset();
+        long seq = getNextSeq();
+        MarketDataContainer event = getNextEventContainer(seq);
         event.dateTime = dateTime;
         event.instId = instId;
         event.bitset.set(MarketDataContainer.QUOTE_BIT);
 
         setQuote(event.quote, instId, dateTime, bid, ask, bidSize, askSize);
 
-        marketDataRB.publish(sequence);
+        marketDataRB.publish(seq);
     }
 
     @Override
     public void publishTrade(long instId, long dateTime, double price, int size) {
-        long sequence = marketDataRB.next();
-        MarketDataContainer event = marketDataRB.get(sequence);
-        event.reset();
+        long seq = getNextSeq();
+        MarketDataContainer event = getNextEventContainer(seq);
         event.dateTime = dateTime;
         event.instId = instId;
         event.bitset.set(MarketDataContainer.TRADE_BIT);
 
         setTrade(event.trade, instId, dateTime, price, size);
 
-        marketDataRB.publish(sequence);
+        marketDataRB.publish(seq);
     }
 }

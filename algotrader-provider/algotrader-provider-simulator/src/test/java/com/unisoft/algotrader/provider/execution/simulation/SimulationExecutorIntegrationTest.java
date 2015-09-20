@@ -3,8 +3,9 @@ package com.unisoft.algotrader.provider.execution.simulation;
 import com.google.common.collect.Lists;
 import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.event.SampleEventFactory;
+import com.unisoft.algotrader.event.bus.BackTestEventBusManager;
 import com.unisoft.algotrader.model.clock.SimulationClock;
-import com.unisoft.algotrader.model.event.EventBusManager;
+import com.unisoft.algotrader.model.event.bus.EventBusManager;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
@@ -90,12 +91,12 @@ public class SimulationExecutorIntegrationTest {
 
         providerManager = new ProviderManager();
         strategyManager = new StrategyManager();
-        eventBusManager = new EventBusManager();
+        eventBusManager = new BackTestEventBusManager();
         orderManager = spy(new OrderManager(providerManager, strategyManager, eventBusManager));
 
 
         rb =RingBuffer.createSingleProducer(MarketDataContainer.FACTORY, 1024, new NoWaitStrategy());
-        instrumentDataManager = new InstrumentDataManager(eventBusManager.marketDataRB);
+        instrumentDataManager = new InstrumentDataManager(eventBusManager.getMarketDataRB());
         simulationExecutor = new SimulationExecutor(providerManager, orderManager, instrumentDataManager, new SimulationClock(), rb);
         simulationExecutor.config.fillOnQuote = true;
         simulationExecutor.config.fillOnQuoteMode = FillOnQuoteMode.LastQuote;

@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.csv;
 
-import com.unisoft.algotrader.model.event.EventBus;
+import com.unisoft.algotrader.model.event.bus.MarketDataEventBus;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.persistence.InMemoryRefDataStore;
 import com.unisoft.algotrader.provider.ProviderManager;
@@ -23,7 +23,7 @@ public class CSVHistoricalDataStoreTest {
     @Test
     public void testCsvImport(){
         StringWriter sw = new StringWriter();
-        CSVHistoricalDataStore csvImport = new CSVHistoricalDataStore(mock(ProviderManager.class), sw, new InMemoryRefDataStore(), mock(EventBus.MarketDataEventBus.class));
+        CSVHistoricalDataStore csvImport = new CSVHistoricalDataStore(mock(ProviderManager.class), sw, new InMemoryRefDataStore(), mock(MarketDataEventBus.class));
 
         Bar bar1 = new Bar(1,  60, 19999,
                 500, 9999, 100, 600);

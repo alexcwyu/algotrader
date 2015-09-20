@@ -7,9 +7,9 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 import com.unisoft.algotrader.config.DefaultEventBusConfigModule;
 import com.unisoft.algotrader.config.SampleAppConfigModule;
 import com.unisoft.algotrader.config.ServiceConfigModule;
-import com.unisoft.algotrader.event.RingBufferMarketDataEventBus;
+import com.unisoft.algotrader.event.bus.RingBufferMarketDataEventBus;
 import com.unisoft.algotrader.model.event.Event;
-import com.unisoft.algotrader.model.event.EventBusManager;
+import com.unisoft.algotrader.model.event.bus.EventBusManager;
 import com.unisoft.algotrader.model.event.data.*;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
@@ -89,7 +89,7 @@ public class DataImporter extends MultiEventProcessor implements MarketDataHandl
         DataService dataService = injector.getInstance(DataService.class);
         RefDataStore refDataStore = injector.getInstance(RefDataStore.class);
         EventBusManager eventBusManager = injector.getInstance(EventBusManager.class);
-        DataImporter importer = new DataImporter(providerManager, dataService, eventBusManager.marketDataRB);
+        DataImporter importer = new DataImporter(providerManager, dataService, eventBusManager.getMarketDataRB());
 
         executor.submit(importer);
 

@@ -1,7 +1,7 @@
 package com.unisoft.algotrader.trading;
 
 import com.unisoft.algotrader.model.event.Event;
-import com.unisoft.algotrader.model.event.EventBusManager;
+import com.unisoft.algotrader.model.event.bus.EventBusManager;
 import com.unisoft.algotrader.model.event.execution.*;
 import com.unisoft.algotrader.model.trading.*;
 import com.unisoft.algotrader.provider.ProviderManager;
@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * Created by alex on 5/18/15.
  */
 @Singleton
-public class OrderManager extends MultiEventProcessor implements OrderHandler, ExecutionHandler {
+public class OrderManager extends MultiEventProcessor implements OrderEventHandler, ExecutionEventHandler {
 
     private static final Logger LOG = LogManager.getLogger(OrderManager.class);
 
@@ -31,7 +31,7 @@ public class OrderManager extends MultiEventProcessor implements OrderHandler, E
 
     @Inject
     public OrderManager(ProviderManager providerManager, StrategyManager strategyManager, EventBusManager eventBusManager){
-        super(new NoWaitStrategy(),  null, eventBusManager.executionReportRB, eventBusManager.orderRB, eventBusManager.orderStatusRB);
+        super(new NoWaitStrategy(),  null, eventBusManager.getExecutionEventRB(), eventBusManager.getOrderEventRB());
         this.providerManager = providerManager;
         this.strategyManager = strategyManager;
         this.eventBusManager = eventBusManager;

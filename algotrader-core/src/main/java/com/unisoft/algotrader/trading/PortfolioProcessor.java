@@ -8,10 +8,10 @@ import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataHandler;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
-import com.unisoft.algotrader.model.event.execution.ExecutionHandler;
+import com.unisoft.algotrader.model.event.execution.ExecutionEventHandler;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
-import com.unisoft.algotrader.model.event.execution.OrderHandler;
+import com.unisoft.algotrader.model.event.execution.OrderEventHandler;
 import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.*;
@@ -24,7 +24,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * Created by alex on 7/1/15.
  */
-public class PortfolioProcessor extends MultiEventProcessor implements MarketDataHandler, OrderHandler, ExecutionHandler {
+public class PortfolioProcessor extends MultiEventProcessor implements MarketDataHandler, OrderEventHandler, ExecutionEventHandler {
 
     private static final Logger LOG = LogManager.getLogger(Portfolio.class);
 
@@ -34,7 +34,7 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
     private final Clock clock;
 
     public PortfolioProcessor(AppConfig appConfig, Portfolio portfolio, Account account, RingBuffer... providers){
-        this(portfolio, account, appConfig.getRefDataStore(), appConfig.getClock(), providers == null || providers.length ==0 ? new RingBuffer[]{appConfig.getEventBusManager().marketDataRB} : providers);
+        this(portfolio, account, appConfig.getRefDataStore(), appConfig.getClock(), providers == null || providers.length ==0 ? new RingBuffer[]{appConfig.getEventBusManager().getMarketDataRB()} : providers);
     }
 
     public PortfolioProcessor(Portfolio portfolio, Account account, RefDataStore refDataStore, Clock clock, RingBuffer... providers) {

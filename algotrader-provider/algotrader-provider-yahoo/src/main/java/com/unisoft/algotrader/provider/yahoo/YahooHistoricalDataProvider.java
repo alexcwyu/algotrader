@@ -1,7 +1,7 @@
 package com.unisoft.algotrader.provider.yahoo;
 
 import com.google.common.collect.Lists;
-import com.unisoft.algotrader.model.event.EventBus;
+import com.unisoft.algotrader.model.event.bus.MarketDataEventBus;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
@@ -45,10 +45,10 @@ public class YahooHistoricalDataProvider extends AbstractHistoricalDataProvider 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     private final RefDataStore refDataStore;
-    private final EventBus.MarketDataEventBus marketDataEventBus;
+    private final MarketDataEventBus marketDataEventBus;
 
     @Inject
-    public YahooHistoricalDataProvider(ProviderManager providerManager, RefDataStore refDataStore, EventBus.MarketDataEventBus marketDataEventBus){
+    public YahooHistoricalDataProvider(ProviderManager providerManager, RefDataStore refDataStore, MarketDataEventBus marketDataEventBus){
         super(providerManager);
         this.refDataStore = refDataStore;
         this.marketDataEventBus = marketDataEventBus;

@@ -1,6 +1,6 @@
 package com.unisoft.algotrader.provider.cassandra;
 
-import com.unisoft.algotrader.model.event.EventBus;
+import com.unisoft.algotrader.model.event.bus.MarketDataEventBus;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.provider.ProviderManager;
 import org.junit.Before;
@@ -22,7 +22,7 @@ public class CassandraHistoricalDataStoreTest {
     @BeforeClass
     public static void init(){
         providerManager = new ProviderManager();
-        cassandraHistoricalDataStore = new CassandraHistoricalDataStore(providerManager, new CassandraHistoricalDataStoreConfig("127.0.0.1", 0, "marketdata", null, null), mock(EventBus.MarketDataEventBus.class));
+        cassandraHistoricalDataStore = new CassandraHistoricalDataStore(providerManager, new CassandraHistoricalDataStoreConfig("127.0.0.1", 0, "marketdata", null, null), mock(MarketDataEventBus.class));
         cassandraHistoricalDataStore.connect();
     }
 

@@ -43,14 +43,6 @@ public abstract class IBEvent <E extends IBEvent<? super E>> implements Event<IB
         handler.onIBEvent(this);
     }
 
-    public void reset() {
-        throw new UnsupportedOperationException();
-    }
-
-    public void copy(E event) {
-        throw new UnsupportedOperationException();
-    }
-
     @Override
     public String toString() {
         return "IBEvent{" +

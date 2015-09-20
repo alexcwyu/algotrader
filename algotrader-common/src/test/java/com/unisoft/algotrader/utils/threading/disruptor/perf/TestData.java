@@ -18,16 +18,6 @@ class TestData implements Event<TestDataHandler, TestData> {
         handler.onTestData(this);
     }
 
-    @Override
-    public void reset() {
-        map.clear();
-    }
-
-    @Override
-    public void copy(TestData event) {
-
-    }
-
     public static final EventFactory<TestData> FACTORY = new EventFactory() {
         @Override
         public TestData newInstance() {

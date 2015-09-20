@@ -5,7 +5,7 @@ import com.unisoft.algotrader.model.event.EventHandler;
 /**
  * Created by alex on 4/16/15.
  */
-public interface ExecutionHandler extends EventHandler {
+public interface ExecutionEventHandler extends EventHandler {
 
     default void onExecutionReport(ExecutionReport executionReport){
 
@@ -15,7 +15,9 @@ public interface ExecutionHandler extends EventHandler {
 
     }
 
+    default void onOrderStatusUpdate(Order orderStatusUpdate){
 
+    }
 
     default void onExecutionEventContainer(ExecutionEventContainer executionEventContainer){
         if (executionEventContainer.hasExecutionReport()){
@@ -23,6 +25,9 @@ public interface ExecutionHandler extends EventHandler {
         }
         if (executionEventContainer.hasOrderCancelReject()){
             onOrderCancelReject(executionEventContainer.orderCancelReject);
+        }
+        if (executionEventContainer.hasOrderStatusUpdate()){
+            onOrderStatusUpdate(executionEventContainer.orderStatusUpdate);
         }
     }
 

@@ -5,8 +5,8 @@ import com.exxeleron.qjava.QConnection;
 import com.exxeleron.qjava.QMessage;
 import com.exxeleron.qjava.QTable;
 import com.google.common.collect.Lists;
-import com.unisoft.algotrader.event.LogMarketDataEventBus;
-import com.unisoft.algotrader.model.event.EventBus;
+import com.unisoft.algotrader.event.bus.LogMarketDataEventBus;
+import com.unisoft.algotrader.model.event.bus.MarketDataEventBus;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
@@ -52,11 +52,11 @@ public class KDBHistoricalDataStore extends AbstractDataStoreProvider{
     private final AtomicBoolean connected = new AtomicBoolean(false);
 
     private final KDBConfig kdbConfig;
-    private final EventBus.MarketDataEventBus marketDataEventBus;
+    private final MarketDataEventBus marketDataEventBus;
     private final QConnection q;
 
     @Inject
-    public KDBHistoricalDataStore(ProviderManager providerManager, KDBConfig kdbConfig, EventBus.MarketDataEventBus marketDataEventBus){
+    public KDBHistoricalDataStore(ProviderManager providerManager, KDBConfig kdbConfig, MarketDataEventBus marketDataEventBus){
         super(providerManager);
         this.kdbConfig = kdbConfig;
         this.marketDataEventBus = marketDataEventBus;

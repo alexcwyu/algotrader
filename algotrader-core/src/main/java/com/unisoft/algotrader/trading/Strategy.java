@@ -2,13 +2,13 @@ package com.unisoft.algotrader.trading;
 
 import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.model.event.Event;
-import com.unisoft.algotrader.model.event.EventBusManager;
+import com.unisoft.algotrader.model.event.bus.EventBusManager;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataHandler;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
 import com.unisoft.algotrader.model.event.execution.ExecutionEventContainer;
-import com.unisoft.algotrader.model.event.execution.ExecutionHandler;
+import com.unisoft.algotrader.model.event.execution.ExecutionEventHandler;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.OrderCancelReject;
 import com.unisoft.algotrader.model.trading.Portfolio;
@@ -20,24 +20,33 @@ import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrat
  * Created by alex on 5/17/15.
  */
 
-public abstract class Strategy extends MultiEventProcessor implements MarketDataHandler, ExecutionHandler {
+public abstract class Strategy extends MultiEventProcessor implements MarketDataHandler, ExecutionEventHandler {
 
     protected final String strategyId;
     protected Portfolio portfolio;
     protected final TradingDataStore tradingDataStore;
+    protected final EventBusManager eventBusManager;
 
     public Strategy(String strategyId, TradingDataStore tradingDataStore, EventBusManager eventBusManager){
-        this(strategyId, tradingDataStore, eventBusManager.executionReportRB, eventBusManager.orderStatusRB, eventBusManager.marketDataRB);
+        super(new NoWaitStrategy(),  null, eventBusManager.getExecutionEventRB(), eventBusManager.getMarketDataRB());
+        this.strategyId = strategyId;
+        this.tradingDataStore = tradingDataStore;
+        this.eventBusManager = null;
     }
 
-    public Strategy(String strategyId, TradingDataStore tradingDataStore, RingBuffer... providers){
+    public Strategy(String strategyId, TradingDataStore tradingDataStore, EventBusManager eventBusManager, RingBuffer... providers){
         super(new NoWaitStrategy(),  null, providers);
         this.strategyId = strategyId;
         this.tradingDataStore = tradingDataStore;
+        this.eventBusManager = eventBusManager;
     }
 
     public Strategy(String strategyId, TradingDataStore tradingDataStore, String portfolioId, EventBusManager eventBusManager){
-        this(strategyId, tradingDataStore, portfolioId, eventBusManager.executionReportRB, eventBusManager.orderStatusRB, eventBusManager.marketDataRB);
+        super(new NoWaitStrategy(),  null, eventBusManager.getExecutionEventRB(), eventBusManager.getMarketDataRB());
+        this.strategyId = strategyId;
+        this.tradingDataStore = tradingDataStore;
+        this.portfolio = tradingDataStore.getPortfolio(portfolioId);
+        this.eventBusManager = eventBusManager;
     }
 
     public Strategy(String strategyId, TradingDataStore tradingDataStore, String portfolioId, RingBuffer... providers){
@@ -45,6 +54,7 @@ public abstract class Strategy extends MultiEventProcessor implements MarketData
         this.strategyId = strategyId;
         this.tradingDataStore = tradingDataStore;
         this.portfolio = tradingDataStore.getPortfolio(portfolioId);
+        this.eventBusManager = null;
     }
 
     @Override

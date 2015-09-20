@@ -2,6 +2,7 @@ allprojects {
     apply plugin: 'idea'
     apply plugin: 'java'
     apply plugin: 'eclipse'
+    apply plugin: 'findbugs'
 
     idea {
 	module {
