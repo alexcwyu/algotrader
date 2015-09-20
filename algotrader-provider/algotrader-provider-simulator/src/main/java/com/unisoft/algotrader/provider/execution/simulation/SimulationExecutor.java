@@ -11,6 +11,7 @@ import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.event.execution.OrderStatusRequest;
 import com.unisoft.algotrader.model.trading.OrdStatus;
 import com.unisoft.algotrader.model.trading.OrdType;
+import com.unisoft.algotrader.provider.ProviderId;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.execution.ExecutionProvider;
 import com.unisoft.algotrader.trading.InstrumentDataManager;
@@ -34,7 +35,7 @@ public class SimulationExecutor extends MultiEventProcessor implements Execution
 
     private static final Logger LOG = LogManager.getLogger(SimulationExecutor.class);
 
-    public static final String PROVIDER_ID = "Simulated";
+    public static final ProviderId PROVIDER_ID = ProviderId.Simulation;
 
     private final OrderManager orderManager;
     private final InstrumentDataManager instrumentDataManager;
@@ -79,7 +80,7 @@ public class SimulationExecutor extends MultiEventProcessor implements Execution
     }
 
     @Override
-    public String providerId() {
+    public ProviderId providerId() {
         return PROVIDER_ID;
     }
 

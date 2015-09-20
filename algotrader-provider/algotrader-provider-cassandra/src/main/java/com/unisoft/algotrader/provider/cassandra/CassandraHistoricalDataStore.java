@@ -8,6 +8,7 @@ import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
+import com.unisoft.algotrader.provider.ProviderId;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.AbstractDataStoreProvider;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
@@ -43,7 +44,7 @@ public class CassandraHistoricalDataStore extends AbstractDataStoreProvider {
     private static final String TABLE_TRADE = "trade";
     private static final String TABLE_QUOTE = "quote";
 
-    public static final String PROVIDER_ID = "Cassandra";
+    public static final ProviderId PROVIDER_ID = ProviderId.Cassandra;
 
     private final AtomicBoolean connected = new AtomicBoolean(false);
     private final MarketDataEventBus marketDataEventBus;
@@ -61,7 +62,7 @@ public class CassandraHistoricalDataStore extends AbstractDataStoreProvider {
 
     /// PROVIDER
     @Override
-    public String providerId() {
+    public ProviderId providerId() {
         return PROVIDER_ID;
     }
 

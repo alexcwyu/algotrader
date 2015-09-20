@@ -25,7 +25,7 @@ public interface TradingDataStore {
 
     void savePortfolio(Portfolio portfolio);
 
-    Portfolio getPortfolio(String portfolioId);
+    Portfolio getPortfolio(int portfolioId);
 
     List<Portfolio> getAllPortfolios();
 
@@ -47,9 +47,9 @@ public interface TradingDataStore {
 
     List<Order> getOrdersByInstId(long instId);
 
-    List<Order> getOrdersByPortfolioId(String portfolioId);
+    List<Order> getOrdersByPortfolioId(int portfolioId);
 
-    List<Order> getOrdersByStrategyId(String strategyId);
+    List<Order> getOrdersByStrategyId(int strategyId);
 
     long nextId();
 }

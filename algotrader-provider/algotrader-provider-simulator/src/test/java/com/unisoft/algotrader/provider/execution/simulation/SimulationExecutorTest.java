@@ -16,6 +16,7 @@ import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.trading.InstrumentDataManager;
 import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.trading.StrategyManager;
+import com.unisoft.algotrader.utils.id.AtomicIntIdSupplier;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,9 +46,9 @@ public class SimulationExecutorTest {
     public void setup(){
 
         providerManager = new ProviderManager();
-        strategyManager = new StrategyManager();
+        strategyManager = new StrategyManager(new AtomicIntIdSupplier());
         eventBusManager = new BackTestEventBusManager();
-        orderManager = spy(new OrderManager(providerManager, strategyManager, eventBusManager));
+        orderManager = spy(new OrderManager(eventBusManager));
         instrumentDataManager = new InstrumentDataManager(eventBusManager.getMarketDataRB());
         simulationExecutor = new SimulationExecutor(providerManager, orderManager, instrumentDataManager, new SimulationClock(), rb);
         simulationExecutor.config.fillOnBar = true;

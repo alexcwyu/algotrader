@@ -66,7 +66,7 @@ public class OrderCancelRequest <E extends OrderCancelRequest<? super E>> implem
                 ", dateTime=" + dateTime +
                 ", side=" + side +
                 ", ordQty=" + ordQty +
-                ", execProviderId=" + execProviderId +
+                ", providerId=" + execProviderId +
                 '}';
     }
 

@@ -35,35 +35,12 @@ public class AccountPosition {
     }
 
     public void add(AccountTransaction transaction){
-        if (transaction.getCcyId() != ccyId)
-            throw new IllegalArgumentException("Currency not match, transaction.currency="+transaction.getCcyId()+", position.currency="+ccyId);
+        if (transaction.ccyId() != ccyId)
+            throw new IllegalArgumentException("Currency not match, transaction.currency="+transaction.ccyId()+", position.currency="+ccyId);
         this.accountTransactions.add(transaction);
-        this.value += transaction.getValue();
+        this.value += transaction.value();
     }
 
-    public double getValue() {
-        return value;
-    }
-
-    public String getCcyId() {
-        return ccyId;
-    }
-
-    public List<AccountTransaction> getAccountTransactions(){
-        return accountTransactions;
-    }
-
-    public void setCcyId(String ccyId) {
-        this.ccyId = ccyId;
-    }
-
-    public void setValue(double value) {
-        this.value = value;
-    }
-
-    public void setAccountTransactions(List<AccountTransaction> accountTransactions) {
-        this.accountTransactions = accountTransactions;
-    }
 
     @Override
     public String toString() {
@@ -87,5 +64,32 @@ public class AccountPosition {
     @Override
     public int hashCode() {
         return Objects.hashCode(ccyId, value, accountTransactions);
+    }
+
+    public List<AccountTransaction> accountTransactions() {
+        return accountTransactions;
+    }
+
+    public AccountPosition accountTransactions(List<AccountTransaction> accountTransactions) {
+        this.accountTransactions = accountTransactions;
+        return this;
+    }
+
+    public String ccyId() {
+        return ccyId;
+    }
+
+    public AccountPosition ccyId(String ccyId) {
+        this.ccyId = ccyId;
+        return this;
+    }
+
+    public double value() {
+        return value;
+    }
+
+    public AccountPosition value(double value) {
+        this.value = value;
+        return this;
     }
 }

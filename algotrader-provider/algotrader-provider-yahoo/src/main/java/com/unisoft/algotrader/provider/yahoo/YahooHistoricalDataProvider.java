@@ -5,6 +5,7 @@ import com.unisoft.algotrader.model.event.bus.MarketDataEventBus;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
+import com.unisoft.algotrader.provider.ProviderId;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.AbstractHistoricalDataProvider;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
@@ -34,7 +35,7 @@ import java.util.List;
 @Singleton
 public class YahooHistoricalDataProvider extends AbstractHistoricalDataProvider {
 
-    public static final String PROVIDER_ID = "Yahoo";
+    public static final ProviderId PROVIDER_ID = ProviderId.Yahoo;
 
     private static final Logger LOG = LogManager.getLogger(YahooHistoricalDataProvider.class);
 
@@ -120,7 +121,7 @@ public class YahooHistoricalDataProvider extends AbstractHistoricalDataProvider 
 
 
     @Override
-    public String providerId() {
+    public ProviderId providerId() {
         return PROVIDER_ID;
     }
 

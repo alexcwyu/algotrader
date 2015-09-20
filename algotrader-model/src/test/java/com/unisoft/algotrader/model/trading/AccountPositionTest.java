@@ -14,16 +14,16 @@ public class AccountPositionTest {
     public void should_return_correct_value(){
         AccountPosition position = new AccountPosition(Currency.USD);
 
-        assertEquals(0.0, position.getValue(), 0.0);
+        assertEquals(0.0, position.value(), 0.0);
 
         position.add(new AccountTransaction(Currency.USD, 1000));
-        assertEquals(1000, position.getValue(), 0.0);
+        assertEquals(1000, position.value(), 0.0);
 
         position.add(new AccountTransaction(Currency.USD, 86.1));
-        assertEquals(1086.1, position.getValue(), 0.0);
+        assertEquals(1086.1, position.value(), 0.0);
 
         position.add(new AccountTransaction(Currency.USD, -750));
-        assertEquals(1086.1-750, position.getValue(), 0.0);
+        assertEquals(1086.1-750, position.value(), 0.0);
 
     }
 

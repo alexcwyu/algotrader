@@ -70,7 +70,7 @@ public class HistoricalMarketDataSubscriptionRequestSerializer extends Serialize
            builder.append(0); //contract / instrument id
         }
 
-        builder.append(instrument.getSymbol(IBProvider.PROVIDER_ID));
+        builder.append(instrument.getSymbol(IBProvider.PROVIDER_ID.name()));
         builder.append(SecType.convert(instrument.getType()));
         if (instrument.getExpiryDate() != null) {
             builder.append(IBModelUtils.convertDateTime(instrument.getExpiryDate().getTime()));
@@ -86,7 +86,7 @@ public class HistoricalMarketDataSubscriptionRequestSerializer extends Serialize
         else {
             builder.append(instrument.getFactor());
         }
-        builder.append(instrument.getExchId(IBProvider.PROVIDER_ID));
+        builder.append(instrument.getExchId(IBProvider.PROVIDER_ID.name()));
         builder.appendEol(); // primary exch
         builder.append(instrument.getCcyId());
         builder.appendEol(); //localsymbol

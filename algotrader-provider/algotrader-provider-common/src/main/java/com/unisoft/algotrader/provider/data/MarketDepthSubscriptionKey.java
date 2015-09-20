@@ -8,7 +8,7 @@ import com.unisoft.algotrader.model.event.data.DataType;
 public class MarketDepthSubscriptionKey extends SubscriptionKey {
     public final int numRows;
 
-    protected MarketDepthSubscriptionKey(String providerId, long instId, int numRows){
+    protected MarketDepthSubscriptionKey(int providerId, long instId, int numRows){
         super(providerId, DataType.MarketDepth, instId, 0);
         this.numRows = numRows;
 
@@ -35,7 +35,7 @@ public class MarketDepthSubscriptionKey extends SubscriptionKey {
                 "} " + super.toString();
     }
 
-    public static MarketDepthSubscriptionKey createSubscriptionKey(String providerId, long instId, int numRows){
+    public static MarketDepthSubscriptionKey createSubscriptionKey(int providerId, long instId, int numRows){
         return new MarketDepthSubscriptionKey(providerId, instId, numRows);
     }
 

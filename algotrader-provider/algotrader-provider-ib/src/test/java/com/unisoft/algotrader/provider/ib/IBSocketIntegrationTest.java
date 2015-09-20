@@ -3,6 +3,7 @@ package com.unisoft.algotrader.provider.ib;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.unisoft.algotrader.config.SampleAppConfigModule;
+import com.unisoft.algotrader.event.SampleEventFactory;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.refdata.Instrument;
@@ -89,7 +90,7 @@ public class IBSocketIntegrationTest {
         Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange("0005.HK", HKEX.getExchId());
         Date fromDate = DateHelper.fromYYYYMMDD(20150101);
         Date toDate = DateHelper.fromYYYYMMDD(20150901);
-        HistoricalSubscriptionKey subscriptionKey = HistoricalSubscriptionKey.createDailySubscriptionKey(IBProvider.PROVIDER_ID, instrument.getInstId(), fromDate, toDate);
+        HistoricalSubscriptionKey subscriptionKey = HistoricalSubscriptionKey.createDailySubscriptionKey(IBProvider.PROVIDER_ID.id, instrument.getInstId(), fromDate, toDate);
 
         long requestId = nextRequestId ++;
         socket.subscribeHistoricalData(requestId, subscriptionKey);
@@ -103,7 +104,7 @@ public class IBSocketIntegrationTest {
     @Test
     public void testRealtimeMarketDataSubscription(){
         Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange("EURUSD", IDEALPRO.getExchId());
-        SubscriptionKey subscriptionKey = SubscriptionKey.createQuoteSubscriptionKey(IBProvider.PROVIDER_ID, instrument.getInstId());
+        SubscriptionKey subscriptionKey = SubscriptionKey.createQuoteSubscriptionKey(IBProvider.PROVIDER_ID.id, instrument.getInstId());
 
         long requestId = nextRequestId ++;
         socket.subscribeRealTimeData(requestId, subscriptionKey);
@@ -115,7 +116,7 @@ public class IBSocketIntegrationTest {
     @Test
     public void testMarketDataSubscription(){
         Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange("EURUSD", IDEALPRO.getExchId());
-        SubscriptionKey subscriptionKey = SubscriptionKey.createQuoteSubscriptionKey(IBProvider.PROVIDER_ID, instrument.getInstId());
+        SubscriptionKey subscriptionKey = SubscriptionKey.createQuoteSubscriptionKey(IBProvider.PROVIDER_ID.id, instrument.getInstId());
 
         long requestId = nextRequestId ++;
         socket.subscribeMarketData(requestId, subscriptionKey, true);
@@ -127,7 +128,7 @@ public class IBSocketIntegrationTest {
     @Test
     public void testMarketDepthSubscription(){
         Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange("EURUSD", IDEALPRO.getExchId());
-        MarketDepthSubscriptionKey subscriptionKey = MarketDepthSubscriptionKey.createSubscriptionKey(IBProvider.PROVIDER_ID, instrument.getInstId(), 1);
+        MarketDepthSubscriptionKey subscriptionKey = MarketDepthSubscriptionKey.createSubscriptionKey(IBProvider.PROVIDER_ID.id, instrument.getInstId(), 1);
         long requestId = nextRequestId ++;
 
         socket.subscribeMarketDepth(requestId, subscriptionKey);
@@ -365,7 +366,7 @@ public class IBSocketIntegrationTest {
         int orderId = captor.getValue();
 
         Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange("EURUSD", IDEALPRO.getExchId());
-        Order order = orderManager.newLimitOrder(instrument.getInstId(), "Test", IBProvider.PROVIDER_ID, Side.Buy, 1.1, 1000000, TimeInForce.Day);
+        Order order = SampleEventFactory.newLimitOrder(instrument.getInstId(), 1, IBProvider.PROVIDER_ID.id, Side.Buy, 1.1, 1000000, TimeInForce.Day);
         order.orderId = orderId;
         socket.placeOrder(order);
         ArgumentCaptor<Long> captor2 = ArgumentCaptor.forClass(Long.class);
@@ -433,7 +434,7 @@ public class IBSocketIntegrationTest {
         int orderId = captor.getValue();
 
         Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange("EURUSD", IDEALPRO.getExchId());
-        Order order = orderManager.newLimitOrder(instrument.getInstId(), "Test", IBProvider.PROVIDER_ID, Side.Buy, 1.1, 1000000, TimeInForce.Day);
+        Order order = SampleEventFactory.newLimitOrder(instrument.getInstId(), 1, IBProvider.PROVIDER_ID.id, Side.Buy, 1.1, 1000000, TimeInForce.Day);
         order.orderId = orderId;
         socket.placeOrder(order);
         ArgumentCaptor<Long> captor2 = ArgumentCaptor.forClass(Long.class);

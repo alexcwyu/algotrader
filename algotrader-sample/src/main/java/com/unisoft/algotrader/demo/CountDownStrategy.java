@@ -9,6 +9,7 @@ import com.unisoft.algotrader.model.trading.OrdStatus;
 import com.unisoft.algotrader.model.trading.OrdType;
 import com.unisoft.algotrader.model.trading.Side;
 import com.unisoft.algotrader.persistence.TradingDataStore;
+import com.unisoft.algotrader.provider.ProviderId;
 import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.trading.Strategy;
 import org.apache.logging.log4j.LogManager;
@@ -28,8 +29,8 @@ class CountDownStrategy extends Strategy {
     private int count = 0;
     private final OrderManager orderManager;
     public long clOrderId = 0;
-    public CountDownStrategy(OrderManager orderManager, String strategyId, TradingDataStore tradingDataStore, CountDownLatch latch, int exp, RingBuffer... providers) {
-        super(strategyId, tradingDataStore, "test", providers);
+    public CountDownStrategy(OrderManager orderManager, int strategyId, TradingDataStore tradingDataStore, CountDownLatch latch, int exp, RingBuffer... providers) {
+        super(strategyId, tradingDataStore, 1, providers);
         this.orderManager = orderManager;
         this.latch = latch;
         this.exp = exp;
@@ -49,8 +50,8 @@ class CountDownStrategy extends Strategy {
             order.instId = bar.instId;
             //order.limitPrice = bar.close;
             order.strategyId = this.strategyId;
-            order.execProviderId = "Simulated";
-            order.portfolioId = portfolio.getPortfolioId();
+            order.providerId = ProviderId.Dummy.id;
+            order.portfolioId = portfolio.portfolioId();
             order.ordType = OrdType.Market;
             order.side = Side.Buy;
             order.ordQty = 500;
@@ -69,8 +70,8 @@ class CountDownStrategy extends Strategy {
             order.instId = data.instId;
             order.limitPrice = data.bar.close;
             order.strategyId = this.strategyId;
-            order.execProviderId = "Simulated";
-            order.portfolioId = portfolio.getPortfolioId();
+            order.providerId = ProviderId.Dummy.id;
+            order.portfolioId = portfolio.portfolioId();
             order.side = Side.Buy;
             order.ordQty = 500;
             orderManager.onNewOrderRequest(order);

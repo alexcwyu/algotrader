@@ -32,6 +32,10 @@ public abstract class MultiEventProcessor implements EventProcessor, EventHandle
         this.waitStrategy = waitStrategy;
     }
 
+    public MultiEventProcessor(MultiBufferWaitStrategy waitStrategy, RingBuffer... providers) {
+        this(waitStrategy, null, providers);
+    }
+
 
     public MultiEventProcessor(MultiBufferWaitStrategy waitStrategy, Queue queue, RingBuffer... providers) {
 

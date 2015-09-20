@@ -5,6 +5,7 @@ import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
+import com.unisoft.algotrader.provider.ProviderId;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.AbstractDataStoreProvider;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
@@ -29,7 +30,7 @@ public class InfluxDBHistoricalDataStore extends AbstractDataStoreProvider{
     private final InfluxDBConfig config;
     private final MarketDataEventBus marketDataEventBus;
 
-    public static final String PROVIDER_ID = "InfluxDB";
+    public static final ProviderId PROVIDER_ID = ProviderId.InfluxDB;
 
     @Inject
     public InfluxDBHistoricalDataStore(ProviderManager providerManager, InfluxDBConfig config, MarketDataEventBus marketDataEventBus){
@@ -40,7 +41,7 @@ public class InfluxDBHistoricalDataStore extends AbstractDataStoreProvider{
 
     /// PROVIDER
     @Override
-    public String providerId() {
+    public ProviderId providerId() {
         return PROVIDER_ID;
     }
 

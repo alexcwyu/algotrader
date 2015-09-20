@@ -42,7 +42,7 @@ public class DataImporter extends MultiEventProcessor implements MarketDataHandl
     private DataStoreProvider provider;
 
     public DataImporter(ProviderManager providerManager, DataService dataService, RingBuffer<MarketDataContainer> marketDataRB){
-        super(new NoWaitStrategy(),  null, marketDataRB);
+        super(new NoWaitStrategy(),  marketDataRB);
         this.providerManager = providerManager;
         this.dataService = dataService;
         this.rb = new RingBufferMarketDataEventBus(marketDataRB);
@@ -96,7 +96,7 @@ public class DataImporter extends MultiEventProcessor implements MarketDataHandl
         Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange("0005.HK", HKEX.getExchId());
         Date fromDate = DateHelper.fromYYYYMMDD(20000101);
         Date toDate = Calendar.getInstance().getTime();
-        HistoricalSubscriptionKey subscriptionKey = HistoricalSubscriptionKey.createDailySubscriptionKey(YahooHistoricalDataProvider.PROVIDER_ID, instrument.getInstId(), fromDate, toDate);
+        HistoricalSubscriptionKey subscriptionKey = HistoricalSubscriptionKey.createDailySubscriptionKey(YahooHistoricalDataProvider.PROVIDER_ID.id, instrument.getInstId(), fromDate, toDate);
 
         boolean result = importer.importData(subscriptionKey);
 

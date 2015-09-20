@@ -83,7 +83,7 @@ public class InstrumentDataManager extends MultiEventProcessor implements Market
     }
 
     public InstrumentDataManager(RingBuffer ringBuffer){
-        super(new NoWaitStrategy(),  null, ringBuffer);
+        super(new NoWaitStrategy(), ringBuffer);
     }
 
     @Override

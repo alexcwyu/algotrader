@@ -1,6 +1,8 @@
 package com.unisoft.algotrader.model.event.execution;
 
 import com.datastax.driver.mapping.annotations.Column;
+import com.datastax.driver.mapping.annotations.Enumerated;
+import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.unisoft.algotrader.model.trading.CxlRejReason;
 import com.unisoft.algotrader.model.trading.CxlRejResponseTo;
 import com.unisoft.algotrader.model.trading.OrdStatus;
@@ -10,27 +12,36 @@ import com.unisoft.algotrader.model.trading.OrdStatus;
  */
 public class OrderCancelReject<E extends OrderCancelReject<? super E>> extends ExecutionEvent<E> {
     //TODO
+    @PartitionKey(0)
+    @Column(name="strategy_id")
+    public int strategyId;
 
-//    @PartitionKey
+    @PartitionKey(1)
     @Column(name="cl_order_id")
     public long clOrderId;
 
-    @Column(name="order_id")
-    public long orderId = -1;
-
     @Column(name="orig_cl_order_id")
     public long origClOrderId = -1;
+
+    @Column(name="provider_id")
+    public int providerId;
+
+    @Column(name="order_id")
+    public long orderId = -1;
 
     @Column(name="date_time")
     public long dateTime;
 
     @Column(name="ord_status")
+    @Enumerated
     public OrdStatus ordStatus = OrdStatus.New;
 
     @Column(name="cxl_rej_reason")
+    @Enumerated
     public CxlRejReason cxlRejReason;
 
     @Column(name="cxl_rej_response_to")
+    @Enumerated
     public CxlRejResponseTo cxlRejResponseTo;
 
 

@@ -67,7 +67,7 @@ public class ContractSpecificationEventDeserializer extends Deserializer<Contrac
             primaryExchange = readString(inputStream);
         }
 
-        Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
+        Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID.name(), symbol, exchange);
         contractSpecification.setInstrument(instrument);
 
         if (version >= 6) {

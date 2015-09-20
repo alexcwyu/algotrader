@@ -75,7 +75,7 @@ public class StrategyRunner {
 
 
         Account account = TradingDataStore.DEFAULT_ACCOUNT;
-        Portfolio portfolio = new Portfolio("Test Portfolio", account.getAccountId());
+        Portfolio portfolio = new Portfolio(1, account.accountId());
         appConfig.getTradingDataStore().savePortfolio(portfolio);
 
         PortfolioProcessor portfolioProcessor = new PortfolioProcessor(appConfig, portfolio, account);

@@ -51,7 +51,7 @@ public class ExecutionReportEventDeserializer extends Deserializer<ExecutionRepo
         final String localSymbol = readString(inputStream);
         final String tradingClass = (version >= 10)? readString(inputStream) : null;
 
-        Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
+        Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID.name(), symbol, exchange);
         if (instrument == null){
             throw new RuntimeException("Cannot find instrumnet symbol=" + symbol +", primaryExchange="+exchange);
         }
@@ -61,15 +61,15 @@ public class ExecutionReportEventDeserializer extends Deserializer<ExecutionRepo
 
     protected ExecutionReport consumeExecutionReport(final int version, final InputStream inputStream, final int providerOrderId){
         ExecutionReport executionReport = new ExecutionReport();
-        executionReport.setOrderId(providerOrderId);
+        executionReport.orderId(providerOrderId);
         //TODO string to execID mapping?
-        executionReport.setExecId(Long.parseLong(readString(inputStream)));
+        executionReport.execId(Long.parseLong(readString(inputStream)));
         String time = readString(inputStream);
         String account = readString(inputStream);
         String exchange = readString(inputStream);
-        executionReport.setSide(IBSide.convert(readString(inputStream)));
-        executionReport.setLastQty(readInt(inputStream));
-        executionReport.setLastPrice(readDouble(inputStream));
+        executionReport.side(IBSide.convert(readString(inputStream)));
+        executionReport.lastQty(readInt(inputStream));
+        executionReport.lastPrice(readDouble(inputStream));
         if (version >= 2) {
             int permanentId = readInt(inputStream);
         }
@@ -80,8 +80,8 @@ public class ExecutionReportEventDeserializer extends Deserializer<ExecutionRepo
             int liquidation = readInt(inputStream);
         }
         if (version >= 6) {
-            executionReport.setFilledQty(readInt(inputStream));
-            executionReport.setAvgPrice(readDouble(inputStream));
+            executionReport.filledQty(readInt(inputStream));
+            executionReport.avgPrice(readDouble(inputStream));
         }
         if (version >= 8) {
             String orderRef = readString(inputStream);

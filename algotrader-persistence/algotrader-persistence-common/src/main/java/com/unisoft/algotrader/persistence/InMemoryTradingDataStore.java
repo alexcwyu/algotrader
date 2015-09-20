@@ -32,10 +32,10 @@ public class InMemoryTradingDataStore implements TradingDataStore {
                         }
                     });
 
-    private LoadingCache<String, Portfolio> portfolioCache = CacheBuilder.newBuilder()
+    private LoadingCache<Integer, Portfolio> portfolioCache = CacheBuilder.newBuilder()
             .build(
-                    new CacheLoader<String, Portfolio>() {
-                        public Portfolio load(String portfolioId) {
+                    new CacheLoader<Integer, Portfolio>() {
+                        public Portfolio load(Integer portfolioId) {
                             return delegateDataStore.getPortfolio(portfolioId);
                         }
                     });
@@ -72,10 +72,10 @@ public class InMemoryTradingDataStore implements TradingDataStore {
     public void connect(){
         if(delegateDataStore != null) {
             delegateDataStore.connect();
-            delegateDataStore.getAllAccounts().forEach(a -> accountCache.put(a.getAccountId(), a));
-            delegateDataStore.getAllPortfolios().forEach(p -> portfolioCache.put(p.getPortfolioId(), p));
+            delegateDataStore.getAllAccounts().forEach(a -> accountCache.put(a.accountId(), a));
+            delegateDataStore.getAllPortfolios().forEach(p -> portfolioCache.put(p.portfolioId(), p));
             delegateDataStore.getAllOrders().forEach(o -> orderCache.put(o.clOrderId(), o));
-            delegateDataStore.getAllExecutionReports().forEach(er -> executionReportCache.put(er.getExecId(), er));
+            delegateDataStore.getAllExecutionReports().forEach(er -> executionReportCache.put(er.execId(), er));
         }
     }
 
@@ -84,7 +84,7 @@ public class InMemoryTradingDataStore implements TradingDataStore {
         if(delegateDataStore != null) {
             delegateDataStore.saveAccount(account);
         }
-        accountCache.put(account.getAccountId(), account);
+        accountCache.put(account.accountId(), account);
     }
 
     @Override
@@ -102,11 +102,11 @@ public class InMemoryTradingDataStore implements TradingDataStore {
         if(delegateDataStore != null) {
             delegateDataStore.savePortfolio(portfolio);
         }
-        portfolioCache.put(portfolio.getPortfolioId(), portfolio);
+        portfolioCache.put(portfolio.portfolioId(), portfolio);
     }
 
     @Override
-    public Portfolio getPortfolio(String portfolioId) {
+    public Portfolio getPortfolio(int portfolioId) {
         return portfolioCache.getUnchecked(portfolioId);
     }
 
@@ -120,7 +120,7 @@ public class InMemoryTradingDataStore implements TradingDataStore {
         if(delegateDataStore != null) {
             delegateDataStore.saveExecutionReport(er);
         }
-        executionReportCache.put(er.getExecId(), er);
+        executionReportCache.put(er.execId(), er);
     }
 
     @Override
@@ -135,12 +135,12 @@ public class InMemoryTradingDataStore implements TradingDataStore {
 
     @Override
     public List<ExecutionReport> getExecutionReportsByInstId(long instId) {
-        return executionReportCache.asMap().values().stream().filter(er -> er.getInstId() == instId).collect(toList());
+        return executionReportCache.asMap().values().stream().filter(er -> er.instId() == instId).collect(toList());
     }
 
     @Override
     public List<ExecutionReport> getExecutionReportsByOrderId(long clOrderId) {
-        return executionReportCache.asMap().values().stream().filter(er -> er.getClOrderId() == clOrderId).collect(toList());
+        return executionReportCache.asMap().values().stream().filter(er -> er.clOrderId() == clOrderId).collect(toList());
     }
 
     @Override
@@ -167,19 +167,13 @@ public class InMemoryTradingDataStore implements TradingDataStore {
     }
 
     @Override
-    public List<Order> getOrdersByPortfolioId(String portfolioId) {
-        if (portfolioId == null){
-            return Lists.newArrayList();
-        }
-        return orderCache.asMap().values().stream().filter(order -> portfolioId.equals(order.portfolioId())).collect(toList());
+    public List<Order> getOrdersByPortfolioId(int portfolioId) {
+        return orderCache.asMap().values().stream().filter(order -> portfolioId == order.portfolioId()).collect(toList());
     }
 
     @Override
-    public List<Order> getOrdersByStrategyId(String strategyId) {
-        if (strategyId == null){
-            return Lists.newArrayList();
-        }
-        return orderCache.asMap().values().stream().filter(order -> strategyId.equals(order.strategyId())).collect(toList());
+    public List<Order> getOrdersByStrategyId(int strategyId) {
+        return orderCache.asMap().values().stream().filter(order -> strategyId == order.strategyId()).collect(toList());
     }
 
     @Override

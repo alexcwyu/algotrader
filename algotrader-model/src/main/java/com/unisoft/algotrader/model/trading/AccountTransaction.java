@@ -83,43 +83,48 @@ public class AccountTransaction {
         return Objects.hashCode(clOrderId, datetime, ccyId, value, text);
     }
 
-    public long getClOrderId() {
-        return clOrderId;
-    }
-
-    public long getDatetime() {
-        return datetime;
-    }
-
-    public String getCcyId() {
+    public String ccyId() {
         return ccyId;
     }
 
-    public double getValue() {
-        return value;
+    public AccountTransaction ccyId(String ccyId) {
+        this.ccyId = ccyId;
+        return this;
     }
 
-    public String getText() {
+    public long clOrderId() {
+        return clOrderId;
+    }
+
+    public AccountTransaction clOrderId(long clOrderId) {
+        this.clOrderId = clOrderId;
+        return this;
+    }
+
+    public long datetime() {
+        return datetime;
+    }
+
+    public AccountTransaction datetime(long datetime) {
+        this.datetime = datetime;
+        return this;
+    }
+
+    public String text() {
         return text;
     }
 
-    public void setClOrderId(long clOrderId) {
-        this.clOrderId = clOrderId;
-    }
-
-    public void setDatetime(long datetime) {
-        this.datetime = datetime;
-    }
-
-    public void setCcyId(String ccyId) {
-        this.ccyId = ccyId;
-    }
-
-    public void setValue(double value) {
-        this.value = value;
-    }
-
-    public void setText(String text) {
+    public AccountTransaction text(String text) {
         this.text = text;
+        return this;
+    }
+
+    public double value() {
+        return value;
+    }
+
+    public AccountTransaction value(double value) {
+        this.value = value;
+        return this;
     }
 }

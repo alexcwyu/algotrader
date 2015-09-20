@@ -16,6 +16,7 @@ import com.unisoft.algotrader.model.trading.Side;
 import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.trading.Strategy;
+import com.unisoft.algotrader.trading.StrategyManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,11 +36,11 @@ public class BuyAndHoldStrategy extends Strategy {
     public Order longOrder;
 
     public BuyAndHoldStrategy(AppConfig config, Portfolio portfolio){
-        this(config.getOrderManager(), config.getTradingDataStore(), portfolio.getPortfolioId(), config.getEventBusManager().getMarketDataRB());
+        this(config.getStrategyManager(), config.getOrderManager(), config.getTradingDataStore(), portfolio.portfolioId(), config.getEventBusManager().getMarketDataRB());
     }
 
-    public BuyAndHoldStrategy(OrderManager orderManager, TradingDataStore tradingDataStore, String portfolioId, RingBuffer<MarketDataContainer> rb){
-        super("BuyAndHoldStrategy", tradingDataStore, portfolioId, rb);
+    public BuyAndHoldStrategy(StrategyManager strategyManager, OrderManager orderManager, TradingDataStore tradingDataStore, int portfolioId, RingBuffer<MarketDataContainer> rb){
+        super(strategyManager.nextStrategyId(), tradingDataStore, portfolioId, rb);
         this.orderManager = orderManager;
     }
 
@@ -84,7 +85,7 @@ public class BuyAndHoldStrategy extends Strategy {
 //    }
 
     public void sendOrder(Order order){
-        order.portfolioId = portfolio.getPortfolioId();
+        order.portfolioId = portfolio.portfolioId();
         order.strategyId = strategyId;
         orderManager.onNewOrderRequest(order);
     }

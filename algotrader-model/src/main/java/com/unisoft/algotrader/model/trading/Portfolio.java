@@ -18,10 +18,10 @@ public class Portfolio{
 
     @PartitionKey
     @Column(name ="portfolio_id")
-    private String portfolioId;
+    private int portfolioId;
 
-    @Column(name ="account_name")
-    private String accountName;
+    @Column(name ="account_id")
+    private String accountId;
 
     @Frozen
     private Performance performance;
@@ -34,57 +34,59 @@ public class Portfolio{
     @Transient
     private List<Order> orderList = Lists.newArrayList();
 
-
     public Portfolio(){
     }
 
-    public Portfolio(String portfolioId, String accountName){
-        this.accountName = accountName;
+    public Portfolio(int portfolioId, String accountId){
+        this.accountId = accountId;
         this.portfolioId = portfolioId;
         this.performance = new Performance();
     }
 
-    public Performance getPerformance(){
-        return performance;
+    public String accountId() {
+        return accountId;
     }
 
-    public Map<Long, Position> getPositions(){
-        return positions;
+    public Portfolio accountId(String accountId) {
+        this.accountId = accountId;
+        return this;
     }
 
-    public List<Order> getOrderList(){
+    public List<Order> orderList() {
         return orderList;
     }
 
-    public String getPortfolioId() {
+    public Portfolio orderList(List<Order> orderList) {
+        this.orderList = orderList;
+        return this;
+    }
+
+    public Performance performance() {
+        return performance;
+    }
+
+    public Portfolio performance(Performance performance) {
+        this.performance = performance;
+        return this;
+    }
+
+    public int portfolioId() {
         return portfolioId;
     }
 
-    public void setPortfolioId(String portfolioId) {
+    public Portfolio portfolioId(int portfolioId) {
         this.portfolioId = portfolioId;
+        return this;
     }
 
-    public String getAccountName() {
-        return accountName;
+    public Map<Long, Position> positions() {
+        return positions;
     }
 
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
-    }
-
-    public void setPerformance(Performance performance) {
-        this.performance = performance;
-    }
-
-
-    public void setPositions(Map<Long, Position> positions) {
+    public Portfolio positions(Map<Long, Position> positions) {
         this.positions = positions;
+        return this;
     }
-
-    public void setOrderList(List<Order> orderList) {
-        this.orderList = orderList;
-    }
-
 
     public Position getPosition(long instId){
         return positions.get(instId);
@@ -108,7 +110,7 @@ public class Portfolio{
         if (!(o instanceof Portfolio)) return false;
         Portfolio portfolio = (Portfolio) o;
         return Objects.equal(portfolioId, portfolio.portfolioId) &&
-                Objects.equal(accountName, portfolio.accountName) &&
+                Objects.equal(accountId, portfolio.accountId) &&
                 Objects.equal(performance, portfolio.performance) &&
                 Objects.equal(positions, portfolio.positions) &&
                 Objects.equal(orderList, portfolio.orderList);
@@ -116,6 +118,6 @@ public class Portfolio{
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(portfolioId, accountName, performance, positions, orderList);
+        return Objects.hashCode(portfolioId, accountId, performance, positions, orderList);
     }
 }

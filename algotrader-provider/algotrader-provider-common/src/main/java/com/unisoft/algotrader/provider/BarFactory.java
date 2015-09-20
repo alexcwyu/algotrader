@@ -19,7 +19,7 @@ public class BarFactory extends MultiEventProcessor implements MarketDataHandler
     private final RingBuffer<MarketDataContainer> outputRB;
 
     public BarFactory(RingBuffer<MarketDataContainer> inputRB, RingBuffer<MarketDataContainer> outputRB){
-        super(new NoWaitStrategy(),  null, inputRB);
+        super(new NoWaitStrategy(), inputRB);
         this.outputRB = outputRB;
     }
 

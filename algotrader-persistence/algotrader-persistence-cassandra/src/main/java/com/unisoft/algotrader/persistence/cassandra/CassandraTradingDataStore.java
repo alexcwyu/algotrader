@@ -77,7 +77,7 @@ public class CassandraTradingDataStore implements TradingDataStore {
     }
 
     @Override
-    public Portfolio getPortfolio(String portfolioId) {
+    public Portfolio getPortfolio(int portfolioId) {
         Mapper<Portfolio> mapper = mappingManager.mapper(Portfolio.class);
         return mapper.get(portfolioId);
     }
@@ -142,12 +142,12 @@ public class CassandraTradingDataStore implements TradingDataStore {
     }
 
     @Override
-    public List<Order> getOrdersByPortfolioId(String portfolioId) {
+    public List<Order> getOrdersByPortfolioId(int portfolioId) {
         return orderAccessor.getByPortfolioId(portfolioId).all();
     }
 
     @Override
-    public List<Order> getOrdersByStrategyId(String strategyId) {
+    public List<Order> getOrdersByStrategyId(int strategyId) {
         return orderAccessor.getByStrategyId(strategyId).all();
     }
 

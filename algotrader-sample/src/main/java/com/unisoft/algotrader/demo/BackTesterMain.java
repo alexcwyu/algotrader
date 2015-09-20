@@ -34,10 +34,10 @@ public class BackTesterMain {
         DummyDataProvider provider = new DummyDataProvider(appConfig.getProviderManager(), new RingBufferMarketDataEventBus(appConfig.getEventBusManager().getMarketDataRB()));
 
         CountDownLatch latch = new CountDownLatch(1);
-        Strategy strategy = new CountDownStrategy(appConfig.getOrderManager(), "Sid", appConfig.getTradingDataStore(), latch, 20, appConfig.getEventBusManager().getMarketDataRB());
+        Strategy strategy = new CountDownStrategy(appConfig.getOrderManager(), 1, appConfig.getTradingDataStore(), latch, 20, appConfig.getEventBusManager().getMarketDataRB());
 
         Account account = TradingDataStore.DEFAULT_ACCOUNT;
-        Portfolio portfolio = new Portfolio("TestPortfolio", account.getAccountId());
+        Portfolio portfolio = new Portfolio(1, account.accountId());
 
         BackTester backTester = new BackTester(appConfig, strategy, provider, portfolio, SampleEventFactory.TEST_HKD_INSTRUMENT, 20110101, 20110111);
 
@@ -52,8 +52,8 @@ public class BackTesterMain {
     private static void logPerformance(Performance performance){
 
         LOG.info("Performance:\nEquity\n{}\nPnl\n{}\nDrawdown\n{}"
-                , TimeSeriesHelper.print(performance.getEquitySeries())
-                , TimeSeriesHelper.print(performance.getPnlSeries())
-                , TimeSeriesHelper.print(performance.getDrawdownSeries()));
+                , TimeSeriesHelper.print(performance.equitySeries())
+                , TimeSeriesHelper.print(performance.pnlSeries())
+                , TimeSeriesHelper.print(performance.drawdownSeries()));
     }
 }

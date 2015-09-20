@@ -55,43 +55,11 @@ public class Account {
         deposit(System.currentTimeMillis(), currency, initialValue, "Initial Deposit");
     }
 
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setCcyId(String ccyId) {
-        this.ccyId = ccyId;
-    }
-
-    public void setAccountPositions(Map<String, AccountPosition> accountPositions) {
-        this.accountPositions = accountPositions;
-    }
-
-    public String getCcyId() {
-        return ccyId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getAccountId() {
-        return accountId;
-    }
-
-    public Map<String, AccountPosition> getAccountPositions() {
-        return accountPositions;
-    }
-
     public void add(AccountTransaction transaction){
-        if (!accountPositions.containsKey(transaction.getCcyId())){
-            accountPositions.putIfAbsent(transaction.getCcyId(), new AccountPosition(transaction.getCcyId()));
+        if (!accountPositions.containsKey(transaction.ccyId())){
+            accountPositions.putIfAbsent(transaction.ccyId(), new AccountPosition(transaction.ccyId()));
         }
-        AccountPosition accountPosition = accountPositions.get(transaction.getCcyId());
+        AccountPosition accountPosition = accountPositions.get(transaction.ccyId());
         accountPosition.add(transaction);
 
     }
@@ -106,7 +74,7 @@ public class Account {
 
     public double value(Currency currency){
         if (accountPositions.containsKey(currency.getCcyId())){
-            return accountPositions.get(currency.getCcyId()).getValue();
+            return accountPositions.get(currency.getCcyId()).value();
         }
         return 0.0;
     }
@@ -125,7 +93,7 @@ public class Account {
 
         Map<String, Double> val = Maps.newHashMap();
         for(AccountPosition position : accountPositions.values()) {
-            val.put(position.getCcyId(),position.getValue());
+            val.put(position.ccyId(),position.value());
         }
         return val;
     }
@@ -154,5 +122,41 @@ public class Account {
                 ", ccyId=" + ccyId +
                 ", accountPositions=" + accountPositions +
                 "} " + super.toString();
+    }
+
+    public String accountId() {
+        return accountId;
+    }
+
+    public Account accountId(String accountId) {
+        this.accountId = accountId;
+        return this;
+    }
+
+    public Map<String, AccountPosition> accountPositions() {
+        return accountPositions;
+    }
+
+    public Account accountPositions(Map<String, AccountPosition> accountPositions) {
+        this.accountPositions = accountPositions;
+        return this;
+    }
+
+    public String ccyId() {
+        return ccyId;
+    }
+
+    public Account ccyId(String ccyId) {
+        this.ccyId = ccyId;
+        return this;
+    }
+
+    public String name() {
+        return name;
+    }
+
+    public Account name(String name) {
+        this.name = name;
+        return this;
     }
 }

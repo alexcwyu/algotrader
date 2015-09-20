@@ -53,7 +53,7 @@ public class PositionEventDeserializer extends Deserializer<PositionEvent> {
         final String localSymbol = readString(inputStream);
         final String tradingClass = (version >= 2)? readString(inputStream): null;
 
-        Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
+        Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID.name(), symbol, exchange);
         if (instrument == null){
             throw new RuntimeException("Cannot find instrumnet symbol=" + symbol +", primaryExchange="+exchange);
         }

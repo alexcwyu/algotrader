@@ -3,8 +3,8 @@ package com.unisoft.algotrader.trading;
 import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.model.event.bus.EventBusManager;
 import com.unisoft.algotrader.model.event.execution.*;
-import com.unisoft.algotrader.model.trading.*;
-import com.unisoft.algotrader.provider.ProviderManager;
+import com.unisoft.algotrader.model.trading.ExecType;
+import com.unisoft.algotrader.model.trading.OrdStatus;
 import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.apache.logging.log4j.LogManager;
@@ -12,7 +12,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by alex on 5/18/15.
@@ -22,63 +21,49 @@ public class OrderManager extends MultiEventProcessor implements OrderEventHandl
 
     private static final Logger LOG = LogManager.getLogger(OrderManager.class);
 
-    private final ProviderManager providerManager;
-    private final StrategyManager strategyManager;
-    private final EventBusManager eventBusManager;
+    protected final EventBusManager eventBusManager;
 
-    private AtomicLong clOrderId = new AtomicLong();
-    private OrderTable orderTable = new OrderTable();
+    protected OrderTable orderTable = new OrderTable();
 
     @Inject
-    public OrderManager(ProviderManager providerManager, StrategyManager strategyManager, EventBusManager eventBusManager){
-        super(new NoWaitStrategy(),  null, eventBusManager.getExecutionEventRB(), eventBusManager.getOrderEventRB());
-        this.providerManager = providerManager;
-        this.strategyManager = strategyManager;
+    public OrderManager(EventBusManager eventBusManager){
+        super(new NoWaitStrategy(), eventBusManager.getExecutionEventRB(), eventBusManager.getOrderEventRB());
         this.eventBusManager = eventBusManager;
     }
 
-    public long nextOrdId(){
-        return clOrderId.getAndIncrement();
-    }
-
-
-    private void addOrder(Order order){
+    protected void addOrUpdateOrder(Order order){
         orderTable.addOrUpdateOrder(order);
         //TODO persist
     }
 
     @Override
     public void onNewOrderRequest(Order order) {
-        LOG.info("onNewOrderRequest {}" , order);
-        addOrder(order);
-        providerManager.getExecutionProvider(order.execProviderId).onNewOrderRequest(order);
+        LOG.info("onNewOrderRequest {}", order);
+        addOrUpdateOrder(order);
     }
 
     @Override
     public void onOrderUpdateRequest(Order order){
-        LOG.info("updateOrder {}" , order);
-        order.clOrderId = nextOrdId();
-        providerManager.getExecutionProvider(order.execProviderId).onOrderUpdateRequest(order);
+        LOG.info("onOrderUpdateRequest {}", order);
+        addOrUpdateOrder(order);
     }
 
     @Override
     public void onOrderCancelRequest(Order order){
-        LOG.info("cancelOrder {}" , order);
-        providerManager.getExecutionProvider(order.execProviderId).onOrderCancelRequest(order);
-
+        LOG.info("onOrderCancelRequest {}", order);
     }
 
-    @Override
-    public void onExecutionReport(ExecutionReport executionReport) {
-        LOG.info("onExecutionReport {}", executionReport);
+
+    protected Order processExecutionReport(ExecutionReport executionReport){
 
         Order order = null;
-        if (executionReport.execType == ExecType.PendingCancel ||
-                executionReport.execType == ExecType.Cancelled ||
-                executionReport.execType == ExecType.PendingReplace ||
-                executionReport.execType == ExecType.Replace) {
+        ExecType execType = executionReport.execType;
+        if (execType == ExecType.PendingCancel ||
+                execType == ExecType.Cancelled ||
+                execType == ExecType.PendingReplace ||
+                execType == ExecType.Replace) {
 
-            order = orderTable.getOrder(executionReport.origClOrderId);
+            order = orderTable.getOrder(executionReport.providerId, executionReport.origClOrderId);
             if (executionReport.execType == ExecType.Replace) {
                 orderTable.removeOrder(order);
                 order.clOrderId = executionReport.clOrderId;
@@ -91,56 +76,58 @@ public class OrderManager extends MultiEventProcessor implements OrderEventHandl
                 orderTable.addOrUpdateOrder(order);
             }
         } else {
-            order = orderTable.getOrder(executionReport.clOrderId);
+            order = orderTable.getOrder(executionReport.providerId, executionReport.clOrderId);
         }
+
+
+        return order;
+    }
+
+    @Override
+    public void onExecutionReport(ExecutionReport executionReport) {
+        LOG.info("onExecutionReport {}", executionReport);
+
+        Order order = processExecutionReport(executionReport);
+
         if (order != null) {
             OrdStatus prevOrdStatus = order.ordStatus;
 
             order.add(executionReport);
 
-            //TODO presist order
-            orderTable.addOrUpdateOrder(order);
-
-            //notify execution report
-            //TODO still need this? should we rely on the msg bus?
-            Strategy strategy = strategyManager.get(order.strategyId);
-            if (strategy != null)
-                strategy.onEvent(executionReport);
+            addOrUpdateOrder(order);
 
             if (prevOrdStatus != order.ordStatus) {
-
-                //TODO orderstatus update
-
-                if (order.ordStatus == OrdStatus.Filled
-                        || order.ordStatus == OrdStatus.Cancelled
-                        || order.ordStatus == OrdStatus.Rejected) {
-                    if (order.filledQty > 0 && order.portfolioId != null) {
-                        //TODO notify portfolio processor
-//                    Portfolio portfolio = PortfolioManager.INSTANCE.get(order.portfolioId);
-//                    if (portfolio != null){
-//                        portfolio.add(order);
-//                    }
-                    }
-                }
+                eventBusManager.getExecutionEventBus().publishOrderStatusUpdate(order);
             }
-
-
         } else {
             throw new RuntimeException("Cannot found order, executionReport=" + executionReport);
         }
-
     }
 
     @Override
     public void onOrderCancelReject(OrderCancelReject orderCancelReject) {
-        Order order = orderTable.getOrder(orderCancelReject.clOrderId);
+        Order order = orderTable.getOrder(orderCancelReject.providerId, orderCancelReject.clOrderId);
         OrdStatus prevOrdStatus = order.ordStatus;
         order.add(orderCancelReject);
 
+        addOrUpdateOrder(order);
         if(prevOrdStatus != order.ordStatus){
-            //TODO notify order status changed.
+            eventBusManager.getExecutionEventBus().publishOrderStatusUpdate(order);
         }
     }
+
+
+    @Override
+    public void onOrderStatusUpdate(Order orderStatusUpdate){
+
+        Order order = orderTable.getOrder(orderStatusUpdate.providerId, orderStatusUpdate.clOrderId);
+        OrdStatus prevOrdStatus = order.ordStatus;
+        order.ordStatus = orderStatusUpdate.ordStatus;
+
+        addOrUpdateOrder(order);
+    }
+
+
 
     @Override
     public void onEvent(Event event) {
@@ -151,30 +138,7 @@ public class OrderManager extends MultiEventProcessor implements OrderEventHandl
         this.orderTable.clear();
     }
 
-    public Order newLimitOrder(long instId, String strategyId, String providerId, Side side, double price, double qty, TimeInForce tif){
-        Order order = new Order();
-        order.clOrderId = nextOrdId();
-        order.instId = instId;
-        order.strategyId = strategyId;
-        order.execProviderId = providerId;
-        order.side= side;
-        order.ordType = OrdType.Limit;
-        order.ordQty=qty;
-        order.limitPrice = price;
-        order.tif = tif;
-        return order;
-    }
 
-    public Order newMarketOrder(long instId, String strategyId, String providerId, Side side, double qty, TimeInForce tif){
-        Order order = new Order();
-        order.clOrderId = nextOrdId();
-        order.instId = instId;
-        order.strategyId = strategyId;
-        order.execProviderId = providerId;
-        order.side= side;
-        order.ordType = OrdType.Market;
-        order.ordQty=qty;
-        order.tif = tif;
-        return order;
-    }
+
+
 }

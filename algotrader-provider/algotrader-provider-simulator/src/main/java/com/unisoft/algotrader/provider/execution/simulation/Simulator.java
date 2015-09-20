@@ -19,7 +19,7 @@ public class Simulator extends MultiEventProcessor implements MarketDataHandler 
     private final SimulationExecutor simulationExecutor;
 
     public Simulator(SimulationExecutor simulationExecutor, RingBuffer<MarketDataContainer> marketDataRB, Strategy ... strategies){
-        super(new NoWaitStrategy(),  null, marketDataRB);
+        super(new NoWaitStrategy(), marketDataRB);
         this.simulationExecutor = simulationExecutor;
         this.strategies = strategies;
     }

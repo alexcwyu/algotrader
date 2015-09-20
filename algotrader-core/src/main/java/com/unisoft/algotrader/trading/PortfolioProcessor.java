@@ -38,13 +38,21 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
     }
 
     public PortfolioProcessor(Portfolio portfolio, Account account, RefDataStore refDataStore, Clock clock, RingBuffer... providers) {
-        super(new NoWaitStrategy(), null, providers);
+        super(new NoWaitStrategy(), providers);
         this.portfolio = portfolio;
         this.account = account;
         this.refDataStore = refDataStore;
         this.clock = clock;
     }
 
+
+    public int portfolioId(){
+        return portfolio.portfolioId();
+    }
+
+    public Portfolio portfolio(){
+        return portfolio;
+    }
 
     @Override
     public void onEvent(Event event) {
@@ -53,22 +61,22 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
 
     @Override
     public void onBar(Bar bar) {
-        if (portfolio.getPositions().containsKey(bar.instId)){
-            portfolio.getPositions().get(bar.instId).onBar(bar);
+        if (portfolio.positions().containsKey(bar.instId)){
+            portfolio.positions().get(bar.instId).onBar(bar);
         }
     }
 
     @Override
     public void onQuote(Quote quote) {
-        if (portfolio.getPositions().containsKey(quote.instId)){
-            portfolio.getPositions().get(quote.instId).onQuote(quote);
+        if (portfolio.positions().containsKey(quote.instId)){
+            portfolio.positions().get(quote.instId).onQuote(quote);
         }
     }
 
     @Override
     public void onTrade(Trade trade) {
-        if (portfolio.getPositions().containsKey(trade.instId)){
-            portfolio.getPositions().get(trade.instId).onTrade(trade);
+        if (portfolio.positions().containsKey(trade.instId)){
+            portfolio.positions().get(trade.instId).onTrade(trade);
         }
     }
 
@@ -100,12 +108,12 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
                 currency, order.cashFlow() + newDebt, order.text());
         account.add(accountTransaction);
 
-        portfolio.getPerformance().valueChanged(clock.now(), coreEquity(), totalEquity());
+        portfolio.performance().valueChanged(clock.now(), coreEquity(), totalEquity());
 
     }
 
     public void updatePerformance(long dateTime){
-        portfolio.getPerformance().valueChanged(dateTime, coreEquity(), totalEquity());
+        portfolio.performance().valueChanged(dateTime, coreEquity(), totalEquity());
     }
 
     public void updatePerformance(){
@@ -113,7 +121,7 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
     }
 
     public void reconstruct(){
-        for(Order order : portfolio.getOrderList()){
+        for(Order order : portfolio.orderList()){
             addOrderToPosition(order);
         }
     }
@@ -152,7 +160,7 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
 
         if (position == null){
             // open position
-            position = new Position(order.instId(), portfolio.getPortfolioId(), instrument.getFactor());
+            position = new Position(order.instId(), portfolio.portfolioId(), instrument.getFactor());
             position.add(order);
 
             position = portfolio.addPosition(order.instId(), position);
@@ -166,8 +174,8 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
                 closeDebt = 0;
                 openDebt  = orderDebt;
 
-                position.setMargin(orderMargin);
-                position.setDebt(orderDebt);
+                position.margin(orderMargin);
+                position.debt(orderDebt);
             }
 
             positionOpened = true;
@@ -185,8 +193,8 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
                     closeDebt = 0;
                     openDebt  = orderDebt;
 
-                    position.setMargin(position.getMargin() + orderMargin);
-                    position.setDebt(position.getDebt() + closeDebt);
+                    position.margin(position.margin() + orderMargin);
+                    position.debt(position.debt() + closeDebt);
                 }
 
 
@@ -195,25 +203,25 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
                         (position.getSide() == PositionSide.Long && (order.side == Side.Sell || order.side == Side.SellShort))){
                     if(position.getQty() == order.filledQty()){
                         //fully close
-                        closeMargin = position.getMargin();
+                        closeMargin = position.margin();
                         openMargin = 0;
 
-                        closeDebt = position.getDebt();
+                        closeDebt = position.debt();
                         openDebt = 0;
 
-                        position.setMargin(0);
-                        position.setDebt(0);
+                        position.margin(0);
+                        position.debt(0);
                     }
                     else if (position.getQty() > order.filledQty()){
                         // partially close
                         closeMargin = orderMargin;
                         openMargin = 0;
 
-                        closeDebt = position.getDebt() * order.filledQty() / position.getQty();
+                        closeDebt = position.debt() * order.filledQty() / position.getQty();
                         openDebt = 0;
 
-                        position.setMargin(position.getMargin() - orderMargin);
-                        position.setDebt(position.getDebt() - closeDebt);
+                        position.margin(position.margin() - orderMargin);
+                        position.debt(position.debt() - closeDebt);
                     }
                     else {
                         // close and open
@@ -223,14 +231,14 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
                         if (instrument.getFactor() != 0)
                             value *= instrument.getFactor();
 
-                        closeMargin = position.getMargin();
+                        closeMargin = position.margin();
                         openMargin = instrument.getMargin() * qty;
 
-                        closeDebt = position.getDebt();
+                        closeDebt = position.debt();
                         openDebt = value - openMargin;
 
-                        position.setMargin(openMargin);
-                        position.setDebt(openDebt);
+                        position.margin(openMargin);
+                        position.debt(openDebt);
                     }
                 }
             }
@@ -253,15 +261,15 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
 
     public double positionValue(){
 
-        return portfolio.getPositions().values().stream().mapToDouble(position -> position.getValue()).sum();
+        return portfolio.positions().values().stream().mapToDouble(position -> position.getValue()).sum();
     }
 
 
     public double accountValue(){
         double val = 0;
 
-        for(AccountPosition position : account.getAccountPositions().values()) {
-            val += CurrencyConverter.convert(position.getValue(), refDataStore.getCurrency(position.getCcyId()), refDataStore.getCurrency(account.getCcyId()));
+        for(AccountPosition position : account.accountPositions().values()) {
+            val += CurrencyConverter.convert(position.value(), refDataStore.getCurrency(position.ccyId()), refDataStore.getCurrency(account.ccyId()));
         }
         return val;
     }
@@ -271,10 +279,10 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
     }
 
     public double marginValue(){
-        return portfolio.getPositions().values().stream().mapToDouble(position -> position.getMargin()).sum();
+        return portfolio.positions().values().stream().mapToDouble(position -> position.margin()).sum();
     }
     public double debtValue(){
-        return portfolio.getPositions().values().stream().mapToDouble(position -> position.getDebt()).sum();
+        return portfolio.positions().values().stream().mapToDouble(position -> position.debt()).sum();
     }
 
     public double coreEquity(){
@@ -305,11 +313,11 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
     }
 
     public double cashFlow(){
-        return portfolio.getPositions().values().stream().mapToDouble(position -> position.getCashFlow()).sum();
+        return portfolio.positions().values().stream().mapToDouble(position -> position.getCashFlow()).sum();
     }
 
     public double netCashFlow(){
-        return portfolio.getPositions().values().stream().mapToDouble(position -> position.getNetCashFlow()).sum();
+        return portfolio.positions().values().stream().mapToDouble(position -> position.getNetCashFlow()).sum();
     }
 
 }

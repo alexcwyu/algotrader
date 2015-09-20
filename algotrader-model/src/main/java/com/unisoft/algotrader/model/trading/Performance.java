@@ -117,62 +117,6 @@ public class Performance {
         }
     }
 
-    public DoubleTimeSeries getEquitySeries() {
-        return equitySeries;
-    }
-
-    public DoubleTimeSeries getCoreEquitySeries() {
-        return coreEquitySeries;
-    }
-
-    public DoubleTimeSeries getPnlSeries() {
-        return pnlSeries;
-    }
-
-    public DoubleTimeSeries getDrawdownSeries() {
-        return drawdownSeries;
-    }
-
-    public DoubleTimeSeries getDrawdownPercentSeries() {
-        return drawdownPercentSeries;
-    }
-
-    public double getEquity() {
-        return equity;
-    }
-
-    public double getCoreEquity() {
-        return coreEquity;
-    }
-
-    public double getLowEquity() {
-        return lowEquity;
-    }
-
-    public double getHighEquity() {
-        return highEquity;
-    }
-
-    public double getPnl() {
-        return pnl;
-    }
-
-    public double getDrawdown() {
-        return drawdown;
-    }
-
-    public double getDrawdownPercent() {
-        return drawdownPercent;
-    }
-
-    public double getCurrentDrawdown() {
-        return currentDrawdown;
-    }
-
-    public double getCurrentRunUp() {
-        return currentRunUp;
-    }
-
 
     @Override
     public boolean equals(Object o) {
@@ -223,67 +167,138 @@ public class Performance {
     }
 
 
-    public boolean isEnabled() {
+    public double coreEquity() {
+        return coreEquity;
+    }
+
+    public Performance coreEquity(double coreEquity) {
+        this.coreEquity = coreEquity;
+        return this;
+    }
+
+    public DoubleTimeSeries coreEquitySeries() {
+        return coreEquitySeries;
+    }
+
+    public Performance coreEquitySeries(DoubleTimeSeries coreEquitySeries) {
+        this.coreEquitySeries = coreEquitySeries;
+        return this;
+    }
+
+    public double currentDrawdown() {
+        return currentDrawdown;
+    }
+
+    public Performance currentDrawdown(double currentDrawdown) {
+        this.currentDrawdown = currentDrawdown;
+        return this;
+    }
+
+    public double currentRunUp() {
+        return currentRunUp;
+    }
+
+    public Performance currentRunUp(double currentRunUp) {
+        this.currentRunUp = currentRunUp;
+        return this;
+    }
+
+    public double drawdown() {
+        return drawdown;
+    }
+
+    public Performance drawdown(double drawdown) {
+        this.drawdown = drawdown;
+        return this;
+    }
+
+    public double drawdownPercent() {
+        return drawdownPercent;
+    }
+
+    public Performance drawdownPercent(double drawdownPercent) {
+        this.drawdownPercent = drawdownPercent;
+        return this;
+    }
+
+    public DoubleTimeSeries drawdownPercentSeries() {
+        return drawdownPercentSeries;
+    }
+
+    public Performance drawdownPercentSeries(DoubleTimeSeries drawdownPercentSeries) {
+        this.drawdownPercentSeries = drawdownPercentSeries;
+        return this;
+    }
+
+    public DoubleTimeSeries drawdownSeries() {
+        return drawdownSeries;
+    }
+
+    public Performance drawdownSeries(DoubleTimeSeries drawdownSeries) {
+        this.drawdownSeries = drawdownSeries;
+        return this;
+    }
+
+    public boolean enabled() {
         return enabled;
     }
 
-    public void setEnabled(boolean enabled) {
+    public Performance enabled(boolean enabled) {
         this.enabled = enabled;
+        return this;
     }
 
-    public void setEquitySeries(DoubleTimeSeries equitySeries) {
-        this.equitySeries = equitySeries;
+    public double equity() {
+        return equity;
     }
 
-    public void setCoreEquitySeries(DoubleTimeSeries coreEquitySeries) {
-        this.coreEquitySeries = coreEquitySeries;
-    }
-
-    public void setPnlSeries(DoubleTimeSeries pnlSeries) {
-        this.pnlSeries = pnlSeries;
-    }
-
-    public void setDrawdownSeries(DoubleTimeSeries drawdownSeries) {
-        this.drawdownSeries = drawdownSeries;
-    }
-
-    public void setDrawdownPercentSeries(DoubleTimeSeries drawdownPercentSeries) {
-        this.drawdownPercentSeries = drawdownPercentSeries;
-    }
-
-    public void setEquity(double equity) {
+    public Performance equity(double equity) {
         this.equity = equity;
+        return this;
     }
 
-    public void setCoreEquity(double coreEquity) {
-        this.coreEquity = coreEquity;
+    public DoubleTimeSeries equitySeries() {
+        return equitySeries;
     }
 
-    public void setLowEquity(double lowEquity) {
-        this.lowEquity = lowEquity;
+    public Performance equitySeries(DoubleTimeSeries equitySeries) {
+        this.equitySeries = equitySeries;
+        return this;
     }
 
-    public void setHighEquity(double highEquity) {
+    public double highEquity() {
+        return highEquity;
+    }
+
+    public Performance highEquity(double highEquity) {
         this.highEquity = highEquity;
+        return this;
     }
 
-    public void setPnl(double pnl) {
+    public double lowEquity() {
+        return lowEquity;
+    }
+
+    public Performance lowEquity(double lowEquity) {
+        this.lowEquity = lowEquity;
+        return this;
+    }
+
+    public double pnl() {
+        return pnl;
+    }
+
+    public Performance pnl(double pnl) {
         this.pnl = pnl;
+        return this;
     }
 
-    public void setDrawdownPercent(double drawdownPercent) {
-        this.drawdownPercent = drawdownPercent;
+    public DoubleTimeSeries pnlSeries() {
+        return pnlSeries;
     }
 
-    public void setDrawdown(double drawdown) {
-        this.drawdown = drawdown;
-    }
-
-    public void setCurrentDrawdown(double currentDrawdown) {
-        this.currentDrawdown = currentDrawdown;
-    }
-
-    public void setCurrentRunUp(double currentRunUp) {
-        this.currentRunUp = currentRunUp;
+    public Performance pnlSeries(DoubleTimeSeries pnlSeries) {
+        this.pnlSeries = pnlSeries;
+        return this;
     }
 }

@@ -111,8 +111,8 @@ public class ModelSerializationTest {
         Order order = new Order();
         order.clOrderId = 1;
         order.instId = 2;
-        order.strategyId = "test";
-        order.execProviderId = "IB";
+        order.strategyId = 1;
+        order.providerId = 1;
         order.side= Side.Buy;
         order.ordType = OrdType.Limit;
         order.ordQty=108000;
@@ -151,14 +151,14 @@ public class ModelSerializationTest {
 
     @Test
     public void testSerializePosition()throws Exception{
-        Position position = new Position(1, "test");
-        position.setMarketPrice(89);
-        position.setQtyBought(1000);
-        position.setQtySold(0);
-        position.setQtySoldShort(0);
+        Position position = new Position(1, 2);
+        position.marketPrice(89);
+        position.qtyBought(1000);
+        position.qtySold(0);
+        position.qtySoldShort(0);
 
-        position.setMargin(1);
-        position.setDebt(-100);
+        position.margin(1);
+        position.debt(-100);
 
         byte [] bytes = serializer.serialize(position);
 
@@ -168,7 +168,7 @@ public class ModelSerializationTest {
 
     @Test
     public void testSerializePortfolio()throws Exception{
-        Portfolio portfolio = new Portfolio("portfolio1","acct");
+        Portfolio portfolio = new Portfolio(1,"acct");
 
 
         byte [] bytes = serializer.serialize(portfolio);

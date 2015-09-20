@@ -31,7 +31,7 @@ public class PortfolioProcessorTest {
 
     public static long ordId = 0;
     public static long execId = 100;
-    public static String portfolioId = "TestPortfolio";
+    public static int portfolioId = 1;
 
     public static InMemoryRefDataStore REF_DATA_STORE = new SampleInMemoryRefDataStore();
     public static InstrumentFactory INSTRUMEN_FACTORY = new InstrumentFactory(REF_DATA_STORE);
@@ -53,7 +53,7 @@ public class PortfolioProcessorTest {
     @Before
     public void setup() {
         account = new Account("Test", "Testing Account", Currency.HKD, 1000000);
-        portfolio = new Portfolio(portfolioId, account.getAccountId());
+        portfolio = new Portfolio(portfolioId, account.accountId());
         portfolioProcessor = new PortfolioProcessor(portfolio, account, REF_DATA_STORE, new SimulationClock());
     }
 

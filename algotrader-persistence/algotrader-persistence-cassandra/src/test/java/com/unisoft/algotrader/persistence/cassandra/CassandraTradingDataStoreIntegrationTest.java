@@ -35,7 +35,7 @@ public class CassandraTradingDataStoreIntegrationTest {
     public void testSaveLoadAccount(){
         Account account = new Account("TA1", "Testing Account 1", Currency.HKD, 1000000);
         store.saveAccount(account);
-        Account account1 = store.getAccount(account.getAccountId());
+        Account account1 = store.getAccount(account.accountId());
         assertEquals(account, account1);
 
         assertTrue(store.getAllAccounts().contains(account));
@@ -45,9 +45,9 @@ public class CassandraTradingDataStoreIntegrationTest {
 
     @Test
     public void testSaveLoadPortfolio(){
-        Portfolio portfolio = new Portfolio("TP1", "TA1");
+        Portfolio portfolio = new Portfolio(1, "TA1");
         store.savePortfolio(portfolio);
-        Portfolio portfolio1 = store.getPortfolio(portfolio.getPortfolioId());
+        Portfolio portfolio1 = store.getPortfolio(portfolio.portfolioId());
         assertEquals(portfolio, portfolio1);
 
         assertTrue(store.getAllPortfolios().contains(portfolio));
@@ -56,7 +56,7 @@ public class CassandraTradingDataStoreIntegrationTest {
 
     @Test
     public void testSaveLoadOrder(){
-        Order order = SampleEventFactory.createOrder(1001, Side.Buy, OrdType.Limit, 9000, 98, 0.0, TimeInForce.Day, "Provider1", "Portfolio1", "Strategy1");
+        Order order = SampleEventFactory.createOrder(1001, Side.Buy, OrdType.Limit, 9000, 98, 0.0, TimeInForce.Day, 1, 1, 1);
 
         store.saveOrder(order);
         Order order1 = store.getOrder(order.clOrderId());
@@ -73,36 +73,36 @@ public class CassandraTradingDataStoreIntegrationTest {
         ExecutionReport executionReport = SampleEventFactory.createExecutionReport(1102, 1001, Side.Buy, OrdType.Limit, 9000, 98, 0.0, TimeInForce.Day, OrdStatus.New, 0, 0, 0, 0);
 
         store.saveExecutionReport(executionReport);
-        ExecutionReport executionReport1 = store.getExecutionReport(executionReport.getExecId());
+        ExecutionReport executionReport1 = store.getExecutionReport(executionReport.execId());
         assertEquals(executionReport, executionReport1);
 
         assertTrue(store.getAllExecutionReports().contains(executionReport));
-        assertTrue(store.getExecutionReportsByInstId(executionReport.getInstId()).contains(executionReport));
-        assertTrue(store.getExecutionReportsByOrderId(executionReport.getClOrderId()).contains(executionReport));
+        assertTrue(store.getExecutionReportsByInstId(executionReport.instId()).contains(executionReport));
+        assertTrue(store.getExecutionReportsByOrderId(executionReport.clOrderId()).contains(executionReport));
     }
 
     @Test
     public void testSaveLoad() throws Exception {
         Account account = TradingDataStore.DEFAULT_ACCOUNT;
 
-        Portfolio portfolio = SampleEventFactory.createPortfolio("TestPortfolio", account.getAccountId());
+        Portfolio portfolio = SampleEventFactory.createPortfolio(1, account.accountId());
         Clock clock = new SimulationClock();
         PortfolioProcessor portfolioProcessor = new PortfolioProcessor(portfolio, account, new SampleInMemoryRefDataStore(), clock);
 
         clock.setDateTime(System.currentTimeMillis());
-        Order order = SampleEventFactory.createOrder(SampleEventFactory.TEST_USD_INSTRUMENT.getInstId(), Side.Buy, OrdType.Limit, 9000, 98, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
+        Order order = SampleEventFactory.createOrder(SampleEventFactory.TEST_USD_INSTRUMENT.getInstId(), Side.Buy, OrdType.Limit, 9000, 98, 0.0, TimeInForce.Day, 1, portfolio.portfolioId(), 1);
         ExecutionReport executionReport = SampleEventFactory.createExecutionReport(order);
         order.add(executionReport);
         portfolioProcessor.add(order);
 
         clock.setDateTime(System.currentTimeMillis());
-        Order order2 = SampleEventFactory.createOrder(SampleEventFactory.TEST_USD_INSTRUMENT.getInstId(), Side.Sell, OrdType.Limit, 10000, 108, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
+        Order order2 = SampleEventFactory.createOrder(SampleEventFactory.TEST_USD_INSTRUMENT.getInstId(), Side.Sell, OrdType.Limit, 10000, 108, 0.0, TimeInForce.Day, 1, portfolio.portfolioId(), 1);
         ExecutionReport executionReport2 = SampleEventFactory.createExecutionReport(order2);
         order2.add(executionReport2);
         portfolioProcessor.add(order2);
 
         clock.setDateTime(System.currentTimeMillis());
-        Order order3 = SampleEventFactory.createOrder(SampleEventFactory.TEST_USD_INSTRUMENT.getInstId(), Side.Buy, OrdType.Limit, 1000, 88, 0.0, TimeInForce.Day, "TESTIB", portfolio.getPortfolioId(), "TESTStrategy");
+        Order order3 = SampleEventFactory.createOrder(SampleEventFactory.TEST_USD_INSTRUMENT.getInstId(), Side.Buy, OrdType.Limit, 1000, 88, 0.0, TimeInForce.Day, 1, portfolio.portfolioId(), 1);
         ExecutionReport executionReport3 = SampleEventFactory.createExecutionReport(order3);
         order3.add(executionReport3);
         portfolioProcessor.add(order3);
@@ -126,24 +126,24 @@ public class CassandraTradingDataStoreIntegrationTest {
         Order loadedOrder3 = store.getOrder(order3.clOrderId());
         assertNotNull(loadedOrder2);
 
-        ExecutionReport loadedER = store.getExecutionReport(executionReport.getExecId());
+        ExecutionReport loadedER = store.getExecutionReport(executionReport.execId());
         assertNotNull(loadedER);
-        ExecutionReport loadedER2 = store.getExecutionReport(executionReport2.getExecId());
+        ExecutionReport loadedER2 = store.getExecutionReport(executionReport2.execId());
         assertNotNull(loadedER2);
-        ExecutionReport loadedER3 = store.getExecutionReport(executionReport3.getExecId());
+        ExecutionReport loadedER3 = store.getExecutionReport(executionReport3.execId());
         assertNotNull(loadedER3);
 
         loadedOrder.executionReports(Lists.newArrayList(loadedER));
         loadedOrder2.executionReports(Lists.newArrayList(loadedER2));
         loadedOrder3.executionReports(Lists.newArrayList(loadedER3));
 
-        Portfolio loadedPortfolio = store.getPortfolio(portfolio.getPortfolioId());
+        Portfolio loadedPortfolio = store.getPortfolio(portfolio.portfolioId());
         assertNotNull(loadedPortfolio);
-        loadedPortfolio.setOrderList(Lists.newArrayList(loadedOrder, loadedOrder2, loadedOrder3));
+        loadedPortfolio.orderList(Lists.newArrayList(loadedOrder, loadedOrder2, loadedOrder3));
 
-        Account loadedAccount = store.getAccount(account.getAccountId());
+        Account loadedAccount = store.getAccount(account.accountId());
         assertNotNull(loadedAccount);
-        loadedPortfolio.setAccountName(loadedAccount.getName());
+        loadedPortfolio.accountId(loadedAccount.accountId());
 
         assertEquals(order, loadedOrder);
         assertEquals(order2, loadedOrder2);

@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class Position implements MarketDataHandler {
     private long instId;
-    private String portfolioId;
+    private int portfolioId;
 
     private double marketPrice;
     private double factor;
@@ -32,11 +32,11 @@ public class Position implements MarketDataHandler {
 
     protected Position(){}
 
-    public Position(long instId, String portfolioId){
+    public Position(long instId, int portfolioId){
         this(instId, portfolioId, 0.0);
     }
 
-    public Position(long instId, String portfolioId, double factor){
+    public Position(long instId, int portfolioId, double factor){
         this.instId = instId;
         this.portfolioId = portfolioId;
         this.factor = factor;
@@ -276,92 +276,111 @@ public class Position implements MarketDataHandler {
         return Objects.hashCode(instId, portfolioId, marketPrice, qtyBought, qtySold, qtySoldShort, margin, debt, orderList, fPnLTransactionIndex, qtyLeft);
     }
 
-    public long getInstId() {
-        return instId;
-    }
-
-    public void setInstId(long instId) {
-        this.instId = instId;
-    }
-
-    public String getPortfolioId() {
-        return portfolioId;
-    }
-
-    public void setPortfolioId(String portfolioId) {
-        this.portfolioId = portfolioId;
-    }
-
-    public double getMarketPrice() {
-        return marketPrice;
-    }
-
-    public void setMarketPrice(double marketPrice) {
-        this.marketPrice = marketPrice;
-    }
-
-    public double getQtyBought() {
-        return qtyBought;
-    }
-
-    public void setQtyBought(double qtyBought) {
-        this.qtyBought = qtyBought;
-    }
-
-    public double getQtySold() {
-        return qtySold;
-    }
-
-    public void setQtySold(double qtySold) {
-        this.qtySold = qtySold;
-    }
-
-    public double getQtySoldShort() {
-        return qtySoldShort;
-    }
-
-    public void setQtySoldShort(double qtySoldShort) {
-        this.qtySoldShort = qtySoldShort;
-    }
-
-    public double getMargin() {
-        return margin;
-    }
-
-    public void setMargin(double margin) {
-        this.margin = margin;
-    }
-
-    public double getDebt() {
+    public double debt() {
         return debt;
     }
 
-    public void setDebt(double debt) {
+    public Position debt(double debt) {
         this.debt = debt;
+        return this;
     }
 
-    public List<Order> getOrderList() {
-        return orderList;
+    public double factor() {
+        return factor;
     }
 
-    public void setOrderList(List<Order> orderList) {
-        this.orderList = orderList;
+    public Position factor(double factor) {
+        this.factor = factor;
+        return this;
     }
 
-    public int getfPnLTransactionIndex() {
+    public int fPnLTransactionIndex() {
         return fPnLTransactionIndex;
     }
 
-    public void setfPnLTransactionIndex(int fPnLTransactionIndex) {
+    public Position fPnLTransactionIndex(int fPnLTransactionIndex) {
         this.fPnLTransactionIndex = fPnLTransactionIndex;
+        return this;
     }
 
-    public double getQtyLeft() {
+    public long instId() {
+        return instId;
+    }
+
+    public Position instId(long instId) {
+        this.instId = instId;
+        return this;
+    }
+
+    public double margin() {
+        return margin;
+    }
+
+    public Position margin(double margin) {
+        this.margin = margin;
+        return this;
+    }
+
+    public double marketPrice() {
+        return marketPrice;
+    }
+
+    public Position marketPrice(double marketPrice) {
+        this.marketPrice = marketPrice;
+        return this;
+    }
+
+    public List<Order> orderList() {
+        return orderList;
+    }
+
+    public Position orderList(List<Order> orderList) {
+        this.orderList = orderList;
+        return this;
+    }
+
+    public int portfolioId() {
+        return portfolioId;
+    }
+
+    public Position portfolioId(int portfolioId) {
+        this.portfolioId = portfolioId;
+        return this;
+    }
+
+    public double qtyBought() {
+        return qtyBought;
+    }
+
+    public Position qtyBought(double qtyBought) {
+        this.qtyBought = qtyBought;
+        return this;
+    }
+
+    public double qtyLeft() {
         return qtyLeft;
     }
 
-    public void setQtyLeft(double qtyLeft) {
+    public Position qtyLeft(double qtyLeft) {
         this.qtyLeft = qtyLeft;
+        return this;
     }
 
+    public double qtySold() {
+        return qtySold;
+    }
+
+    public Position qtySold(double qtySold) {
+        this.qtySold = qtySold;
+        return this;
+    }
+
+    public double qtySoldShort() {
+        return qtySoldShort;
+    }
+
+    public Position qtySoldShort(double qtySoldShort) {
+        this.qtySoldShort = qtySoldShort;
+        return this;
+    }
 }

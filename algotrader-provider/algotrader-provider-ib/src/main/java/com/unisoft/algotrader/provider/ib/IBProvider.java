@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.provider.ib;
 
 
+import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.model.event.bus.EventBusManager;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.DataType;
@@ -11,6 +12,7 @@ import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.ExecType;
 import com.unisoft.algotrader.model.trading.OrdStatus;
 import com.unisoft.algotrader.persistence.RefDataStore;
+import com.unisoft.algotrader.provider.ProviderId;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.*;
 import com.unisoft.algotrader.provider.execution.ExecutionProvider;
@@ -22,6 +24,8 @@ import com.unisoft.algotrader.provider.ib.api.model.data.TickType;
 import com.unisoft.algotrader.provider.ib.api.model.fa.FinancialAdvisorDataType;
 import com.unisoft.algotrader.provider.ib.api.model.order.OrderStatus;
 import com.unisoft.algotrader.provider.ib.api.model.system.ClientMessageCode;
+import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
+import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,11 +39,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by alex on 6/20/15.
  */
 @Singleton
-public class IBProvider extends DefaultIBEventHandler implements IBEventHandler, RealTimeDataProvider, HistoricalDataProvider, ExecutionProvider{
+public class IBProvider extends MultiEventProcessor implements IBEventHandler, RealTimeDataProvider, HistoricalDataProvider, ExecutionProvider{
 
     private static final Logger LOG = LogManager.getLogger(IBProvider.class);
 
-    public static final String PROVIDER_ID = "IB";
+    public static final ProviderId PROVIDER_ID = ProviderId.IB;
 
     private final IBConfig config;
     private final RefDataStore refDataStore;
@@ -55,6 +59,7 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
 
     @Inject
     public IBProvider(ProviderManager providerManager, IBConfig config, RefDataStore refDataStore, EventBusManager eventBusManager){
+        super(new NoWaitStrategy(), eventBusManager.getOrderEventRB());
         this.refDataStore = refDataStore;
         this.config = config;
         this.eventBusManager = eventBusManager;
@@ -62,6 +67,11 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
         providerManager.addHistoricalDataProvider(this);
         providerManager.addRealTimeDataProvider(this);
         this.ibSocket = new IBSocket(config, this, refDataStore);
+    }
+
+    @Override
+    public void onEvent(Event event) {
+        event.on(this);
     }
 
     @Override
@@ -88,7 +98,7 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
     }
 
     @Override
-    public String providerId() {
+    public ProviderId providerId() {
         return PROVIDER_ID;
     }
 
@@ -347,7 +357,7 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
 
     @Override
     public void onMarketDepthLevelTwoUpdateEvent(MarketDepthLevelTwoUpdateEvent e) {
-        super.onMarketDepthLevelTwoUpdateEvent(e.requestId, e.rowId, e.marketMakerName, e.operation, e.bookSide, e.price, e.size);
+        onMarketDepthLevelTwoUpdateEvent(e.requestId, e.rowId, e.marketMakerName, e.operation, e.bookSide, e.price, e.size);
     }
 
     @Override
@@ -361,7 +371,7 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
 
     @Override
     public void onMarketDepthUpdateEvent(MarketDepthUpdateEvent e) {
-        super.onMarketDepthUpdateEvent(e.requestId, e.rowId, e.operation, e.bookSide, e.price, e.size);
+        onMarketDepthUpdateEvent(e.requestId, e.rowId, e.operation, e.bookSide, e.price, e.size);
 
     }
 
@@ -376,7 +386,7 @@ public class IBProvider extends DefaultIBEventHandler implements IBEventHandler,
 
     @Override
     public void onHistoricalDataEvent(HistoricalDataEvent e) {
-        super.onHistoricalDataEvent(e.requestId, e.dateTime, e.open, e.high, e.low, e.close, e.volume, e.tradeNumber, e.weightedAveragePrice, e.hasGap);
+        onHistoricalDataEvent(e.requestId, e.dateTime, e.open, e.high, e.low, e.close, e.volume, e.tradeNumber, e.weightedAveragePrice, e.hasGap);
     }
 
     @Override

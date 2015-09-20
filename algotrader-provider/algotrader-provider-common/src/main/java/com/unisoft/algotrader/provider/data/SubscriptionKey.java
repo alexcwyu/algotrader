@@ -18,7 +18,7 @@ public class SubscriptionKey {
 
     public final static int DAILY_SIZE = 60*60*24;
 
-    public final String providerId;
+    public final int providerId;
     
     public final DataType type;
 
@@ -27,11 +27,11 @@ public class SubscriptionKey {
     public final int barSize;
 
 
-    protected SubscriptionKey(String providerId, DataType type, long instId){
+    protected SubscriptionKey(int providerId, DataType type, long instId){
         this(providerId, type, instId, 0);
     }
 
-    protected SubscriptionKey(String providerId, DataType type, long instId, int barSize){
+    protected SubscriptionKey(int providerId, DataType type, long instId, int barSize){
         this.providerId = providerId;
         this.type = type;
         this.instId = instId;
@@ -64,50 +64,50 @@ public class SubscriptionKey {
                 "} " + super.toString();
     }
 
-    public static SubscriptionKey createBarSubscriptionKey(String providerId, long instId, int frequency){
+    public static SubscriptionKey createBarSubscriptionKey(int providerId, long instId, int frequency){
         return new SubscriptionKey(providerId, DataType.Bar, instId, frequency);
     }
 
-    public static SubscriptionKey create1MBarSubscriptionKey(String providerId, long instId){
+    public static SubscriptionKey create1MBarSubscriptionKey(int providerId, long instId){
         return new SubscriptionKey(providerId, DataType.Bar, instId, M1_SIZE);
     }
 
-    public static SubscriptionKey create15MBarSubscriptionKey(String providerId, long instId){
+    public static SubscriptionKey create15MBarSubscriptionKey(int providerId, long instId){
         return new SubscriptionKey(providerId, DataType.Bar, instId, M15_SIZE);
     }
 
-    public static SubscriptionKey create30MBarSubscriptionKey(String providerId, long instId){
+    public static SubscriptionKey create30MBarSubscriptionKey(int providerId, long instId){
         return new SubscriptionKey(providerId, DataType.Bar, instId, M30_SIZE);
     }
 
-    public static SubscriptionKey create1HBarSubscriptionKey(String providerId, long instId){
+    public static SubscriptionKey create1HBarSubscriptionKey(int providerId, long instId){
         return new SubscriptionKey(providerId, DataType.Bar, instId, H1_SIZE);
     }
 
-    public static SubscriptionKey create4HBarSubscriptionKey(String providerId, long instId){
+    public static SubscriptionKey create4HBarSubscriptionKey(int providerId, long instId){
         return new SubscriptionKey(providerId, DataType.Bar, instId, H4_SIZE);
     }
 
-    public static SubscriptionKey createDailySubscriptionKey(String providerId, long instId){
+    public static SubscriptionKey createDailySubscriptionKey(int providerId, long instId){
         return new SubscriptionKey(providerId, DataType.Bar, instId, DAILY_SIZE);
     }
 
-    public static SubscriptionKey createTradeSubscriptionKey(String providerId, long instId){
+    public static SubscriptionKey createTradeSubscriptionKey(int providerId, long instId){
         return new SubscriptionKey(providerId, DataType.Trade, instId);
     }
 
-    public static SubscriptionKey createQuoteSubscriptionKey(String providerId, long instId){
+    public static SubscriptionKey createQuoteSubscriptionKey(int providerId, long instId){
         return new SubscriptionKey(providerId, DataType.Quote, instId);
     }
 
-    public static SubscriptionKey createSubscriptionKey(String providerId, Bar bar){
+    public static SubscriptionKey createSubscriptionKey(int providerId, Bar bar){
         return new SubscriptionKey(providerId, DataType.Bar, bar.instId, bar.size);
     }
 
-    public static SubscriptionKey createSubscriptionKey(String providerId, Quote quote){
+    public static SubscriptionKey createSubscriptionKey(int providerId, Quote quote){
         return new SubscriptionKey(providerId, DataType.Bar, quote.instId);
     }
-    public static SubscriptionKey createSubscriptionKey(String providerId, Trade trade){
+    public static SubscriptionKey createSubscriptionKey(int providerId, Trade trade){
         return new SubscriptionKey(providerId, DataType.Bar, trade.instId);
     }
 }

@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.model.event.execution;
 
 import com.datastax.driver.mapping.annotations.Column;
+import com.datastax.driver.mapping.annotations.Enumerated;
 import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
 import com.google.common.base.Objects;
@@ -13,18 +14,22 @@ import com.unisoft.algotrader.model.trading.*;
 @Table(keyspace = "trading", name = "execution_reports")
 public class ExecutionReport <E extends ExecutionReport<? super E>> extends ExecutionEvent<E> {
 
-    @PartitionKey
+    @PartitionKey(0)
+    @Column(name="provider_id")
+    public int providerId;
+
+    @PartitionKey(1)
     @Column(name="exec_id")
     public long execId;
 
-    @Column(name="exec_provider_id")
-    public String execProviderId;
+    @Column(name="order_id")
+    public long orderId;
+
+    @Column(name="strategy_id")
+    public int strategyId;
 
     @Column(name="cl_order_id")
     public long clOrderId;
-
-    @Column(name="order_id")
-    public long orderId;
 
     @Column(name="orig_cl_order_id")
     public long origClOrderId;
@@ -36,12 +41,15 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> extends Exec
     public long transactionTime;
 
     @Column(name="ord_type")
+    @Enumerated
     public OrdType ordType;
 
     @Column(name="ord_status")
+    @Enumerated
     public OrdStatus ordStatus;
 
     @Column(name="exec_type")
+    @Enumerated
     public ExecType execType;
 
     @Column(name="limit_price")
@@ -65,10 +73,15 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> extends Exec
     @Column(name="avg_price")
     public double avgPrice;
 
+    @Column(name="tif")
+    @Enumerated
     public TimeInForce tif;
 
+    @Column(name="side")
+    @Enumerated
     public Side side;
 
+    @Column(name="text")
     public String text;
 
     @Override
@@ -133,156 +146,183 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> extends Exec
     }
 
 
-
-    public long getExecId() {
-        return execId;
-    }
-
-    public long getClOrderId() {
-        return clOrderId;
-    }
-
-    public long getOrigOrderId() {
-        return origClOrderId;
-    }
-
-    public long getOrderId() {
-        return orderId;
-    }
-
-    public long getInstId() {
-        return instId;
-    }
-
-    public long getTransactionTime() {
-        return transactionTime;
-    }
-
-    public OrdType getOrdType() {
-        return ordType;
-    }
-
-    public OrdStatus getOrdStatus() {
-        return ordStatus;
-    }
-
-    public double getLimitPrice() {
-        return limitPrice;
-    }
-
-    public double getStopPrice() {
-        return stopPrice;
-    }
-
-    public double getOrdQty() {
-        return ordQty;
-    }
-
-    public double getLastQty() {
-        return lastQty;
-    }
-
-    public double getLastPrice() {
-        return lastPrice;
-    }
-
-    public double getFilledQty() {
-        return filledQty;
-    }
-
-    public double getAvgPrice() {
+    public double avgPrice() {
         return avgPrice;
     }
 
-    public TimeInForce getTif() {
-        return tif;
+    public ExecutionReport avgPrice(double avgPrice) {
+        this.avgPrice = avgPrice;
+        return this;
     }
 
-    public Side getSide() {
+    public long clOrderId() {
+        return clOrderId;
+    }
+
+    public ExecutionReport clOrderId(long clOrderId) {
+        this.clOrderId = clOrderId;
+        return this;
+    }
+
+    public long execId() {
+        return execId;
+    }
+
+    public ExecutionReport execId(long execId) {
+        this.execId = execId;
+        return this;
+    }
+
+    public ExecType execType() {
+        return execType;
+    }
+
+    public ExecutionReport execType(ExecType execType) {
+        this.execType = execType;
+        return this;
+    }
+
+    public double filledQty() {
+        return filledQty;
+    }
+
+    public ExecutionReport filledQty(double filledQty) {
+        this.filledQty = filledQty;
+        return this;
+    }
+
+    public long instId() {
+        return instId;
+    }
+
+    public ExecutionReport instId(long instId) {
+        this.instId = instId;
+        return this;
+    }
+
+    public double lastPrice() {
+        return lastPrice;
+    }
+
+    public ExecutionReport lastPrice(double lastPrice) {
+        this.lastPrice = lastPrice;
+        return this;
+    }
+
+    public double lastQty() {
+        return lastQty;
+    }
+
+    public ExecutionReport lastQty(double lastQty) {
+        this.lastQty = lastQty;
+        return this;
+    }
+
+    public double limitPrice() {
+        return limitPrice;
+    }
+
+    public ExecutionReport limitPrice(double limitPrice) {
+        this.limitPrice = limitPrice;
+        return this;
+    }
+
+    public long orderId() {
+        return orderId;
+    }
+
+    public ExecutionReport orderId(long orderId) {
+        this.orderId = orderId;
+        return this;
+    }
+
+    public double ordQty() {
+        return ordQty;
+    }
+
+    public ExecutionReport ordQty(double ordQty) {
+        this.ordQty = ordQty;
+        return this;
+    }
+
+    public OrdStatus ordStatus() {
+        return ordStatus;
+    }
+
+    public ExecutionReport ordStatus(OrdStatus ordStatus) {
+        this.ordStatus = ordStatus;
+        return this;
+    }
+
+    public OrdType ordType() {
+        return ordType;
+    }
+
+    public ExecutionReport ordType(OrdType ordType) {
+        this.ordType = ordType;
+        return this;
+    }
+
+    public long origClOrderId() {
+        return origClOrderId;
+    }
+
+    public ExecutionReport origClOrderId(long origClOrderId) {
+        this.origClOrderId = origClOrderId;
+        return this;
+    }
+
+    public int providerId() {
+        return providerId;
+    }
+
+    public ExecutionReport providerId(int providerId) {
+        this.providerId = providerId;
+        return this;
+    }
+
+    public Side side() {
         return side;
     }
 
-    public String getText() {
+    public ExecutionReport side(Side side) {
+        this.side = side;
+        return this;
+    }
+
+    public double stopPrice() {
+        return stopPrice;
+    }
+
+    public ExecutionReport stopPrice(double stopPrice) {
+        this.stopPrice = stopPrice;
+        return this;
+    }
+
+    public String text() {
         return text;
     }
 
-    public void setExecId(long execId) {
-        this.execId = execId;
-    }
-
-    public void setClOrderId(long clOrderId) {
-        this.clOrderId = clOrderId;
-    }
-
-    public void setOrigClOrderId(long origClOrderId) {
-        this.origClOrderId = origClOrderId;
-    }
-
-    public void setOrderId(long orderId) {
-        this.orderId = orderId;
-    }
-
-    public void setInstId(long instId) {
-        this.instId = instId;
-    }
-
-    public void setTransactionTime(long transactionTime) {
-        this.transactionTime = transactionTime;
-    }
-
-    public void setOrdType(OrdType ordType) {
-        this.ordType = ordType;
-    }
-
-    public void setOrdStatus(OrdStatus ordStatus) {
-        this.ordStatus = ordStatus;
-    }
-
-    public void setLimitPrice(double limitPrice) {
-        this.limitPrice = limitPrice;
-    }
-
-    public void setStopPrice(double stopPrice) {
-        this.stopPrice = stopPrice;
-    }
-
-    public void setOrdQty(double ordQty) {
-        this.ordQty = ordQty;
-    }
-
-    public void setLastQty(double lastQty) {
-        this.lastQty = lastQty;
-    }
-
-    public void setLastPrice(double lastPrice) {
-        this.lastPrice = lastPrice;
-    }
-
-    public void setFilledQty(double filledQty) {
-        this.filledQty = filledQty;
-    }
-
-    public void setAvgPrice(double avgPrice) {
-        this.avgPrice = avgPrice;
-    }
-
-    public void setTif(TimeInForce tif) {
-        this.tif = tif;
-    }
-
-    public void setSide(Side side) {
-        this.side = side;
-    }
-
-    public void setText(String text) {
+    public ExecutionReport text(String text) {
         this.text = text;
+        return this;
     }
 
-    public void setExecProviderId(String execProviderId){
-        this.execProviderId = execProviderId;
+    public TimeInForce tif() {
+        return tif;
     }
 
-    public String getExecProviderId(){
-        return execProviderId;
+    public ExecutionReport tif(TimeInForce tif) {
+        this.tif = tif;
+        return this;
+    }
+
+    public long transactionTime() {
+        return transactionTime;
+    }
+
+    public ExecutionReport transactionTime(long transactionTime) {
+        this.transactionTime = transactionTime;
+        return this;
     }
 }

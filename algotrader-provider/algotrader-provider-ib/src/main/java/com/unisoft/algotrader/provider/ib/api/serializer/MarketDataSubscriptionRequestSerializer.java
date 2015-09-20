@@ -49,7 +49,7 @@ public class MarketDataSubscriptionRequestSerializer extends Serializer{
         if (Feature.MARKET_DATA_REQUEST_BY_CONTRACT_ID.isSupportedByVersion(getServerCurrentVersion())) {
             builder.append(0);
         }
-        builder.append(instrument.getSymbol(IBProvider.PROVIDER_ID));
+        builder.append(instrument.getSymbol(IBProvider.PROVIDER_ID.name()));
         builder.append(SecType.convert(instrument.getType()));
         if (instrument.getExpiryDate() != null) {
             builder.append(IBModelUtils.convertDateTime(instrument.getExpiryDate().getTime()));
@@ -65,7 +65,7 @@ public class MarketDataSubscriptionRequestSerializer extends Serializer{
         else {
             builder.append(instrument.getFactor());
         }
-        builder.append(instrument.getExchId(IBProvider.PROVIDER_ID));
+        builder.append(instrument.getExchId(IBProvider.PROVIDER_ID.name()));
         builder.appendEol(); // primary exch
         builder.append(instrument.getCcyId());
         builder.appendEol(); //localsymbol

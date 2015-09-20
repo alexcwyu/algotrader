@@ -11,6 +11,7 @@ import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
+import com.unisoft.algotrader.provider.ProviderId;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.AbstractDataStoreProvider;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
@@ -32,7 +33,7 @@ public class KDBHistoricalDataStore extends AbstractDataStoreProvider{
 
     private static final Logger LOG = LogManager.getLogger(KDBHistoricalDataStore.class);
 
-    public static final String PROVIDER_ID = "KDB";
+    public static final ProviderId PROVIDER_ID = ProviderId.KDB;
 
     private static final String BAR_INSERT_PREFIX = "`bar insert (`";
     private static final String QUOTE_INSERT_PREFIX = "`quote insert (`";
@@ -65,7 +66,7 @@ public class KDBHistoricalDataStore extends AbstractDataStoreProvider{
 
     /// PROVIDER
     @Override
-    public String providerId() {
+    public ProviderId providerId() {
         return PROVIDER_ID;
     }
 
@@ -382,9 +383,9 @@ public class KDBHistoricalDataStore extends AbstractDataStoreProvider{
             store.onTrade(trade);
         }
 
-        store.subscribeHistoricalData(HistoricalSubscriptionKey.createDailySubscriptionKey(PROVIDER_ID, instId, 20000101, 20000112));
-        store.subscribeHistoricalData(HistoricalSubscriptionKey.createQuoteSubscriptionKey(PROVIDER_ID, instId, 20000101, 20000112));
-        store.subscribeHistoricalData(HistoricalSubscriptionKey.createTradeSubscriptionKey(PROVIDER_ID, instId, 20000101, 20000112));
+        store.subscribeHistoricalData(HistoricalSubscriptionKey.createDailySubscriptionKey(PROVIDER_ID.id, instId, 20000101, 20000112));
+        store.subscribeHistoricalData(HistoricalSubscriptionKey.createQuoteSubscriptionKey(PROVIDER_ID.id, instId, 20000101, 20000112));
+        store.subscribeHistoricalData(HistoricalSubscriptionKey.createTradeSubscriptionKey(PROVIDER_ID.id, instId, 20000101, 20000112));
 
     }
 }

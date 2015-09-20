@@ -23,6 +23,7 @@ import com.unisoft.algotrader.trading.InstrumentDataManager;
 import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.trading.Strategy;
 import com.unisoft.algotrader.trading.StrategyManager;
+import com.unisoft.algotrader.utils.id.AtomicIntIdSupplier;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -40,7 +41,7 @@ import static org.mockito.Mockito.spy;
  */
 public class SimulationExecutorIntegrationTest {
 
-    public static String mockStrategyId = "MockStrategy";
+    public static int mockStrategyId = 1;
     public static long ordId = 0;
     public static Instrument testInstrument = SampleEventFactory.TEST_USD_INSTRUMENT;
 
@@ -90,9 +91,9 @@ public class SimulationExecutorIntegrationTest {
     public void setup(){
 
         providerManager = new ProviderManager();
-        strategyManager = new StrategyManager();
+        strategyManager = new StrategyManager(new AtomicIntIdSupplier());
         eventBusManager = new BackTestEventBusManager();
-        orderManager = spy(new OrderManager(providerManager, strategyManager, eventBusManager));
+        orderManager = spy(new OrderManager(eventBusManager));
 
 
         rb =RingBuffer.createSingleProducer(MarketDataContainer.FACTORY, 1024, new NoWaitStrategy());
@@ -334,7 +335,7 @@ public class SimulationExecutorIntegrationTest {
         order.clOrderId = ordId++;
         order.instId = testInstrument.getInstId();
         order.strategyId = mockStrategyId;
-        order.execProviderId = simulationExecutor.providerId();
+        order.providerId = simulationExecutor.providerId().id;
         order.side= side;
         order.ordType = type;
         order.ordQty=qty;

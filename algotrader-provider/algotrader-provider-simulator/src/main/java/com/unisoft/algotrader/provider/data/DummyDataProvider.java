@@ -3,6 +3,7 @@ package com.unisoft.algotrader.provider.data;
 import com.google.common.collect.Lists;
 import com.unisoft.algotrader.model.event.bus.MarketDataEventBus;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
+import com.unisoft.algotrader.provider.ProviderId;
 import com.unisoft.algotrader.provider.ProviderManager;
 
 import java.text.SimpleDateFormat;
@@ -19,7 +20,7 @@ public class DummyDataProvider extends AbstractHistoricalDataProvider {
 
     public static SimpleDateFormat FORMAT2 = new SimpleDateFormat("yyyyMMdd");
 
-    public static final String PROVIDER_ID = "Dummy";
+    public static final ProviderId PROVIDER_ID = ProviderId.Dummy;
     private final MarketDataEventBus marketDataEventBus;
 
     public DummyDataProvider(ProviderManager providerManager, MarketDataEventBus marketDataEventBus){
@@ -80,7 +81,7 @@ public class DummyDataProvider extends AbstractHistoricalDataProvider {
     }
 
     @Override
-    public String providerId() {
+    public ProviderId providerId() {
         return PROVIDER_ID;
     }
 

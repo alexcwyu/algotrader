@@ -78,7 +78,7 @@ public class BondInstrumentSpecificationEventDeserializer extends Deserializer<B
             }
         }
 
-        Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, exchange);
+        Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID.name(), symbol, exchange);
         contractSpecification.setInstrument(instrument);
 
         return contractSpecification;

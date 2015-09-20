@@ -11,6 +11,7 @@ import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.persistence.RefDataStore;
+import com.unisoft.algotrader.provider.ProviderId;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.AbstractDataStoreProvider;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
@@ -41,7 +42,7 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
     private final RefDataStore refDataStore;
     private final MarketDataEventBus marketDataEventBus;
 
-    public static final String PROVIDER_ID = "CSV";
+    public static final ProviderId PROVIDER_ID = ProviderId.CSV;
     private CsvParserSettings settings = new CsvParserSettings();
 
     private final LoadingCache<SubscriptionKey, CsvWriter> caches = CacheBuilder.newBuilder()
@@ -83,7 +84,7 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
 
     /// PROVIDER
     @Override
-    public String providerId() {
+    public ProviderId providerId() {
         return PROVIDER_ID;
     }
 
@@ -104,21 +105,21 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
     /// DATASTORE
     @Override
     public void onBar(Bar bar) {
-        SubscriptionKey key = createSubscriptionKey(PROVIDER_ID, bar);
+        SubscriptionKey key = createSubscriptionKey(PROVIDER_ID.id, bar);
         CsvWriter writer = getOrCreateCsvWriter(key);
         writer.writeRow(bar.dateTime, bar.open, bar.high, bar.low, bar.close, bar.volume, bar.openInt);
     }
 
     @Override
     public void onQuote(Quote quote) {
-        SubscriptionKey key = createSubscriptionKey(PROVIDER_ID, quote);
+        SubscriptionKey key = createSubscriptionKey(PROVIDER_ID.id, quote);
         CsvWriter writer = getOrCreateCsvWriter(key);
         writer.writeRow(quote.dateTime, quote.bid, quote.ask, quote.bidSize, quote.askSize);
     }
 
     @Override
     public void onTrade(Trade trade) {
-        SubscriptionKey key = createSubscriptionKey(PROVIDER_ID, trade);
+        SubscriptionKey key = createSubscriptionKey(PROVIDER_ID.id, trade);
         CsvWriter writer = getOrCreateCsvWriter(key);
         writer.writeRow(trade.dateTime, trade.price, trade.size);
     }

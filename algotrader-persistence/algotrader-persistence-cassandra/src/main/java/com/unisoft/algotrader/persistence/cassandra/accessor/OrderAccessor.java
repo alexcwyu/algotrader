@@ -26,8 +26,8 @@ public interface OrderAccessor {
     Result<Order> getByInstId(@Param("inst_id") long inst_id);
 
     @Query("SELECT * FROM trading.orders WHERE portfolio_id = :portfolio_id")
-    Result<Order> getByPortfolioId(@Param("portfolio_id") String portfolio_id);
+    Result<Order> getByPortfolioId(@Param("portfolio_id") int portfolio_id);
 
     @Query("SELECT * FROM trading.orders WHERE strategy_id = :strategy_id")
-    Result<Order> getByStrategyId(@Param("strategy_id") String strategy_id);
+    Result<Order> getByStrategyId(@Param("strategy_id") int strategy_id);
 }

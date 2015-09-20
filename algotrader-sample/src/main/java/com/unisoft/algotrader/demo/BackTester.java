@@ -103,11 +103,11 @@ public class BackTester {
     public void run(){
         executor.submit(barFactory);
         executor.submit(simulator);
-        dataProvider.subscribeHistoricalData(HistoricalSubscriptionKey.createDailySubscriptionKey(dataProvider.providerId(), instrument.getInstId(), fromDate, toDate));
+        dataProvider.subscribeHistoricalData(HistoricalSubscriptionKey.createDailySubscriptionKey(dataProvider.providerId().id, instrument.getInstId(), fromDate, toDate));
     }
 
     public Performance getPerformance(){
-        return portfolio.getPerformance();
+        return portfolio.performance();
     }
 
 }

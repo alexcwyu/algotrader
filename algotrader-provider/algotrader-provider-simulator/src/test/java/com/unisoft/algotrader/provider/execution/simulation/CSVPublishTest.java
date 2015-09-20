@@ -36,7 +36,7 @@ public class CSVPublishTest {
         private int exp;
         private int count = 0;
 
-        public CountDownStrategy(String strategyId, TradingDataStore tradingDataStore, String portfolioId, CountDownLatch latch, int exp, RingBuffer... providers){
+        public CountDownStrategy(int strategyId, TradingDataStore tradingDataStore, int portfolioId, CountDownLatch latch, int exp, RingBuffer... providers){
             super(strategyId, tradingDataStore, portfolioId, providers);
             this.latch = latch;
             this.exp = exp;
@@ -61,18 +61,18 @@ public class CSVPublishTest {
         ProviderManager providerManager = new ProviderManager();
         DummyDataProvider provider = new DummyDataProvider(providerManager, new RingBufferMarketDataEventBus(marketDataRB));
 
-        Portfolio portfolio = new Portfolio("PID1", TradingDataStore.DEFAULT_ACCOUNT.getAccountId());
+        Portfolio portfolio = new Portfolio(1, TradingDataStore.DEFAULT_ACCOUNT.accountId());
         InMemoryTradingDataStore tradingDataStore = new InMemoryTradingDataStore();
 
         tradingDataStore.savePortfolio(portfolio);
 
 
         CountDownLatch latch = new CountDownLatch(5);
-        CountDownStrategy strategy1 = new CountDownStrategy("strategy1", tradingDataStore, portfolio.getPortfolioId(), latch, 10, marketDataRB);
-        CountDownStrategy strategy2 = new CountDownStrategy("strategy2", tradingDataStore, portfolio.getPortfolioId(), latch, 10, marketDataRB);
-        CountDownStrategy strategy3 = new CountDownStrategy("strategy3", tradingDataStore, portfolio.getPortfolioId(), latch, 10, marketDataRB);
-        CountDownStrategy strategy4 = new CountDownStrategy("strategy4", tradingDataStore, portfolio.getPortfolioId(), latch, 10, marketDataRB);
-        CountDownStrategy strategy5 = new CountDownStrategy("strategy5", tradingDataStore, portfolio.getPortfolioId(), latch, 10, marketDataRB);
+        CountDownStrategy strategy1 = new CountDownStrategy(1, tradingDataStore, portfolio.portfolioId(), latch, 10, marketDataRB);
+        CountDownStrategy strategy2 = new CountDownStrategy(2, tradingDataStore, portfolio.portfolioId(), latch, 10, marketDataRB);
+        CountDownStrategy strategy3 = new CountDownStrategy(3, tradingDataStore, portfolio.portfolioId(), latch, 10, marketDataRB);
+        CountDownStrategy strategy4 = new CountDownStrategy(4, tradingDataStore, portfolio.portfolioId(), latch, 10, marketDataRB);
+        CountDownStrategy strategy5 = new CountDownStrategy(5, tradingDataStore, portfolio.portfolioId(), latch, 10, marketDataRB);
 
         ExecutorService executor = Executors.newFixedThreadPool(8, DaemonThreadFactory.INSTANCE);
         executor.submit(strategy1);
@@ -86,7 +86,7 @@ public class CSVPublishTest {
         Thread.sleep(5000);
 
         LOG.info("start");
-        provider.subscribeHistoricalData(HistoricalSubscriptionKey.createDailySubscriptionKey(provider.providerId(), testInstrument.getInstId(), 20110101, 20141231));
+        provider.subscribeHistoricalData(HistoricalSubscriptionKey.createDailySubscriptionKey(provider.providerId().id, testInstrument.getInstId(), 20110101, 20141231));
 
         latch.await();
 

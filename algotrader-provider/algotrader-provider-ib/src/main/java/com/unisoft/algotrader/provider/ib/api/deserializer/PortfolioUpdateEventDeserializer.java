@@ -67,7 +67,7 @@ public class PortfolioUpdateEventDeserializer extends Deserializer {
         final String localSymbol = (version >= 2)?readString(inputStream) : null;
         final String tradingClass = (version >= 8)? readString(inputStream): null;
 
-        Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID, symbol, primaryExchange);
+        Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange(IBProvider.PROVIDER_ID.name(), symbol, primaryExchange);
         if (instrument == null){
             throw new RuntimeException("Cannot find instrumnet symbol=" + symbol +", primaryExchange="+primaryExchange);
         }

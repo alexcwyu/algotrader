@@ -9,6 +9,7 @@ import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.*;
 import com.unisoft.algotrader.persistence.InMemoryRefDataStore;
 import com.unisoft.algotrader.persistence.InstrumentFactory;
+import com.unisoft.algotrader.provider.ProviderId;
 
 /**
  * Created by alex on 6/6/15.
@@ -17,30 +18,30 @@ public class SampleEventFactory {
 
     public static long ordId = 0;
     public static long execId = 0;
-    public static String MOCK_PORTFOLIO_ID = "MockPortfolio";
-    public static String MOCK_STRATEGY_ID = "MockStrategy";
+    public static int MOCK_PORTFOLIO_ID = 1;
+    public static int MOCK_STRATEGY_ID = 1;
     public static InMemoryRefDataStore REF_DATA_STORE = new InMemoryRefDataStore();
     public static InstrumentFactory INSTRUMEN_FACTORY = new InstrumentFactory(REF_DATA_STORE);
     public static Instrument TEST_HKD_INSTRUMENT = INSTRUMEN_FACTORY.createStock("testInst1", "testInst1", "testExch1","HKD");
     public static Instrument TEST_USD_INSTRUMENT = INSTRUMEN_FACTORY.createStock("testInst2", "testInst2", "testExch2","USD");
 
     public static Order createOrder(long instId, Side side, OrdType type, double qty, double price){
-        return createOrder(instId, side, type, qty, price, 0, "Simulated");
+        return createOrder(instId, side, type, qty, price, 0, ProviderId.Simulation.id);
     }
 
     public static Order createOrder(long instId, Side side, OrdType type, double qty, double price, double stopPrice){
-        return createOrder(instId, side, type, qty, price, stopPrice, "Simulated");
+        return createOrder(instId, side, type, qty, price, stopPrice, ProviderId.Simulation.id);
     }
 
-    public static Order createOrder(long instId, Side side, OrdType type, double qty, double price, double stopPrice, String providerId){
+    public static Order createOrder(long instId, Side side, OrdType type, double qty, double price, double stopPrice, int providerId){
         return createOrder(instId, side, type, qty, price, stopPrice, TimeInForce.Day, providerId, MOCK_PORTFOLIO_ID, MOCK_STRATEGY_ID);
     }
 
-    public static Order createOrder(long instId, Side side, OrdType type, double qty, double price, double stopPrice, TimeInForce tif, String providerId, String portfolioId, String strategyId){
+    public static Order createOrder(long instId, Side side, OrdType type, double qty, double price, double stopPrice, TimeInForce tif, int providerId, int portfolioId, int strategyId){
         Order order = new Order();
         order.clOrderId = ++ordId;
         order.instId = instId;
-        order.execProviderId = providerId;
+        order.providerId = providerId;
         order.portfolioId = portfolioId;
         order.strategyId = strategyId;
         order.side= side;
@@ -51,6 +52,33 @@ public class SampleEventFactory {
         order.tif = tif;
         order.ordStatus = OrdStatus.New;
         order.dateTime = System.currentTimeMillis();
+        return order;
+    }
+
+    public static Order newLimitOrder(long instId, int strategyId, int providerId, Side side, double price, double qty, TimeInForce tif){
+        Order order = new Order();
+        order.clOrderId = ++ordId;
+        order.instId = instId;
+        order.strategyId = strategyId;
+        order.providerId = providerId;
+        order.side= side;
+        order.ordType = OrdType.Limit;
+        order.ordQty=qty;
+        order.limitPrice = price;
+        order.tif = tif;
+        return order;
+    }
+
+    public static Order newMarketOrder(long instId, int strategyId, int providerId, Side side, double qty, TimeInForce tif){
+        Order order = new Order();
+        order.clOrderId = ++ordId;
+        order.instId = instId;
+        order.strategyId = strategyId;
+        order.providerId = providerId;
+        order.side= side;
+        order.ordType = OrdType.Market;
+        order.ordQty=qty;
+        order.tif = tif;
         return order;
     }
 
@@ -104,8 +132,8 @@ public class SampleEventFactory {
         return er;
     }
 
-    public static Portfolio createPortfolio(String name, String accountName){
-        return new Portfolio(name, accountName);
+    public static Portfolio createPortfolio(int portfolioId, String accountName){
+        return new Portfolio(portfolioId, accountName);
     }
 
     public static Quote createQuote(long instId, double bid,

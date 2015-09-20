@@ -228,7 +228,7 @@ public class OrderCancelReplaceRequest<E extends OrderCancelReplaceRequest<? sup
                 ", tif=" + tif +
                 ", side=" + side +
                 ", text='" + text + '\'' +
-                ", execProviderId='" + execProviderId + '\'' +
+                ", providerId='" + execProviderId + '\'' +
                 '}';
     }
 }
