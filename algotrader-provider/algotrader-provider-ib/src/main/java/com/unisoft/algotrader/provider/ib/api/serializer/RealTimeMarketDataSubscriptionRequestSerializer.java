@@ -39,7 +39,7 @@ public class RealTimeMarketDataSubscriptionRequestSerializer extends Serializer{
         builder.append(requestId);
         appendInstrument(builder, instrument);
         builder.append(size);
-        builder.append(RealTimeBarDataType.from(subscriptionKey.type)); //what to show
+        builder.append(RealTimeBarDataType.from(subscriptionKey.subscriptionType.type)); //what to show
         builder.append(useRegularTradingHours); // RTH
 
         //realTimeBarsOptions

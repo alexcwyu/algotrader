@@ -42,7 +42,7 @@ public class HistoricalMarketDataSubscriptionRequestSerializer extends Serialize
         appendInstrument(builder, instrument);
         builder.append(false); // include expiry
         builder.append(DateHelper.formatYYYYMMDDHHMMSS(subscriptionKey.toDate));
-        builder.append(BarSize.getFormattedBarSize(subscriptionKey.barSize));
+        builder.append(BarSize.getFormattedBarSize(subscriptionKey.subscriptionType.barSize));
         Period period = Period.between(
                 (new Date(subscriptionKey.fromDate)).toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
                 (new Date(subscriptionKey.toDate)).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
@@ -56,7 +56,7 @@ public class HistoricalMarketDataSubscriptionRequestSerializer extends Serialize
             builder.append(period.getDays() + " D");
         }
         builder.append(false); //RTH
-        builder.append(HistoricalDataType.from(subscriptionKey.type)); //What to show
+        builder.append(HistoricalDataType.from(subscriptionKey.subscriptionType.type)); //What to show
         builder.append(DateFormat.YYYYMMDD__HH_MM_SS.getValue());
         appendCombo(builder, instrument);
         if (Feature.LINKING.isSupportedByVersion(getServerCurrentVersion())) {

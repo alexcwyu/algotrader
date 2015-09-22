@@ -142,9 +142,9 @@ public class IBProvider extends MultiEventProcessor implements IBEventHandler, R
 
             if (subscriptionKey instanceof MarketDepthSubscriptionKey) {
                 ibSocket.subscribeMarketDepth(requestId, (MarketDepthSubscriptionKey) subscriptionKey);
-            } else if (subscriptionKey.type == DataType.Quote || subscriptionKey.type == DataType.Trade) {
+            } else if (subscriptionKey.subscriptionType.type == DataType.Quote || subscriptionKey.subscriptionType.type == DataType.Trade) {
                 ibSocket.subscribeMarketData(requestId, subscriptionKey, false);
-            } else if (subscriptionKey.type == DataType.Bar) {
+            } else if (subscriptionKey.subscriptionType.type == DataType.Bar) {
                 ibSocket.subscribeRealTimeData(requestId, subscriptionKey);
             } else {
                 LOG.warn("unsupported type {}", subscriptionKey);
@@ -351,7 +351,7 @@ public class IBProvider extends MultiEventProcessor implements IBEventHandler, R
             record.close = close;
             //TODO
             record.volume = (int)volume;
-            eventBusManager.getMarketDataEventBus().publishBar(record.instId, key.barSize, System.currentTimeMillis(), open, high, low, close, volume, 0);
+            eventBusManager.getMarketDataEventBus().publishBar(record.instId, key.subscriptionType.barSize, System.currentTimeMillis(), open, high, low, close, volume, 0);
         }
     }
 
@@ -401,7 +401,7 @@ public class IBProvider extends MultiEventProcessor implements IBEventHandler, R
             record.close = bar.close;
             //TODO
             record.volume = (int)bar.volume;
-            eventBusManager.getMarketDataEventBus().publishBar(record.instId, key.barSize, System.currentTimeMillis(), bar.open, bar.high, bar.low, bar.close, bar.volume, 0);
+            eventBusManager.getMarketDataEventBus().publishBar(record.instId, key.subscriptionType.barSize, System.currentTimeMillis(), bar.open, bar.high, bar.low, bar.close, bar.volume, 0);
         }
     }
 
@@ -417,7 +417,7 @@ public class IBProvider extends MultiEventProcessor implements IBEventHandler, R
             record.close = close;
             record.volume = volume;
             //TODO dateTime to time
-            eventBusManager.getMarketDataEventBus().publishBar(record.instId, key.barSize, System.currentTimeMillis(), open, high, low, close, volume, 0);
+            eventBusManager.getMarketDataEventBus().publishBar(record.instId, key.subscriptionType.barSize, System.currentTimeMillis(), open, high, low, close, volume, 0);
         }
     }
 

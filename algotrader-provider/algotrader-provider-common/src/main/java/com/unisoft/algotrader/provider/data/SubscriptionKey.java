@@ -1,5 +1,6 @@
 package com.unisoft.algotrader.provider.data;
 
+import com.google.common.base.Objects;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.DataType;
 import com.unisoft.algotrader.model.event.data.Quote;
@@ -9,6 +10,7 @@ import com.unisoft.algotrader.model.event.data.Trade;
  * Created by alex on 6/16/15.
  */
 public class SubscriptionKey {
+
     public final static int M1_SIZE = 60;
     public final static int M15_SIZE = 60*15;
     public final static int M30_SIZE = 60*30;
@@ -20,11 +22,9 @@ public class SubscriptionKey {
 
     public final int providerId;
     
-    public final DataType type;
+    public final SubscriptionType subscriptionType;
 
     public final long instId;
-
-    public final int barSize;
 
 
     protected SubscriptionKey(int providerId, DataType type, long instId){
@@ -33,9 +33,14 @@ public class SubscriptionKey {
 
     protected SubscriptionKey(int providerId, DataType type, long instId, int barSize){
         this.providerId = providerId;
-        this.type = type;
+        this.subscriptionType = new SubscriptionType(type, barSize);
         this.instId = instId;
-        this.barSize = barSize;
+    }
+
+    protected SubscriptionKey(int providerId, SubscriptionType subscriptionType, long instId){
+        this.providerId = providerId;
+        this.subscriptionType = subscriptionType;
+        this.instId = instId;
     }
 
     @Override
@@ -43,24 +48,22 @@ public class SubscriptionKey {
         if (this == o) return true;
         if (!(o instanceof SubscriptionKey)) return false;
         SubscriptionKey that = (SubscriptionKey) o;
-        return com.google.common.base.Objects.equal(instId, that.instId) &&
-                com.google.common.base.Objects.equal(barSize, that.barSize) &&
-                com.google.common.base.Objects.equal(providerId, that.providerId) &&
-                com.google.common.base.Objects.equal(type, that.type);
+        return Objects.equal(instId, that.instId) &&
+                Objects.equal(subscriptionType, that.subscriptionType) &&
+                Objects.equal(providerId, that.providerId);
     }
 
     @Override
     public int hashCode() {
-        return com.google.common.base.Objects.hashCode( providerId, type, instId, barSize);
+        return com.google.common.base.Objects.hashCode( providerId, subscriptionType, instId);
     }
 
     @Override
     public String toString() {
         return "SubscriptionKey{" +
                 "providerId='" + providerId + '\'' +
-                ", type=" + type +
+                ", subscriptionType=" + subscriptionType +
                 ", instId=" + instId +
-                ", barSize=" + barSize +
                 "} " + super.toString();
     }
 
@@ -109,5 +112,9 @@ public class SubscriptionKey {
     }
     public static SubscriptionKey createSubscriptionKey(int providerId, Trade trade){
         return new SubscriptionKey(providerId, DataType.Bar, trade.instId);
+    }
+
+    public static SubscriptionKey createSubscriptionKey(int providerId, SubscriptionType subscriptionType, long instId){
+        return new SubscriptionKey(providerId, subscriptionType, instId);
     }
 }

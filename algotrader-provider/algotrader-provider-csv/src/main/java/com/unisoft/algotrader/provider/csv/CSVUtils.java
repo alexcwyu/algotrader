@@ -28,9 +28,9 @@ public interface CSVUtils {
 
 
     static String getFileName(SubscriptionKey key, String symbol){
-        switch (key.type){
+        switch (key.subscriptionType.type){
             case Bar:
-                return String.format(BAR_FILENAME_FORMAT, symbol, key.barSize);
+                return String.format(BAR_FILENAME_FORMAT, symbol, key.subscriptionType.barSize);
             case Trade:
                 return String.format(TRADE_FILENAME_FORMAT, symbol);
             case Quote:

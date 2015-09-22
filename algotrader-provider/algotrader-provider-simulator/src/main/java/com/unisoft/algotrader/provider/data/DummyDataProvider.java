@@ -42,7 +42,7 @@ public class DummyDataProvider extends AbstractHistoricalDataProvider {
         int count = 0;
         while (dateTime < toDateTime) {
 
-            marketDataEventBus.publishBar(subscriptionKey.instId, subscriptionKey.barSize, dateTime,
+            marketDataEventBus.publishBar(subscriptionKey.instId, subscriptionKey.subscriptionType.barSize, dateTime,
                     900 + count,
                     1000 + count,
                     800 + count,
@@ -66,7 +66,7 @@ public class DummyDataProvider extends AbstractHistoricalDataProvider {
         while (dateTime < toDateTime) {
             MarketDataContainer container = new MarketDataContainer();
 
-            container.setBar(subscriptionKey.instId, subscriptionKey.barSize, dateTime,
+            container.setBar(subscriptionKey.instId, subscriptionKey.subscriptionType.barSize, dateTime,
                     900 + count,
                     1000 + count,
                     800 + count,

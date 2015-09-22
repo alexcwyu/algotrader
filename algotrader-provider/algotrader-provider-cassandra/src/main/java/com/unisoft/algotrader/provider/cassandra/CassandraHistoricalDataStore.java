@@ -110,7 +110,7 @@ public class CassandraHistoricalDataStore extends AbstractDataStoreProvider {
     /// PROVIDER
     @Override
     public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
-        switch (subscriptionKey.type) {
+        switch (subscriptionKey.subscriptionType.type) {
             case Bar:
                 publishBar(subscriptionKey);
                 break;
@@ -129,7 +129,7 @@ public class CassandraHistoricalDataStore extends AbstractDataStoreProvider {
     @Override
     public List<MarketDataContainer> loadHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
         List<MarketDataContainer> result = Lists.newArrayList();
-        switch (subscriptionKey.type) {
+        switch (subscriptionKey.subscriptionType.type) {
             case Bar:
                 result = loadBar(subscriptionKey);
                 break;
@@ -204,7 +204,7 @@ public class CassandraHistoricalDataStore extends AbstractDataStoreProvider {
     private ResultSet queryBar(HistoricalSubscriptionKey subscriptionKey){
         Statement select = QueryBuilder.select().all().from(config.keyspace, TABLE_BAR)
                 .where(eq(COL_INSTID, subscriptionKey.instId))
-                .and(eq(COL_BARSIZE, subscriptionKey.barSize))
+                .and(eq(COL_BARSIZE, subscriptionKey.subscriptionType.barSize))
                 .and(gte(COL_DATETIME, subscriptionKey.fromDate)).and(lt(COL_DATETIME, subscriptionKey.toDate));
         return session.execute(select);
     }

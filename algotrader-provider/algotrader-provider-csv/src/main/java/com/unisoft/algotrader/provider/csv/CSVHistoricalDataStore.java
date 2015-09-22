@@ -151,7 +151,7 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
     }
 
     protected String [] getHeader(SubscriptionKey key){
-        switch (key.type){
+        switch (key.subscriptionType.type){
             case Bar:
                 return BAR_HEADER;
             case Trade:
@@ -184,7 +184,7 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
 
         Reader reader = getReader(subscriptionKey);
 
-        switch (subscriptionKey.type) {
+        switch (subscriptionKey.subscriptionType.type) {
             case Bar:
                 publishBar(subscriptionKey, parser, reader, fromDateTime, toDateTime);
                 break;
@@ -209,7 +209,7 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
         Reader reader = getReader(subscriptionKey);
 
         List<MarketDataContainer> result = Lists.newArrayList();
-        switch (subscriptionKey.type) {
+        switch (subscriptionKey.subscriptionType.type) {
             case Bar:
                 result = loadBar(subscriptionKey, parser, reader, fromDateTime, toDateTime);
                 break;
@@ -239,7 +239,7 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
                     break;
 
                 MarketDataContainer container = new MarketDataContainer();
-                container.setBar(subscriptionKey.instId, subscriptionKey.barSize, time,
+                container.setBar(subscriptionKey.instId, subscriptionKey.subscriptionType.barSize, time,
                         Double.parseDouble(row[1]), Double.parseDouble(row[2]), Double.parseDouble(row[3]), Double.parseDouble(row[4]), Long.parseLong(row[5]), 0);
 
                 list.add(container);
@@ -314,7 +314,7 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
                 long time = Long.parseLong(row[0]);
                 if (lt(time, fromDateTime)) continue;
                 if (gt(time, toDateTime)) break;
-                marketDataEventBus.publishBar(subscriptionKey.instId, subscriptionKey.barSize, time,
+                marketDataEventBus.publishBar(subscriptionKey.instId, subscriptionKey.subscriptionType.barSize, time,
                         Double.parseDouble(row[1]), Double.parseDouble(row[2]), Double.parseDouble(row[3]), Double.parseDouble(row[4]), Long.parseLong(row[5]), 0);
             }
             parser.stopParsing();

@@ -139,7 +139,7 @@ public class KDBHistoricalDataStore extends AbstractDataStoreProvider{
     /// PROVIDER
     @Override
     public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
-        switch (subscriptionKey.type) {
+        switch (subscriptionKey.subscriptionType.type) {
             case Bar:
                 publishBar(subscriptionKey);
                 break;
@@ -159,7 +159,7 @@ public class KDBHistoricalDataStore extends AbstractDataStoreProvider{
     @Override
     public List<MarketDataContainer> loadHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
         List<MarketDataContainer> result = Lists.newArrayList();
-        switch (subscriptionKey.type) {
+        switch (subscriptionKey.subscriptionType.type) {
             case Bar:
                 result = loadBar(subscriptionKey);
                 break;
@@ -349,7 +349,7 @@ public class KDBHistoricalDataStore extends AbstractDataStoreProvider{
 
     public static String buildBarSelectQuery(SubscriptionKey subscriptionKey, long fromDate, long toDate){
         return new StringBuilder(BAR_SELECT_PREFIX).append(subscriptionKey.instId)
-                .append(SIZE_EQ).append(subscriptionKey.barSize)
+                .append(SIZE_EQ).append(subscriptionKey.subscriptionType.barSize)
                 .append(DT_GE).append(fromDate)
                 .append(DT_LT).append(toDate).toString();
     }
