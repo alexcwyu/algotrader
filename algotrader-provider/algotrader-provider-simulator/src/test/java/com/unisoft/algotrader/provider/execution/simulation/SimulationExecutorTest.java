@@ -49,8 +49,8 @@ public class SimulationExecutorTest {
         strategyManager = new StrategyManager(new AtomicIntIdSupplier());
         eventBusManager = new BackTestEventBusManager();
         orderManager = spy(new OrderManager(eventBusManager));
-        instrumentDataManager = new InstrumentDataManager(eventBusManager.getMarketDataRB());
-        simulationExecutor = new SimulationExecutor(providerManager, orderManager, instrumentDataManager, new SimulationClock(), rb);
+        instrumentDataManager = new InstrumentDataManager();
+        simulationExecutor = new SimulationExecutor(providerManager, orderManager, instrumentDataManager, new SimulationClock());
         simulationExecutor.config.fillOnBar = true;
         simulationExecutor.config.fillOnQuote = true;
         simulationExecutor.config.fillOnTrade = true;

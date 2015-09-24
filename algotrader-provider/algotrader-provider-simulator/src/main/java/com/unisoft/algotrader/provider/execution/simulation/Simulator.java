@@ -1,25 +1,24 @@
 package com.unisoft.algotrader.provider.execution.simulation;
 
-import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.model.event.Event;
-import com.unisoft.algotrader.model.event.data.*;
+import com.unisoft.algotrader.model.event.data.Bar;
+import com.unisoft.algotrader.model.event.data.MarketDataHandler;
+import com.unisoft.algotrader.model.event.data.Quote;
+import com.unisoft.algotrader.model.event.data.Trade;
 import com.unisoft.algotrader.trading.Strategy;
-import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
-import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 
 ;
 
 /**
  * Created by alex on 6/2/15.
  */
-public class Simulator extends MultiEventProcessor implements MarketDataHandler {
+public class Simulator implements MarketDataHandler {
 
     private final Strategy[] strategies;
 
     private final SimulationExecutor simulationExecutor;
 
-    public Simulator(SimulationExecutor simulationExecutor, RingBuffer<MarketDataContainer> marketDataRB, Strategy ... strategies){
-        super(new NoWaitStrategy(), marketDataRB);
+    public Simulator(SimulationExecutor simulationExecutor, Strategy ... strategies){
         this.simulationExecutor = simulationExecutor;
         this.strategies = strategies;
     }

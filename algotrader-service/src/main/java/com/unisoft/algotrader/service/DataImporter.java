@@ -8,7 +8,6 @@ import com.unisoft.algotrader.config.DefaultEventBusConfigModule;
 import com.unisoft.algotrader.config.SampleAppConfigModule;
 import com.unisoft.algotrader.config.ServiceConfigModule;
 import com.unisoft.algotrader.event.bus.RingBufferMarketDataEventBus;
-import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.model.event.bus.EventBusManager;
 import com.unisoft.algotrader.model.event.data.*;
 import com.unisoft.algotrader.model.refdata.Instrument;
@@ -22,7 +21,6 @@ import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
 import com.unisoft.algotrader.provider.yahoo.YahooHistoricalDataProvider;
 import com.unisoft.algotrader.utils.DateHelper;
 import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
-import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -34,7 +32,7 @@ import static com.unisoft.algotrader.model.refdata.Exchange.HKEX;
 /**
  * Created by alex on 7/19/15.
  */
-public class DataImporter extends MultiEventProcessor implements MarketDataHandler {
+public class DataImporter implements MarketDataHandler {
     private final ProviderManager providerManager;
     private final DataService dataService;
     private final RingBufferMarketDataEventBus rb;
@@ -42,17 +40,11 @@ public class DataImporter extends MultiEventProcessor implements MarketDataHandl
     private DataStoreProvider provider;
 
     public DataImporter(ProviderManager providerManager, DataService dataService, RingBuffer<MarketDataContainer> marketDataRB){
-        super(new NoWaitStrategy(),  marketDataRB);
         this.providerManager = providerManager;
         this.dataService = dataService;
         this.rb = new RingBufferMarketDataEventBus(marketDataRB);
 
     }
-    @Override
-    public void onEvent(Event event) {
-        event.on(this);
-    }
-
     @Override
     public void onBar(Bar bar) {
         if(provider != null){
@@ -91,7 +83,9 @@ public class DataImporter extends MultiEventProcessor implements MarketDataHandl
         EventBusManager eventBusManager = injector.getInstance(EventBusManager.class);
         DataImporter importer = new DataImporter(providerManager, dataService, eventBusManager.getMarketDataRB());
 
-        executor.submit(importer);
+        MultiEventProcessor processor = new MultiEventProcessor(importer);
+
+        executor.submit(processor);
 
         Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange("0005.HK", HKEX.getExchId());
         Date fromDate = DateHelper.fromYYYYMMDD(20000101);

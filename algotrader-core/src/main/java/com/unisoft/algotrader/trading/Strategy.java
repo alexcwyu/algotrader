@@ -1,6 +1,5 @@
 package com.unisoft.algotrader.trading;
 
-import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.model.event.bus.EventBusManager;
 import com.unisoft.algotrader.model.event.data.Bar;
@@ -14,8 +13,6 @@ import com.unisoft.algotrader.model.trading.Side;
 import com.unisoft.algotrader.model.trading.TimeInForce;
 import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.provider.ProviderId;
-import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
-import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -23,7 +20,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * Created by alex on 5/17/15.
  */
 
-public abstract class Strategy extends MultiEventProcessor implements MarketDataHandler, ExecutionEventHandler {
+public abstract class Strategy implements MarketDataHandler, ExecutionEventHandler {
 
     protected final int strategyId;
     protected final TradingDataStore tradingDataStore;
@@ -36,30 +33,26 @@ public abstract class Strategy extends MultiEventProcessor implements MarketData
 
     protected OrderTable orderTable = new OrderTable();
 
-    public Strategy(int strategyId, TradingDataStore tradingDataStore, EventBusManager eventBusManager){
-        super(new NoWaitStrategy(),  eventBusManager.getExecutionEventRB(), eventBusManager.getMarketDataRB());
+    public Strategy(int strategyId, TradingDataStore tradingDataStore){
         this.strategyId = strategyId;
         this.tradingDataStore = tradingDataStore;
         this.eventBusManager = null;
     }
 
-    public Strategy(int strategyId, TradingDataStore tradingDataStore, EventBusManager eventBusManager, RingBuffer... providers){
-        super(new NoWaitStrategy(),  null, providers);
+    public Strategy(int strategyId, TradingDataStore tradingDataStore, EventBusManager eventBusManager){
         this.strategyId = strategyId;
         this.tradingDataStore = tradingDataStore;
         this.eventBusManager = eventBusManager;
     }
 
     public Strategy(int strategyId, TradingDataStore tradingDataStore, int portfolioId, EventBusManager eventBusManager){
-        super(new NoWaitStrategy(),  eventBusManager.getExecutionEventRB(), eventBusManager.getMarketDataRB());
         this.strategyId = strategyId;
         this.tradingDataStore = tradingDataStore;
         this.portfolio = tradingDataStore.getPortfolio(portfolioId);
         this.eventBusManager = eventBusManager;
     }
 
-    public Strategy(int strategyId, TradingDataStore tradingDataStore, int portfolioId, RingBuffer... providers){
-        super(new NoWaitStrategy(),  null, providers);
+    public Strategy(int strategyId, TradingDataStore tradingDataStore, int portfolioId){
         this.strategyId = strategyId;
         this.tradingDataStore = tradingDataStore;
         this.portfolio = tradingDataStore.getPortfolio(portfolioId);

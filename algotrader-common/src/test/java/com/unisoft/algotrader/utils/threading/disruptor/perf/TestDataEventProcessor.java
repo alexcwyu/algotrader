@@ -1,8 +1,6 @@
 package com.unisoft.algotrader.utils.threading.disruptor.perf;
 
 import com.unisoft.algotrader.model.event.Event;
-import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
-import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.YieldMultiBufferWaitStrategy;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.function.BiConsumer;
@@ -11,7 +9,7 @@ import java.util.function.BiPredicate;
 /**
  * Created by alex on 6/13/15.
  */
-class TestDataEventProcessor extends MultiEventProcessor implements TestDataHandler {
+class TestDataEventProcessor implements TestDataHandler {
 
     private final String name;
     private final long expected;
@@ -22,7 +20,6 @@ class TestDataEventProcessor extends MultiEventProcessor implements TestDataHand
     private long totalCount = 0;
 
     public TestDataEventProcessor(String name, long expected, BiPredicate<TestData, Long> testFunc, BiConsumer<TestData, Long> processFunc) {
-        super(new YieldMultiBufferWaitStrategy());
         this.name = name;
         this.expected = expected;
         this.testFunc = testFunc;

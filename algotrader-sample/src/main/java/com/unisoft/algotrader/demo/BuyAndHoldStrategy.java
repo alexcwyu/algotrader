@@ -36,11 +36,11 @@ public class BuyAndHoldStrategy extends Strategy {
     public Order longOrder;
 
     public BuyAndHoldStrategy(AppConfig config, Portfolio portfolio){
-        this(config.getStrategyManager(), config.getOrderManager(), config.getTradingDataStore(), portfolio.portfolioId(), config.getEventBusManager().getMarketDataRB());
+        this(config.getStrategyManager(), config.getOrderManager(), config.getTradingDataStore(), portfolio.portfolioId());
     }
 
-    public BuyAndHoldStrategy(StrategyManager strategyManager, OrderManager orderManager, TradingDataStore tradingDataStore, int portfolioId, RingBuffer<MarketDataContainer> rb){
-        super(strategyManager.nextStrategyId(), tradingDataStore, portfolioId, rb);
+    public BuyAndHoldStrategy(StrategyManager strategyManager, OrderManager orderManager, TradingDataStore tradingDataStore, int portfolioId){
+        super(strategyManager.nextStrategyId(), tradingDataStore, portfolioId);
         this.orderManager = orderManager;
     }
 

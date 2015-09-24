@@ -5,6 +5,8 @@ package com.unisoft.algotrader.model.event;
  */
 public interface EventHandler {
 
-
+    default void onEvent(Event event){
+        event.on(this);
+    }
 }
 

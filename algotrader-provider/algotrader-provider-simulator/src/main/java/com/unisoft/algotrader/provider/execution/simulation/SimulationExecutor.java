@@ -1,7 +1,6 @@
 package com.unisoft.algotrader.provider.execution.simulation;
 
 import com.google.common.collect.Maps;
-import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.config.AppConfig;
 import com.unisoft.algotrader.model.clock.Clock;
 import com.unisoft.algotrader.model.event.Event;
@@ -16,12 +15,9 @@ import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.execution.ExecutionProvider;
 import com.unisoft.algotrader.trading.InstrumentDataManager;
 import com.unisoft.algotrader.trading.OrderManager;
-import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
-import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Map;
@@ -31,7 +27,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * Created by alex on 5/18/15.
  */
 @Singleton
-public class SimulationExecutor extends MultiEventProcessor implements ExecutionProvider, MarketDataHandler {
+public class SimulationExecutor implements ExecutionProvider, MarketDataHandler {
 
     private static final Logger LOG = LogManager.getLogger(SimulationExecutor.class);
 
@@ -57,12 +53,11 @@ public class SimulationExecutor extends MultiEventProcessor implements Execution
     private Clock clock;
 
     @Inject
-    public SimulationExecutor(AppConfig config, @Nullable RingBuffer ... rbs){
-        this(config.getProviderManager(), config.getOrderManager(), config.getInstrumentDataManager(), config.getClock(), (rbs == null || rbs.length ==0) ? new RingBuffer[]{config.getEventBusManager().getMarketDataRB()} : rbs);
+    public SimulationExecutor(AppConfig config){
+        this(config.getProviderManager(), config.getOrderManager(), config.getInstrumentDataManager(), config.getClock());
     }
 
-    public SimulationExecutor(ProviderManager providerManager, OrderManager orderManager, InstrumentDataManager instrumentDataManager, Clock clock, @Nullable RingBuffer... rbs) {
-        super(new NoWaitStrategy(), null, rbs);
+    public SimulationExecutor(ProviderManager providerManager, OrderManager orderManager, InstrumentDataManager instrumentDataManager, Clock clock ) {
 
         this.orderManager = orderManager;
         this.instrumentDataManager = instrumentDataManager;

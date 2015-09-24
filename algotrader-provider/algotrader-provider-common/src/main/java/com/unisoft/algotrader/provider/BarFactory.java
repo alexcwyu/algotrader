@@ -4,22 +4,19 @@ package com.unisoft.algotrader.provider;
 import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.model.event.Event;
 import com.unisoft.algotrader.model.event.data.*;
-import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
-import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
  * Created by alex on 5/21/15.
  */
-public class BarFactory extends MultiEventProcessor implements MarketDataHandler {
+public class BarFactory implements MarketDataHandler{
 
     private static final Logger LOG = LogManager.getLogger(BarFactory.class);
 
     private final RingBuffer<MarketDataContainer> outputRB;
 
-    public BarFactory(RingBuffer<MarketDataContainer> inputRB, RingBuffer<MarketDataContainer> outputRB){
-        super(new NoWaitStrategy(), inputRB);
+    public BarFactory(RingBuffer<MarketDataContainer> outputRB){
         this.outputRB = outputRB;
     }
 

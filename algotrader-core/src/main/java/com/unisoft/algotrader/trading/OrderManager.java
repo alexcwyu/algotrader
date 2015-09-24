@@ -5,8 +5,6 @@ import com.unisoft.algotrader.model.event.bus.EventBusManager;
 import com.unisoft.algotrader.model.event.execution.*;
 import com.unisoft.algotrader.model.trading.ExecType;
 import com.unisoft.algotrader.model.trading.OrdStatus;
-import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
-import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +15,7 @@ import javax.inject.Singleton;
  * Created by alex on 5/18/15.
  */
 @Singleton
-public class OrderManager extends MultiEventProcessor implements OrderEventHandler, ExecutionEventHandler {
+public class OrderManager implements OrderEventHandler, ExecutionEventHandler {
 
     private static final Logger LOG = LogManager.getLogger(OrderManager.class);
 
@@ -27,7 +25,6 @@ public class OrderManager extends MultiEventProcessor implements OrderEventHandl
 
     @Inject
     public OrderManager(EventBusManager eventBusManager){
-        super(new NoWaitStrategy(), eventBusManager.getExecutionEventRB(), eventBusManager.getOrderEventRB());
         this.eventBusManager = eventBusManager;
     }
 

@@ -34,7 +34,7 @@ public class BackTesterMain {
         DummyDataProvider provider = new DummyDataProvider(appConfig.getProviderManager(), new RingBufferMarketDataEventBus(appConfig.getEventBusManager().getMarketDataRB()));
 
         CountDownLatch latch = new CountDownLatch(1);
-        Strategy strategy = new CountDownStrategy(appConfig.getOrderManager(), 1, appConfig.getTradingDataStore(), latch, 20, appConfig.getEventBusManager().getMarketDataRB());
+        Strategy strategy = new CountDownStrategy(appConfig.getOrderManager(), 1, appConfig.getTradingDataStore(), latch, 20);
 
         Account account = TradingDataStore.DEFAULT_ACCOUNT;
         Portfolio portfolio = new Portfolio(1, account.accountId());

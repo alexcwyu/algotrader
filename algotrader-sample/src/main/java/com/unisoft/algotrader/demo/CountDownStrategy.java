@@ -29,8 +29,8 @@ class CountDownStrategy extends Strategy {
     private int count = 0;
     private final OrderManager orderManager;
     public long clOrderId = 0;
-    public CountDownStrategy(OrderManager orderManager, int strategyId, TradingDataStore tradingDataStore, CountDownLatch latch, int exp, RingBuffer... providers) {
-        super(strategyId, tradingDataStore, 1, providers);
+    public CountDownStrategy(OrderManager orderManager, int strategyId, TradingDataStore tradingDataStore, CountDownLatch latch, int exp) {
+        super(strategyId, tradingDataStore, 1);
         this.orderManager = orderManager;
         this.latch = latch;
         this.exp = exp;

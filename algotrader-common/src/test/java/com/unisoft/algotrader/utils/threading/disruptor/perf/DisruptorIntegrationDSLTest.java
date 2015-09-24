@@ -37,7 +37,7 @@ public class DisruptorIntegrationDSLTest {
                 new TestDataConsumer("processor3"));
 
         MultiEventDisruptor<TestData> disruptor = new MultiEventDisruptor(ProducerType.SINGLE, TestData.FACTORY, BUFFER_SIZE, executor);
-        disruptor.handleEventsWith(processor1, processor2).then(processor3);
+//        disruptor.handleEventsWith(processor1, processor2).then(processor3);
 
         Future<?>[] futures = new Future[NUM_PUBLISHERS];
         DataPublisher<TestData> testDataPublisher = new DataPublisher(cyclicBarrier, disruptor.getRingBuffer(), ITERATIONS, "publisher", new TestDataConsumer("publisher"));

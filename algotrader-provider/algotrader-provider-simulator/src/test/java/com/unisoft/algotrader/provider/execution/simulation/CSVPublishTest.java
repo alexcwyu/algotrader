@@ -13,6 +13,8 @@ import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.DummyDataProvider;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
 import com.unisoft.algotrader.trading.Strategy;
+import com.unisoft.algotrader.utils.DateHelper;
+import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,15 +38,15 @@ public class CSVPublishTest {
         private int exp;
         private int count = 0;
 
-        public CountDownStrategy(int strategyId, TradingDataStore tradingDataStore, int portfolioId, CountDownLatch latch, int exp, RingBuffer... providers){
-            super(strategyId, tradingDataStore, portfolioId, providers);
+        public CountDownStrategy(int strategyId, TradingDataStore tradingDataStore, int portfolioId, CountDownLatch latch, int exp){
+            super(strategyId, tradingDataStore, portfolioId);
             this.latch = latch;
             this.exp = exp;
         }
 
         @Override
         public void onMarketDataContainer(MarketDataContainer data){
-            LOG.info("instId {}, onMarketDataContainer {}", strategyId, data);
+            LOG.info("stgId {}, onMarketDataContainer {}", strategyId, data);
             count ++;
             if (count==exp){
                 latch.countDown();
@@ -68,25 +70,28 @@ public class CSVPublishTest {
 
 
         CountDownLatch latch = new CountDownLatch(5);
-        CountDownStrategy strategy1 = new CountDownStrategy(1, tradingDataStore, portfolio.portfolioId(), latch, 10, marketDataRB);
-        CountDownStrategy strategy2 = new CountDownStrategy(2, tradingDataStore, portfolio.portfolioId(), latch, 10, marketDataRB);
-        CountDownStrategy strategy3 = new CountDownStrategy(3, tradingDataStore, portfolio.portfolioId(), latch, 10, marketDataRB);
-        CountDownStrategy strategy4 = new CountDownStrategy(4, tradingDataStore, portfolio.portfolioId(), latch, 10, marketDataRB);
-        CountDownStrategy strategy5 = new CountDownStrategy(5, tradingDataStore, portfolio.portfolioId(), latch, 10, marketDataRB);
 
         ExecutorService executor = Executors.newFixedThreadPool(8, DaemonThreadFactory.INSTANCE);
-        executor.submit(strategy1);
-        executor.submit(strategy2);
 
-        executor.submit(strategy3);
-        executor.submit(strategy4);
-        executor.submit(strategy5);
+        MultiEventProcessor ep1 = new MultiEventProcessor( new CountDownStrategy(1, tradingDataStore, portfolio.portfolioId(), latch, 10), new NoWaitStrategy(), marketDataRB);
+        MultiEventProcessor ep2 = new MultiEventProcessor( new CountDownStrategy(2, tradingDataStore, portfolio.portfolioId(), latch, 10), new NoWaitStrategy(), marketDataRB);
+        MultiEventProcessor ep3 = new MultiEventProcessor( new CountDownStrategy(3, tradingDataStore, portfolio.portfolioId(), latch, 10), new NoWaitStrategy(), marketDataRB);
+        MultiEventProcessor ep4 = new MultiEventProcessor( new CountDownStrategy(4, tradingDataStore, portfolio.portfolioId(), latch, 10), new NoWaitStrategy(), marketDataRB);
+        MultiEventProcessor ep5 = new MultiEventProcessor( new CountDownStrategy(5, tradingDataStore, portfolio.portfolioId(), latch, 10), new NoWaitStrategy(), marketDataRB);
+
+        executor.submit(ep1);
+        executor.submit(ep2);
+        executor.submit(ep3);
+        executor.submit(ep4);
+        executor.submit(ep5);
 
         LOG.info("sleep");
         Thread.sleep(5000);
 
         LOG.info("start");
-        provider.subscribeHistoricalData(HistoricalSubscriptionKey.createDailySubscriptionKey(provider.providerId().id, testInstrument.getInstId(), 20110101, 20141231));
+        provider.subscribeHistoricalData(HistoricalSubscriptionKey.createDailySubscriptionKey(provider.providerId().id, testInstrument.getInstId(),
+                DateHelper.fromYYYYMMDD(20110101).getTime(),
+                DateHelper.fromYYYYMMDD(20110111).getTime()));
 
         latch.await();
 

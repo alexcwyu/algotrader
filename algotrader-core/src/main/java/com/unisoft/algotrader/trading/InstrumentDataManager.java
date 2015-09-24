@@ -1,14 +1,9 @@
 package com.unisoft.algotrader.trading;
 
 import com.google.common.collect.Maps;
-import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.model.event.Event;
-import com.unisoft.algotrader.model.event.bus.EventBusManager;
 import com.unisoft.algotrader.model.event.data.*;
-import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
-import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Map;
 
@@ -16,7 +11,7 @@ import java.util.Map;
  * Created by alex on 5/21/15.
  */
 @Singleton
-public class InstrumentDataManager extends MultiEventProcessor implements MarketDataHandler, MarketDepthHandler {
+public class InstrumentDataManager implements MarketDataHandler, MarketDepthHandler {
 
     @Override
     public void onMarketDataContainer(MarketDataContainer data) {
@@ -77,14 +72,6 @@ public class InstrumentDataManager extends MultiEventProcessor implements Market
 
     public Map<Long, InstrumentData> map = Maps.newHashMap();
 
-    @Inject
-    public InstrumentDataManager(EventBusManager eventBusManager){
-        this(eventBusManager.getMarketDataRB());
-    }
-
-    public InstrumentDataManager(RingBuffer ringBuffer){
-        super(new NoWaitStrategy(), ringBuffer);
-    }
 
     @Override
     public void onEvent(Event event) {

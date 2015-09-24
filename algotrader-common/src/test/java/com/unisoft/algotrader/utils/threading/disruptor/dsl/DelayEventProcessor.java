@@ -2,6 +2,7 @@ package com.unisoft.algotrader.utils.threading.disruptor.dsl;
 
 import com.lmax.disruptor.LifecycleAware;
 import com.unisoft.algotrader.model.event.Event;
+import com.unisoft.algotrader.model.event.EventHandler;
 import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
 
 import java.util.concurrent.BrokenBarrierException;
@@ -16,23 +17,15 @@ public class DelayEventProcessor extends MultiEventProcessor implements Lifecycl
     private volatile boolean stopped = false;
     private final CyclicBarrier barrier;
 
-    public DelayEventProcessor(CyclicBarrier barrier)
+    public DelayEventProcessor(EventHandler eventHandler, CyclicBarrier barrier)
     {
+        super(eventHandler);
         this.barrier = barrier;
     }
 
-    public DelayEventProcessor()
+    public DelayEventProcessor(EventHandler eventHandler)
     {
-        this(new CyclicBarrier(2));
-    }
-
-
-    @Override
-    public void onEvent(Event event) {
-        try {
-            Thread.sleep(1000);
-        }
-        catch (Exception e){}
+        this(eventHandler, new CyclicBarrier(2));
     }
 
 

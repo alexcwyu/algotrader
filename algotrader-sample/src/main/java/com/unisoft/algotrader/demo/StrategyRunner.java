@@ -46,10 +46,10 @@ public class StrategyRunner {
         appConfig.getProviderManager().addExecutionProvider(simulationExecutor);
         DataPublisher dataPublisher = new DataPublisher(appConfig.getEventBusManager().getMarketDataRB());
 
-        executor.submit(strategy);
-        executor.submit(portfolioProcessor);
-        executor.submit(simulationExecutor);
-        executor.submit(appConfig.getInstrumentDataManager());
+//        executor.submit(strategy);
+//        executor.submit(portfolioProcessor);
+//        executor.submit(simulationExecutor);
+//        executor.submit(appConfig.getInstrumentDataManager());
 
 
 

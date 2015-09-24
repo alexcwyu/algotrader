@@ -2,6 +2,7 @@ package com.unisoft.algotrader.utils.threading.disruptor;
 
 import com.lmax.disruptor.*;
 import com.unisoft.algotrader.model.event.Event;
+import com.unisoft.algotrader.model.event.EventHandler;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.MultiBufferWaitStrategy;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 
@@ -13,7 +14,7 @@ import static java.util.Arrays.fill;
 /**
  * Created by alex on 4/12/15.
  */
-public abstract class MultiEventProcessor implements EventProcessor, EventHandler<Event>, LifecycleAware{
+public class MultiEventProcessor implements EventProcessor, LifecycleAware{
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
     private RingBuffer<Event>[] providers = null;
     private SequenceBarrier[] barriers = null;
@@ -22,23 +23,25 @@ public abstract class MultiEventProcessor implements EventProcessor, EventHandle
     private final MultiBufferWaitStrategy waitStrategy;
     private long count;
 
+    private final EventHandler eventHandler;
 
-    public MultiEventProcessor() {
-        this(new NoWaitStrategy());
+    public MultiEventProcessor(EventHandler eventHandler) {
+        this(eventHandler, new NoWaitStrategy());
     }
 
-    public MultiEventProcessor(MultiBufferWaitStrategy waitStrategy) {
+    public MultiEventProcessor(EventHandler eventHandler, MultiBufferWaitStrategy waitStrategy) {
+        this.eventHandler = eventHandler;
         this.queue = null;
         this.waitStrategy = waitStrategy;
     }
 
-    public MultiEventProcessor(MultiBufferWaitStrategy waitStrategy, RingBuffer... providers) {
-        this(waitStrategy, null, providers);
+    public MultiEventProcessor(EventHandler eventHandler, MultiBufferWaitStrategy waitStrategy, RingBuffer... providers) {
+        this(eventHandler, waitStrategy, null, providers);
     }
 
 
-    public MultiEventProcessor(MultiBufferWaitStrategy waitStrategy, Queue queue, RingBuffer... providers) {
-
+    public MultiEventProcessor(EventHandler eventHandler, MultiBufferWaitStrategy waitStrategy, Queue queue, RingBuffer... providers) {
+        this.eventHandler = eventHandler;
         this.providers = providers;
         this.barriers = new SequenceBarrier[providers.length];
         this.queue = queue;
@@ -52,12 +55,13 @@ public abstract class MultiEventProcessor implements EventProcessor, EventHandle
         }
     }
 
-    public MultiEventProcessor(RingBuffer[] providers,
+    public MultiEventProcessor(EventHandler eventHandler, RingBuffer[] providers,
                                SequenceBarrier[] barriers, Queue queue, MultiBufferWaitStrategy waitStrategy) {
         if (providers.length != barriers.length) {
             throw new IllegalArgumentException();
         }
 
+        this.eventHandler = eventHandler;
         this.providers = providers;
         this.barriers = barriers;
         this.queue = queue;
@@ -95,7 +99,7 @@ public abstract class MultiEventProcessor implements EventProcessor, EventHandle
                     if (queue != null) {
                         while (queue.peek() != null) {
                             batchCount++;
-                            onEvent(queue.poll());
+                            eventHandler.onEvent(queue.poll());
                         }
                     }
 
@@ -109,7 +113,7 @@ public abstract class MultiEventProcessor implements EventProcessor, EventHandle
 
                         if (available > previous) {
                             for (long l = previous + 1; l <= available; l++) {
-                                onEvent(providers[i].get(l));
+                                eventHandler.onEvent(providers[i].get(l));
                             }
                             sequence.set(available);
                             batchCount += (available - previous);

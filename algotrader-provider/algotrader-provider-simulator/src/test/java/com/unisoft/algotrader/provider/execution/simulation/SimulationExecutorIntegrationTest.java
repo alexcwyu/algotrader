@@ -97,8 +97,8 @@ public class SimulationExecutorIntegrationTest {
 
 
         rb =RingBuffer.createSingleProducer(MarketDataContainer.FACTORY, 1024, new NoWaitStrategy());
-        instrumentDataManager = new InstrumentDataManager(eventBusManager.getMarketDataRB());
-        simulationExecutor = new SimulationExecutor(providerManager, orderManager, instrumentDataManager, new SimulationClock(), rb);
+        instrumentDataManager = new InstrumentDataManager();
+        simulationExecutor = new SimulationExecutor(providerManager, orderManager, instrumentDataManager, new SimulationClock());
         simulationExecutor.config.fillOnQuote = true;
         simulationExecutor.config.fillOnQuoteMode = FillOnQuoteMode.LastQuote;
         simulationExecutor.config.fillOnTrade = true;

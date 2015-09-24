@@ -24,8 +24,6 @@ import com.unisoft.algotrader.provider.ib.api.model.data.TickType;
 import com.unisoft.algotrader.provider.ib.api.model.fa.FinancialAdvisorDataType;
 import com.unisoft.algotrader.provider.ib.api.model.order.OrderStatus;
 import com.unisoft.algotrader.provider.ib.api.model.system.ClientMessageCode;
-import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
-import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -39,7 +37,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by alex on 6/20/15.
  */
 @Singleton
-public class IBProvider extends MultiEventProcessor implements IBEventHandler, RealTimeDataProvider, HistoricalDataProvider, ExecutionProvider{
+public class IBProvider implements IBEventHandler, RealTimeDataProvider, HistoricalDataProvider, ExecutionProvider{
 
     private static final Logger LOG = LogManager.getLogger(IBProvider.class);
 
@@ -59,7 +57,6 @@ public class IBProvider extends MultiEventProcessor implements IBEventHandler, R
 
     @Inject
     public IBProvider(ProviderManager providerManager, IBConfig config, RefDataStore refDataStore, EventBusManager eventBusManager){
-        super(new NoWaitStrategy(), eventBusManager.getOrderEventRB());
         this.refDataStore = refDataStore;
         this.config = config;
         this.eventBusManager = eventBusManager;

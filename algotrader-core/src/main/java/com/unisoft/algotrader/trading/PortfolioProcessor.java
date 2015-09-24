@@ -1,6 +1,5 @@
 package com.unisoft.algotrader.trading;
 
-import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.config.AppConfig;
 import com.unisoft.algotrader.model.clock.Clock;
 import com.unisoft.algotrader.model.event.Event;
@@ -16,15 +15,13 @@ import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.*;
 import com.unisoft.algotrader.persistence.RefDataStore;
-import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
-import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
  * Created by alex on 7/1/15.
  */
-public class PortfolioProcessor extends MultiEventProcessor implements MarketDataHandler, OrderEventHandler, ExecutionEventHandler {
+public class PortfolioProcessor implements MarketDataHandler, OrderEventHandler, ExecutionEventHandler {
 
     private static final Logger LOG = LogManager.getLogger(Portfolio.class);
 
@@ -33,12 +30,11 @@ public class PortfolioProcessor extends MultiEventProcessor implements MarketDat
     private final RefDataStore refDataStore;
     private final Clock clock;
 
-    public PortfolioProcessor(AppConfig appConfig, Portfolio portfolio, Account account, RingBuffer... providers){
-        this(portfolio, account, appConfig.getRefDataStore(), appConfig.getClock(), providers == null || providers.length ==0 ? new RingBuffer[]{appConfig.getEventBusManager().getMarketDataRB()} : providers);
+    public PortfolioProcessor(AppConfig appConfig, Portfolio portfolio, Account account){
+        this(portfolio, account, appConfig.getRefDataStore(), appConfig.getClock());
     }
 
-    public PortfolioProcessor(Portfolio portfolio, Account account, RefDataStore refDataStore, Clock clock, RingBuffer... providers) {
-        super(new NoWaitStrategy(), providers);
+    public PortfolioProcessor(Portfolio portfolio, Account account, RefDataStore refDataStore, Clock clock) {
         this.portfolio = portfolio;
         this.account = account;
         this.refDataStore = refDataStore;

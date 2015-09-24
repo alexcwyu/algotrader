@@ -41,7 +41,6 @@ public class DummyDataProvider extends AbstractHistoricalDataProvider {
 
         int count = 0;
         while (dateTime < toDateTime) {
-
             marketDataEventBus.publishBar(subscriptionKey.instId, subscriptionKey.barSize, dateTime,
                     900 + count,
                     1000 + count,

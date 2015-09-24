@@ -84,14 +84,14 @@ public class BackTester {
         this.strategy.setPortfolio(portfolio);
         strategyManager.register(strategy);
 
-        this.simulationExecutor = new SimulationExecutor(providerManager, orderManager, new InstrumentDataManager(eventBusManager.getMarketDataRB()), new SimulationClock(), eventBusManager.getMarketDataRB());
+        this.simulationExecutor = new SimulationExecutor(providerManager, orderManager, new InstrumentDataManager(), new SimulationClock());
         providerManager.addExecutionProvider(simulationExecutor);
 
         RingBuffer<MarketDataContainer> rawMarketDataRB
             = RingBuffer.createSingleProducer(MarketDataContainer.FACTORY, 1024, new NoWaitStrategy());
 
-        this.barFactory = new BarFactory(rawMarketDataRB, eventBusManager.getMarketDataRB());
-        this.simulator = new Simulator(simulationExecutor, eventBusManager.getMarketDataRB(), strategy);
+        this.barFactory = new BarFactory(eventBusManager.getMarketDataRB());
+        this.simulator = new Simulator(simulationExecutor, strategy);
 
         this.dataProvider = provider;
 
@@ -101,8 +101,8 @@ public class BackTester {
 
 
     public void run(){
-        executor.submit(barFactory);
-        executor.submit(simulator);
+        //executor.submit(barFactory);
+        //executor.submit(simulator);
         dataProvider.subscribeHistoricalData(HistoricalSubscriptionKey.createDailySubscriptionKey(dataProvider.providerId().id, instrument.getInstId(), fromDate, toDate));
     }
 
