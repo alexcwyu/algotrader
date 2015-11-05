@@ -3,6 +3,7 @@ package com.unisoft.algotrader.utils.threading.disruptor.perf;
 import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import com.lmax.disruptor.dsl.MultiEventDisruptor;
+import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 
 import java.util.concurrent.*;
 
@@ -36,7 +37,7 @@ public class DisruptorIntegrationDSLTest {
                 ((testData, count) -> testData.map.size() == 2 && testData.map.get("publisher") == count && testData.map.get("processor1") == count&& testData.map.get("processor2") == count),
                 new TestDataConsumer("processor3"));
 
-        MultiEventDisruptor<TestData> disruptor = new MultiEventDisruptor(ProducerType.SINGLE, TestData.FACTORY, BUFFER_SIZE, executor);
+        MultiEventDisruptor<TestData> disruptor = new MultiEventDisruptor(TestData.FACTORY, BUFFER_SIZE, executor, ProducerType.SINGLE, new NoWaitStrategy());
 //        disruptor.handleEventsWith(processor1, processor2).then(processor3);
 
         Future<?>[] futures = new Future[NUM_PUBLISHERS];

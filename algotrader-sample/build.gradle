@@ -4,5 +4,4 @@ dependencies {
     compile project(':algotrader-provider:algotrader-provider-simulator')
     compile project(':algotrader-persistence:algotrader-persistence-common')
 
-    compile project(':algotrader-core').sourceSets.test.output
 }

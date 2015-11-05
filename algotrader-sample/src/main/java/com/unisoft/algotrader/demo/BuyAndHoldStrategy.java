@@ -1,11 +1,8 @@
 package com.unisoft.algotrader.demo;
 
 import com.google.common.collect.Lists;
-import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.config.AppConfig;
-import com.unisoft.algotrader.event.SampleEventFactory;
 import com.unisoft.algotrader.model.event.data.Bar;
-import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.Quote;
 import com.unisoft.algotrader.model.event.data.Trade;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;

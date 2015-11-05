@@ -4,6 +4,7 @@ import com.lmax.disruptor.EventTranslator;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.MultiEventDisruptor;
 import com.lmax.disruptor.dsl.ProducerType;
+import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.junit.After;
 import org.junit.Before;
 
@@ -33,7 +34,7 @@ public class MultiEventDisruptorTest {
     @Before
     public void setup(){
         executor = new StubExecutor();
-        disruptor = new MultiEventDisruptor(ProducerType.SINGLE, TestEvent.EVENT_FACTORY, 4, executor);
+        disruptor = new MultiEventDisruptor(TestEvent.EVENT_FACTORY, 4, executor, ProducerType.SINGLE, new NoWaitStrategy());
     }
 
     @After

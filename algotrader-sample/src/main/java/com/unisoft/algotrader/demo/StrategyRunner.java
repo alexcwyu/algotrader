@@ -4,7 +4,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.unisoft.algotrader.config.AppConfig;
 import com.unisoft.algotrader.config.SampleConfigModule;
-import com.unisoft.algotrader.event.SampleEventFactory;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.Account;
 import com.unisoft.algotrader.model.trading.Portfolio;

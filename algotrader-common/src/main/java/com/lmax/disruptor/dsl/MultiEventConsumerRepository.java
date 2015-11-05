@@ -34,16 +34,33 @@ class MultiEventConsumerRepository<T> extends ConsumerRepository<T>
         this.disruptor = disruptor;
     }
 
-
-    public MultiEventProcessor getEventProcessorFor(final EventHandler<T> handler)
-    {
-        return (MultiEventProcessor)super.getEventProcessorFor(handler);
-    }
-
-
     public Sequence getSequenceFor(final EventHandler<T> handler)
     {
-        return getEventProcessorFor(handler).getSequence(disruptor.getRingBuffer());
+        EventProcessor ep = getEventProcessorFor(handler);
+        if (ep instanceof MultiEventProcessor)
+            return ((MultiEventProcessor) ep).getSequence(disruptor.getRingBuffer());
+        return ep.getSequence();
     }
 
+
+    static class T1{
+        public final int t = 1;
+
+        public String print(){
+            return ""+t;
+        }
+    }
+
+
+    static class T2 extends T1 {
+        public final int t = 2;
+
+    }
+
+    public static void main(String [] args){
+        T2 t2 = new T2();
+        System.out.println(t2.print());
+        System.out.println(t2.t);
+        System.out.println(((T1)t2).t);
+    }
 }

@@ -4,7 +4,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.unisoft.algotrader.config.AppConfig;
 import com.unisoft.algotrader.config.AppConfigModule;
-import com.unisoft.algotrader.event.SampleEventFactory;
 import com.unisoft.algotrader.event.bus.RingBufferMarketDataEventBus;
 import com.unisoft.algotrader.model.series.TimeSeriesHelper;
 import com.unisoft.algotrader.model.trading.Account;

@@ -27,11 +27,13 @@ public class MultiEventDisruptor<T> {
         this(RingBuffer.createMultiProducer(eventFactory, ringBufferSize, new NoWaitStrategy()), executor);
     }
 
-    public MultiEventDisruptor(final ProducerType producerType,
-                               final EventFactory<T> eventFactory,
+    public MultiEventDisruptor(final EventFactory<T> eventFactory,
                                final int ringBufferSize,
-                               final Executor executor){
-        this(RingBuffer.create(producerType, eventFactory, ringBufferSize, new NoWaitStrategy()),
+                               final Executor executor,
+                               final ProducerType producerType,
+                               final WaitStrategy waitStrategy)
+    {
+        this(RingBuffer.create(producerType, eventFactory, ringBufferSize, waitStrategy),
                 executor);
     }
 
@@ -69,16 +71,6 @@ public class MultiEventDisruptor<T> {
 
         return new MultiEventHandlerGroup<T>(this, multiEventConsumerRepository, sequences);
     }
-
-//    public MultiEventHandlerGroup<T> after(final MultiEventProcessor... processors)
-//    {
-//        for (final MultiEventProcessor processor : processors)
-//        {
-//            multiEventConsumerRepository.add(processor, ringBuffer);
-//        }
-//
-//        return new MultiEventHandlerGroup<T>(this, multiEventConsumerRepository, getSequencesFor(processors));
-//    }
 
     public void publishEvent(final EventTranslator<T> eventTranslator)
     {
