@@ -2,7 +2,7 @@ package com.unisoft.algotrader.utils.threading.disruptor.perf;
 
 import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
-import com.unisoft.algotrader.utils.threading.disruptor.dsl.MultiEventDisruptor;
+import com.lmax.disruptor.dsl.MultiEventDisruptor;
 
 import java.util.concurrent.*;
 

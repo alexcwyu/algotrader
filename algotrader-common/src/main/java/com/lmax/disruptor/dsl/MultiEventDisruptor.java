@@ -1,7 +1,6 @@
-package com.unisoft.algotrader.utils.threading.disruptor.dsl;
+package com.lmax.disruptor.dsl;
 
 import com.lmax.disruptor.*;
-import com.lmax.disruptor.dsl.ProducerType;
 import com.unisoft.algotrader.utils.collection.Tuple2;
 import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
@@ -42,7 +41,7 @@ public class MultiEventDisruptor<T> {
         this.executor = executor;
     }
 
-    public MultiEventHandlerGroup<T> handleEventsWith(final Tuple2<MultiEventProcessor, EventHandler<? super T>>... handlers){
+    public MultiEventHandlerGroup<T> handleEventsWith(final Tuple2<MultiEventProcessor, EventHandler<T>>... handlers){
         return updateEventProcessors(new Sequence[0], handlers);
     }
 
@@ -58,16 +57,28 @@ public class MultiEventDisruptor<T> {
     }
 
 
-
-    public MultiEventHandlerGroup<T> after(final MultiEventProcessor... processors)
+    @SuppressWarnings("varargs")
+    public MultiEventHandlerGroup<T> after(final Tuple2<MultiEventProcessor, EventHandler<T>>[] groups)
     {
-        for (final MultiEventProcessor processor : processors)
+        final Sequence[] sequences = new Sequence[groups.length];
+        for (int i = 0, handlersLength = groups.length; i < handlersLength; i++)
         {
-            multiEventConsumerRepository.add(processor, ringBuffer);
+
+            sequences[i] = multiEventConsumerRepository.getSequenceFor(groups[i].getV2());
         }
 
-        return new MultiEventHandlerGroup<T>(this, multiEventConsumerRepository, getSequencesFor(processors));
+        return new MultiEventHandlerGroup<T>(this, multiEventConsumerRepository, sequences);
     }
+
+//    public MultiEventHandlerGroup<T> after(final MultiEventProcessor... processors)
+//    {
+//        for (final MultiEventProcessor processor : processors)
+//        {
+//            multiEventConsumerRepository.add(processor, ringBuffer);
+//        }
+//
+//        return new MultiEventHandlerGroup<T>(this, multiEventConsumerRepository, getSequencesFor(processors));
+//    }
 
     public void publishEvent(final EventTranslator<T> eventTranslator)
     {
@@ -173,7 +184,7 @@ public class MultiEventDisruptor<T> {
     }
 
     MultiEventHandlerGroup<T> updateEventProcessors(final Sequence[] barrierSequences,
-                                               final Tuple2<MultiEventProcessor, EventHandler<? super T>>[] groups){
+                                               final Tuple2<MultiEventProcessor, EventHandler<T>>[] groups){
 
         checkNotStarted();
         final Sequence[] processorSequences = new Sequence[groups.length];
@@ -181,12 +192,12 @@ public class MultiEventDisruptor<T> {
 
         for (int i = 0, processorsLength = groups.length; i < processorsLength; i++){
 
-            final Tuple2<MultiEventProcessor, EventHandler<? super T>> group = groups[i];
+            final Tuple2<MultiEventProcessor, EventHandler<T>> group = groups[i];
             final MultiEventProcessor eventProcessor = group.getV1();
-            final EventHandler<? super T> eventHandler = group.getV2();
+            final EventHandler<T> eventHandler = group.getV2();
 
             processorSequences[i] = eventProcessor.add(ringBuffer, barrier, eventHandler);
-            multiEventConsumerRepository.add(eventProcessor, barrier, ringBuffer);
+            multiEventConsumerRepository.add(eventProcessor, eventHandler, barrier);
         }
 
         if (processorSequences.length > 0){

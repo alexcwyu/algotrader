@@ -2,11 +2,10 @@ package com.unisoft.algotrader.utils.threading.disruptor.dsl;
 
 import com.lmax.disruptor.EventTranslator;
 import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.dsl.MultiEventDisruptor;
 import com.lmax.disruptor.dsl.ProducerType;
-import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collection;
