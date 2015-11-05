@@ -17,7 +17,7 @@ public class MultiEventDisruptor<T> {
 
     private final RingBuffer<T> ringBuffer;
     private final Executor executor;
-    private final ConsumerRepository<T> consumerRepository = new ConsumerRepository<T>(this);
+    private final ConsumerRepository<T> consumerRepository = new ConsumerRepository<>(this);
     private final AtomicBoolean started = new AtomicBoolean(false);
     private ExceptionHandler<? super T> exceptionHandler;
 
@@ -41,9 +41,9 @@ public class MultiEventDisruptor<T> {
         this.executor = executor;
     }
 
-    public MultiEventHandlerGroup<T> handleEventsWith(final MultiEventProcessor... processors){
+    public MultiEventHandlerGroup<T> handleEventsWith(final EventHandler... handlers){
         final Sequence[] barrierSequences = new Sequence[0];
-        return createEventProcessors(barrierSequences, processors);
+        return createEventProcessors(barrierSequences, handlers);
     }
 
     public MultiEventHandlerGroup<T> handleEventsWithWorkerPool(final WorkHandler<T>... workHandlers)
@@ -171,15 +171,16 @@ public class MultiEventDisruptor<T> {
     }
 
     MultiEventHandlerGroup<T> createEventProcessors(final Sequence[] barrierSequences,
-                                               final MultiEventProcessor... processors){
+                                               final EventHandler<? super T>[] eventHandlers){
 
         checkNotStarted();
-        final Sequence[] processorSequences = new Sequence[processors.length];
+        final Sequence[] processorSequences = new Sequence[eventHandlers.length];
         final SequenceBarrier barrier = ringBuffer.newBarrier(barrierSequences);
 
-        for (int i = 0, processorsLength = processors.length; i < processorsLength; i++){
+        for (int i = 0, processorsLength = eventHandlers.length; i < processorsLength; i++){
 
-            final MultiEventProcessor processor = processors[i];
+            final EventHandler<? super T> eventHandler = eventHandlers[i];
+            final MultiEventProcessor eventProcessor = new MultiEventProcessor();
             processorSequences[i] = processor.add(ringBuffer, barrier);
 
             consumerRepository.add(processor, barrier, ringBuffer);

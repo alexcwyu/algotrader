@@ -9,20 +9,19 @@ import java.util.concurrent.CountDownLatch;
 /**
  * Created by alex on 6/12/15.
  */
-public class StubEventProcessor extends MultiEventProcessor {
+public class StubEventProcessor implements EventHandler {
     private final CountDownLatch countDownLatch;
 
-    public StubEventProcessor(EventHandler eventHandler, CountDownLatch countDownLatch) {
-        super(eventHandler);
+    public StubEventProcessor(CountDownLatch countDownLatch) {
         this.countDownLatch = countDownLatch;
     }
 
-    //
-//    @Override
-//    public void onEvent(Event event) {
-//        try {
-//            countDownLatch.countDown();
-//        } catch (Exception e) {
-//        }
-//    }
+
+    @Override
+    public void onEvent(Event event) {
+        try {
+            countDownLatch.countDown();
+        } catch (Exception e) {
+        }
+    }
 }

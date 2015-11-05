@@ -16,6 +16,7 @@ import static java.util.Arrays.fill;
  */
 public class MultiEventProcessor implements EventProcessor, LifecycleAware{
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
+    private final AtomicBoolean sealed = new AtomicBoolean(false);
     private RingBuffer<Event>[] providers = null;
     private SequenceBarrier[] barriers = null;
     private Sequence[] sequences = null;
@@ -35,25 +36,25 @@ public class MultiEventProcessor implements EventProcessor, LifecycleAware{
         this.waitStrategy = waitStrategy;
     }
 
-    public MultiEventProcessor(EventHandler eventHandler, MultiBufferWaitStrategy waitStrategy, RingBuffer... providers) {
-        this(eventHandler, waitStrategy, null, providers);
-    }
-
-
-    public MultiEventProcessor(EventHandler eventHandler, MultiBufferWaitStrategy waitStrategy, Queue queue, RingBuffer... providers) {
-        this.eventHandler = eventHandler;
-        this.providers = providers;
-        this.barriers = new SequenceBarrier[providers.length];
-        this.queue = queue;
-        this.waitStrategy = waitStrategy;
-
-        this.sequences = new Sequence[providers.length];
-        for (int i = 0; i < providers.length; i++) {
-            barriers[i] = providers[i].newBarrier();
-            sequences[i] = new Sequence(Sequencer.INITIAL_CURSOR_VALUE);
-            //providers[i].addGatingSequences(sequences[i]);
-        }
-    }
+//    public MultiEventProcessor(EventHandler eventHandler, MultiBufferWaitStrategy waitStrategy, RingBuffer... providers) {
+//        this(eventHandler, waitStrategy, null, providers);
+//    }
+//
+//
+//    public MultiEventProcessor(EventHandler eventHandler, MultiBufferWaitStrategy waitStrategy, Queue queue, RingBuffer... providers) {
+//        this.eventHandler = eventHandler;
+//        this.providers = providers;
+//        this.barriers = new SequenceBarrier[providers.length];
+//        this.queue = queue;
+//        this.waitStrategy = waitStrategy;
+//
+//        this.sequences = new Sequence[providers.length];
+//        for (int i = 0; i < providers.length; i++) {
+//            barriers[i] = providers[i].newBarrier();
+//            sequences[i] = new Sequence(Sequencer.INITIAL_CURSOR_VALUE);
+//            //providers[i].addGatingSequences(sequences[i]);
+//        }
+//    }
 
     public MultiEventProcessor(EventHandler eventHandler, RingBuffer[] providers,
                                SequenceBarrier[] barriers, Queue queue, MultiBufferWaitStrategy waitStrategy) {
@@ -67,10 +68,17 @@ public class MultiEventProcessor implements EventProcessor, LifecycleAware{
         this.queue = queue;
         this.waitStrategy = waitStrategy;
 
-        this.sequences = new Sequence[providers.length];
-        for (int i = 0; i < sequences.length; i++) {
-            sequences[i] = new Sequence(-1);
-            providers[i].addGatingSequences(sequences[i]);
+        seal();
+    }
+
+
+    public void seal(){
+        if (sealed.compareAndSet(false, true)) {
+            this.sequences = new Sequence[providers.length];
+            for (int i = 0; i < sequences.length; i++) {
+                sequences[i] = new Sequence(-1);
+                providers[i].addGatingSequences(sequences[i]);
+            }
         }
     }
 
