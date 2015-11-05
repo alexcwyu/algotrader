@@ -73,28 +73,28 @@ public class CSVPublishTest {
 
         ExecutorService executor = Executors.newFixedThreadPool(8, DaemonThreadFactory.INSTANCE);
 
-        MultiEventProcessor ep1 = new MultiEventProcessor( new CountDownStrategy(1, tradingDataStore, portfolio.portfolioId(), latch, 10), new NoWaitStrategy(), marketDataRB);
-        MultiEventProcessor ep2 = new MultiEventProcessor( new CountDownStrategy(2, tradingDataStore, portfolio.portfolioId(), latch, 10), new NoWaitStrategy(), marketDataRB);
-        MultiEventProcessor ep3 = new MultiEventProcessor( new CountDownStrategy(3, tradingDataStore, portfolio.portfolioId(), latch, 10), new NoWaitStrategy(), marketDataRB);
-        MultiEventProcessor ep4 = new MultiEventProcessor( new CountDownStrategy(4, tradingDataStore, portfolio.portfolioId(), latch, 10), new NoWaitStrategy(), marketDataRB);
-        MultiEventProcessor ep5 = new MultiEventProcessor( new CountDownStrategy(5, tradingDataStore, portfolio.portfolioId(), latch, 10), new NoWaitStrategy(), marketDataRB);
-
-        executor.submit(ep1);
-        executor.submit(ep2);
-        executor.submit(ep3);
-        executor.submit(ep4);
-        executor.submit(ep5);
-
-        LOG.info("sleep");
-        Thread.sleep(5000);
-
-        LOG.info("start");
-        provider.subscribeHistoricalData(HistoricalSubscriptionKey.createDailySubscriptionKey(provider.providerId().id, testInstrument.getInstId(),
-                DateHelper.fromYYYYMMDD(20110101).getTime(),
-                DateHelper.fromYYYYMMDD(20110111).getTime()));
-
-        latch.await();
-
-        LOG.info("done");
+//        MultiEventProcessor ep1 = new MultiEventProcessor( new CountDownStrategy(1, tradingDataStore, portfolio.portfolioId(), latch, 10), new NoWaitStrategy(), marketDataRB);
+//        MultiEventProcessor ep2 = new MultiEventProcessor( new CountDownStrategy(2, tradingDataStore, portfolio.portfolioId(), latch, 10), new NoWaitStrategy(), marketDataRB);
+//        MultiEventProcessor ep3 = new MultiEventProcessor( new CountDownStrategy(3, tradingDataStore, portfolio.portfolioId(), latch, 10), new NoWaitStrategy(), marketDataRB);
+//        MultiEventProcessor ep4 = new MultiEventProcessor( new CountDownStrategy(4, tradingDataStore, portfolio.portfolioId(), latch, 10), new NoWaitStrategy(), marketDataRB);
+//        MultiEventProcessor ep5 = new MultiEventProcessor( new CountDownStrategy(5, tradingDataStore, portfolio.portfolioId(), latch, 10), new NoWaitStrategy(), marketDataRB);
+//
+//        executor.submit(ep1);
+//        executor.submit(ep2);
+//        executor.submit(ep3);
+//        executor.submit(ep4);
+//        executor.submit(ep5);
+//
+//        LOG.info("sleep");
+//        Thread.sleep(5000);
+//
+//        LOG.info("start");
+//        provider.subscribeHistoricalData(HistoricalSubscriptionKey.createDailySubscriptionKey(provider.providerId().id, testInstrument.getInstId(),
+//                DateHelper.fromYYYYMMDD(20110101).getTime(),
+//                DateHelper.fromYYYYMMDD(20110111).getTime()));
+//
+//        latch.await();
+//
+//        LOG.info("done");
     }
 }

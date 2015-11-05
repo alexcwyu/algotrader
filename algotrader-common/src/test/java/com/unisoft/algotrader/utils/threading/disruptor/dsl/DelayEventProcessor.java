@@ -17,15 +17,15 @@ public class DelayEventProcessor extends MultiEventProcessor implements Lifecycl
     private volatile boolean stopped = false;
     private final CyclicBarrier barrier;
 
-    public DelayEventProcessor(EventHandler eventHandler, CyclicBarrier barrier)
+    public DelayEventProcessor(CyclicBarrier barrier)
     {
-        super(eventHandler);
+        super();
         this.barrier = barrier;
     }
 
-    public DelayEventProcessor(EventHandler eventHandler)
+    public DelayEventProcessor()
     {
-        this(eventHandler, new CyclicBarrier(2));
+        this(new CyclicBarrier(2));
     }
 
 

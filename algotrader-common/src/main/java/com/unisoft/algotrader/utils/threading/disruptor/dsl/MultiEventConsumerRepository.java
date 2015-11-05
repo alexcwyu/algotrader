@@ -25,7 +25,7 @@ import java.util.*;
  *
  * @param <T> the type of the {@link EventHandler}
  */
-class ConsumerRepository<T> implements Iterable<ConsumerInfo>
+class MultiEventConsumerRepository<T> implements Iterable<ConsumerInfo>
 {
 
 
@@ -35,7 +35,7 @@ class ConsumerRepository<T> implements Iterable<ConsumerInfo>
     private final Collection<ConsumerInfo> consumerInfos = new ArrayList<ConsumerInfo>();
     private final MultiEventDisruptor<T> disruptor;
 
-    public ConsumerRepository(MultiEventDisruptor<T> disruptor){
+    public MultiEventConsumerRepository(MultiEventDisruptor<T> disruptor){
         this.disruptor = disruptor;
     }
 

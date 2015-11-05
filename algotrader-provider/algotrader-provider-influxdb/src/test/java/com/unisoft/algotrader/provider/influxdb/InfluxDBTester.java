@@ -2,7 +2,7 @@ package com.unisoft.algotrader.provider.influxdb;
 
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
-import org.influxdb.dto.Serie;
+//import org.influxdb.dto.Serie;
 
 import java.util.concurrent.TimeUnit;
 
@@ -12,20 +12,20 @@ import java.util.concurrent.TimeUnit;
 public class InfluxDBTester {
 
     public static void main(String [] args)throws Exception{
-        InfluxDB influxDB = InfluxDBFactory.connect("http://sandbox.influxdb.com:8086", "alexcwyu", "H@ll0123");
-
-        //influxDB.createDatabase("aTimeSeries");
-
-        Serie serie1 = new Serie.Builder("serie2Name")
-                .columns("column1", "column2")
-                .values(System.currentTimeMillis(), 1)
-                .values(System.currentTimeMillis(), 2)
-                .build();
-        Serie serie2 = new Serie.Builder("serie2Name")
-                .columns("column1", "column2")
-                .values(System.currentTimeMillis(), 1)
-                .values(System.currentTimeMillis(), 2)
-                .build();
-        influxDB.write("algotrader", TimeUnit.MILLISECONDS, serie1, serie2);
+//        InfluxDB influxDB = InfluxDBFactory.connect("http://sandbox.influxdb.com:8086", "alexcwyu", "H@ll0123");
+//
+//        //influxDB.createDatabase("aTimeSeries");
+//
+//        Serie serie1 = new Serie.Builder("serie2Name")
+//                .columns("column1", "column2")
+//                .values(System.currentTimeMillis(), 1)
+//                .values(System.currentTimeMillis(), 2)
+//                .build();
+//        Serie serie2 = new Serie.Builder("serie2Name")
+//                .columns("column1", "column2")
+//                .values(System.currentTimeMillis(), 1)
+//                .values(System.currentTimeMillis(), 2)
+//                .build();
+//        influxDB.write("algotrader", TimeUnit.MILLISECONDS, serie1, serie2);
     }
 }

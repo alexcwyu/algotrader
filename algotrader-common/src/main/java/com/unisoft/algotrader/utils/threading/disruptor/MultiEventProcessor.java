@@ -1,15 +1,18 @@
 package com.unisoft.algotrader.utils.threading.disruptor;
 
+import com.google.common.collect.Lists;
 import com.lmax.disruptor.*;
-import com.unisoft.algotrader.model.event.Event;
-import com.unisoft.algotrader.model.event.EventHandler;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.MultiBufferWaitStrategy;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.util.Arrays.fill;
+
+//import com.unisoft.algotrader.model.event.Event;
+//import com.unisoft.algotrader.model.event.EventHandler;
 
 /**
  * Created by alex on 4/12/15.
@@ -17,66 +20,51 @@ import static java.util.Arrays.fill;
 public class MultiEventProcessor implements EventProcessor, LifecycleAware{
     private final AtomicBoolean isRunning = new AtomicBoolean(false);
     private final AtomicBoolean sealed = new AtomicBoolean(false);
-    private RingBuffer<Event>[] providers = null;
-    private SequenceBarrier[] barriers = null;
-    private Sequence[] sequences = null;
-    private final Queue<Event> queue;
     private final MultiBufferWaitStrategy waitStrategy;
+    private final List<RingBufferInfo<?>> ringBufferInfos = Lists.newArrayList();
+
+    private Queue queue;
     private long count;
+    private RingBuffer [] providers;
+    private SequenceBarrier [] barriers;
+    private Sequence [] sequences;
+    private EventHandler [] eventHandlers;
 
-    private final EventHandler eventHandler;
-
-    public MultiEventProcessor(EventHandler eventHandler) {
-        this(eventHandler, new NoWaitStrategy());
+    public MultiEventProcessor() {
+        this(new NoWaitStrategy());
     }
 
-    public MultiEventProcessor(EventHandler eventHandler, MultiBufferWaitStrategy waitStrategy) {
-        this.eventHandler = eventHandler;
-        this.queue = null;
+    public MultiEventProcessor(MultiBufferWaitStrategy waitStrategy) {
         this.waitStrategy = waitStrategy;
     }
 
-//    public MultiEventProcessor(EventHandler eventHandler, MultiBufferWaitStrategy waitStrategy, RingBuffer... providers) {
-//        this(eventHandler, waitStrategy, null, providers);
-//    }
-//
-//
-//    public MultiEventProcessor(EventHandler eventHandler, MultiBufferWaitStrategy waitStrategy, Queue queue, RingBuffer... providers) {
-//        this.eventHandler = eventHandler;
-//        this.providers = providers;
-//        this.barriers = new SequenceBarrier[providers.length];
-//        this.queue = queue;
-//        this.waitStrategy = waitStrategy;
-//
-//        this.sequences = new Sequence[providers.length];
-//        for (int i = 0; i < providers.length; i++) {
-//            barriers[i] = providers[i].newBarrier();
-//            sequences[i] = new Sequence(Sequencer.INITIAL_CURSOR_VALUE);
-//            //providers[i].addGatingSequences(sequences[i]);
-//        }
-//    }
-
-    public MultiEventProcessor(EventHandler eventHandler, RingBuffer[] providers,
-                               SequenceBarrier[] barriers, Queue queue, MultiBufferWaitStrategy waitStrategy) {
-        if (providers.length != barriers.length) {
-            throw new IllegalArgumentException();
-        }
-
-        this.eventHandler = eventHandler;
-        this.providers = providers;
-        this.barriers = barriers;
-        this.queue = queue;
-        this.waitStrategy = waitStrategy;
-
-        seal();
+    public Sequence add(RingBuffer provider, SequenceBarrier barriers, EventHandler eventHandler){
+        Sequence sequence = new Sequence(Sequencer.INITIAL_CURSOR_VALUE);
+        this.ringBufferInfos.add(new RingBufferInfo<>(provider, barriers, sequence, eventHandler));
+        return sequence;
     }
 
+    public Sequence add(RingBufferInfo ringBufferInfo){
+        this.ringBufferInfos.add(ringBufferInfo);
+        return ringBufferInfo.sequence;
+    }
 
     public void seal(){
         if (sealed.compareAndSet(false, true)) {
-            this.sequences = new Sequence[providers.length];
-            for (int i = 0; i < sequences.length; i++) {
-                sequences[i] = new Sequence(-1);
+            int size = ringBufferInfos.size();
+
+            this.providers = new RingBuffer[size];
+            this.barriers = new SequenceBarrier[size] ;
+            this.sequences = new Sequence[size];
+            this.eventHandlers = new EventHandler[size];
+
+            for (int i =0; i < size; i ++) {
+                RingBufferInfo ringBufferInfo = ringBufferInfos.get(i);
+                this.providers[i]= ringBufferInfo.provider;
+                this.barriers[i]= ringBufferInfo.barriers;
+                this.sequences[i]= ringBufferInfo.sequence;
+                this.eventHandlers[i]= ringBufferInfo.eventHandler;
+
                 providers[i].addGatingSequences(sequences[i]);
             }
         }
@@ -87,6 +75,8 @@ public class MultiEventProcessor implements EventProcessor, LifecycleAware{
         if (!isRunning.compareAndSet(false, true)) {
             throw new RuntimeException("Already running");
         }
+
+        seal();
 
         for (SequenceBarrier barrier : barriers) {
             barrier.clearAlert();
@@ -104,12 +94,12 @@ public class MultiEventProcessor implements EventProcessor, LifecycleAware{
                     long batchCount = 0;
 
                     // queue event
-                    if (queue != null) {
-                        while (queue.peek() != null) {
-                            batchCount++;
-                            eventHandler.onEvent(queue.poll());
-                        }
-                    }
+//                    if (queue != null) {
+//                        while (queue.peek() != null) {
+//                            batchCount++;
+//                            eventHandler.onEvent(queue.poll());
+//                        }
+//                    }
 
                     //RB event
                     for (int i = 0; i < barrierLength; i++) {
@@ -121,7 +111,7 @@ public class MultiEventProcessor implements EventProcessor, LifecycleAware{
 
                         if (available > previous) {
                             for (long l = previous + 1; l <= available; l++) {
-                                eventHandler.onEvent(providers[i].get(l));
+                                eventHandlers[i].onEvent(providers[i].get(l), l, l==available);
                             }
                             sequence.set(available);
                             batchCount += (available - previous);
@@ -153,7 +143,6 @@ public class MultiEventProcessor implements EventProcessor, LifecycleAware{
         }
     }
 
-
     @Override
     public Sequence getSequence() {
         throw new UnsupportedOperationException();
@@ -166,12 +155,10 @@ public class MultiEventProcessor implements EventProcessor, LifecycleAware{
             }
         }
         throw new RuntimeException("buffer not found="+buffer);
-
     }
 
-    public long getCount()
-    {
-        return count;
+    public Sequence getSequence(int i){
+        return sequences[i];
     }
 
     public Sequence[] getSequences()
@@ -179,57 +166,31 @@ public class MultiEventProcessor implements EventProcessor, LifecycleAware{
         return sequences;
     }
 
-    public Sequence add(RingBuffer provider, SequenceBarrier barrier){
-
-        Sequence sequence = new Sequence(Sequencer.INITIAL_CURSOR_VALUE);
-        if (this.providers != null) {
-            RingBuffer<Event>[] newProviders = new RingBuffer[this.providers.length + 1];
-            SequenceBarrier[] newBarriers = new SequenceBarrier[this.barriers.length + 1];
-            Sequence[] newSequences = new Sequence[this.sequences.length + 1];
-
-            System.arraycopy(this.providers, 0, newProviders, 0, this.sequences.length);
-            System.arraycopy(this.barriers, 0, newBarriers, 0, this.sequences.length);
-            System.arraycopy(this.sequences, 0, newSequences, 0, this.sequences.length);
-
-            newProviders[newProviders.length - 1] = provider;
-            newBarriers[newBarriers.length - 1] = barrier;
-            newSequences[newSequences.length - 1] = sequence;
-
-            this.providers = newProviders;
-            this.barriers = newBarriers;
-            this.sequences = newSequences;
-        }
-        else{
-
-            this.providers = new RingBuffer[]{provider};
-            this.barriers = new SequenceBarrier[]{barrier};
-            this.sequences = new Sequence[]{sequence};
-        }
-
-        return sequence;
+    public long getCount()
+    {
+        return count;
     }
 
     @Override
-    public void halt()
-    {
+    public void halt(){
         isRunning.set(false);
-        barriers[0].alert();
+        //barriers[0].alert();
+        for (SequenceBarrier barrier : barriers) {
+            barrier.alert();
+        }
     }
 
     @Override
-    public boolean isRunning()
-    {
+    public boolean isRunning(){
         return isRunning.get();
     }
 
     @Override
-    public void onStart()
-    {
+    public void onStart(){
     }
 
     @Override
-    public void onShutdown()
-    {
+    public void onShutdown(){
     }
 }
 

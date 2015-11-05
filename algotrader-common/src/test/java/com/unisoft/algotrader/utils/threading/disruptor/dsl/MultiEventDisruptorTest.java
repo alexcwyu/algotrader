@@ -53,30 +53,30 @@ public class MultiEventDisruptorTest {
         executor.joinAllThreads();
     }
 
-    @Test
-    public void shouldCreateEventProcessorGroupForFirstEventProcessors() throws Exception{
-        executor.ignoreExecutions();
-        final SleepingEventProcessor eventHandler1 = new SleepingEventProcessor();
-        SleepingEventProcessor eventHandler2 = new SleepingEventProcessor();
-
-        final MultiEventHandlerGroup<TestEvent> eventHandlerGroup =
-                disruptor.handleEventsWith(eventHandler1, eventHandler2);
-        disruptor.start();
-
-        assertNotNull(eventHandlerGroup);
-        assertThat(Integer.valueOf(executor.getExecutionCount()), equalTo(Integer.valueOf(2)));
-    }
-
-    @Test
-    public void shouldMakeEntriesAvailableToFirstHandlersImmediately() throws Exception
-    {
-        CountDownLatch countDownLatch = new CountDownLatch(2);
-        StubEventProcessor multiEventProcessor = new StubEventProcessor(countDownLatch);
-
-        disruptor.handleEventsWith(createDelayedEventHandler(), multiEventProcessor);
-
-        ensureTwoEventsProcessedAccordingToDependencies(countDownLatch);
-    }
+//    @Test
+//    public void shouldCreateEventProcessorGroupForFirstEventProcessors() throws Exception{
+//        executor.ignoreExecutions();
+//        final SleepingEventProcessor eventHandler1 = new SleepingEventProcessor();
+//        SleepingEventProcessor eventHandler2 = new SleepingEventProcessor();
+//
+//        final MultiEventHandlerGroup<TestEvent> eventHandlerGroup =
+//                disruptor.handleEventsWith(eventHandler1, eventHandler2);
+//        disruptor.start();
+//
+//        assertNotNull(eventHandlerGroup);
+//        assertThat(Integer.valueOf(executor.getExecutionCount()), equalTo(Integer.valueOf(2)));
+//    }
+//
+//    @Test
+//    public void shouldMakeEntriesAvailableToFirstHandlersImmediately() throws Exception
+//    {
+//        CountDownLatch countDownLatch = new CountDownLatch(2);
+//        StubEventProcessor multiEventProcessor = new StubEventProcessor(countDownLatch);
+//
+//        disruptor.handleEventsWith(createDelayedEventHandler(), multiEventProcessor);
+//
+//        ensureTwoEventsProcessedAccordingToDependencies(countDownLatch);
+//    }
 
 
 

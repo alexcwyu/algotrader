@@ -2,6 +2,7 @@ package com.unisoft.algotrader.utils.threading.disruptor.dsl;
 
 import com.lmax.disruptor.*;
 import com.lmax.disruptor.dsl.ProducerType;
+import com.unisoft.algotrader.utils.collection.Tuple2;
 import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
 import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 
@@ -17,7 +18,7 @@ public class MultiEventDisruptor<T> {
 
     private final RingBuffer<T> ringBuffer;
     private final Executor executor;
-    private final ConsumerRepository<T> consumerRepository = new ConsumerRepository<>(this);
+    private final MultiEventConsumerRepository<T> multiEventConsumerRepository = new MultiEventConsumerRepository<>(this);
     private final AtomicBoolean started = new AtomicBoolean(false);
     private ExceptionHandler<? super T> exceptionHandler;
 
@@ -41,9 +42,8 @@ public class MultiEventDisruptor<T> {
         this.executor = executor;
     }
 
-    public MultiEventHandlerGroup<T> handleEventsWith(final EventHandler... handlers){
-        final Sequence[] barrierSequences = new Sequence[0];
-        return createEventProcessors(barrierSequences, handlers);
+    public MultiEventHandlerGroup<T> handleEventsWith(final Tuple2<MultiEventProcessor, EventHandler<? super T>>... handlers){
+        return updateEventProcessors(new Sequence[0], handlers);
     }
 
     public MultiEventHandlerGroup<T> handleEventsWithWorkerPool(final WorkHandler<T>... workHandlers)
@@ -57,14 +57,16 @@ public class MultiEventDisruptor<T> {
         this.exceptionHandler = exceptionHandler;
     }
 
+
+
     public MultiEventHandlerGroup<T> after(final MultiEventProcessor... processors)
     {
         for (final MultiEventProcessor processor : processors)
         {
-            consumerRepository.add(processor, ringBuffer);
+            multiEventConsumerRepository.add(processor, ringBuffer);
         }
 
-        return new MultiEventHandlerGroup<T>(this, consumerRepository, getSequencesFor(processors));
+        return new MultiEventHandlerGroup<T>(this, multiEventConsumerRepository, getSequencesFor(processors));
     }
 
     public void publishEvent(final EventTranslator<T> eventTranslator)
@@ -84,11 +86,11 @@ public class MultiEventDisruptor<T> {
 
     public RingBuffer<T> start()
     {
-        final Sequence[] gatingSequences = consumerRepository.getLastSequenceInChain(true);
+        final Sequence[] gatingSequences = multiEventConsumerRepository.getLastSequenceInChain(true);
         ringBuffer.addGatingSequences(gatingSequences);
 
         checkOnlyStartedOnce();
-        for (final ConsumerInfo consumerInfo : consumerRepository)
+        for (final ConsumerInfo consumerInfo : multiEventConsumerRepository)
         {
             consumerInfo.start(executor);
         }
@@ -98,7 +100,7 @@ public class MultiEventDisruptor<T> {
 
     public void halt()
     {
-        for (final ConsumerInfo consumerInfo : consumerRepository)
+        for (final ConsumerInfo consumerInfo : multiEventConsumerRepository)
         {
             consumerInfo.halt();
         }
@@ -152,15 +154,15 @@ public class MultiEventDisruptor<T> {
     }
 
 
-    public SequenceBarrier getBarrierFor(final EventHandler<T> handler)
+    public SequenceBarrier getBarrierFor(final EventHandler handler)
     {
-        return consumerRepository.getBarrierFor(handler);
+        return multiEventConsumerRepository.getBarrierFor(handler);
     }
 
     private boolean hasBacklog()
     {
         final long cursor = ringBuffer.getCursor();
-        for (final Sequence consumer : consumerRepository.getLastSequenceInChain(false))
+        for (final Sequence consumer : multiEventConsumerRepository.getLastSequenceInChain(false))
         {
             if (cursor > consumer.get())
             {
@@ -170,36 +172,36 @@ public class MultiEventDisruptor<T> {
         return false;
     }
 
-    MultiEventHandlerGroup<T> createEventProcessors(final Sequence[] barrierSequences,
-                                               final EventHandler<? super T>[] eventHandlers){
+    MultiEventHandlerGroup<T> updateEventProcessors(final Sequence[] barrierSequences,
+                                               final Tuple2<MultiEventProcessor, EventHandler<? super T>>[] groups){
 
         checkNotStarted();
-        final Sequence[] processorSequences = new Sequence[eventHandlers.length];
+        final Sequence[] processorSequences = new Sequence[groups.length];
         final SequenceBarrier barrier = ringBuffer.newBarrier(barrierSequences);
 
-        for (int i = 0, processorsLength = eventHandlers.length; i < processorsLength; i++){
+        for (int i = 0, processorsLength = groups.length; i < processorsLength; i++){
 
-            final EventHandler<? super T> eventHandler = eventHandlers[i];
-            final MultiEventProcessor eventProcessor = new MultiEventProcessor();
-            processorSequences[i] = processor.add(ringBuffer, barrier);
+            final Tuple2<MultiEventProcessor, EventHandler<? super T>> group = groups[i];
+            final MultiEventProcessor eventProcessor = group.getV1();
+            final EventHandler<? super T> eventHandler = group.getV2();
 
-            consumerRepository.add(processor, barrier, ringBuffer);
+            processorSequences[i] = eventProcessor.add(ringBuffer, barrier, eventHandler);
+            multiEventConsumerRepository.add(eventProcessor, barrier, ringBuffer);
         }
 
-        if (processorSequences.length > 0)
-        {
-            consumerRepository.unMarkEventProcessorsAsEndOfChain(barrierSequences);
+        if (processorSequences.length > 0){
+            multiEventConsumerRepository.unMarkEventProcessorsAsEndOfChain(barrierSequences);
         }
 
-        return new MultiEventHandlerGroup<T>(this, consumerRepository, processorSequences);
+        return new MultiEventHandlerGroup<T>(this, multiEventConsumerRepository, processorSequences);
     }
 
     MultiEventHandlerGroup<T> createWorkerPool(final Sequence[] barrierSequences, final WorkHandler<? super T>[] workHandlers)
     {
         final SequenceBarrier sequenceBarrier = ringBuffer.newBarrier(barrierSequences);
         final WorkerPool<T> workerPool = new WorkerPool<T>(ringBuffer, sequenceBarrier, exceptionHandler, workHandlers);
-        consumerRepository.add(workerPool, sequenceBarrier);
-        return new MultiEventHandlerGroup<T>(this, consumerRepository, workerPool.getWorkerSequences());
+        multiEventConsumerRepository.add(workerPool, sequenceBarrier);
+        return new MultiEventHandlerGroup<T>(this, multiEventConsumerRepository, workerPool.getWorkerSequences());
     }
 
     private void checkNotStarted()

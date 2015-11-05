@@ -72,38 +72,38 @@ public class DataImporter implements MarketDataHandler {
     }
 
     public static void main(String [] args){
-
-        final ExecutorService executor = Executors.newFixedThreadPool(2, DaemonThreadFactory.INSTANCE);
-
-
-        Injector injector = Guice.createInjector(new SampleAppConfigModule(), new ServiceConfigModule(), new DefaultEventBusConfigModule(), new DataServiceConfigModule());
-        ProviderManager providerManager = injector.getInstance(ProviderManager.class);
-        DataService dataService = injector.getInstance(DataService.class);
-        RefDataStore refDataStore = injector.getInstance(RefDataStore.class);
-        EventBusManager eventBusManager = injector.getInstance(EventBusManager.class);
-        DataImporter importer = new DataImporter(providerManager, dataService, eventBusManager.getMarketDataRB());
-
-        MultiEventProcessor processor = new MultiEventProcessor(importer);
-
-        executor.submit(processor);
-
-        Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange("0005.HK", HKEX.getExchId());
-        Date fromDate = DateHelper.fromYYYYMMDD(20000101);
-        Date toDate = Calendar.getInstance().getTime();
-        HistoricalSubscriptionKey subscriptionKey = HistoricalSubscriptionKey.createDailySubscriptionKey(YahooHistoricalDataProvider.PROVIDER_ID.id, instrument.getInstId(), fromDate, toDate);
-
-        boolean result = importer.importData(subscriptionKey);
-
-
-        CSVHistoricalDataStore provider = (CSVHistoricalDataStore)providerManager.getDataStoreProvider(CSVHistoricalDataStore.PROVIDER_ID);
-
-        List<MarketDataContainer> data = provider.loadHistoricalData(subscriptionKey);
-
-        System.out.println(data.size());
-
-        data.stream().map(marketDataContainer -> marketDataContainer.bar).forEach(System.out::println);
-
-        executor.shutdownNow();
+//
+//        final ExecutorService executor = Executors.newFixedThreadPool(2, DaemonThreadFactory.INSTANCE);
+//
+//
+//        Injector injector = Guice.createInjector(new SampleAppConfigModule(), new ServiceConfigModule(), new DefaultEventBusConfigModule(), new DataServiceConfigModule());
+//        ProviderManager providerManager = injector.getInstance(ProviderManager.class);
+//        DataService dataService = injector.getInstance(DataService.class);
+//        RefDataStore refDataStore = injector.getInstance(RefDataStore.class);
+//        EventBusManager eventBusManager = injector.getInstance(EventBusManager.class);
+//        DataImporter importer = new DataImporter(providerManager, dataService, eventBusManager.getMarketDataRB());
+//
+//        MultiEventProcessor processor = new MultiEventProcessor(importer);
+//
+//        executor.submit(processor);
+//
+//        Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange("0005.HK", HKEX.getExchId());
+//        Date fromDate = DateHelper.fromYYYYMMDD(20000101);
+//        Date toDate = Calendar.getInstance().getTime();
+//        HistoricalSubscriptionKey subscriptionKey = HistoricalSubscriptionKey.createDailySubscriptionKey(YahooHistoricalDataProvider.PROVIDER_ID.id, instrument.getInstId(), fromDate, toDate);
+//
+//        boolean result = importer.importData(subscriptionKey);
+//
+//
+//        CSVHistoricalDataStore provider = (CSVHistoricalDataStore)providerManager.getDataStoreProvider(CSVHistoricalDataStore.PROVIDER_ID);
+//
+//        List<MarketDataContainer> data = provider.loadHistoricalData(subscriptionKey);
+//
+//        System.out.println(data.size());
+//
+//        data.stream().map(marketDataContainer -> marketDataContainer.bar).forEach(System.out::println);
+//
+//        executor.shutdownNow();
     }
 
 }
