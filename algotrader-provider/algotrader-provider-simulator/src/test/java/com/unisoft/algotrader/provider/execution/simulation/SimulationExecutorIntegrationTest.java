@@ -2,6 +2,7 @@ package com.unisoft.algotrader.provider.execution.simulation;
 
 import com.google.common.collect.Lists;
 import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.multi.NoWaitStrategy;
 import com.unisoft.algotrader.event.SampleEventFactory;
 import com.unisoft.algotrader.event.bus.BackTestEventBusManager;
 import com.unisoft.algotrader.model.clock.SimulationClock;
@@ -24,7 +25,6 @@ import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.trading.Strategy;
 import com.unisoft.algotrader.trading.StrategyManager;
 import com.unisoft.algotrader.utils.id.AtomicIntIdSupplier;
-import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

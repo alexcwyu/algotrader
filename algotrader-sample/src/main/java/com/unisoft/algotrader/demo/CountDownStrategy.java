@@ -1,6 +1,5 @@
 package com.unisoft.algotrader.demo;
 
-import com.lmax.disruptor.RingBuffer;
 import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;

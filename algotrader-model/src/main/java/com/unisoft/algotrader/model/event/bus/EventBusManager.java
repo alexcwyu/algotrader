@@ -1,11 +1,11 @@
 package com.unisoft.algotrader.model.event.bus;
 
 import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.multi.NoWaitStrategy;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.event.data.MarketDepth;
 import com.unisoft.algotrader.model.event.execution.ExecutionEventContainer;
 import com.unisoft.algotrader.model.event.execution.OrderEventContainer;
-import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 
 import javax.inject.Singleton;
 

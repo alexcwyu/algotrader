@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.provider.execution.simulation;
 
 import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.multi.NoWaitStrategy;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import com.unisoft.algotrader.event.SampleEventFactory;
 import com.unisoft.algotrader.event.bus.RingBufferMarketDataEventBus;
@@ -11,11 +12,7 @@ import com.unisoft.algotrader.persistence.InMemoryTradingDataStore;
 import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.data.DummyDataProvider;
-import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
 import com.unisoft.algotrader.trading.Strategy;
-import com.unisoft.algotrader.utils.DateHelper;
-import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
-import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

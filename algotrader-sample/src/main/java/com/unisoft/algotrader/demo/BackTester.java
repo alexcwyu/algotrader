@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.demo;
 
 import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.multi.NoWaitStrategy;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import com.unisoft.algotrader.config.AppConfig;
 import com.unisoft.algotrader.model.clock.SimulationClock;
@@ -21,7 +22,6 @@ import com.unisoft.algotrader.trading.InstrumentDataManager;
 import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.trading.Strategy;
 import com.unisoft.algotrader.trading.StrategyManager;
-import com.unisoft.algotrader.utils.threading.disruptor.waitstrategy.NoWaitStrategy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

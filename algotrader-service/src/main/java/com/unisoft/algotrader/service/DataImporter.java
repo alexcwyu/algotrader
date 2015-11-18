@@ -1,34 +1,13 @@
 package com.unisoft.algotrader.service;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import com.lmax.disruptor.RingBuffer;
-import com.lmax.disruptor.util.DaemonThreadFactory;
-import com.unisoft.algotrader.config.DefaultEventBusConfigModule;
-import com.unisoft.algotrader.config.SampleAppConfigModule;
-import com.unisoft.algotrader.config.ServiceConfigModule;
 import com.unisoft.algotrader.event.bus.RingBufferMarketDataEventBus;
-import com.unisoft.algotrader.model.event.bus.EventBusManager;
 import com.unisoft.algotrader.model.event.data.*;
-import com.unisoft.algotrader.model.refdata.Instrument;
-import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.provider.ProviderManager;
-import com.unisoft.algotrader.provider.config.DataServiceConfigModule;
 import com.unisoft.algotrader.provider.csv.CSVHistoricalDataStore;
 import com.unisoft.algotrader.provider.data.DataService;
 import com.unisoft.algotrader.provider.data.DataStoreProvider;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
-import com.unisoft.algotrader.provider.yahoo.YahooHistoricalDataProvider;
-import com.unisoft.algotrader.utils.DateHelper;
-import com.unisoft.algotrader.utils.threading.disruptor.MultiEventProcessor;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import static com.unisoft.algotrader.model.refdata.Exchange.HKEX;
 /**
  * Created by alex on 7/19/15.
  */

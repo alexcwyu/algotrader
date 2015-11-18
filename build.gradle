@@ -94,7 +94,7 @@ ext{
     jodaVersion          = "latest.release"
     gsonVersion          = "latest.release"
     slf4jVersion         = "latest.release"
-    disruptorVersion     = "latest.release"
+    disruptorVersion     = "3.3.3.multievent"
     reactorVersion       = "latest.release"
     chronicleVersion     = "latest.release"
     rxjavaVersion        = "latest.release"
