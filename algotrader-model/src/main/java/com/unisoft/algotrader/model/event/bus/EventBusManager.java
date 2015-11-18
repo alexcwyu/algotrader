@@ -12,7 +12,6 @@ import javax.inject.Singleton;
 /**
  * Created by alex on 5/17/15.
  */
-@Singleton
 public abstract class EventBusManager {
 
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 64;

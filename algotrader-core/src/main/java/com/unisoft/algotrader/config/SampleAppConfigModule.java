@@ -1,7 +1,9 @@
 package com.unisoft.algotrader.config;
 
+import com.unisoft.algotrader.event.bus.DefaultEventBusManager;
 import com.unisoft.algotrader.model.clock.Clock;
 import com.unisoft.algotrader.model.clock.SimulationClock;
+import com.unisoft.algotrader.model.event.bus.EventBusManager;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.persistence.SampleInMemoryRefDataStore;
 import com.unisoft.algotrader.persistence.SampleInMemoryTradingDataStore;
@@ -18,6 +20,7 @@ public class SampleAppConfigModule extends BaseConfigModule {
         bind(Clock.class).to(SimulationClock.class).asEagerSingleton();
         bind(RefDataStore.class).to(SampleInMemoryRefDataStore.class).asEagerSingleton();
         bind(TradingDataStore.class).to(SampleInMemoryTradingDataStore.class).asEagerSingleton();
+        bind(EventBusManager.class).to(DefaultEventBusManager.class);
 
     }
 }

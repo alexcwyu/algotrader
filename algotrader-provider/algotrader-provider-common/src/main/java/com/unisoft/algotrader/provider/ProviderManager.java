@@ -30,14 +30,18 @@ public class ProviderManager {
     private Map<ProviderId, RealTimeDataProvider> rtDataProviderMap = Maps.newHashMap();
 
     private void addProvider(Provider provider){
-        if (providerMap.containsKey(provider.providerId())) {
-            throw new IllegalArgumentException("Provider id is registered, id=" + provider.providerId());
+        if (!providerMap.containsKey(provider.providerId())) {
+
+            providerMap.put(provider.providerId(), provider);
+            if (providerIdMap.containsKey(provider.providerId().id)) {
+                throw new IllegalArgumentException("Provider id is registered, id=" + provider.providerId().id);
+            }
+            providerIdMap.put(provider.providerId().id, provider);
         }
-        providerMap.put(provider.providerId(), provider);
-        if (providerIdMap.containsKey(provider.providerId().id)) {
+        else if (providerMap.get(provider.providerId()) != provider){
             throw new IllegalArgumentException("Provider id is registered, id=" + provider.providerId().id);
         }
-        providerIdMap.put(provider.providerId().id, provider);
+
     }
 
     public void addHistoricalDataProvider(HistoricalDataProvider provider) {

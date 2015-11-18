@@ -3,10 +3,13 @@ package com.unisoft.algotrader.event.bus;
 import com.unisoft.algotrader.model.event.bus.*;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Created by alex on 9/20/15.
  */
+
+@Singleton
 public class DefaultEventBusManager extends EventBusManager {
 
     public final MarketDataEventBus marketDataEventBus;
