@@ -5,7 +5,6 @@ import com.unisoft.algotrader.model.trading.Account;
 import com.unisoft.algotrader.model.trading.Performance;
 import com.unisoft.algotrader.model.trading.Portfolio;
 import com.unisoft.algotrader.persistence.SampleInMemoryRefDataStore;
-import com.unisoft.algotrader.persistence.TradingDataStore;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,7 +23,7 @@ public class PerformanceTest {
 
     @Before
     public void setup() {
-        Account account = TradingDataStore.DEFAULT_ACCOUNT;
+        Account account = Account.DEFAULT;
         Portfolio portfolio = new Portfolio(1, account.accountId());
         processor = spy(new PortfolioProcessor(portfolio, account, new SampleInMemoryRefDataStore(), new SimulationClock()));
         performance = portfolio.performance();

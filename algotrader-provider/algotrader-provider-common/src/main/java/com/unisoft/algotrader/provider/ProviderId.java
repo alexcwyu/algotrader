@@ -9,6 +9,7 @@ import java.util.Map;
  */
 public enum ProviderId {
     Dummy(0),
+    Dummy1(-1),
     Simulation(1),
     Google(2),
     Yahoo(3),

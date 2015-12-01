@@ -13,8 +13,6 @@ import java.util.List;
  */
 public interface TradingDataStore {
 
-    public static final Account DEFAULT_ACCOUNT = new Account("Test", "Testing Account", Currency.USD, 1000000);
-
     void connect();
 
     void saveAccount(Account account);

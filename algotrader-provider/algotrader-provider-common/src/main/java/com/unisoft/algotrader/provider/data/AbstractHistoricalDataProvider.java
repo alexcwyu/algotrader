@@ -11,5 +11,9 @@ public abstract class AbstractHistoricalDataProvider implements HistoricalDataPr
         providerManager.addHistoricalDataProvider(this);
     }
 
+    protected AbstractHistoricalDataProvider(){
+    }
+
+
 
 }

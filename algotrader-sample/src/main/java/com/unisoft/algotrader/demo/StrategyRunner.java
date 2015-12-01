@@ -7,7 +7,6 @@ import com.unisoft.algotrader.config.SampleConfigModule;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.Account;
 import com.unisoft.algotrader.model.trading.Portfolio;
-import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.provider.execution.simulation.SimulationExecutor;
 import com.unisoft.algotrader.trading.PortfolioProcessor;
 import com.unisoft.algotrader.trading.Strategy;
@@ -73,7 +72,7 @@ public class StrategyRunner {
         AppConfig appConfig = injector.getInstance(AppConfig.class);
 
 
-        Account account = TradingDataStore.DEFAULT_ACCOUNT;
+        Account account = Account.DEFAULT;
         Portfolio portfolio = new Portfolio(1, account.accountId());
         appConfig.getTradingDataStore().savePortfolio(portfolio);
 

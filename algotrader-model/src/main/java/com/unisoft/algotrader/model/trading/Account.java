@@ -16,6 +16,9 @@ import java.util.Map;
 
 @Table(keyspace = "trading", name = "accounts")
 public class Account {
+    public static final String DEFAULT_ACCOUNT_ID = "default";
+    public static Account DEFAULT = new Account(Account.DEFAULT_ACCOUNT_ID, "Default", Currency.USD, 1000000);
+
     @PartitionKey
     @Column(name ="account_id")
     private String accountId;

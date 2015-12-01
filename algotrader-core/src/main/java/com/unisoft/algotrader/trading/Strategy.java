@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class Strategy implements MarketDataHandler, ExecutionEventHandler {
 
-    protected final int strategyId;
+    public final int strategyId;
     protected final TradingDataStore tradingDataStore;
     protected final EventBusManager eventBusManager;
     protected Portfolio portfolio;

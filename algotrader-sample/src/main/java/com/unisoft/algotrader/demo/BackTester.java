@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.demo;
 
 import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.multi.MultiEventProcessor;
 import com.lmax.disruptor.multi.NoWaitStrategy;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import com.unisoft.algotrader.config.AppConfig;
@@ -41,6 +42,12 @@ public class BackTester {
 
     private final HistoricalDataProvider dataProvider;
     private final SimulationExecutor simulationExecutor;
+
+    private final MultiEventProcessor processor1;
+    private final MultiEventProcessor processor2;
+    private final MultiEventProcessor processor3;
+    private final MultiEventProcessor simulationExecutorProcessor;
+
     private final BarFactory barFactory;
     private final Simulator simulator;
     private final RefDataStore refDataStore;
@@ -90,8 +97,17 @@ public class BackTester {
         RingBuffer<MarketDataContainer> rawMarketDataRB
             = RingBuffer.createSingleProducer(MarketDataContainer.FACTORY, 1024, new NoWaitStrategy());
 
-        this.barFactory = new BarFactory(eventBusManager.getMarketDataRB());
+        this.barFactory = new BarFactory(rawMarketDataRB);
         this.simulator = new Simulator(simulationExecutor, strategy);
+
+        this.processor1 = new MultiEventProcessor();
+        this.processor2 = new MultiEventProcessor();
+        this.processor3 = new MultiEventProcessor();
+        this.simulationExecutorProcessor = new MultiEventProcessor();
+
+        processor1.add(eventBusManager.getMarketDataRB(), barFactory);
+        processor2.add(rawMarketDataRB, simulator);
+        processor3.add(rawMarketDataRB, simulator);
 
         this.dataProvider = provider;
 
@@ -101,8 +117,8 @@ public class BackTester {
 
 
     public void run(){
-        //executor.submit(barFactory);
-        //executor.submit(simulator);
+        executor.submit(processor1);
+        executor.submit(processor2);
         dataProvider.subscribeHistoricalData(HistoricalSubscriptionKey.createDailySubscriptionKey(dataProvider.providerId().id, instrument.getInstId(), fromDate, toDate));
     }
 

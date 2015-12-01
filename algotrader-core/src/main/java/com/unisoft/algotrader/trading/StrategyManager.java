@@ -1,6 +1,7 @@
 package com.unisoft.algotrader.trading;
 
 import com.google.common.collect.Maps;
+import com.unisoft.algotrader.utils.id.AtomicIntIdSupplier;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -17,7 +18,13 @@ public class StrategyManager {
 
     private final Supplier<Integer> strategyIdSupplier;
 
+
     @Inject
+    public StrategyManager(){
+        this(new AtomicIntIdSupplier());
+    }
+
+
     public StrategyManager(Supplier<Integer> strategyIdSupplier){
         this.strategyIdSupplier = strategyIdSupplier;
     }

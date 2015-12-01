@@ -10,6 +10,7 @@ import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.trading.StrategyManager;
 
 import javax.inject.Inject;
+import java.util.function.Supplier;
 
 /**
  * Created by alex on 7/16/15.
@@ -56,4 +57,6 @@ public class AppConfig {
     public InstrumentDataManager getInstrumentDataManager() {
         return instrumentDataManager;
     }
+
+
 }

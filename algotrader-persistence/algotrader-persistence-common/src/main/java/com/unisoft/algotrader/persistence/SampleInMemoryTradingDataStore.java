@@ -1,5 +1,8 @@
 package com.unisoft.algotrader.persistence;
 
+import com.unisoft.algotrader.model.trading.Account;
+import com.unisoft.algotrader.model.trading.Portfolio;
+
 import javax.inject.Singleton;
 
 /**
@@ -10,6 +13,7 @@ public class SampleInMemoryTradingDataStore  extends  InMemoryTradingDataStore{
 
     public SampleInMemoryTradingDataStore(){
         super();
-        this.saveAccount(TradingDataStore.DEFAULT_ACCOUNT);
+        this.saveAccount(Account.DEFAULT);
+        this.savePortfolio(Portfolio.DEFAULT);
     }
 }

@@ -20,22 +20,22 @@ public class DummyDataProvider extends AbstractHistoricalDataProvider {
 
     public static SimpleDateFormat FORMAT2 = new SimpleDateFormat("yyyyMMdd");
 
-    public static final ProviderId PROVIDER_ID = ProviderId.Dummy;
+    public final ProviderId providerId;
     private final MarketDataEventBus marketDataEventBus;
 
     public DummyDataProvider(ProviderManager providerManager, MarketDataEventBus marketDataEventBus){
-        super(providerManager);
+        this(ProviderId.Dummy1, providerManager, marketDataEventBus);
+    }
+
+
+    public DummyDataProvider(ProviderId providerId, ProviderManager providerManager, MarketDataEventBus marketDataEventBus){
+        this.providerId = providerId;
         this.marketDataEventBus = marketDataEventBus;
+        providerManager.addHistoricalDataProvider(this);
     }
 
     @Override
     public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
-//        CsvParserSettings settings = new CsvParserSettings();
-//
-//        settings.getFormat().setLineSeparator("\n");
-//        settings.getFormat().setDelimiter(',');
-//        settings.setHeaderExtractionEnabled(true);
-
         long dateTime = subscriptionKey.fromDate;
         long toDateTime = subscriptionKey.toDate;
 
@@ -81,7 +81,7 @@ public class DummyDataProvider extends AbstractHistoricalDataProvider {
 
     @Override
     public ProviderId providerId() {
-        return PROVIDER_ID;
+        return providerId;
     }
 
     @Override

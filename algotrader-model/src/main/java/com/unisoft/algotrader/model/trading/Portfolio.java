@@ -16,6 +16,9 @@ import java.util.Map;
 @Table(keyspace = "trading", name = "portfolios")
 public class Portfolio{
 
+    public static final int DEFAULT_PORTFOLIO_ID = 0;
+    public static final Portfolio DEFAULT = new Portfolio(Portfolio.DEFAULT_PORTFOLIO_ID, Account.DEFAULT_ACCOUNT_ID);
+
     @PartitionKey
     @Column(name ="portfolio_id")
     private int portfolioId;
