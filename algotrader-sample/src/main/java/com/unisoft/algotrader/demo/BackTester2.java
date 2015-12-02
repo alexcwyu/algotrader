@@ -3,12 +3,9 @@ package com.unisoft.algotrader.demo;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.lmax.disruptor.multi.MultiEventProcessor;
-import com.unisoft.algotrader.config.AppConfig;
-import com.unisoft.algotrader.config.DefaultEventBusConfigModule;
-import com.unisoft.algotrader.config.SampleAppConfigModule;
-import com.unisoft.algotrader.config.ServiceConfigModule;
+import com.lmax.disruptor.util.DaemonThreadFactory;
+import com.unisoft.algotrader.config.*;
 import com.unisoft.algotrader.model.event.bus.EventBusManager;
-import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.Portfolio;
 import com.unisoft.algotrader.persistence.RefDataStore;
@@ -16,19 +13,15 @@ import com.unisoft.algotrader.provider.Provider;
 import com.unisoft.algotrader.provider.ProviderId;
 import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.config.DataServiceConfigModule;
-import com.unisoft.algotrader.provider.csv.CSVHistoricalDataStore;
-import com.unisoft.algotrader.provider.data.DataService;
+import com.unisoft.algotrader.provider.data.HistoricalDataProvider;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
-import com.unisoft.algotrader.provider.yahoo.YahooHistoricalDataProvider;
 import com.unisoft.algotrader.trading.Strategy;
 import com.unisoft.algotrader.trading.StrategyManager;
 import com.unisoft.algotrader.utils.DateHelper;
 
-import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static com.unisoft.algotrader.model.refdata.Exchange.HKEX;
 
@@ -38,10 +31,12 @@ import static com.unisoft.algotrader.model.refdata.Exchange.HKEX;
 public class BackTester2 {
 
 
-    public static void main(String [] args){
+    public static void main(String [] args) throws Exception{
 
-        Injector injector = Guice.createInjector(new SampleAppConfigModule(), new ServiceConfigModule(), new DefaultEventBusConfigModule(), new DataServiceConfigModule());
+        Injector injector = Guice.createInjector(new BackTestingConfigModule(), new SampleAppConfigModule(), new ServiceConfigModule(), new DefaultEventBusConfigModule(), new DataServiceConfigModule());
         AppConfig appConfig = injector.getInstance(AppConfig.class);
+
+        final ExecutorService executor = Executors.newFixedThreadPool(2, DaemonThreadFactory.INSTANCE);
 
         StrategyManager strategyManager = appConfig.getStrategyManager();
         ProviderManager providerManager = appConfig.getProviderManager();
@@ -58,7 +53,7 @@ public class BackTester2 {
          */
         Strategy strategy = new CountDownStrategy(appConfig.getOrderManager(),
                 strategyManager.nextStrategyId(),
-                Portfolio.DEFAULT_PORTFOLIO_ID, appConfig.getTradingDataStore(), latch, 20);
+                Portfolio.DEFAULT_PORTFOLIO_ID, ProviderId.Simulation.id, appConfig.getTradingDataStore(), latch, 20);
 
         strategyManager.register(strategy);
 
@@ -81,13 +76,12 @@ public class BackTester2 {
 
 
         MultiEventProcessor processor = new MultiEventProcessor();
-        processor.add(eventBusManager.getMarketDataRB(), null);
+        processor.add(eventBusManager.getMarketDataRB(), strategy);
+        executor.submit(processor);
 
         /**
          * subscribe historical data
          */
-
-
 
         for (long instId : backTestConfig.instIds) {
 
@@ -96,11 +90,11 @@ public class BackTester2 {
                     instId,
                     backTestConfig.fromDate,
                     backTestConfig.toDate);
-            CSVHistoricalDataStore provider = (CSVHistoricalDataStore) providerManager.getDataStoreProvider(CSVHistoricalDataStore.PROVIDER_ID);
+            HistoricalDataProvider provider = providerManager.getHistoricalDataProvider(ProviderId.Yahoo.id);
             provider.subscribeHistoricalData(subscriptionKey);
         }
 
-
+        latch.await();
         System.out.println(marketDataProvider);
     }
 }

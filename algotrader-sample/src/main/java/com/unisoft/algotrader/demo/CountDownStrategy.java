@@ -27,10 +27,12 @@ class CountDownStrategy extends Strategy {
     private int exp;
     private int count = 0;
     private final OrderManager orderManager;
+    private final int execProviderId;
     public long clOrderId = 0;
-    public CountDownStrategy(OrderManager orderManager, int strategyId, int portfolioId, TradingDataStore tradingDataStore, CountDownLatch latch, int exp) {
+    public CountDownStrategy(OrderManager orderManager, int strategyId, int portfolioId, int execProviderId, TradingDataStore tradingDataStore, CountDownLatch latch, int exp) {
         super(strategyId, tradingDataStore, portfolioId);
         this.orderManager = orderManager;
+        this.execProviderId = execProviderId;
         this.latch = latch;
         this.exp = exp;
     }
@@ -49,7 +51,7 @@ class CountDownStrategy extends Strategy {
             order.instId = bar.instId;
             //order.limitPrice = bar.close;
             order.strategyId = this.strategyId;
-            order.providerId = ProviderId.Dummy.id;
+            order.providerId = execProviderId;
             order.portfolioId = portfolio.portfolioId();
             order.ordType = OrdType.Market;
             order.side = Side.Buy;
@@ -69,7 +71,7 @@ class CountDownStrategy extends Strategy {
             order.instId = data.instId;
             order.limitPrice = data.bar.close;
             order.strategyId = this.strategyId;
-            order.providerId = ProviderId.Dummy.id;
+            order.providerId = execProviderId;
             order.portfolioId = portfolio.portfolioId();
             order.side = Side.Buy;
             order.ordQty = 500;

@@ -8,6 +8,7 @@ import com.unisoft.algotrader.model.event.data.*;
 import com.unisoft.algotrader.model.event.execution.ExecutionReport;
 import com.unisoft.algotrader.model.event.execution.Order;
 import com.unisoft.algotrader.model.event.execution.OrderStatusRequest;
+import com.unisoft.algotrader.model.trading.ExecType;
 import com.unisoft.algotrader.model.trading.OrdStatus;
 import com.unisoft.algotrader.model.trading.OrdType;
 import com.unisoft.algotrader.provider.ProviderId;
@@ -79,7 +80,7 @@ public class SimulationExecutor implements ExecutionProvider, MarketDataHandler 
         return PROVIDER_ID;
     }
 
-    public void sendExecutionReport(Order order, double qty, double price, OrdStatus status){
+    public void sendExecutionReport(Order order, double qty, double price, OrdStatus status, ExecType execType){
 
         ExecutionReport report = new ExecutionReport();
         report.execId = execId.getAndIncrement();
@@ -102,6 +103,7 @@ public class SimulationExecutor implements ExecutionProvider, MarketDataHandler 
 
         report.text = order.text;
         report.ordStatus = status;
+        report.execType = execType;
 
         orderManager.onExecutionReport(report);
     }
@@ -112,7 +114,7 @@ public class SimulationExecutor implements ExecutionProvider, MarketDataHandler 
 
         addOrder(order);
 
-        sendExecutionReport(order, 0, 0, order.ordStatus);
+        sendExecutionReport(order, 0, 0, order.ordStatus, ExecType.New);
 
         if (processNewOrder(order)){
             removeOrder(order);
@@ -242,14 +244,14 @@ public class SimulationExecutor implements ExecutionProvider, MarketDataHandler 
 
         if (qty < order.leaveQty()){
             // partially filled
-            sendExecutionReport(order, qty, filledPrice, OrdStatus.PartiallyFilled);
+            sendExecutionReport(order, qty, filledPrice, OrdStatus.PartiallyFilled, ExecType.PartialFill);
             return false;
         }
         else{
             // fully filled
 
             double filledQty = order.leaveQty();
-            sendExecutionReport(order, filledQty, filledPrice, OrdStatus.Filled);
+            sendExecutionReport(order, filledQty, filledPrice, OrdStatus.Filled, ExecType.Fill);
             removeOrder(order);
             return true;
         }

@@ -11,6 +11,7 @@ import com.unisoft.algotrader.model.trading.Account;
 import com.unisoft.algotrader.model.trading.Performance;
 import com.unisoft.algotrader.model.trading.Portfolio;
 import com.unisoft.algotrader.persistence.TradingDataStore;
+import com.unisoft.algotrader.provider.ProviderId;
 import com.unisoft.algotrader.provider.config.DataServiceConfigModule;
 import com.unisoft.algotrader.provider.data.DummyDataProvider;
 import com.unisoft.algotrader.trading.Strategy;
@@ -42,7 +43,7 @@ public class BackTesterMain {
         tradingDataStore.savePortfolio(portfolio);
 
         CountDownLatch latch = new CountDownLatch(1);
-        Strategy strategy = new CountDownStrategy(appConfig.getOrderManager(), 1, 1, appConfig.getTradingDataStore(), latch, 20);
+        Strategy strategy = new CountDownStrategy(appConfig.getOrderManager(), 1, 1, ProviderId.Simulation.id, appConfig.getTradingDataStore(), latch, 20);
 
 
         BackTester backTester = new BackTester(appConfig, strategy, provider, portfolio, SampleEventFactory.TEST_HKD_INSTRUMENT, 20110101, 20110111);

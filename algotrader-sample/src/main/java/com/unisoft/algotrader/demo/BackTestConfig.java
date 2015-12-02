@@ -27,7 +27,8 @@ public class BackTestConfig extends TradingConfig{
 
 
     public BackTestConfig(int marketDataProviderId, int strategyId,
-                          Date fromDate, Date toDate, String accountId, Currency accountCurrency, int initWealth, int portfolioId, long ... instIds) {        super(marketDataProviderId, ProviderId.Simulation.id, strategyId, instIds);
+                          Date fromDate, Date toDate, String accountId, Currency accountCurrency, int initWealth, int portfolioId, long ... instIds) {
+        super(marketDataProviderId, ProviderId.Simulation.id, strategyId, instIds);
         this.fromDate = fromDate;
         this.toDate = toDate;
         this.accountId = accountId;

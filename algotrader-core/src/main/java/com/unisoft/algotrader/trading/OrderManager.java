@@ -60,7 +60,7 @@ public class OrderManager implements OrderEventHandler, ExecutionEventHandler {
                 execType == ExecType.PendingReplace ||
                 execType == ExecType.Replace) {
 
-            order = orderTable.getOrder(executionReport.providerId, executionReport.origClOrderId);
+            order = orderTable.getOrder(executionReport.strategyId, executionReport.origClOrderId);
             if (executionReport.execType == ExecType.Replace) {
                 orderTable.removeOrder(order);
                 order.clOrderId = executionReport.clOrderId;
@@ -73,7 +73,7 @@ public class OrderManager implements OrderEventHandler, ExecutionEventHandler {
                 orderTable.addOrUpdateOrder(order);
             }
         } else {
-            order = orderTable.getOrder(executionReport.providerId, executionReport.clOrderId);
+            order = orderTable.getOrder(executionReport.strategyId, executionReport.clOrderId);
         }
 
 
@@ -103,7 +103,7 @@ public class OrderManager implements OrderEventHandler, ExecutionEventHandler {
 
     @Override
     public void onOrderCancelReject(OrderCancelReject orderCancelReject) {
-        Order order = orderTable.getOrder(orderCancelReject.providerId, orderCancelReject.clOrderId);
+        Order order = orderTable.getOrder(orderCancelReject.strategyId, orderCancelReject.clOrderId);
         OrdStatus prevOrdStatus = order.ordStatus;
         order.add(orderCancelReject);
 
@@ -117,7 +117,7 @@ public class OrderManager implements OrderEventHandler, ExecutionEventHandler {
     @Override
     public void onOrderStatusUpdate(Order orderStatusUpdate){
 
-        Order order = orderTable.getOrder(orderStatusUpdate.providerId, orderStatusUpdate.clOrderId);
+        Order order = orderTable.getOrder(orderStatusUpdate.strategyId, orderStatusUpdate.clOrderId);
         OrdStatus prevOrdStatus = order.ordStatus;
         order.ordStatus = orderStatusUpdate.ordStatus;
 

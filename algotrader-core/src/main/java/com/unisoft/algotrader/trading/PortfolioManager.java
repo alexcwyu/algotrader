@@ -15,13 +15,17 @@ public class PortfolioManager {
 
     private Map<Integer, PortfolioProcessor> portfolioProcessorMap = Maps.newConcurrentMap();
     private Map<Integer, Portfolio> portfolioMap = Maps.newConcurrentMap();
-
-    private final Supplier<Integer> idSupplier;
+//
+//    private final Supplier<Integer> idSupplier;
 
     @Inject
-    public PortfolioManager(Supplier<Integer> idSupplier){
-        this.idSupplier = idSupplier;
+    public PortfolioManager(){
     }
+
+//
+//    public PortfolioManager(Supplier<Integer> idSupplier){
+//        this.idSupplier = idSupplier;
+//    }
 
     public void register(PortfolioProcessor portfolioProcessor){
         if (portfolioProcessorMap.containsKey(portfolioProcessor.portfolioId())){
@@ -39,7 +43,7 @@ public class PortfolioManager {
         return portfolioMap.get(portfolioId);
     }
 
-    public int nextId(){
-        return idSupplier.get();
-    }
+//    public int nextId(){
+//        return idSupplier.get();
+//    }
 }
