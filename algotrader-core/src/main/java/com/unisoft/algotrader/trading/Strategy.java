@@ -27,7 +27,6 @@ public abstract class Strategy implements MarketDataHandler, ExecutionEventHandl
     protected final EventBusManager eventBusManager;
     protected Portfolio portfolio;
     protected String accountId;
-    protected AtomicLong clOrderId;
     protected ProviderId providerId;
     protected StrategyContext strategyContext;
 
@@ -65,7 +64,7 @@ public abstract class Strategy implements MarketDataHandler, ExecutionEventHandl
         this.portfolio = tradingDataStore.getPortfolio(strategyContext.portfolioId);
         this.providerId = strategyContext.providerId;
         this.accountId = portfolio.accountId();
-        this.clOrderId = new AtomicLong(strategyContext.lastOrderId);
+        //this.clOrderId = new AtomicLong(strategyContext.lastOrderId);
     }
 
     @Override
@@ -101,13 +100,9 @@ public abstract class Strategy implements MarketDataHandler, ExecutionEventHandl
         this.portfolio = portfolio;
     }
 
-    protected long nextOrdId(){
-        return clOrderId.incrementAndGet();
-    }
 
     protected void newLimitOrder(long instId, Side side, double price, double qty, TimeInForce tif){
         Order order = new Order();
-        order.clOrderId = nextOrdId();
         order.instId = instId;
         order.strategyId = strategyId;
         order.providerId = providerId.id;
@@ -125,7 +120,6 @@ public abstract class Strategy implements MarketDataHandler, ExecutionEventHandl
 
     protected void newMarketOrder(long instId, Side side, double qty, TimeInForce tif){
         Order order = new Order();
-        order.clOrderId = nextOrdId();
         order.instId = instId;
         order.strategyId = strategyId;
         order.providerId = providerId.id;

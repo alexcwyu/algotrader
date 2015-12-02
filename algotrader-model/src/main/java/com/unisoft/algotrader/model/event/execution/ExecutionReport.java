@@ -24,9 +24,9 @@ public class ExecutionReport <E extends ExecutionReport<? super E>> extends Exec
 
     @Column(name="order_id")
     public long orderId;
-
-    @Column(name="strategy_id")
-    public int strategyId;
+//
+//    @Column(name="strategy_id")
+//    public int strategyId;
 
     @Column(name="cl_order_id")
     public long clOrderId;

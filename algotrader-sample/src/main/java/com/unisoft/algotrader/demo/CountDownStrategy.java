@@ -44,39 +44,33 @@ class CountDownStrategy extends Strategy {
     public void onBar(Bar bar) {
         LOG.info("onBar");
         if (!ordered) {
-            ordered = true;
-            Order order = new Order();
-            order.dateTime = bar.dateTime;
-            order.clOrderId = clOrderId++;
-            order.instId = bar.instId;
-            //order.limitPrice = bar.close;
-            order.strategyId = this.strategyId;
-            order.providerId = execProviderId;
-            order.portfolioId = portfolio.portfolioId();
-            order.ordType = OrdType.Market;
-            order.side = Side.Buy;
-            order.ordQty = 500;
-            orderManager.onNewOrderRequest(order);
-            LOG.info("CountDownStrategy send order");
+            sendNewOrder(bar.instId, 0);
         }
+    }
+
+    private void sendNewOrder(long instId, double price){
+        LOG.info("CountDownStrategy send order");
+        ordered = true;
+        Order order = new Order();
+        order.dateTime = System.currentTimeMillis();
+        order.clOrderId = clOrderId++;
+        order.instId = instId;
+        //order.limitPrice = price;
+        order.strategyId = this.strategyId;
+        order.providerId = execProviderId;
+        order.portfolioId = portfolio.portfolioId();
+        order.ordType = OrdType.Market;
+        order.side = Side.Buy;
+        order.ordQty = 500;
+
+        orderManager.onNewOrderRequest(order);
     }
 
     @Override
     public void onMarketDataContainer(MarketDataContainer data) {
         LOG.info("onMarketDataContainer");
         if (!ordered) {
-            Order order = new Order();
-            order.dateTime = data.dateTime;
-            order.clOrderId = clOrderId++;
-            order.instId = data.instId;
-            order.limitPrice = data.bar.close;
-            order.strategyId = this.strategyId;
-            order.providerId = execProviderId;
-            order.portfolioId = portfolio.portfolioId();
-            order.side = Side.Buy;
-            order.ordQty = 500;
-            orderManager.onNewOrderRequest(order);
-            ordered = true;
+            sendNewOrder(data.bar.instId, 0);
         }
     }
 

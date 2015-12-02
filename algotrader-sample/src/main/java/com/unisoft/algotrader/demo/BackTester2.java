@@ -2,6 +2,8 @@ package com.unisoft.algotrader.demo;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.lmax.disruptor.Sequence;
+import com.lmax.disruptor.SequenceBarrier;
 import com.lmax.disruptor.multi.MultiEventProcessor;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import com.unisoft.algotrader.config.*;
@@ -15,6 +17,7 @@ import com.unisoft.algotrader.provider.ProviderManager;
 import com.unisoft.algotrader.provider.config.DataServiceConfigModule;
 import com.unisoft.algotrader.provider.data.HistoricalDataProvider;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
+import com.unisoft.algotrader.trading.InstrumentDataManager;
 import com.unisoft.algotrader.trading.Strategy;
 import com.unisoft.algotrader.trading.StrategyManager;
 import com.unisoft.algotrader.utils.DateHelper;
@@ -74,10 +77,22 @@ public class BackTester2 {
          * wire up backtest
          */
 
+        InstrumentDataManager instrumentDataManager = appConfig.getInstrumentDataManager();
 
-        MultiEventProcessor processor = new MultiEventProcessor();
-        processor.add(eventBusManager.getMarketDataRB(), strategy);
-        executor.submit(processor);
+        SequenceBarrier instDataProcessorSB = eventBusManager.getMarketDataRB().newBarrier();
+        MultiEventProcessor instDataProcessor = new MultiEventProcessor();
+        Sequence instDataProcessorSeq = instDataProcessor.add(eventBusManager.getMarketDataRB(), instDataProcessorSB, instrumentDataManager);
+
+
+        SequenceBarrier strategySB = eventBusManager.getMarketDataRB().newBarrier(instDataProcessorSeq);
+        MultiEventProcessor strategyProcessor = new MultiEventProcessor();
+        Sequence strategySeq = strategyProcessor.add(eventBusManager.getMarketDataRB(), strategySB, strategy);
+        eventBusManager.getMarketDataRB().addGatingSequences(strategySeq);
+
+        executor.submit(instDataProcessor);
+        executor.submit(strategyProcessor);
+
+
 
         /**
          * subscribe historical data

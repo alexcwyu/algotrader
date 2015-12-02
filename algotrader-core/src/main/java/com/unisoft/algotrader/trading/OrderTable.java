@@ -11,36 +11,33 @@ import java.util.Map;
  */
 public class OrderTable {
 
-    private Map<ClOrderId, Order> orderMap = Maps.newHashMap();
-    private Map<Long, Map<ClOrderId, Order>> instOrderMap = Maps.newHashMap();
+    private Map<Long, Order> orderMap = Maps.newHashMap();
+    private Map<Long, Map<Long, Order>> instOrderMap = Maps.newHashMap();
 
-    public Map<ClOrderId, Order> getOrdersByInstId(long instId){
+    public Map<Long, Order> getOrdersByInstId(long instId){
         if (!instOrderMap.containsKey(instId))
             instOrderMap.putIfAbsent(instId, Maps.newHashMap());
         return instOrderMap.get(instId);
     }
 
 
-    public Order getOrder(int strategyId, long OrderId){
-        ClOrderId clOrderId = new ClOrderId(strategyId, OrderId);
-        if (orderMap.containsKey(clOrderId))
-            return orderMap.get(clOrderId);
+    public Order getOrder(long orderId){
+        if (orderMap.containsKey(orderId))
+            return orderMap.get(orderId);
         return null;
     }
 
 
     public void addOrUpdateOrder(Order order){
-        ClOrderId clOrderId = new ClOrderId(order.strategyId, order.clOrderId);
-        getOrdersByInstId(order.instId).put(clOrderId, order);
-        orderMap.put(clOrderId, order);
+        getOrdersByInstId(order.instId).put(order.clOrderId, order);
+        orderMap.put(order.clOrderId, order);
     }
 
     public void removeOrder(Order order) {
-        ClOrderId clOrderId = new ClOrderId(order.strategyId, order.clOrderId);
         if (getOrdersByInstId(order.instId) != null) {
-            getOrdersByInstId(order.instId).remove(clOrderId);
+            getOrdersByInstId(order.instId).remove(order.clOrderId);
         }
-        orderMap.remove(clOrderId);
+        orderMap.remove(order.clOrderId);
     }
 
 

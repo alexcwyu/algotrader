@@ -98,7 +98,7 @@ public class BackTestOrderManager extends OrderManager {
 
     @Override
     public void onOrderCancelReject(OrderCancelReject orderCancelReject) {
-        Order order = orderTable.getOrder(orderCancelReject.providerId, orderCancelReject.clOrderId);
+        Order order = orderTable.getOrder(orderCancelReject.clOrderId);
         OrdStatus prevOrdStatus = order.ordStatus;
         order.add(orderCancelReject);
 

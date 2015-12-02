@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by alex on 5/18/15.
@@ -23,6 +24,7 @@ public class OrderManager implements OrderEventHandler, ExecutionEventHandler {
 
     protected OrderTable orderTable = new OrderTable();
 
+    protected AtomicLong clOrderId = new AtomicLong(0);
     @Inject
     public OrderManager(EventBusManager eventBusManager){
         this.eventBusManager = eventBusManager;
@@ -33,9 +35,14 @@ public class OrderManager implements OrderEventHandler, ExecutionEventHandler {
         //TODO persist
     }
 
+    protected long nextOrdId(){
+        return clOrderId.incrementAndGet();
+    }
+
     @Override
     public void onNewOrderRequest(Order order) {
         LOG.info("onNewOrderRequest {}", order);
+        order.clOrderId = nextOrdId();
         addOrUpdateOrder(order);
     }
 
@@ -60,7 +67,7 @@ public class OrderManager implements OrderEventHandler, ExecutionEventHandler {
                 execType == ExecType.PendingReplace ||
                 execType == ExecType.Replace) {
 
-            order = orderTable.getOrder(executionReport.strategyId, executionReport.origClOrderId);
+            order = orderTable.getOrder(executionReport.origClOrderId);
             if (executionReport.execType == ExecType.Replace) {
                 orderTable.removeOrder(order);
                 order.clOrderId = executionReport.clOrderId;
@@ -73,7 +80,7 @@ public class OrderManager implements OrderEventHandler, ExecutionEventHandler {
                 orderTable.addOrUpdateOrder(order);
             }
         } else {
-            order = orderTable.getOrder(executionReport.strategyId, executionReport.clOrderId);
+            order = orderTable.getOrder(executionReport.clOrderId);
         }
 
 
@@ -103,7 +110,7 @@ public class OrderManager implements OrderEventHandler, ExecutionEventHandler {
 
     @Override
     public void onOrderCancelReject(OrderCancelReject orderCancelReject) {
-        Order order = orderTable.getOrder(orderCancelReject.strategyId, orderCancelReject.clOrderId);
+        Order order = orderTable.getOrder(orderCancelReject.clOrderId);
         OrdStatus prevOrdStatus = order.ordStatus;
         order.add(orderCancelReject);
 
@@ -117,7 +124,7 @@ public class OrderManager implements OrderEventHandler, ExecutionEventHandler {
     @Override
     public void onOrderStatusUpdate(Order orderStatusUpdate){
 
-        Order order = orderTable.getOrder(orderStatusUpdate.strategyId, orderStatusUpdate.clOrderId);
+        Order order = orderTable.getOrder(orderStatusUpdate.clOrderId);
         OrdStatus prevOrdStatus = order.ordStatus;
         order.ordStatus = orderStatusUpdate.ordStatus;
 
