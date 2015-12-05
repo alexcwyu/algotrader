@@ -4,6 +4,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.lmax.disruptor.Sequence;
 import com.lmax.disruptor.SequenceBarrier;
+import com.lmax.disruptor.multi.AggregratedEventHandler;
 import com.lmax.disruptor.multi.MultiEventProcessor;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import com.unisoft.algotrader.config.*;
@@ -79,18 +80,11 @@ public class BackTester2 {
 
         InstrumentDataManager instrumentDataManager = appConfig.getInstrumentDataManager();
 
-        SequenceBarrier instDataProcessorSB = eventBusManager.getMarketDataRB().newBarrier();
-        MultiEventProcessor instDataProcessor = new MultiEventProcessor();
-        Sequence instDataProcessorSeq = instDataProcessor.add(eventBusManager.getMarketDataRB(), instDataProcessorSB, instrumentDataManager);
+        MultiEventProcessor processor = new MultiEventProcessor();
+        Sequence seq = processor.add(eventBusManager.getMarketDataRB(), new AggregratedEventHandler(instrumentDataManager, strategy));
+        eventBusManager.getMarketDataRB().addGatingSequences(seq);
 
-
-        SequenceBarrier strategySB = eventBusManager.getMarketDataRB().newBarrier(instDataProcessorSeq);
-        MultiEventProcessor strategyProcessor = new MultiEventProcessor();
-        Sequence strategySeq = strategyProcessor.add(eventBusManager.getMarketDataRB(), strategySB, strategy);
-        eventBusManager.getMarketDataRB().addGatingSequences(strategySeq);
-
-        executor.submit(instDataProcessor);
-        executor.submit(strategyProcessor);
+        executor.submit(processor);
 
 
 
