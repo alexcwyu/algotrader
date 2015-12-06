@@ -6,6 +6,7 @@ import com.lmax.disruptor.multi.NoWaitStrategy;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import com.unisoft.algotrader.event.SampleEventFactory;
 import com.unisoft.algotrader.event.bus.RingBufferMarketDataEventBus;
+import com.unisoft.algotrader.model.event.data.Bar;
 import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.refdata.Instrument;
 import com.unisoft.algotrader.model.trading.Account;
@@ -50,13 +51,27 @@ public class CSVPublishTest {
             this.exp2 = exp2;
         }
 
+//        @Override
+//        public void onMarketDataContainer(MarketDataContainer data){
+//            LOG.info("stgId {}, onMarketDataContainer {}", strategyId, data);
+//            if (data.instId == testInstrument1.getInstId()){
+//                count1++;
+//            }
+//            else if (data.instId == testInstrument2.getInstId()){
+//                count2++;
+//            }
+//            if (count1>=exp1 && count2>=exp2){
+//                latch.countDown();
+//            }
+//        }
+
         @Override
-        public void onMarketDataContainer(MarketDataContainer data){
-            LOG.info("stgId {}, onMarketDataContainer {}", strategyId, data);
-            if (data.instId == testInstrument1.getInstId()){
+        public void onBar(Bar bar) {
+            LOG.info("stgId {}, onBar {}", strategyId, bar);
+            if (bar.instId == testInstrument1.getInstId()){
                 count1++;
             }
-            else if (data.instId == testInstrument2.getInstId()){
+            else if (bar.instId == testInstrument2.getInstId()){
                 count2++;
             }
             if (count1>=exp1 && count2>=exp2){

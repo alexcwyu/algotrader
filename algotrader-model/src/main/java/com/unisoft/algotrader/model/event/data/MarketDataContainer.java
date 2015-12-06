@@ -26,6 +26,8 @@ public class MarketDataContainer extends MarketData<MarketDataContainer> {
 
     public Trade trade = new Trade();
 
+    public boolean endOfData = false;
+
     public MarketDataContainer(){
 
     }
@@ -59,6 +61,10 @@ public class MarketDataContainer extends MarketData<MarketDataContainer> {
 
     public boolean hasTrade(){
         return bitset.get(TRADE_BIT);
+    }
+
+    public void setEndOfData(){
+        endOfData = true;
     }
 
     public void setBar(Bar bar){

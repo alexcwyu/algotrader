@@ -12,5 +12,9 @@ public interface EventHandler extends com.lmax.disruptor.EventHandler<Event>{
     default void onEvent(Event event, long sequence, boolean endOfBatch) throws Exception{
         onEvent(event);
     }
+
+    default void onCompleted(){
+
+    }
 }
 

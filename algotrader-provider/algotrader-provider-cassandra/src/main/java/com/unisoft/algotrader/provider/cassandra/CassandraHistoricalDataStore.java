@@ -148,22 +148,31 @@ public class CassandraHistoricalDataStore extends AbstractDataStoreProvider {
 
     private void publishBar(HistoricalSubscriptionKey subscriptionKey){
         ResultSet results = queryBar(subscriptionKey);
-        for (Row row : results) {
-            marketDataEventBus.publishBar(row.getLong(0), row.getInt(1), row.getDate(2).getTime(), row.getDouble(3), row.getDouble(4), row.getDouble(5), row.getDouble(6), row.getLong(7), row.getLong(8));
+        List<Row> rows = results.all();
+        int size = rows.size();
+        for (int i = 0; i< size ;i ++) {
+            Row row = rows.get(i);
+            marketDataEventBus.publishBar(row.getLong(0), row.getInt(1), row.getDate(2).getTime(), row.getDouble(3), row.getDouble(4), row.getDouble(5), row.getDouble(6), row.getLong(7), row.getLong(8), i==size);
         }
     }
 
     private void publishQuote(HistoricalSubscriptionKey subscriptionKey){
         ResultSet results = queryQuote(subscriptionKey);
-        for (Row row : results) {
-            marketDataEventBus.publishQuote(row.getLong(0), row.getDate(1).getTime(), row.getDouble(2), row.getDouble(3), row.getInt(4), row.getInt(5));
+        List<Row> rows = results.all();
+        int size = rows.size();
+        for (int i = 0; i< size ;i ++) {
+            Row row = rows.get(i);
+            marketDataEventBus.publishQuote(row.getLong(0), row.getDate(1).getTime(), row.getDouble(2), row.getDouble(3), row.getInt(4), row.getInt(5), i==size);
         }
     }
 
     private void publishTrade(HistoricalSubscriptionKey subscriptionKey){
         ResultSet results = queryTrade(subscriptionKey);
-        for (Row row : results) {
-            marketDataEventBus.publishTrade(row.getLong(0), row.getDate(1).getTime(), row.getDouble(2), row.getInt(3));
+        List<Row> rows = results.all();
+        int size = rows.size();
+        for (int i = 0; i< size ;i ++) {
+            Row row = rows.get(i);
+            marketDataEventBus.publishTrade(row.getLong(0), row.getDate(1).getTime(), row.getDouble(2), row.getInt(3), i==size);
         }
     }
 

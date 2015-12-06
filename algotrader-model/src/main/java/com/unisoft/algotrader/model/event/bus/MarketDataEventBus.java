@@ -16,7 +16,8 @@ public interface MarketDataEventBus {
                     double low,
                     double close,
                     long volume,
-                    long openInt);
+                    long openInt,
+                    boolean endOfData);
 
     default void setBar(Bar bar, long instId,
                         int size,
@@ -44,7 +45,8 @@ public interface MarketDataEventBus {
                       double bid,
                       double ask,
                       int bidSize,
-                      int askSize);
+                      int askSize,
+                      boolean endOfData);
 
     default void setQuote(Quote quote, long instId,
                           long dateTime,
@@ -65,7 +67,8 @@ public interface MarketDataEventBus {
     void publishTrade(long instId,
                       long dateTime,
                       double price,
-                      int size);
+                      int size,
+                      boolean endOfData);
 
     default void setTrade(Trade trade, long instId,
                           long dateTime,
@@ -76,5 +79,9 @@ public interface MarketDataEventBus {
         trade.dateTime = dateTime;
         trade.price = price;
         trade.size = size;
+    }
+
+    default void onCompleted(){
+
     }
 }

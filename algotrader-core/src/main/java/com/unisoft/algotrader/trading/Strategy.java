@@ -32,6 +32,8 @@ public abstract class Strategy implements MarketDataHandler, ExecutionEventHandl
 
     protected OrderTable orderTable = new OrderTable();
 
+    protected boolean completed= false;
+
     public Strategy(int strategyId, TradingDataStore tradingDataStore){
         this.strategyId = strategyId;
         this.tradingDataStore = tradingDataStore;
@@ -82,6 +84,14 @@ public abstract class Strategy implements MarketDataHandler, ExecutionEventHandl
 
     @Override
     public void onTrade(Trade trade) {
+    }
+
+    public void onCompleted(){
+        completed = true;
+    }
+
+    public boolean isCompleted(){
+        return completed;
     }
 
     @Override

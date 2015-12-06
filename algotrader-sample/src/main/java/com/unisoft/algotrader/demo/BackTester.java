@@ -1,129 +1,137 @@
 package com.unisoft.algotrader.demo;
 
-import com.lmax.disruptor.RingBuffer;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.lmax.disruptor.Sequence;
+import com.lmax.disruptor.multi.AggregratedEventHandler;
 import com.lmax.disruptor.multi.MultiEventProcessor;
-import com.lmax.disruptor.multi.NoWaitStrategy;
 import com.lmax.disruptor.util.DaemonThreadFactory;
-import com.unisoft.algotrader.config.AppConfig;
-import com.unisoft.algotrader.model.clock.SimulationClock;
+import com.unisoft.algotrader.config.*;
 import com.unisoft.algotrader.model.event.bus.EventBusManager;
-import com.unisoft.algotrader.model.event.data.MarketDataContainer;
 import com.unisoft.algotrader.model.refdata.Instrument;
-import com.unisoft.algotrader.model.trading.Performance;
 import com.unisoft.algotrader.model.trading.Portfolio;
 import com.unisoft.algotrader.persistence.RefDataStore;
-import com.unisoft.algotrader.persistence.TradingDataStore;
-import com.unisoft.algotrader.provider.BarFactory;
+import com.unisoft.algotrader.provider.ProviderId;
 import com.unisoft.algotrader.provider.ProviderManager;
+import com.unisoft.algotrader.provider.config.DataServiceConfigModule;
 import com.unisoft.algotrader.provider.data.HistoricalDataProvider;
 import com.unisoft.algotrader.provider.data.HistoricalSubscriptionKey;
-import com.unisoft.algotrader.provider.execution.simulation.SimulationExecutor;
-import com.unisoft.algotrader.provider.execution.simulation.Simulator;
 import com.unisoft.algotrader.trading.InstrumentDataManager;
-import com.unisoft.algotrader.trading.OrderManager;
 import com.unisoft.algotrader.trading.Strategy;
 import com.unisoft.algotrader.trading.StrategyManager;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.unisoft.algotrader.utils.DateHelper;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static com.unisoft.algotrader.model.refdata.Exchange.HKEX;
+
 /**
- * Created by alex on 6/16/15.
+ * Created by alex on 11/30/15.
  */
-public class BackTester {
+public class BackTester implements Runnable{
 
-    private static final Logger LOG = LogManager.getLogger(BackTester.class);
-    private final Instrument instrument;
+    private final AppConfig appConfig;
+    private final BackTestConfig backTestConfig;
+    private final ExecutorService executorService;
 
-    private final Portfolio portfolio;
-    private final Strategy strategy;
+    private StrategyManager strategyManager;
+    private ProviderManager providerManager;
+    private RefDataStore refDataStore;
+    private EventBusManager eventBusManager;
+    private InstrumentDataManager instrumentDataManager;
+    private Strategy strategy;
+    private CountDownLatch latch;
 
-    private final HistoricalDataProvider dataProvider;
-    private final SimulationExecutor simulationExecutor;
+    @Inject
+    public BackTester(
+            AppConfig appConfig,
+            BackTestConfig backTestConfig,
+            ExecutorService executorService, CountDownLatch latch) {
+        this.appConfig = appConfig;
+        this.backTestConfig = backTestConfig;
+        this.executorService = executorService;
+        this.latch = latch;
+        init();
+    }
 
-    private final MultiEventProcessor processor1;
-    private final MultiEventProcessor processor2;
-    private final MultiEventProcessor processor3;
-    private final MultiEventProcessor simulationExecutorProcessor;
-
-    private final BarFactory barFactory;
-    private final Simulator simulator;
-    private final RefDataStore refDataStore;
-    private final TradingDataStore tradingDataStore;
-    private final ProviderManager providerManager;
-    private final OrderManager orderManager;
-    private final StrategyManager strategyManager;
-    private final EventBusManager eventBusManager;
-    private final int fromDate;
-    private final int toDate;
-
-    private final ExecutorService executor = Executors.newFixedThreadPool(2, DaemonThreadFactory.INSTANCE);
+    public void init(){
+        this.strategyManager = appConfig.getStrategyManager();
+        this.providerManager = appConfig.getProviderManager();
+        this.refDataStore = appConfig.getRefDataStore();
+        this.eventBusManager = appConfig.getEventBusManager();
+        this.instrumentDataManager = appConfig.getInstrumentDataManager();
+        this.strategy = strategyManager.get(backTestConfig.strategyId);
+    }
 
 
-    public BackTester(AppConfig appConfig,
-                      Strategy strategy, HistoricalDataProvider provider, Portfolio portfolio, Instrument instrument, int fromDate, int toDate){
-        this(appConfig.getProviderManager(), appConfig.getOrderManager(), appConfig.getStrategyManager(), appConfig.getEventBusManager(),
-                appConfig.getRefDataStore(), appConfig.getTradingDataStore(),
-                strategy, provider, portfolio,
-                instrument, fromDate, toDate);
+    @Override
+    public void run(){
+        try {
+            createProcessor();
+
+            subscribeData();
+
+            while(!strategy.isCompleted()){
+                Thread.sleep(2000);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createProcessor(){
+
+        MultiEventProcessor processor = new MultiEventProcessor();
+        Sequence seq = processor.add(eventBusManager.getMarketDataRB(), new AggregratedEventHandler(instrumentDataManager, strategy));
+        eventBusManager.getMarketDataRB().addGatingSequences(seq);
+
+        executorService.submit(processor);
 
     }
 
-    public BackTester(ProviderManager providerManager, OrderManager orderManager,
-                      StrategyManager strategyManager, EventBusManager eventBusManager,
-                      RefDataStore refDataStore, TradingDataStore tradingDataStore,
-                              Strategy strategy, HistoricalDataProvider provider, Portfolio portfolio, Instrument instrument, int fromDate, int toDate){
-        this.providerManager = providerManager;
-        this.orderManager = orderManager;
-        this.strategyManager = strategyManager;
-        this.eventBusManager = eventBusManager;
-        this.refDataStore = refDataStore;
-        this.tradingDataStore = tradingDataStore;
+    public void subscribeData(){
+        for (long instId : backTestConfig.instIds) {
 
-        this.instrument = instrument;
-        this.refDataStore.saveInstrument(instrument);
-        this.portfolio = portfolio;
-        this.tradingDataStore.savePortfolio(portfolio);
+            HistoricalSubscriptionKey subscriptionKey = HistoricalSubscriptionKey.createDailySubscriptionKey(
+                    backTestConfig.marketDataProviderId,
+                    instId,
+                    backTestConfig.fromDate,
+                    backTestConfig.toDate);
+            HistoricalDataProvider provider = providerManager.getHistoricalDataProvider(ProviderId.Yahoo.id);
+            provider.subscribeHistoricalData(subscriptionKey);
+        }
+    }
 
-        this.strategy = strategy;
-        this.strategy.setPortfolio(portfolio);
+
+    public static void main(String [] args) throws Exception{
+
+        Injector injector = Guice.createInjector(new BackTestingConfigModule(), new SampleAppConfigModule(), new ServiceConfigModule(), new DefaultEventBusConfigModule(), new DataServiceConfigModule());
+        AppConfig appConfig = injector.getInstance(AppConfig.class);
+
+        StrategyManager strategyManager = appConfig.getStrategyManager();
+
+        RefDataStore refDataStore = appConfig.getRefDataStore();
+
+
+        CountDownLatch latch = new CountDownLatch(1);
+
+        Strategy strategy = new CountDownStrategy(appConfig.getOrderManager(),
+                strategyManager.nextStrategyId(),
+                Portfolio.DEFAULT_PORTFOLIO_ID, ProviderId.Simulation.id, appConfig.getTradingDataStore(), latch, 20);
+
         strategyManager.register(strategy);
 
-        this.simulationExecutor = new SimulationExecutor(providerManager, orderManager, new InstrumentDataManager(), new SimulationClock());
-        providerManager.addExecutionProvider(simulationExecutor);
+        Instrument instrument = refDataStore.getInstrumentBySymbolAndExchange("0005.HK", HKEX.getExchId());
 
-        RingBuffer<MarketDataContainer> rawMarketDataRB
-            = RingBuffer.createSingleProducer(MarketDataContainer.FACTORY, 1024, new NoWaitStrategy());
+        BackTestConfig backTestConfig = new BackTestConfig(ProviderId.Yahoo.id,
+                strategy.strategyId, DateHelper.fromYYYYMMDD(20100101), DateHelper.fromYYYYMMDD(20160101), instrument.getInstId());
+        ExecutorService executor = Executors.newFixedThreadPool(2, DaemonThreadFactory.INSTANCE);
 
-        this.barFactory = new BarFactory(rawMarketDataRB);
-        this.simulator = new Simulator(simulationExecutor, strategy);
+        BackTester backTester = new BackTester(appConfig, backTestConfig, executor, latch);
 
-        this.processor1 = new MultiEventProcessor();
-        this.processor2 = new MultiEventProcessor();
-        this.processor3 = new MultiEventProcessor();
-        this.simulationExecutorProcessor = new MultiEventProcessor();
-
-        processor1.add(eventBusManager.getMarketDataRB(), barFactory);
-        processor2.add(rawMarketDataRB, simulator);
-        processor3.add(rawMarketDataRB, simulator);
-
-        this.dataProvider = provider;
-
-        this.fromDate = fromDate;
-        this.toDate = toDate;
+        backTester.run();
     }
-
-
-    public void run(){
-        executor.submit(processor1);
-        executor.submit(processor2);
-        dataProvider.subscribeHistoricalData(HistoricalSubscriptionKey.createDailySubscriptionKey(dataProvider.providerId().id, instrument.getInstId(), fromDate, toDate));
-    }
-
-    public Performance getPerformance(){
-        return portfolio.performance();
-    }
-
 }

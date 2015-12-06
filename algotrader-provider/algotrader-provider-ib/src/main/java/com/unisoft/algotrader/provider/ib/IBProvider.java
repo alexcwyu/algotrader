@@ -234,7 +234,7 @@ public class IBProvider implements IBEventHandler, RealTimeDataProvider, Histori
             case ASK_PRICE:
                 if (record.quoteRequested) {
                     if (record.bid > 0 && record.bidSize > 0 && record.ask > 0 && record.askSize > 0) {
-                        eventBusManager.getMarketDataEventBus().publishQuote(record.instId, System.currentTimeMillis(), record.bid, record.ask, record.bidSize, record.askSize);
+                        eventBusManager.getMarketDataEventBus().publishQuote(record.instId, System.currentTimeMillis(), record.bid, record.ask, record.bidSize, record.askSize, false);
                     }
                 }
 
@@ -242,7 +242,7 @@ public class IBProvider implements IBEventHandler, RealTimeDataProvider, Histori
             case LAST_SIZE:
                 if (record.tradeRequested) {
                     if (record.last > 0 && record.lastSize > 0) {
-                        eventBusManager.getMarketDataEventBus().publishTrade(record.instId, System.currentTimeMillis(), record.last, record.lastSize);
+                        eventBusManager.getMarketDataEventBus().publishTrade(record.instId, System.currentTimeMillis(), record.last, record.lastSize, false);
                     }
                 }
 
@@ -348,7 +348,7 @@ public class IBProvider implements IBEventHandler, RealTimeDataProvider, Histori
             record.close = close;
             //TODO
             record.volume = (int)volume;
-            eventBusManager.getMarketDataEventBus().publishBar(record.instId, key.barSize, System.currentTimeMillis(), open, high, low, close, volume, 0);
+            eventBusManager.getMarketDataEventBus().publishBar(record.instId, key.barSize, System.currentTimeMillis(), open, high, low, close, volume, 0, false);
         }
     }
 
@@ -398,7 +398,7 @@ public class IBProvider implements IBEventHandler, RealTimeDataProvider, Histori
             record.close = bar.close;
             //TODO
             record.volume = (int)bar.volume;
-            eventBusManager.getMarketDataEventBus().publishBar(record.instId, key.barSize, System.currentTimeMillis(), bar.open, bar.high, bar.low, bar.close, bar.volume, 0);
+            eventBusManager.getMarketDataEventBus().publishBar(record.instId, key.barSize, System.currentTimeMillis(), bar.open, bar.high, bar.low, bar.close, bar.volume, 0, false);
         }
     }
 
@@ -414,7 +414,7 @@ public class IBProvider implements IBEventHandler, RealTimeDataProvider, Histori
             record.close = close;
             record.volume = volume;
             //TODO dateTime to time
-            eventBusManager.getMarketDataEventBus().publishBar(record.instId, key.barSize, System.currentTimeMillis(), open, high, low, close, volume, 0);
+            eventBusManager.getMarketDataEventBus().publishBar(record.instId, key.barSize, System.currentTimeMillis(), open, high, low, close, volume, 0, false);
         }
     }
 

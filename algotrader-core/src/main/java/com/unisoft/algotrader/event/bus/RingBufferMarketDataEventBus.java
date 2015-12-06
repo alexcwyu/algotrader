@@ -28,13 +28,13 @@ public class RingBufferMarketDataEventBus implements MarketDataEventBus {
 
 
     @Override
-    public void publishBar(long instId, int size, long dateTime, double open, double high, double low, double close, long volume, long openInt) {
+    public void publishBar(long instId, int size, long dateTime, double open, double high, double low, double close, long volume, long openInt, boolean endOfData) {
         long seq = getNextSeq();
         MarketDataContainer event = getNextEventContainer(seq);
         event.dateTime = dateTime;
         event.instId = instId;
         event.bitset.set(MarketDataContainer.BAR_BIT);
-
+        event.endOfData = endOfData;
         setBar(event.bar, instId, size, dateTime, open, high, low, close, volume, openInt);
 
         marketDataRB.publish(seq);
@@ -42,28 +42,32 @@ public class RingBufferMarketDataEventBus implements MarketDataEventBus {
     }
 
     @Override
-    public void publishQuote(long instId, long dateTime, double bid, double ask, int bidSize, int askSize) {
+    public void publishQuote(long instId, long dateTime, double bid, double ask, int bidSize, int askSize, boolean endOfData) {
         long seq = getNextSeq();
         MarketDataContainer event = getNextEventContainer(seq);
         event.dateTime = dateTime;
         event.instId = instId;
         event.bitset.set(MarketDataContainer.QUOTE_BIT);
-
+        event.endOfData = endOfData;
         setQuote(event.quote, instId, dateTime, bid, ask, bidSize, askSize);
 
         marketDataRB.publish(seq);
     }
 
     @Override
-    public void publishTrade(long instId, long dateTime, double price, int size) {
+    public void publishTrade(long instId, long dateTime, double price, int size, boolean endOfData) {
         long seq = getNextSeq();
         MarketDataContainer event = getNextEventContainer(seq);
         event.dateTime = dateTime;
         event.instId = instId;
         event.bitset.set(MarketDataContainer.TRADE_BIT);
-
+        event.endOfData = endOfData;
         setTrade(event.trade, instId, dateTime, price, size);
 
         marketDataRB.publish(seq);
+    }
+
+    public void onCompleted(){
+
     }
 }

@@ -227,11 +227,12 @@ public class KDBHistoricalDataStore extends AbstractDataStoreProvider{
     private void publishBar(HistoricalSubscriptionKey subscriptionKey) {
         QTable table = queryBar(subscriptionKey);
         if (table != null) {
-            for (int i = 0; i < table.getRowsCount(); i++) {
+            int count = table.getRowsCount();
+            for (int i = 0; i < count; i++) {
                 QTable.Row row = table.get(i);
                 marketDataEventBus.publishBar((int) row.get(0),
                         (int) row.get(1), (long) row.get(2), (double) row.get(3), (double) row.get(4),
-                        (double) row.get(5), (double) row.get(6), (int) row.get(7), (int) row.get(8));
+                        (double) row.get(5), (double) row.get(6), (int) row.get(7), (int) row.get(8), i== count);
             }
         }
     }
@@ -240,11 +241,12 @@ public class KDBHistoricalDataStore extends AbstractDataStoreProvider{
         QTable table = queryQuote(subscriptionKey);
 
         if (table != null) {
-            for (int i = 0; i < table.getRowsCount(); i++) {
+            int count = table.getRowsCount();
+            for (int i = 0; i < count; i++) {
                 QTable.Row row = table.get(i);
                 marketDataEventBus.publishQuote((int) row.get(0),
                         (long) row.get(1), (double) row.get(2), (double) row.get(3),
-                        (int) row.get(4), (int) row.get(5));
+                        (int) row.get(4), (int) row.get(5), i== count);
             }
         }
     }
@@ -252,10 +254,11 @@ public class KDBHistoricalDataStore extends AbstractDataStoreProvider{
     private void publishTrade(HistoricalSubscriptionKey subscriptionKey) {
         QTable table = queryTrade(subscriptionKey);
         if (table != null) {
-            for (int i = 0; i < table.getRowsCount(); i++) {
+            int count = table.getRowsCount();
+            for (int i = 0; i < count; i++) {
                 QTable.Row row = table.get(i);
                 marketDataEventBus.publishTrade((int) row.get(0),
-                        (long) row.get(1), (double) row.get(2), (int) row.get(3));
+                        (long) row.get(1), (double) row.get(2), (int) row.get(3), i== count);
             }
         }
     }

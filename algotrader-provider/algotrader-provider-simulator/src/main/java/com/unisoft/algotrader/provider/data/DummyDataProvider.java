@@ -38,17 +38,17 @@ public class DummyDataProvider extends AbstractHistoricalDataProvider {
     public boolean subscribeHistoricalData(HistoricalSubscriptionKey subscriptionKey) {
         long dateTime = subscriptionKey.fromDate;
         long toDateTime = subscriptionKey.toDate;
-
+        long nextDateTime = 0;
         int count = 0;
         while (dateTime < toDateTime) {
+            nextDateTime = dateTime + DAY_TO_MS;
             marketDataEventBus.publishBar(subscriptionKey.instId, subscriptionKey.barSize, dateTime,
                     900 + count,
                     1000 + count,
                     800 + count,
                     950 + count,
-                    0, 0);
-
-            dateTime += DAY_TO_MS;
+                    0, 0, nextDateTime>=toDateTime);
+            dateTime = nextDateTime;
             count++;
         }
 

@@ -25,6 +25,7 @@ class CountDownStrategy extends Strategy {
 
     private CountDownLatch latch;
     private int exp;
+    private int dataCount = 0;
     private int count = 0;
     private final OrderManager orderManager;
     private final int execProviderId;
@@ -66,14 +67,6 @@ class CountDownStrategy extends Strategy {
         orderManager.onNewOrderRequest(order);
     }
 
-    @Override
-    public void onMarketDataContainer(MarketDataContainer data) {
-        LOG.info("onMarketDataContainer");
-        if (!ordered) {
-            sendNewOrder(data.bar.instId, 0);
-        }
-    }
-
     public void onExecutionReport(ExecutionReport executionReport) {
         LOG.info("onExecutionReport = {}", executionReport);
         super.onExecutionReport(executionReport);
@@ -81,9 +74,9 @@ class CountDownStrategy extends Strategy {
             this.ordered = false;
         }
         count++;
-        if (count == exp) {
-            latch.countDown();
-        }
+//        if (count == exp) {
+//            latch.countDown();
+//        }
     }
 
 }

@@ -308,14 +308,17 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
     protected void publishBar(SubscriptionKey subscriptionKey, CsvParser parser, Reader reader, long fromDateTime, long toDateTime) {
         try {
             parser.beginParsing(reader);
-            String[] row;
-            while ((row = parser.parseNext()) != null) {
+            String[] row= parser.parseNext();
+            while ((row ) != null) {
                 //long time = FORMAT.parse(row[0]).getTime();
                 long time = Long.parseLong(row[0]);
                 if (lt(time, fromDateTime)) continue;
                 if (gt(time, toDateTime)) break;
+
+                String [] nextRow = parser.parseNext();
                 marketDataEventBus.publishBar(subscriptionKey.instId, subscriptionKey.barSize, time,
-                        Double.parseDouble(row[1]), Double.parseDouble(row[2]), Double.parseDouble(row[3]), Double.parseDouble(row[4]), Long.parseLong(row[5]), 0);
+                        Double.parseDouble(row[1]), Double.parseDouble(row[2]), Double.parseDouble(row[3]), Double.parseDouble(row[4]), Long.parseLong(row[5]), 0, (nextRow) != null);
+                row = nextRow;
             }
             parser.stopParsing();
 
@@ -339,15 +342,18 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
     protected void publishQuote(SubscriptionKey subscriptionKey, CsvParser parser, Reader reader, long fromDateTime, long toDateTime) {
         try {
             parser.beginParsing(reader);
-            String[] row;
-            while ((row = parser.parseNext()) != null) {
+            String[] row= parser.parseNext();
+            while ((row ) != null) {
                 //long time = FORMAT.parse(row[0]).getTime();
                 long time = Long.parseLong(row[0]);
 
                 if (lt(time, fromDateTime)) continue;
                 if (gt(time, toDateTime)) break;
+
+                String [] nextRow = parser.parseNext();
                 marketDataEventBus.publishQuote(subscriptionKey.instId, time,
-                        Double.parseDouble(row[1]), Double.parseDouble(row[2]), Integer.parseInt(row[3]), Integer.parseInt(row[4]));
+                        Double.parseDouble(row[1]), Double.parseDouble(row[2]), Integer.parseInt(row[3]), Integer.parseInt(row[4]), (nextRow) != null);
+                row = nextRow;
             }
             parser.stopParsing();
 
@@ -359,15 +365,18 @@ public class CSVHistoricalDataStore extends AbstractDataStoreProvider{
     protected void publishTrade(SubscriptionKey subscriptionKey, CsvParser parser, Reader reader, long fromDateTime, long toDateTime) {
         try {
             parser.beginParsing(reader);
-            String[] row;
-            while ((row = parser.parseNext()) != null) {
+            String[] row= parser.parseNext();
+            while ((row ) != null) {
                 //long time = FORMAT.parse(row[0]).getTime();
                 long time = Long.parseLong(row[0]);
 
                 if (lt(time, fromDateTime)) continue;
                 if (gt(time, toDateTime)) break;
+
+                String [] nextRow = parser.parseNext();
                 marketDataEventBus.publishTrade(subscriptionKey.instId, time,
-                        Double.parseDouble(row[1]), Integer.parseInt(row[2]));
+                        Double.parseDouble(row[1]), Integer.parseInt(row[2]), (nextRow) != null);
+                row = nextRow;
             }
             parser.stopParsing();
 

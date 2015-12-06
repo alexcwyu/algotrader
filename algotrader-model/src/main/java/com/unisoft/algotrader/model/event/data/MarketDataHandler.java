@@ -17,6 +17,9 @@ public interface MarketDataHandler extends EventHandler {
         if (container.hasTrade()){
             onTrade(container.trade);
         }
+        if (container.endOfData){
+            onCompleted();
+        }
     }
 
     void onBar(Bar bar);

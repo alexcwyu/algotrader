@@ -86,8 +86,9 @@ public class YahooHistoricalDataProvider extends AbstractHistoricalDataProvider 
                 String[] tokens = line.split(",");
 
                 marketDataEventBus.publishBar(subscriptionKey.instId, SubscriptionKey.DAILY_SIZE, DATE_FORMAT.parse(tokens[0]).getTime(),
-                        Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]), Double.parseDouble(tokens[3]), Double.parseDouble(tokens[4]), Long.parseLong(tokens[5]), 0);
+                        Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]), Double.parseDouble(tokens[3]), Double.parseDouble(tokens[4]), Long.parseLong(tokens[5]), 0, i==0);
             }
+            LOG.info("all data for subscription {} is published", subscriptionKey);
         }
         catch (Exception e){
             throw new RuntimeException(e);
