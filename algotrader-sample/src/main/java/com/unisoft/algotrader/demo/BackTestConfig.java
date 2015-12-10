@@ -4,9 +4,7 @@ import com.unisoft.algotrader.model.refdata.Currency;
 import com.unisoft.algotrader.model.trading.Account;
 import com.unisoft.algotrader.model.trading.Portfolio;
 import com.unisoft.algotrader.provider.ProviderId;
-import com.unisoft.algotrader.trading.Strategy;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -40,6 +38,6 @@ public class BackTestConfig extends TradingConfig{
 
     public BackTestConfig(int marketDataProviderId, int strategyId,
                           Date fromDate, Date toDate, long ... instIds) {
-        this(marketDataProviderId, strategyId, fromDate, toDate, Account.DEFAULT_ACCOUNT_ID, DEFAULT_CURRENCY, DEFAULT_INIT_WEALTH, Portfolio.DEFAULT_PORTFOLIO_ID, instIds);
+        this(marketDataProviderId, strategyId, fromDate, toDate, Account.TEST_USD_ACCOUNT_ID, DEFAULT_CURRENCY, DEFAULT_INIT_WEALTH, Portfolio.TEST_USD_PORTFOLIO_ID, instIds);
     }
 }

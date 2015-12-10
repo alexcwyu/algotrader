@@ -5,12 +5,13 @@ import com.unisoft.algotrader.model.event.bus.EventBusManager;
 import com.unisoft.algotrader.persistence.RefDataStore;
 import com.unisoft.algotrader.persistence.TradingDataStore;
 import com.unisoft.algotrader.provider.ProviderManager;
+import com.unisoft.algotrader.provider.data.DataService;
 import com.unisoft.algotrader.trading.InstrumentDataManager;
 import com.unisoft.algotrader.trading.OrderManager;
+import com.unisoft.algotrader.trading.PortfolioProcessorManager;
 import com.unisoft.algotrader.trading.StrategyManager;
 
 import javax.inject.Inject;
-import java.util.function.Supplier;
 
 /**
  * Created by alex on 7/16/15.
@@ -18,6 +19,7 @@ import java.util.function.Supplier;
 public class AppConfig {
 
     @Inject Clock clock;
+    @Inject DataService dataService;
     @Inject RefDataStore refDataStore;
     @Inject TradingDataStore tradingDataStore;
     @Inject OrderManager orderManager;
@@ -25,6 +27,7 @@ public class AppConfig {
     @Inject StrategyManager strategyManager;
     @Inject EventBusManager eventBusManager;
     @Inject InstrumentDataManager instrumentDataManager;
+    @Inject PortfolioProcessorManager portfolioProcessorManager;
 
     public Clock getClock() {
         return clock;
@@ -32,6 +35,10 @@ public class AppConfig {
 
     public RefDataStore getRefDataStore() {
         return refDataStore;
+    }
+
+    public DataService getDataService() {
+        return dataService;
     }
 
     public TradingDataStore getTradingDataStore() {
@@ -56,6 +63,10 @@ public class AppConfig {
 
     public InstrumentDataManager getInstrumentDataManager() {
         return instrumentDataManager;
+    }
+
+    public PortfolioProcessorManager getPortfolioProcessorManager() {
+        return portfolioProcessorManager;
     }
 
 

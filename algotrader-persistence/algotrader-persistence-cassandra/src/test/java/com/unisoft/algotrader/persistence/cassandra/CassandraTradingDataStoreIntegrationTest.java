@@ -82,7 +82,7 @@ public class CassandraTradingDataStoreIntegrationTest {
 
     @Test
     public void testSaveLoad() throws Exception {
-        Account account = Account.DEFAULT;
+        Account account = Account.TEST_USD_ACCOUNT;
 
         Portfolio portfolio = SampleEventFactory.createPortfolio(1, account.accountId());
         Clock clock = new SimulationClock();

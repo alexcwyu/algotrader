@@ -149,11 +149,11 @@ public class Performance {
     public String toString() {
         return "Performance{" +
                 "enabled=" + enabled +
-                ", equitySeries=" + equitySeries +
-                ", coreEquitySeries=" + coreEquitySeries +
-                ", pnlSeries=" + pnlSeries +
-                ", drawdownSeries=" + drawdownSeries +
-                ", drawdownPercentSeries=" + drawdownPercentSeries +
+//                ", equitySeries=" + equitySeries +
+//                ", coreEquitySeries=" + coreEquitySeries +
+//                ", pnlSeries=" + pnlSeries +
+//                ", drawdownSeries=" + drawdownSeries +
+//                ", drawdownPercentSeries=" + drawdownPercentSeries +
                 ", equity=" + equity +
                 ", coreEquity=" + coreEquity +
                 ", lowEquity=" + lowEquity +

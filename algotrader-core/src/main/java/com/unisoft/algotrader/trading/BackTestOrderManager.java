@@ -23,12 +23,12 @@ public class BackTestOrderManager extends OrderManager {
 
     private final ProviderManager providerManager;
     private final StrategyManager strategyManager;
-    private final PortfolioManager portfolioManager;
+    private final PortfolioProcessorManager portfolioProcessorManager;
 
     @Inject
-    public BackTestOrderManager(EventBusManager eventBusManager, PortfolioManager portfolioManager, ProviderManager providerManager, StrategyManager strategyManager){
+    public BackTestOrderManager(EventBusManager eventBusManager, PortfolioProcessorManager portfolioProcessorManager, ProviderManager providerManager, StrategyManager strategyManager){
         super(eventBusManager);
-        this.portfolioManager = portfolioManager;
+        this.portfolioProcessorManager = portfolioProcessorManager;
         this.providerManager = providerManager;
         this.strategyManager = strategyManager;
     }
@@ -37,12 +37,23 @@ public class BackTestOrderManager extends OrderManager {
     public void onNewOrderRequest(Order order) {
         super.onNewOrderRequest(order);
         providerManager.getExecutionProvider(order.providerId).onNewOrderRequest(order);
+
+        PortfolioProcessor processor = portfolioProcessorManager.getPortfolioProcessor(order.portfolioId);
+        if (processor != null) {
+            processor.onNewOrderRequest(order);
+        }
+
     }
 
     @Override
     public void onOrderUpdateRequest(Order order){
         super.onOrderUpdateRequest(order);
         providerManager.getExecutionProvider(order.providerId).onOrderUpdateRequest(order);
+
+        PortfolioProcessor processor = portfolioProcessorManager.getPortfolioProcessor(order.portfolioId);
+        if (processor != null) {
+            processor.onOrderUpdateRequest(order);
+        }
     }
 
     @Override
@@ -50,6 +61,10 @@ public class BackTestOrderManager extends OrderManager {
         super.onOrderCancelRequest(order);
         providerManager.getExecutionProvider(order.providerId).onOrderCancelRequest(order);
 
+        PortfolioProcessor processor = portfolioProcessorManager.getPortfolioProcessor(order.portfolioId);
+        if (processor != null) {
+            processor.onOrderCancelRequest(order);
+        }
     }
 
     @Override
@@ -67,7 +82,7 @@ public class BackTestOrderManager extends OrderManager {
 
             //notify execution report
             Strategy strategy = strategyManager.get(order.strategyId);
-            PortfolioProcessor processor = portfolioManager.getPortfolioProcessor(order.portfolioId);
+            PortfolioProcessor processor = portfolioProcessorManager.getPortfolioProcessor(order.portfolioId);
 
             if (strategy != null)
                 strategy.onExecutionReport(executionReport);
@@ -107,7 +122,7 @@ public class BackTestOrderManager extends OrderManager {
             if (strategy != null)
                 strategy.onOrderCancelReject(orderCancelReject);
 
-            PortfolioProcessor processor = portfolioManager.getPortfolioProcessor(order.portfolioId);
+            PortfolioProcessor processor = portfolioProcessorManager.getPortfolioProcessor(order.portfolioId);
             if (processor != null) {
                 processor.onOrderCancelReject(orderCancelReject);
             }

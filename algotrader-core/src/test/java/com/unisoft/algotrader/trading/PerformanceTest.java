@@ -23,7 +23,7 @@ public class PerformanceTest {
 
     @Before
     public void setup() {
-        Account account = Account.DEFAULT;
+        Account account = Account.TEST_USD_ACCOUNT;
         Portfolio portfolio = new Portfolio(1, account.accountId());
         processor = spy(new PortfolioProcessor(portfolio, account, new SampleInMemoryRefDataStore(), new SimulationClock()));
         performance = portfolio.performance();

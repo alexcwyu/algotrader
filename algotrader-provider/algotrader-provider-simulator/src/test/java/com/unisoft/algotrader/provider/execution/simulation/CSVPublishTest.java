@@ -92,7 +92,7 @@ public class CSVPublishTest {
         DummyDataProvider provider1 = new DummyDataProvider(ProviderId.Dummy, providerManager, new RingBufferMarketDataEventBus(marketDataRB1));
         DummyDataProvider provider2 = new DummyDataProvider(ProviderId.Dummy1, providerManager, new RingBufferMarketDataEventBus(marketDataRB2));
 
-        Portfolio portfolio = new Portfolio(1, Account.DEFAULT.accountId());
+        Portfolio portfolio = new Portfolio(1, Account.TEST_USD_ACCOUNT.accountId());
         InMemoryTradingDataStore tradingDataStore = new InMemoryTradingDataStore();
 
         tradingDataStore.savePortfolio(portfolio);

@@ -72,7 +72,7 @@ public class StrategyRunner {
         AppConfig appConfig = injector.getInstance(AppConfig.class);
 
 
-        Account account = Account.DEFAULT;
+        Account account = Account.TEST_USD_ACCOUNT;
         Portfolio portfolio = new Portfolio(1, account.accountId());
         appConfig.getTradingDataStore().savePortfolio(portfolio);
 
