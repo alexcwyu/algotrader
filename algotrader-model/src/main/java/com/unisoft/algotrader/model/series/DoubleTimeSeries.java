@@ -79,6 +79,17 @@ public class DoubleTimeSeries implements Iterable<DoubleTimeSeries.Tuple>{
 //    private TLongIntHashMap indexMap = new TLongIntHashMap();
 //    private TDoubleArrayList dataSeries = new TDoubleArrayList();
 
+    public DoubleTimeSeries(){
+
+    }
+
+    public DoubleTimeSeries(String name){
+        this.name = name;
+    }
+
+
+    @Field(name = "name")
+    protected String name;
 
     @Field(name = "datetime_series")
     private List<Long> datetimeSeries = new ArrayList();
@@ -128,6 +139,10 @@ public class DoubleTimeSeries implements Iterable<DoubleTimeSeries.Tuple>{
 
     protected int getIndex(long datetime){
         return indexMap.containsKey(datetime) ? indexMap.get(datetime) : -1;
+    }
+
+    public long getDateTime(int idx){
+        return datetimeSeries.get(idx);
     }
 
     public double ago(int ago){
@@ -243,5 +258,13 @@ public class DoubleTimeSeries implements Iterable<DoubleTimeSeries.Tuple>{
 
     public void setCurrTime(long currTime) {
         this.currTime = currTime;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public void setName(String name){
+        this.name = name;
     }
 }

@@ -1,4 +1,5 @@
 dependencies {
     compile project(':algotrader-model')
     compile project(':algotrader-common')
+    compile files('libs/ta-lib-0.4.0.jar')
 }
